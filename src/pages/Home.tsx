@@ -1,22 +1,32 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
-import ExploreContainer from '../components/ExploreContainer';
+import { IonButton, IonContent, IonPage } from '@ionic/react';
 import './Home.css';
+import Header from '../components/Header';
+import { AuthContext } from '../App';
+import React from 'react';
+import { useHistory } from 'react-router';
+
+export interface props { }
 
 const Home: React.FC = () => {
+
+  const history = useHistory();
+
+  const { state: authState } = React.useContext(AuthContext);
+
+  console.log(authState);
+
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Blank</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <Header headerTitle="Home" />
       <IonContent fullscreen>
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Blank</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <ExploreContainer />
+
+        {authState.isAuthenticated ? <p>Hello {authState.user.id}</p> :
+          <div>
+            <IonButton onClick={() => history.push("/login")} expand="block">Login</IonButton>
+            <IonButton onClick={() => history.push("/create-account")} expand="block">Create Account</IonButton>
+          </div>}
+
+
       </IonContent>
     </IonPage>
   );
