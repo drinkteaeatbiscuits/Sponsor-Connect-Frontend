@@ -51,7 +51,6 @@ export const AuthContext = React.createContext<{
 const initialState = {
   isAuthenticated: false,
   user: null,
-  profile: null,
 };
 
 const reducer = (state: any, action: any) => {
@@ -113,7 +112,6 @@ const App: React.FC = () => {
 
   wasUserHere && ( initialState.isAuthenticated = true); 
   wasUserHere && ( initialState.user = wasUserHere );
-
 
   return (  
   
