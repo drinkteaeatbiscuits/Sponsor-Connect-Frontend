@@ -3,63 +3,105 @@ import Header from '../components/Header';
 import { useHistory } from 'react-router';
 import Cookies from 'js-cookie';
 import { AuthContext } from "../App";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LogoutButton from '../components/LogoutButton';
-import { useQuery, useQueryClient } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
+import useUpdateProfile from '../hooks/useUpdateProfile';
+import useMyProfile from '../hooks/useMyProfile';
 
 export interface props {}
 
-export const useMyProfile = () => {
-  const client = useQueryClient();
-  return useQuery(
-    "myProfile",
-    async() => {
-      console.log("in query");
-      const response = await fetch(process.env.REACT_APP_API_URL + '/profiles/me', {
-        credentials: "include",
-      });
-      
-      const posts = await response.json();
-
-      // pre load the cache
-      posts.forEach((p: any) => {
-        client.setQueryData(["myProfile", p.id], p);
-      });
-
-      return posts;
-    }
-  )
- 
-}
 
 const EditProfile: React.FC = () => {
   
 
 	const history = useHistory();
-  const [profileName, setProfileName] = useState("");
   const { state: authState } = React.useContext(AuthContext);
 
-  const {isLoading, data, error} = useMyProfile();
+  const {isLoading, error, mutateAsync: addProfileMutation} = useUpdateProfile();
+  const profileData = useMyProfile();
 
-  console.log(error);
-  console.log(data);
+  
+  const [profileName, setProfileName] = useState("");
+  const [sport, setSport] = useState("");
+  const [location, setLocation] = useState("");
+  const [priceRange, setPriceRange] = useState("");
+  const [website, setWebsite] = useState("");
+
+  const updateProfile = async () => {
+    
+    await addProfileMutation({
+      profileName, 
+      sport, 
+      location, 
+      priceRange, 
+      website 
+    });
+    
+    history.goBack();
+  }
+
+  error && console.log(error);
+  profileData.error && console.log(profileData);
+
+  useEffect(() => {
+    if (profileData.status === "success") {
+      setProfileName(profileData.data[0].profileName);
+      setSport(profileData.data[0].sport);
+      setLocation(profileData.data[0].location);
+      setPriceRange(profileData.data[0].priceRange);
+      setWebsite(profileData.data[0].website);
+    }
+  }, [profileData.status, profileData.data]);
+
   return (
     <IonPage>
       <Header headerTitle="Edit Profile"/>
       <IonContent fullscreen>
-        <IonLoading isOpen={isLoading} message="Loading Profiles" />
+        {/* <IonLoading isOpen={isLoadingProfile} message="Loading Profile" /> */}
+        <IonLoading isOpen={isLoading} message="Updating Profile" />
 
           { authState.isAuthenticated ? <p>Hello user { authState.user.id }</p>	: <p>Please log in</p> }
             
           <IonButton fill="clear" expand="full" onClick={()=> history.push( "/opportunities/" )}>Opportunities</IonButton>
           <IonButton fill="clear" expand="full" onClick={()=> history.push( "/dashboard/" )}>Back to Dashboard</IonButton>
 
-          <IonItem>
-            <IonLabel position="stacked">Profile Name</IonLabel>
-            <IonInput type="text" onIonChange={ (e:any) => setProfileName(e.detail.value) } />
-          </IonItem>
+          { profileData.data?.map((p: any) => {
+            return (
+              <div className="ion-text-center" key={p.id}>
+
+                  <IonItem>
+                    <IonLabel position="stacked">Profile Name</IonLabel>
+                    <IonInput type="text" value={ profileName ? profileName : p.profileName } onIonChange={ (e:any) => setProfileName(e.detail.value) } />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="stacked">Sport</IonLabel>
+                    <IonInput type="text" value={ sport ? sport : p.sport } onIonChange={ (e:any) => setSport(e.detail.value) } />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="stacked">Location</IonLabel>
+                    <IonInput type="text" value={ location ? location : p.location } onIonChange={ (e:any) => setLocation(e.detail.value) } />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="stacked">Price Range</IonLabel>
+                    <IonInput type="text" value={ priceRange ? priceRange : p.priceRange } onIonChange={ (e:any) => setPriceRange(e.detail.value) } />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="stacked">Website</IonLabel>
+                    <IonInput type="text" value={ website ? website : p.website } onIonChange={ (e:any) => setWebsite(e.detail.value) } />
+                  </IonItem>
+
+              </div>
+            )
+          })}
           
 
+          <div style={{paddingTop: 8}}><IonButton onClick={()=> updateProfile()} expand="block">SAVE</IonButton></div>
+          
       </IonContent>
     </IonPage>
   );
