@@ -37,12 +37,10 @@ const CreateAccount: React.FC = () => {
               email: username,
               password: password 
             }),
-          credentials: "include",
-            
+            credentials: "include",
         });
 
         
-  
         const createAccountInfo = await createAccountResp.json();
 
         if(createAccountInfo?.statusCode) {
@@ -54,9 +52,13 @@ const CreateAccount: React.FC = () => {
             console.log( "User account created" );
             console.log(createAccountInfo);
 
-
+            dispatch && dispatch({
+              type: "setUser",
+              payload: createAccountInfo
+            });
             
-            const createProfileResp = await fetch(URL + "/profiles/me", {
+            
+            const createProfileResp = await fetch(process.env.REACT_APP_API_URL + "/profiles/me", {
               headers: {
                   "Content-Type": "application/json"
               },
@@ -75,10 +77,7 @@ const CreateAccount: React.FC = () => {
               console.log(createProfileInfo);
             }
 
-            dispatch && dispatch({
-              type: "setUser",
-              payload: createAccountInfo
-            });
+            
              
         }
     }

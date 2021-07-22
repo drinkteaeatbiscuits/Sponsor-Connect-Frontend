@@ -2,6 +2,9 @@ import { Redirect, Route } from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import React, { useState } from "react";
 import { IonReactRouter } from '@ionic/react-router';
+import {Elements} from '@stripe/react-stripe-js';
+import {loadStripe} from '@stripe/stripe-js';
+
 // import Cookies from 'js-cookie';
 
 import Home from './pages/Home';
@@ -42,6 +45,8 @@ import Account from './pages/Account';
 import Notifications from './pages/Notifications';
 import MainMenu from './components/MainMenu';
 
+
+const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
 
 export const AuthContext = React.createContext<{
   state?: any;
@@ -116,6 +121,8 @@ const App: React.FC = () => {
   return (  
   
   <IonApp>
+      <Elements stripe={stripePromise}>
+
     <AuthContext.Provider
       value={{
         state,
@@ -180,6 +187,7 @@ const App: React.FC = () => {
     </IonReactRouter>
     
     </AuthContext.Provider>
+    </Elements>
   </IonApp>
   )
 };

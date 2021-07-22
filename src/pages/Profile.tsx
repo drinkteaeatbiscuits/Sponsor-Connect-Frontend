@@ -24,7 +24,7 @@ const Profile: React.FC = () => {
   return (
     <IonPage>
       <Header headerTitle="Profile"/>
-      <TabBar/>
+      <TabBar activeTab="profile"/>
       
       <IonContent fullscreen>
         <IonLoading isOpen={isLoading} message="Loading Profile" />
@@ -40,10 +40,10 @@ const Profile: React.FC = () => {
                   { p.priceRange && <p>{ p.priceRange }</p> }
                   { p.website && <p>{ p.website }</p> }
                   
-                  { p.socialMedia.facebook && <p>Facebook: { p.socialMedia.facebook }</p> }
-                  { p.socialMedia.twitter && <p>Twitter: { p.socialMedia.twitter }</p> }
-                  { p.socialMedia.instagram && <p>Instagram: { p.socialMedia.instagram }</p> }
-                  { p.socialMedia.youtube && <p>YouTube: { p.socialMedia.youtube }</p> }
+                  { p.socialMedia?.facebook && <p>Facebook: { p.socialMedia.facebook }</p> }
+                  { p.socialMedia?.twitter && <p>Twitter: { p.socialMedia.twitter }</p> }
+                  { p.socialMedia?.instagram && <p>Instagram: { p.socialMedia.instagram }</p> }
+                  { p.socialMedia?.youtube && <p>YouTube: { p.socialMedia.youtube }</p> }
 
 
               </div>

@@ -3,29 +3,32 @@ import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonBadge, IonButto
 import { calendar, personCircle, map, informationCircle, settings, trailSign, speedometer } from 'ionicons/icons';
 import { useHistory } from "react-router";
 
+interface TabBarProps {
+	activeTab?: string;
+}
 
-const TabBar: React.FC = () => {
+const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
 	const history = useHistory();
 
 	return <div className="tab-bar">
 			
-                <div className={ ( history.location.pathname === '/dashboard' && "active " ) + " tab-button"} onClick={()=> history.push("/dashboard")}>
+                <div className={ ( activeTab === 'dashboard' && "active " ) + " tab-button"} onClick={()=> history.push("/dashboard")}>
                     <IonIcon icon={speedometer} />
                     <IonLabel>Dashboard</IonLabel>
                     <IonBadge>2</IonBadge>
                 </div>
 
-                <div className={ ( history.location.pathname === '/profile' && "active " ) + " tab-button"} onClick={()=> history.push("/profile")}>
+                <div className={ ( activeTab === 'profile' && "active " ) + " tab-button"} onClick={()=> history.push("/profile")}>
                     <IonIcon icon={personCircle} />
                     <IonLabel>Profile</IonLabel>
                 </div>
 
-                <div className={ ( history.location.pathname === '/opportunities' && "active " ) + " tab-button"} onClick={()=> history.push("/opportunities")}>
+                <div className={ ( activeTab === 'opportunities' && "active " ) + " tab-button"} onClick={()=> history.push("/opportunities")}>
                     <IonIcon icon={trailSign} />
                     <IonLabel>Opportunities</IonLabel>
                 </div>
 
-                <div className={ ( history.location.pathname === '/settings' && "active " ) + " tab-button"} onClick={()=> history.push("/settings")}>
+                <div className={ ( activeTab === 'settings' && "active " ) + " tab-button"} onClick={()=> history.push("/settings")}>
                     <IonIcon icon={settings} />
                     <IonLabel>Settings</IonLabel>
                 </div>

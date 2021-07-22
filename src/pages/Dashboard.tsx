@@ -17,7 +17,7 @@ const Dashboard: React.FC = () => {
   return (
     <IonPage>
       <Header headerTitle="Dashboard"/>
-      <TabBar/>
+      <TabBar activeTab="dashboard"/>
       <IonContent fullscreen>
 
           { authState.isAuthenticated ? <p>Hello user { authState.user.id }</p>	: <p>Please log in</p> }

@@ -34,7 +34,7 @@ const EditProfile: React.FC = () => {
     await addProfileMutation({
       profileName, 
       sport, 
-      location, 
+      location,  
       priceRange, 
       website 
     });

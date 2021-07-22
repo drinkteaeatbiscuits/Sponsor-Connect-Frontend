@@ -17,7 +17,7 @@ const Notifications: React.FC = () => {
   return (
     <IonPage>
       <Header headerTitle="Notifications"/>
-      <TabBar/>
+      <TabBar activeTab="settings"/>
       <IonContent fullscreen>
 
           { authState.isAuthenticated ? <p>Hello user { authState.user.id }</p>	: <p>Please log in</p> }

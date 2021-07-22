@@ -17,7 +17,7 @@ const Opportunities: React.FC = () => {
   return (
     <IonPage>
       <Header headerTitle="Opportunities"/>
-      <TabBar/>
+      <TabBar activeTab="opportunities"/>
       <IonContent fullscreen>
 
           { authState.isAuthenticated ? <p>Hello user { authState.user.id }</p>	: <p>Please log in</p> }
