@@ -7,6 +7,7 @@ import React from 'react';
 import LogoutButton from '../components/LogoutButton';
 import { useQueryClient, useQuery } from 'react-query';
 import useMyProfile from '../hooks/useMyProfile';
+import TabBar from '../components/TabBar';
 
 export interface props {}
 
@@ -23,6 +24,8 @@ const Profile: React.FC = () => {
   return (
     <IonPage>
       <Header headerTitle="Profile"/>
+      <TabBar/>
+      
       <IonContent fullscreen>
         <IonLoading isOpen={isLoading} message="Loading Profile" />
 

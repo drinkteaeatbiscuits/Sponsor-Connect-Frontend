@@ -9,7 +9,6 @@ import AddItem from './pages/AddItem';
 import Login from './pages/Login';
 import CreateAccount from './pages/CreateAccount';
 import Menu from './pages/Menu';
-import DoLogin from './pages/DoLogin';
 
 
 /* Core CSS required for Ionic components to work properly */
@@ -30,6 +29,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import './theme/app.css';
 import { useEffect } from 'react';
 import Dashboard from './pages/Dashboard';
 import Profiles from './pages/Profiles';
@@ -124,10 +124,9 @@ const App: React.FC = () => {
     >
     
     {/* {!state.isAuthenticated ? <p>logged out</p> : <p>logged in</p>} */}
-
+    
     <IonReactRouter>
-      <IonRouterOutlet>
-        <MainMenu />
+      <IonRouterOutlet  animated={false}>        
         <Route exact path="/">
           <Redirect to="/home" />
         </Route>
@@ -140,12 +139,13 @@ const App: React.FC = () => {
         <Route exact path="/login">
           {state.isAuthenticated ? <Dashboard /> : <Login />}
         </Route>
-        <Route exact path="/profile">
-          {state.isAuthenticated ? <Profile /> : <Login />}
-        </Route>
         <Route exact path="/profile/edit">
           {state.isAuthenticated ? <EditProfile /> : <Login />}
         </Route>
+        <Route exact path="/profile">
+          {state.isAuthenticated ? <Profile /> : <Login />}
+        </Route>
+        
         <Route exact path="/opportunities">
           {state.isAuthenticated ? <Opportunities /> : <Login />}
         </Route>
@@ -170,9 +170,6 @@ const App: React.FC = () => {
         <Route exact path="/profiles">
           <Profiles />
         </Route>
-        <Route exact path="/connect/auth0">
-          <DoLogin />
-        </Route>
         
         <Route exact path="/create-account">
           {state.isAuthenticated ?  <Dashboard /> : <CreateAccount />}
@@ -181,6 +178,7 @@ const App: React.FC = () => {
         
       </IonRouterOutlet>
     </IonReactRouter>
+    
     </AuthContext.Provider>
   </IonApp>
   )

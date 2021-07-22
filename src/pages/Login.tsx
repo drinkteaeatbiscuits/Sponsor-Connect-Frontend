@@ -80,8 +80,8 @@ const Login: React.FC<props> = () => {
         </div>
       
       
-       <div style={{paddingTop: 8}}><IonButton onClick={()=> doLogoutFunction()} expand="block">Logout</IonButton></div>
-        
+       {/* <div style={{paddingTop: 8}}><IonButton onClick={()=> doLogoutFunction()} expand="block">Logout</IonButton></div>
+         */}
       </IonContent>
     </IonPage>
   );

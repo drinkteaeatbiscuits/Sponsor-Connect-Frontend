@@ -22,7 +22,7 @@ ReactDOM.render(
     <QueryClientProvider client={queryClient}>
       <React.StrictMode>
         <App />
-        <ReactQueryDevtools initialIsOpen />
+        {/* <ReactQueryDevtools initialIsOpen /> */}
       </React.StrictMode>
     </QueryClientProvider>
   </Auth0Provider>,

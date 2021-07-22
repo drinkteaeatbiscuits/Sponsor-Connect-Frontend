@@ -5,6 +5,7 @@ import Cookies from 'js-cookie';
 import { AuthContext } from "../App";
 import React from 'react';
 import LogoutButton from '../components/LogoutButton';
+import TabBar from '../components/TabBar';
 
 export interface props {}
 
@@ -16,6 +17,7 @@ const Dashboard: React.FC = () => {
   return (
     <IonPage>
       <Header headerTitle="Dashboard"/>
+      <TabBar/>
       <IonContent fullscreen>
 
           { authState.isAuthenticated ? <p>Hello user { authState.user.id }</p>	: <p>Please log in</p> }

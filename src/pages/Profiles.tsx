@@ -1,6 +1,7 @@
 import { IonContent, IonItem, IonList, IonLoading, IonPage } from '@ionic/react';
 // import useImagePosts from '../hooks/useImagePosts';
 import Header from '../components/Header';
+import TabBar from '../components/TabBar';
 import useProfiles from '../hooks/useProflies';
 
 export interface props {}
@@ -16,6 +17,7 @@ const Profiles: React.FC = () => {
   return (
     <IonPage>
       <Header headerTitle="Profiles"/>
+      <TabBar/>
       <IonContent fullscreen>
         <IonLoading isOpen={isLoading} message="Loading..." />
           <IonList>

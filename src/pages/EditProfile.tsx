@@ -21,6 +21,7 @@ const EditProfile: React.FC = () => {
   const {isLoading, error, mutateAsync: addProfileMutation} = useUpdateProfile();
   const profileData = useMyProfile();
 
+  console.log(profileData);
   
   const [profileName, setProfileName] = useState("");
   const [sport, setSport] = useState("");
@@ -46,11 +47,11 @@ const EditProfile: React.FC = () => {
 
   useEffect(() => {
     if (profileData.status === "success") {
-      setProfileName(profileData.data[0].profileName);
-      setSport(profileData.data[0].sport);
-      setLocation(profileData.data[0].location);
-      setPriceRange(profileData.data[0].priceRange);
-      setWebsite(profileData.data[0].website);
+      setProfileName(profileData.data[0]?.profileName);
+      setSport(profileData.data[0]?.sport);
+      setLocation(profileData.data[0]?.location);
+      setPriceRange(profileData.data[0]?.priceRange);
+      setWebsite(profileData.data[0]?.website);
     }
   }, [profileData.status, profileData.data]);
 
@@ -66,7 +67,7 @@ const EditProfile: React.FC = () => {
           <IonButton fill="clear" expand="full" onClick={()=> history.push( "/opportunities/" )}>Opportunities</IonButton>
           <IonButton fill="clear" expand="full" onClick={()=> history.push( "/dashboard/" )}>Back to Dashboard</IonButton>
 
-          { profileData.data?.map((p: any) => {
+          { profileData.data[0] ? profileData.data?.map((p: any) => {
             return (
               <div className="ion-text-center" key={p.id}>
 
@@ -97,7 +98,37 @@ const EditProfile: React.FC = () => {
 
               </div>
             )
-          })}
+          }) :  <div className="ion-text-center">
+
+                  <IonItem>
+                    <IonLabel position="stacked">Profile Name</IonLabel>
+                    <IonInput type="text" value={ profileName } onIonChange={ (e:any) => setProfileName(e.detail.value) } />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="stacked">Sport</IonLabel>
+                    <IonInput type="text" value={ sport } onIonChange={ (e:any) => setSport(e.detail.value) } />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="stacked">Location</IonLabel>
+                    <IonInput type="text" value={ location } onIonChange={ (e:any) => setLocation(e.detail.value) } />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="stacked">Price Range</IonLabel>
+                    <IonInput type="text" value={ priceRange } onIonChange={ (e:any) => setPriceRange(e.detail.value) } />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="stacked">Website</IonLabel>
+                    <IonInput type="text" value={ website } onIonChange={ (e:any) => setWebsite(e.detail.value) } />
+                  </IonItem>
+
+              </div>
+            
+        
+        }
           
 
           <div style={{paddingTop: 8}}><IonButton onClick={()=> updateProfile()} expand="block">SAVE</IonButton></div>
