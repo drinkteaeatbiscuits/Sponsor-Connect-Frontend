@@ -12,20 +12,13 @@ import reportWebVitals from './reportWebVitals';
 const queryClient = new QueryClient();
 
 ReactDOM.render(
-  <Auth0Provider
-    domain="dev-dteb123.eu.auth0.com"
-    clientId="3wEcaSnm1K9pgKq3SzWjuBZiONKF6US0"
-    redirectUri={window.location.origin}
-    audience="https://dev-dteb123.eu.auth0.com/api/v2/"
-    scope="read:current_user update:current_user_metadata"
-  >
+  
     <QueryClientProvider client={queryClient}>
       <React.StrictMode>
         <App />
         {/* <ReactQueryDevtools initialIsOpen /> */}
       </React.StrictMode>
-    </QueryClientProvider>
-  </Auth0Provider>,
+    </QueryClientProvider>,
   document.getElementById('root')
 );
 
