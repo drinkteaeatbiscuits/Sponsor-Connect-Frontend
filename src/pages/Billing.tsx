@@ -28,7 +28,7 @@ const Billing: React.FC = () => {
   const [processing, setProcessing] = useState<any>('');
   const [disabled, setDisabled] = useState<boolean>(true);
   const [clientSecret, setClientSecret] = useState('');
-  // const [subscriptionId, setSubscriptionId] = useState('');
+  const [subscriptionId, setSubscriptionId] = useState('');
   // const [customerId, setCustomerId] = useState('');
 
   const stripe = useStripe();
@@ -54,15 +54,12 @@ const Billing: React.FC = () => {
       })
       .then(data => {
 
-        console.log(data);
+        // console.log(data);
 
-        setClientSecret(data.latest_invoice?.payment_intent.client_secret);
-        // setSubscriptionId(data.latest_invoice?.payment_intent.client_secret);
-        // setCustomerId(data.customer.id);
+        // setClientSecret(data.latest_invoice?.payment_intent.client_secret);
 
-        // console.log(clientSecret);
-          
-          fetch( process.env.REACT_APP_API_URL + "/subscriptions/create-subscription", {
+
+        fetch( process.env.REACT_APP_API_URL + "/subscriptions/create-subscription", {
           method: "POST",
           credentials: "include",
           headers: {
@@ -77,16 +74,23 @@ const Billing: React.FC = () => {
           return res.json();
         })
         .then(data => {
-          setClientSecret(data.subscription?.latest_invoice.payment_intent.client_secret);
-          // setSubscriptionId(data.latest_invoice.payment_intent.client_secret);
-          // console.log(data);
+          console.log(data);
+
+          if(data.subscription.status === "succeeded"){
+
+            setSucceeded(true);
+          
+          }else{
+          
+            setClientSecret(data.subscription?.latest_invoice.payment_intent.client_secret);
+          
+          }
+
+
         });
 
       
     });
-
-      
-    
 
   }, [authState.user.email]);
 

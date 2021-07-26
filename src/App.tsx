@@ -44,6 +44,7 @@ import Billing from './pages/Billing';
 import Account from './pages/Account';
 import Notifications from './pages/Notifications';
 import MainMenu from './components/MainMenu';
+import Subscription from './pages/Subscription';
 
 
 const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
@@ -161,6 +162,9 @@ const App: React.FC = () => {
         </Route>
         <Route exact path="/settings/billing">
           {state.isAuthenticated ? <Billing /> : <Login />}
+        </Route>
+        <Route exact path="/settings/subscription">
+          {state.isAuthenticated ? <Subscription /> : <Login />}
         </Route>
         <Route exact path="/settings/account">
           {state.isAuthenticated ? <Account /> : <Login />}
