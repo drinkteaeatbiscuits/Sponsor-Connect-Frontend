@@ -69,7 +69,7 @@ const Billing: React.FC = () => {
             "Content-Type": "application/json"
           },
           body: JSON.stringify({
-            customerId: data.customer.id,
+            customerId: data.customer?.id,
             priceId: "price_1JFxqWBwWs8b52mUO0mJqChD"
           })
         })
