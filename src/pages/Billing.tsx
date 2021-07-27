@@ -11,6 +11,9 @@ import {CardElement, useStripe, Elements, useElements} from '@stripe/react-strip
 
 import './billing.css';
 import useMySubscription from '../hooks/useMySubscription';
+import { AnyARecord } from 'dns';
+import useCancelMySubscription from '../hooks/useCancelMySubscription';
+import { useQueryClient, useMutation } from 'react-query';
 
 
 export interface props {}
@@ -20,8 +23,10 @@ const Billing: React.FC = () => {
 	// const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
 
-  const {isLoading, data} = useMySubscription();
-  // console.log(data);
+  const history = useHistory();
+
+  const mySubscription = useMySubscription();
+    
   
   const [succeeded, setSucceeded] = useState<any>(false);
   const [error, setError] = useState<any>(null);
@@ -29,73 +34,86 @@ const Billing: React.FC = () => {
   const [disabled, setDisabled] = useState<boolean>(true);
   const [clientSecret, setClientSecret] = useState('');
   const [subscriptionId, setSubscriptionId] = useState('');
+  const [subscriptionStatus, setSubscriptionStatus] = useState('');
   // const [customerId, setCustomerId] = useState('');
 
   const stripe = useStripe();
   const elements = useElements();
 
-
-
   useEffect(() => {
-    // Create PaymentIntent as soon as the page loads
-    window
-      .fetch( process.env.REACT_APP_API_URL + "/subscriptions/create-customer", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ 
-          email: authState.user.email,
-        })
-      })
-      .then(res => {
-        return res.json();
-      })
-      .then(data => {
 
-        // console.log(data);
-
-        // setClientSecret(data.latest_invoice?.payment_intent.client_secret);
-
-
-        fetch( process.env.REACT_APP_API_URL + "/subscriptions/create-subscription", {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            customerId: data.customer?.id,
-            priceId: "price_1JFxqWBwWs8b52mUO0mJqChD"
-          })
-        })
-        .then(res => {
-          return res.json();
-        })
-        .then(data => {
-          console.log(data);
-
-          if(data.subscription.status === "succeeded"){
-
-            setSucceeded(true);
-          
-          }else{
-          
-            setClientSecret(data.subscription?.latest_invoice.payment_intent.client_secret);
-          
-          }
-
-
-        });
-
+    if (mySubscription.status === "success") {
       
-    });
+      setSubscriptionStatus(mySubscription.data[0]?.subscriptionStatus);
+    
+    if(mySubscription.data[0]?.subscriptionStatus !== 'active'){
 
-  }, [authState.user.email]);
+        // Create PaymentIntent as soon as the page loads
+        window
+          .fetch( process.env.REACT_APP_API_URL + "/subscriptions/create-customer", {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ 
+              email: authState.user.email,
+            })
+          })
+          .then(res => {
+            return res.json();
+          })
+          .then(data => {
+
+            fetch( process.env.REACT_APP_API_URL + "/subscriptions/create-subscription", {
+              method: "POST",
+              credentials: "include",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                customerId: data.customer?.id,
+                priceId: "price_1JFxqWBwWs8b52mUO0mJqChD"
+              })
+            })
+            .then(res => {
+              return res.json();
+            })
+            .then(data => {
+              // console.log(data);
+
+              if(data.subscription?.status === "succeeded"){
+
+                console.log('test');
+                setSucceeded(true);
+
+                if(clientSecret === ''){
+
+                  setClientSecret(data.subscription?.latest_invoice.payment_intent.client_secret);
+
+                }
+              
+              }else{
+              
+                setClientSecret(data.subscription?.latest_invoice.payment_intent.client_secret);
+
+              }
+
+            });
+          
+        });
+      } else {
+
+        // console.log('subscription active');
+
+      }
+
+    }
+
+  }, [authState.user.email, mySubscription.status, mySubscription.data ]);
 
   
-
+  
   const CARD_OPTIONS = {
     // iconStyle: "solid",
     style: {
@@ -155,10 +173,37 @@ const Billing: React.FC = () => {
           setError(null);
           setProcessing(false);
           setSucceeded(true);
+
+          setSubscriptionStatus('active');
         }
       });
     }
   }
+
+
+  const HandleCancelSubscription = async (event: any) => {
+
+    event.preventDefault();
+
+   
+    
+      const subscriptionResponse = await fetch(process.env.REACT_APP_API_URL + "/subscriptions/cancel-subscription", {
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        method: "POST", 
+      });
+        
+        setSubscriptionStatus('cancelled');
+        setSucceeded(false);
+        setClientSecret('');
+
+        history.push("/settings");
+
+        return await subscriptionResponse.json();
+    
+      }
 
 
   return (
@@ -167,6 +212,7 @@ const Billing: React.FC = () => {
       <TabBar activeTab="settings"/>
       <IonContent className="ion-padding" fullscreen >
 
+        { subscriptionStatus !== 'active' ?
         <form id="payment-form" onSubmit={handleSubmit}>
 
           <CardElement id="card-element" options={CARD_OPTIONS} onChange={handleChange} />
@@ -202,6 +248,15 @@ const Billing: React.FC = () => {
 
           
         </form>
+        : 
+        <div>
+          <h2>Subscription Active</h2>
+          
+          <IonButton fill="clear" expand="full" onClick={ HandleCancelSubscription }>Cancel Subscription</IonButton>
+          <IonButton fill="clear" expand="full" onClick={()=> history.push( "/settings/" )}>Back to Settings</IonButton>
+
+        </div>
+        }
         
 
       </IonContent>

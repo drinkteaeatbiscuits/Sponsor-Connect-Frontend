@@ -35,8 +35,6 @@ const Subscription: React.FC = () => {
 		   data[0].subscriptionStatus ? <p>Subscription Status: { data[0].subscriptionStatus }</p>
 		  : <p>Subscription Status: Null</p> }
 
-		  
-		
         
 
       </IonContent>
