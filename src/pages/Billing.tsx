@@ -42,11 +42,13 @@ const Billing: React.FC = () => {
 
   useEffect(() => {
 
-    if (mySubscription.status === "success") {
+    
+
+   if (mySubscription.status === "success") {
       
       setSubscriptionStatus(mySubscription.data[0]?.subscriptionStatus);
     
-    if(mySubscription.data[0]?.subscriptionStatus !== 'active'){
+      if( mySubscription.data[0]?.subscriptionStatus !== 'active' ){
 
         // Create PaymentIntent as soon as the page loads
         window
@@ -61,7 +63,9 @@ const Billing: React.FC = () => {
             })
           })
           .then(res => {
+            
             return res.json();
+
           })
           .then(data => {
 
@@ -77,21 +81,18 @@ const Billing: React.FC = () => {
               })
             })
             .then(res => {
+
               return res.json();
+
             })
             .then(data => {
-              // console.log(data);
-
+              
+              
               if(data.subscription?.status === "succeeded"){
 
-                console.log('test');
+                
                 setSucceeded(true);
 
-                if(clientSecret === ''){
-
-                  setClientSecret(data.subscription?.latest_invoice.payment_intent.client_secret);
-
-                }
               
               }else{
               
@@ -102,17 +103,19 @@ const Billing: React.FC = () => {
             });
           
         });
+
       } else {
 
-        // console.log('subscription active');
+        console.log('subscription active');
 
       }
 
     }
 
-  }, [authState.user.email, mySubscription.status, mySubscription.data ]);
+  }, [authState.user.email, mySubscription.data, mySubscription.status ]);
 
   
+ 
   
   const CARD_OPTIONS = {
     // iconStyle: "solid",
@@ -185,8 +188,6 @@ const Billing: React.FC = () => {
 
     event.preventDefault();
 
-   
-    
       const subscriptionResponse = await fetch(process.env.REACT_APP_API_URL + "/subscriptions/cancel-subscription", {
         credentials: "include",
         headers: {
