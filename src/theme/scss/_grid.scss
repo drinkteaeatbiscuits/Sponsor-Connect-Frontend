@@ -1,0 +1,13 @@
+ion-grid {
+	&.flex-direction-column {
+		height: 100%;
+		ion-row {
+			height: 100%;
+			flex-direction: column;
+			flex-wrap: nowrap;
+		}
+		ion-col {
+			min-width: 100%;
+		}
+	}
+}
