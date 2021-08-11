@@ -9,6 +9,9 @@ import SvgScLogo from './images/SvgScLogo';
 import TabBar from '../../components/TabBar';
 import Header from '../../components/Header';
 
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
+
 
 export interface props { }
 
@@ -19,6 +22,8 @@ const Landing: React.FC = () => {
   const { state: authState } = React.useContext(AuthContext);
 
   // console.log(authState);
+
+  const percentage = 66;
 
   return (
     <IonPage>
@@ -32,6 +37,9 @@ const Landing: React.FC = () => {
                 <SvgScLogo />
               </IonCol>
               <IonCol className="login-image">
+              
+
+            <CircularProgressbar value={percentage} text={`${percentage}%`} />
 
               </IonCol>
               <IonCol className="ion-padding-bottom" size="auto">
