@@ -30,10 +30,9 @@ import '@ionic/react/css/text-transformation.css';
 import '@ionic/react/css/flex-utils.css';
 import '@ionic/react/css/display.css';
 
-
 /* Theme variables */
 import './theme/variables.css';
-import './theme/app.scss';
+import './theme/app.css';
 import { useEffect } from 'react';
 import Dashboard from './pages/Dashboard';
 import Profiles from './pages/Profiles';
@@ -44,9 +43,8 @@ import EditProfile from './pages/EditProfile';
 import Billing from './pages/Billing';
 import Account from './pages/Account';
 import Notifications from './pages/Notifications';
-// import MainMenu from './components/MainMenu';
+import MainMenu from './components/MainMenu';
 import Subscription from './pages/Subscription';
-import Landing from './pages/Landing/Landing';
 
 
 const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
@@ -142,9 +140,6 @@ const App: React.FC = () => {
         </Route>
         <Route exact path="/home">
           <Home />
-        </Route>
-        <Route exact path="/landing">
-          {state.isAuthenticated ? <Dashboard /> : <Landing />}
         </Route>
         <Route exact path="/dashboard">
           {state.isAuthenticated ? <Dashboard /> : <Login />}
