@@ -1,0 +1,28 @@
+@import url("//use.typekit.net/hjd8zxz.css");
+
+ion-app,
+ion-content {
+	--ion-font-family: 'neue-haas-unica', sans-serif;
+	
+}
+
+body {
+	font-family: var(--ion-font-family, sans-serif);
+}
+
+// Remove 1px scroll on chrome
+.overscroll::before, 
+.overscroll::after {
+	height: 0px;
+}
+
+ion-content {
+	background-color: var(--ion-color-light);
+}
+
+@import 'scss/tab-bar'; 
+@import 'scss/buttons'; 
+@import 'scss/content'; 
+@import 'scss/grid'; 
+@import 'scss/forms'; 
+@import 'scss/headings'; 

@@ -1,0 +1,36 @@
+.login-form input:-internal-autofill-selected {
+	background-color: #fff !important;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+    transition: background-color 5000s ease-in-out 0s;
+}
+
+ion-input {
+	--padding-top: 15px;
+}
+
+.item-label-stacked.sc-ion-input-md-h, 
+.item-label-stacked .sc-ion-input-md-h, 
+.item-label-floating.sc-ion-input-md-h, 
+.item-label-floating .sc-ion-input-md-h {
+	--padding-top: 15px;
+	// font-weight: 700;
+	color: var(--ion-color-dark);
+	
+}
+
+.label-stacked.sc-ion-label-md-h {
+	font-weight: 700;
+}
+
+ion-label {
+	color: var(--ion-color-dark);
+}
+
+ion-button.arrow {
+	display: inline-block;
+}

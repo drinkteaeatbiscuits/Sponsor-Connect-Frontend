@@ -10,10 +10,10 @@ import {loadStripe} from '@stripe/stripe-js';
 import Home from './pages/Home';
 import AddItem from './pages/AddItem';
 import Login from './pages/Login';
-import CreateAccount from './pages/CreateAccount';
+import CreateAccount from './pages/CreateAccount/CreateAccount';
 import Menu from './pages/Menu';
 
-
+ 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -60,6 +60,7 @@ const initialState = {
 };
 
 const reducer = (state: any, action: any) => {
+  
   switch (action.type) {
     case "LOGIN":
       return {
@@ -83,6 +84,7 @@ const reducer = (state: any, action: any) => {
           user: action.payload.user,
         }
       }
+    
     default:
       return state;
   }
@@ -98,7 +100,7 @@ const checkIfAuthenticated = async () => {
 
     const profileInfo = await loginResp.json();
 
-    console.log(profileInfo);
+    // console.log(profileInfo);
 
     return profileInfo?.statusCode ? false : profileInfo;
     
