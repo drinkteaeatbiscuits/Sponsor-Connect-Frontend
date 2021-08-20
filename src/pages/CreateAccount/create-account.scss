@@ -1,0 +1,138 @@
+
+.progress-circle {
+	
+	position: relative;
+	max-width: 100%;
+	max-height: 100%;
+	aspect-ratio: 1 / 1;
+	background-color: #fff;
+	transition: 0.25s all ease-out;
+	@supports not (aspect-ratio: auto) { 
+		height: 100%;
+		width: 100%;
+		background-color: transparent;
+		
+	}
+	svg.CircularProgressbar {
+		transition: 0.25s all ease-out;
+		@supports not (aspect-ratio: auto) { 
+		max-height: 100%;
+		}
+	}
+	
+}
+
+
+.create-account-step {
+	h1 {
+		color: var(--ion-color-dark, #3A3939);
+		line-height: 0.9;
+		margin: 0;
+		span.ion-color-primary {
+			color: var(--ion-color-primary);
+			display: inline-block;
+		}
+	}
+	&.create-account {
+		h1 {
+			margin: 16px 0 10px;
+		}
+	}
+	&.who-is-this-account-for {
+		h1 {
+			margin: 0px 0 10px;
+		}
+	}
+}
+
+.create-account-buttons {
+	padding: 10px 0 0px;
+}
+
+.prev-next-buttons,
+.create-account-button-group {
+	display: flex;
+	justify-content: space-between;
+	ion-button {
+		margin: 0;
+		height: 65px;
+		width: 65px;
+	}
+}
+
+.arrow.previous {
+	--ion-color-primary: #dcdcdc;
+	--box-shadow: none;
+	&.ion-activated {
+		--background-activated: #c4c4c4;	
+	}
+}
+
+svg.next-arrow {
+	transform: scaleX(-1);
+}
+
+.create-account-button-group {
+	justify-content: center;
+	> div {
+		flex-grow: 2;
+		padding-left: 16px;
+	}
+}
+
+ion-button.create-account {
+	width: 100%;
+	display: block;
+}
+
+.login-form {
+	padding-bottom: 20px;
+}
+
+
+
+.account-for-options {
+	background-color: #fff;
+	padding: 8px 6px;
+	border-radius: 40px;
+	.account-for-option {
+		border-radius: 40px;
+		padding: 5px 7px;
+		display: flex;
+		align-items: center;
+		background-color: transparent;
+		transition: 0.25s background-color ease-out;
+		.icon {
+			width: 57px;
+			height: 57px;
+			background-color: #E0FAF3;
+			border-radius: 30px;
+			transition: 0.25s background-color ease-out;
+		}
+		&.active {
+			background-color: var(--ion-color-primary-tint);
+			.icon {
+				background-color: #fff;
+			}
+		}
+		.text {
+			padding: 10px;
+		}
+		p {
+			margin: 0;
+			color: var(--ion-color-dark);
+			&:first-of-type {
+				font-weight: 600;
+				line-height: 1;
+				margin-bottom: 5px;
+				letter-spacing: -0.01em;
+			}
+			&:nth-of-type(2) {
+				font-size: 0.8em;
+				line-height: 1;
+				color: var(--ion-color-medium);
+				margin-bottom: 2px;
+			}
+		}
+	}
+}

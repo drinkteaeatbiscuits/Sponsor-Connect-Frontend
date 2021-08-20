@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonPage } from '@ionic/react';
+import { IonButton, IonContent, IonPage, useIonViewDidEnter } from '@ionic/react';
 // import Header from '../components/Header';
 import { AuthContext } from '../App';
 import React from 'react';
@@ -13,7 +13,16 @@ const Home: React.FC = () => {
 
   const { state: authState } = React.useContext(AuthContext);
 
+  const { dispatch } = React.useContext( AuthContext );
+
   console.log(authState);
+
+  useIonViewDidEnter(() => {
+    dispatch && dispatch({
+      type: "setOnBoardingPercentage",
+      payload: 0
+    });
+  });
 
   return (
     <IonPage>
