@@ -32,7 +32,7 @@ const Home: React.FC = () => {
 
         {authState.isAuthenticated ? <p>Hello {authState.user.id}</p> :
           <div>
-            <IonButton color="primary" onClick={() => history.push("/landing")} expand="block">Let's Go</IonButton>
+            <IonButton className="primary-button" color="primary" onClick={() => history.push("/landing")} expand="block">Let's Go</IonButton>
             
           </div>}
 

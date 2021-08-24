@@ -34,10 +34,11 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import './theme/app.scss';
+
 import { useEffect } from 'react';
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/Dashboard/Dashboard';
 import Profiles from './pages/Profiles';
-import Profile from './pages/Profile';
+import Profile from './pages/Profile/Profile';
 import Opportunities from './pages/Opportunities';
 import Settings from './pages/Settings';
 import EditProfile from './pages/EditProfile';

@@ -46,7 +46,7 @@ const Landing: React.FC = () => {
  
               </IonCol>
               <IonCol className="ion-padding-bottom" size="auto">
-                <IonButton color="primary" onClick={() => history.push("/login")} expand="block">Login</IonButton>
+                <IonButton className="primary-button" color="primary" onClick={() => history.push("/login")} expand="block">Login</IonButton>
               <IonButton color="secondary" onClick={() => history.push("/create-account")} expand="block">Create Account</IonButton>
               <IonButton button-type="link" size="small"  onClick={() => history.push("/")} >cancel</IonButton>
               </IonCol>

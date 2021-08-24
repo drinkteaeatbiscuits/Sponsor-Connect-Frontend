@@ -102,6 +102,7 @@ ion-button.create-account {
 		align-items: center;
 		background-color: transparent;
 		transition: 0.25s background-color ease-out;
+		cursor: pointer;
 		.icon {
 			width: 57px;
 			height: 57px;
@@ -135,4 +136,93 @@ ion-button.create-account {
 			}
 		}
 	}
+}
+
+.sports-list .sport {
+	cursor: pointer;
+}
+
+.location-item {
+	overflow: visible;
+	position: relative;
+	 
+	.google-places {
+		position: relative;
+		width: 100%;
+		margin-bottom: 12px;
+	}
+}
+
+ion-label.location-label.label-stacked.sc-ion-label-md-h {
+	display: block;
+	width: 100%;
+	margin: 0px auto 12px;
+}
+
+.password-strength {
+	width: 100%;
+	p {
+		position: absolute;
+		bottom: 232%;
+		right: 55px;
+	}
+	margin-bottom: 1
+}
+
+ion-item.password-item {
+	--inner-padding-bottom: 0;
+	--inner-padding-end: 0;
+	--inner-padding-start: 0;
+	--inner-padding-top: 0;
+	border: 0;
+	--border-width: 0 0 0px 0;
+	--full-highlight-height: 0;
+  }
+
+  ion-item.ion-focused {
+	--background: none;
+	--background-focused: none;
+  }
+
+  .error-message {
+	  display: none;
+	  position: absolute;
+	  top: 8px;
+	  right: 0;
+	  color: var(--ion-color-danger);
+	  &.show {
+		  display: block;
+	  }
+  }
+
+  .account-for-option .icon {
+	  position: relative;
+	  svg {
+	  position: absolute;
+	  top: 50%;
+	  left: 50%;
+	  transform: translate(-50%, -50%);
+  }
+}
+
+.password-show {
+	position: absolute;
+    bottom: 8px;
+    right: 0;
+    padding: 9px;
+    width: 50px;
+    height: 40px;
+	z-index: 9;
+	cursor: pointer;
+	path {
+		transition: 0.25s ease;
+	}
+	&:hover path {
+		fill: var(--ion-color-tertiary);
+	}
+	&.active path,
+	&.active:hover path {
+		fill: var(--ion-color-primary);
+	}
+	
 }

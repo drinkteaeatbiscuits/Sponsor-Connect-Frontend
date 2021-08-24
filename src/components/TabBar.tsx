@@ -1,6 +1,6 @@
 import React from 'react';
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonBadge, IonButton } from '@ionic/react';
-import { calendar, personCircle, map, informationCircle, settings, trailSign, speedometer } from 'ionicons/icons';
+import { calendar, personCircle, map, informationCircle, settings, trailSign, speedometer, newspaper } from 'ionicons/icons';
 import { useHistory } from "react-router";
 
 interface TabBarProps {
@@ -26,6 +26,11 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
                 <div className={ ( activeTab === 'opportunities' && "active " ) + " tab-button"} onClick={()=> history.push("/opportunities")}>
                     <IonIcon icon={trailSign} />
                     <IonLabel>Opportunities</IonLabel>
+                </div>
+
+                <div className={ ( activeTab === 'opportunities' && "active " ) + " tab-button"} onClick={()=> history.push("/the-dugout")}>
+                    <IonIcon icon={newspaper} />
+                    <IonLabel>The Dugout</IonLabel>
                 </div>
 
                 <div className={ ( activeTab === 'settings' && "active " ) + " tab-button"} onClick={()=> history.push("/settings")}>

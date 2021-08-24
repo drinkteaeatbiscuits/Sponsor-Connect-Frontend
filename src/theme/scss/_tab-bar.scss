@@ -7,7 +7,9 @@
     width: 100%;
     height: auto;
     display: flex;
-    padding: 15px;
+    padding: 15px 8px;
+    background-color: #fff;
+    box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.16);
 }
 
 .tab-bar .tab-button {
@@ -31,7 +33,10 @@
 } 
 
 .tab-bar .tab-button.active {
-    color:#0EB59A;
+    color: var(--ion-color-primary, #0EB59A);
+    ion-label {
+        color: var(--ion-color-primary, #0EB59A);
+    }
 } 
 
 .tab-bar .tab-button ion-label {
@@ -41,4 +46,10 @@
 
 .tab-bar .tab-button ion-badge {
     position: absolute;
+    border-radius: 10px;
+    width: 19px;
+    height: 19px;
+    left: 50%;
+    margin: 0 0 0 15px;
+    --padding-top: 2px;
 }

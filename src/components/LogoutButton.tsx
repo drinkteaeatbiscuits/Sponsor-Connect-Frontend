@@ -5,11 +5,18 @@ import { AuthContext } from "../App";
 
 // interface LogoutProps {}
 
-const LogoutButton: React.FC = () => {
+interface LogoutProps {
+	className?: string,
+	color?: string,
+	expand?: any,
+	size?: any,
+}
+
+const LogoutButton: React.FC<LogoutProps> = ( props: LogoutProps ) => {
 
 	
 	const { state: authState, dispatch } = React.useContext(AuthContext);
-    
+
 
 	const doLogout = async () => {
 
@@ -39,7 +46,7 @@ const LogoutButton: React.FC = () => {
 
 	  }
 
-	return <IonButton className="logout-button" onClick={()=> doLogout()}>Logout</IonButton>;
+	return <IonButton onClick={()=> doLogout()} { ...props }>Log Out</IonButton>;
 
 }
 

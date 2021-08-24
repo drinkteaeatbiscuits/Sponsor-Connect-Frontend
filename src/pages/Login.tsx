@@ -34,11 +34,12 @@ const Login: React.FC<props> = () => {
           headers: {
             "content-type": "application/json"
           },
+          credentials: "include",
           body: JSON.stringify({ 
               identifier: username,
               password: password 
             }), 
-          credentials: "include",
+          
         });
   
         const loginInfo = await loginResp.json();
@@ -68,7 +69,7 @@ const Login: React.FC<props> = () => {
       }
     }
     
-    
+    console.log(username, password);
 
   return (
     <IonPage>
