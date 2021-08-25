@@ -1,0 +1,18 @@
+.swiper-slide { 
+	width: auto;
+	img {
+		height: 240px;
+		width: auto;
+		border-radius: 5px;
+	}
+}
+
+.profile-images {
+	padding: 20px 8px 80px;
+	margin: 0 -8px;
+}
+
+.profile-images > img {
+	max-width: 100%;
+	
+}

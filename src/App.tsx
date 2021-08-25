@@ -41,7 +41,7 @@ import Profiles from './pages/Profiles';
 import Profile from './pages/Profile/Profile';
 import Opportunities from './pages/Opportunities';
 import Settings from './pages/Settings';
-import EditProfile from './pages/EditProfile';
+import EditProfile from './pages/EditProfile/EditProfile';
 import Billing from './pages/Billing';
 import Account from './pages/Account';
 import Notifications from './pages/Notifications';

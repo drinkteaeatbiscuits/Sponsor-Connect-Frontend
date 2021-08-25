@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonIcon, IonItem, IonLabel, IonList, IonLoading, IonPage, IonSkeletonText, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonIcon, IonItem, IonLabel, IonList, IonLoading, IonPage, IonSkeletonText, IonTitle, IonToolbar } from '@ionic/react';
 import Header from '../../components/Header';
 import { useHistory } from 'react-router';
 import Cookies from 'js-cookie';
@@ -12,6 +12,7 @@ import TabBar from '../../components/TabBar';
 import './profile.scss';
 import { personCircle, location, cash, wallet, cellular, browsersOutline } from 'ionicons/icons';
 import SocialMediaTotals from '../../components/SocialMediaTotals/SocialMediaTotals';
+import ImageSlider from '../../components/ImageSlider/ImageSlider';
 
 export interface props {}
 
@@ -29,7 +30,15 @@ const Profile: React.FC = () => {
   return (
     <IonPage>
 
-      { authState.isAuthenticated && <IonToolbar><IonButton className="button-tertiary ion-margin-bottom" size="small" color="tertiary" expand="block" onClick={()=> history.push( "/profile/edit" )}>Edit Profile</IonButton></IonToolbar> }
+      { authState.isAuthenticated && 
+        <IonToolbar>
+          <IonButtons className="ion-justify-content-around">
+            <IonButton className="" size="small" onClick={()=> history.push( "/dashboard" )}>Dashboard</IonButton>
+            <IonButton className="" size="small" onClick={()=> history.push( "/opportunities" )}>Manage Opportunties</IonButton>
+            <IonButton className="" size="small" onClick={()=> history.push( "/profile/edit" )}>Edit Profile</IonButton>
+          </IonButtons>
+          
+        </IonToolbar> }
             
       <TabBar activeTab="profile"/>
       
@@ -38,17 +47,21 @@ const Profile: React.FC = () => {
         <IonLoading isOpen={isLoading} message="Loading Profile" />
 
         <div className="profile-header">
-
-        </div>
-
-        <div className="avatar">
-          <div className="avatar-image">
-            <IonIcon color="medium" icon={personCircle} />
-          </div>
+          
+          { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data[0]?.coverImage && <img className="cover-image" alt={ "Cover Photo " + data[0]?.coverImage.id } src={ process.env.REACT_APP_API_URL + data[0]?.coverImage.url } />  }
+            
         </div>
 
         <div className="profile-info">
 
+        <div className="avatar">
+          <div className="avatar-image">
+            
+            { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data[0]?.profilePicture ? <img className="profile-picture" alt={ "Profile Image " + data[0]?.profilePicture.id } src={ process.env.REACT_APP_API_URL + data[0]?.profilePicture.url } /> : <IonIcon color="medium" icon={personCircle} /> }
+            
+          </div>
+        </div>
+        
           <div className="ion-text-center ion-padding-top ion-padding">
           
             { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data[0]?.profileName && <h1 className="profile-name ion-no-margin">{ data[0].profileName }</h1>  }
@@ -114,26 +127,29 @@ const Profile: React.FC = () => {
 
           </div>
 
-        </div>
+        
 
 
-        { isLoading ? <IonSkeletonText animated style={{ width: '90%', margin: '10px  auto' }} /> : data[0]?.images && 
+          { isLoading ? <IonSkeletonText animated style={{ width: '90%', margin: '10px  auto' }} /> : data[0]?.images && 
+            <div className="profile-images ion-padding-top  ion-padding-bottom images ion-text-center">
+             
+              { data[0]?.images.length > 1 && <ImageSlider images={data[0]?.images}/> }
+              { data[0]?.images.length === 1 && <img alt={ "Profile Image " + data[0]?.images[0].id } src={ process.env.REACT_APP_API_URL + data[0]?.images[0].url } /> }
               
-              <div className="profile-detail-about ion-text-left ion-padding-top images">
-                { data[0]?.images.map((item: any) => { console.log(item); return <p className="image" key={ item.id }><img alt={ "Profile Image " + item.id } src={ process.env.REACT_APP_API_URL + item.url } /></p>; } ) } 
-              </div>
-            
-            } 
+            </div>
+          } 
 
+          
+          </div>
             
 
        
        
 
           
-          <IonButton fill="clear" expand="full" onClick={()=> history.push( "/opportunities/" )}>Opportunities</IonButton>
+          {/* <IonButton fill="clear" expand="full" onClick={()=> history.push( "/opportunities/" )}>Opportunities</IonButton>
           <IonButton fill="clear" expand="full" onClick={()=> history.push( "/dashboard/" )}>Back to Dashboard</IonButton>
-          
+           */}
 
       </IonContent>
     </IonPage>

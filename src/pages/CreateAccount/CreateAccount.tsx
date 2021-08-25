@@ -343,9 +343,8 @@ const CreateAccount: React.FC = () => {
 
   const focusOnSport = () => {
     
-    document.addEventListener('ionModalDidPresent', () => { console.log(document.querySelector<HTMLInputElement>('ion-searchbar')); document.querySelector('ion-searchbar')?.setFocus(); });
+    document.addEventListener('ionModalDidPresent', () => { document.querySelector('ion-searchbar')?.setFocus(); });
 
-    
   }
 
 
