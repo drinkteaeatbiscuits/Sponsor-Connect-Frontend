@@ -1,6 +1,6 @@
 import { IonButton, IonContent, IonIcon, IonPage } from '@ionic/react';
 import Header from '../../components/Header';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import Cookies from 'js-cookie';
 import { AuthContext } from "../../App";
 import React from 'react';
@@ -31,6 +31,8 @@ const Dashboard: React.FC = () => {
     }
   }
 
+  
+
   return (
     <IonPage>
       <TabBar activeTab="dashboard"/>
@@ -44,7 +46,7 @@ const Dashboard: React.FC = () => {
         <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
 
           <div className="menu-list-option ion-margin-top"
-            onClick={() => history.push( "/profile/" ) }>
+            onClick={() => history.push( "/profile/" + authState?.user.profile ) }>
             <div className="icon">
               <IonIcon color="primary" icon={personCircle} />
             </div>
@@ -55,7 +57,7 @@ const Dashboard: React.FC = () => {
           </div>
 
           <div className='menu-list-option'
-            onClick={() => history.push( "/opportunities/" ) }>
+            onClick={() => history.push( "/opportunities/" + authState?.user.profile ) }>
             <div className="icon">
               <IonIcon color="primary" icon={trailSign} />
             </div>

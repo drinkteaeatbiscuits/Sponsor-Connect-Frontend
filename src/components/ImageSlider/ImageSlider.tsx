@@ -28,7 +28,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ( ImageSliderProps ) => {
 			
     { ImageSliderProps.images.map((item: any) => { 
 
-		console.log(item); 
+		// console.log(item); 
 		return <IonSlide key={ item.id }>
 					<img alt={ "Profile Image " + item.id } src={ process.env.REACT_APP_API_URL + item.url } />
 				</IonSlide>; 

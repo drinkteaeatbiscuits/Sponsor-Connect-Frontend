@@ -69,7 +69,7 @@ const Login: React.FC<props> = () => {
       }
     }
     
-    console.log(username, password);
+    // console.log(username, password);
 
   return (
     <IonPage>

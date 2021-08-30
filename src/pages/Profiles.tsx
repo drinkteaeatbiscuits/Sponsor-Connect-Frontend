@@ -22,7 +22,7 @@ const Profiles: React.FC = () => {
         <IonLoading isOpen={isLoading} message="Loading..." />
           <IonList>
               { data?.map(( p:any )=>{
-              return <IonItem key={p.id}><p>{p.firstName}</p></IonItem>
+              return <IonItem key={p.id}><p>{p.profileName}</p></IonItem>
             })}
           </IonList>
       </IonContent>

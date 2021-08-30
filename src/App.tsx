@@ -39,7 +39,7 @@ import { useEffect } from 'react';
 import Dashboard from './pages/Dashboard/Dashboard';
 import Profiles from './pages/Profiles';
 import Profile from './pages/Profile/Profile';
-import Opportunities from './pages/Opportunities';
+import Opportunities from './pages/Opportunities/Opportunities';
 import Settings from './pages/Settings';
 import EditProfile from './pages/EditProfile/EditProfile';
 import Billing from './pages/Billing';
@@ -48,6 +48,7 @@ import Notifications from './pages/Notifications';
 // import MainMenu from './components/MainMenu';
 import Subscription from './pages/Subscription';
 import Landing from './pages/Landing/Landing';
+import Opportunity from './pages/Opportunity/Opportunity';
 
 
 const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
@@ -107,7 +108,6 @@ const checkIfAuthenticated = async () => {
 
     return profileInfo?.statusCode ? false : profileInfo;
     
-    
 }
 
 const App: React.FC = () => {
@@ -124,6 +124,8 @@ const App: React.FC = () => {
   wasUserHere && ( initialState.isAuthenticated = true); 
   wasUserHere && ( initialState.user = wasUserHere );
 
+
+  
   return (  
   
   <IonApp>
@@ -158,13 +160,22 @@ const App: React.FC = () => {
         <Route exact path="/profile/edit">
           {state.isAuthenticated ? <EditProfile /> : <Login />}
         </Route>
-        <Route exact path="/profile">
+        <Route exact path="/profile/:id">
           {state.isAuthenticated ? <Profile /> : <Login />}
         </Route>
         
-        <Route exact path="/opportunities">
+        {/* <Route exact path="/opportunities">
+          {state.isAuthenticated ? <Opportunities /> : <Login />}
+        </Route> */}
+
+        <Route exact path="/opportunities/:id">
           {state.isAuthenticated ? <Opportunities /> : <Login />}
         </Route>
+
+        <Route exact path="/opportunity/:id">
+          {state.isAuthenticated ? <Opportunity /> : <Login />}
+        </Route>
+
         <Route exact path="/settings">
           {state.isAuthenticated ? <Settings /> : <Login />}
         </Route>

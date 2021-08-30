@@ -15,7 +15,7 @@ const Home: React.FC = () => {
 
   const { dispatch } = React.useContext( AuthContext );
 
-  console.log(authState);
+  // console.log(authState);
 
   useIonViewDidEnter(() => {
     dispatch && dispatch({
