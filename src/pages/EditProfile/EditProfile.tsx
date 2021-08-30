@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonSearchbar, IonToolbar } from '@ionic/react';
+import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonSearchbar, IonTextarea, IonToolbar } from '@ionic/react';
 import Header from '../../components/Header';
 import { useHistory } from 'react-router';
 import Cookies from 'js-cookie';
@@ -12,14 +12,16 @@ import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-goo
 
 import './edit-profile.scss';
 
-import sports from '../CreateAccount/sports.json';
+import sports from '../CreateAccount/sports.json'; 
+import { env } from 'process';
+import useUploadImage from '../../hooks/useUploadImage';
 
 export interface props {}
 
 
 const EditProfile: React.FC = () => {
   
-
+ 
 	const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
 
@@ -28,7 +30,7 @@ const EditProfile: React.FC = () => {
   
   const [profileName, setProfileName] = useState("");
   const [sport, setSport] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState<any>("");
   const [priceRange, setPriceRange] = useState("");
   const [website, setWebsite] = useState("");
 
@@ -40,9 +42,23 @@ const EditProfile: React.FC = () => {
 
   const [filteredSports, setFilteredSports] = useState<any>(sports);
   
-  
+  const [socialMedia, setSocialMedia] = useState<Array<object>>();
   const [facebookTotal, setFacebookTotal] = useState<any>("");
-  const [facebookUrl, setFacebookUrl] = useState<any>("");
+  const [facebookUrl, setFacebookUrl] = useState<any>(""); 
+  const [instagramTotal, setInstagramTotal] = useState<any>("");
+  const [instagramUrl, setInstagramUrl] = useState<any>("");
+  const [twitterTotal, setTwitterTotal] = useState<any>("");
+  const [twitterUrl, setTwitterUrl] = useState<any>("");
+  const [youTubeTotal, setYouTubeTotal] = useState<any>("");
+  const [youTubeUrl, setYouTubeUrl] = useState<any>("");
+  const [accolades, setAccolades] = useState<any>("");
+  
+  
+  const [shortDescription, setShortDescription] = useState<any>("");
+
+
+  const {isLoading: isLoadingUploadImage, error: isLoadingUploadImageError , mutateAsync: addUploadImageMutation} = useUploadImage();
+
 
   const updateProfile = async () => {
     
@@ -51,7 +67,10 @@ const EditProfile: React.FC = () => {
       sport: yourSport, 
       location,  
       priceRange, 
-      website 
+      website,
+      socialMedia: socialMediaObject,
+      shortDescription,
+      accolades: accolades.filter(Boolean),
     });
     
     history.goBack();
@@ -67,6 +86,23 @@ const EditProfile: React.FC = () => {
       setLocation(profileData.data[0]?.location);
       setPriceRange(profileData.data[0]?.priceRange);
       setWebsite(profileData.data[0]?.website);
+      
+      setSocialMedia(profileData.data[0]?.socialMedia);
+
+      setFacebookTotal(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'facebook'; })[0]?.socialMediaTotal);
+      setFacebookUrl(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'facebook'; })[0]?.socialMediaUrl);
+      
+      setInstagramTotal(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'instagram'; })[0]?.socialMediaTotal);
+      setInstagramUrl(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'instagram'; })[0]?.socialMediaUrl);
+      
+      setTwitterTotal(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'twitter'; })[0]?.socialMediaTotal);
+      setTwitterUrl(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'twitter'; })[0]?.socialMediaUrl);
+      
+      setYouTubeTotal(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'youTube'; })[0]?.socialMediaTotal);
+      setYouTubeUrl(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'youTube'; })[0]?.socialMediaUrl);
+
+      setShortDescription(profileData.data[0]?.shortDescription);
+      setAccolades(profileData.data[0]?.accolades);
     }
   }, [profileData.status, profileData.data]);
 
@@ -130,8 +166,72 @@ const EditProfile: React.FC = () => {
   }
 
 
+  // const getSocialMediaData = (socialMediaName: string) => {
 
-  // console.log(profileData);
+
+  //     return socialMedia?.filter(function (entry:any) { return entry.socialMediaName === socialMediaName; })      
+    
+  // }
+  // console.log(getSocialMediaData('facebook'));
+
+  const socialMediaObject: { socialMediaName: string; socialMediaTotal: any; socialMediaUrl: any; }[] = [];
+
+  facebookTotal && socialMediaObject.push({
+    "socialMediaName": "facebook",
+    "socialMediaTotal": facebookTotal,
+    "socialMediaUrl": facebookUrl
+  });
+  
+  instagramTotal && socialMediaObject.push({
+    "socialMediaName": "instagram",
+    "socialMediaTotal": instagramTotal,
+    "socialMediaUrl": instagramUrl
+  });
+  
+  twitterTotal && socialMediaObject.push({
+    "socialMediaName": "twitter",
+    "socialMediaTotal": twitterTotal,
+    "socialMediaUrl": twitterUrl
+  });
+  
+  youTubeTotal && socialMediaObject.push({
+    "socialMediaName": "youTube",
+    "socialMediaTotal": youTubeTotal,
+    "socialMediaUrl": youTubeUrl
+  });
+
+  // console.log(socialMediaObject);
+
+  const createAccolades = (e:any) => {
+    
+    let accoladeIndex = e.srcElement.id.match(/\d+/)[0];
+
+    let newAccolades: Array<any> = [];
+
+    newAccolades = newAccolades.concat(accolades);
+
+    newAccolades[accoladeIndex] = e.detail.value;
+
+    setAccolades(newAccolades);
+  }
+    
+  const addAccolade = () => {
+
+    let newAccolades: Array<string> = [];
+
+    newAccolades = newAccolades.concat(accolades);
+    newAccolades.push("");
+
+    setAccolades(newAccolades);
+    
+  }
+
+  const uploadImage = async (e:any) => {
+    console.log(e);
+    await addUploadImageMutation(e);
+  }
+
+  // console.log(accolades);
 
   return (
     <IonPage>
@@ -161,14 +261,14 @@ const EditProfile: React.FC = () => {
                       <IonItem className="location-item">
 
                         <IonLabel className="location-label" position="stacked" >Location</IonLabel>
+                        
               
                         <GooglePlacesAutocomplete
                           apiKey="AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q"
-
                           selectProps={{
-                            location,
+                            location: location,
                             onChange: doLocationSelected,
-                            placeholder: "Start typing to select location",
+                            placeholder: location ? location.label : "Start typing to select location",
                             menuPlacement: "auto",
                             className: "google-places"
                           }}
@@ -191,17 +291,82 @@ const EditProfile: React.FC = () => {
                     <IonInput type="text" value={ website ? website : p.website } onIonChange={ (e:any) => setWebsite(e.detail.value) } />
                   </IonItem>
 
+                  
+
+                  
 
                   <IonItem>
                     <IonLabel position="stacked">Facebook Total</IonLabel>
-                    <IonInput type="number" value={ facebookTotal ? facebookTotal : p.socialMedia } onIonChange={ (e:any) => setFacebookTotal(e.detail.value) } />
-                    
+                    <IonInput type="number" value={ facebookTotal && facebookTotal } onIonChange={ (e:any) => setFacebookTotal(e.detail.value) } />
                   </IonItem>
 
                   <IonItem>
                     <IonLabel position="stacked">Facebook URL</IonLabel>
-                    <IonInput type="text" value={ facebookUrl ? facebookUrl : p.socialMedia } onIonChange={ (e:any) => setFacebookUrl(e.detail.value) } />
-                    
+                    <IonInput type="text" value={ facebookUrl && facebookUrl } onIonChange={ (e:any) => setFacebookUrl(e.detail.value) } />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="stacked">Instagram Total</IonLabel>
+                    <IonInput type="number" value={ instagramTotal && instagramTotal  } onIonChange={ (e:any) => setInstagramTotal(e.detail.value) } />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="stacked">Instagram URL</IonLabel>
+                    <IonInput type="text" value={ instagramUrl && instagramUrl } onIonChange={ (e:any) => setInstagramUrl(e.detail.value) } />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="stacked">Twitter Total</IonLabel>
+                    <IonInput type="number" value={ twitterTotal && twitterTotal  } onIonChange={ (e:any) => setTwitterTotal(e.detail.value) } />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="stacked">Twitter URL</IonLabel>
+                    <IonInput type="text" value={ twitterUrl && twitterUrl } onIonChange={ (e:any) => setTwitterUrl(e.detail.value) } />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="stacked">YouTube Total</IonLabel>
+                    <IonInput type="number" value={ youTubeTotal && youTubeTotal  } onIonChange={ (e:any) => setYouTubeTotal(e.detail.value) } />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="stacked">YouTube URL</IonLabel>
+                    <IonInput type="text" value={ youTubeUrl && youTubeUrl } onIonChange={ (e:any) => setYouTubeUrl(e.detail.value) } />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="stacked">Short Description</IonLabel>
+                    <IonTextarea value={ shortDescription ? shortDescription : p.shortDescription } onIonChange={ (e:any) => setShortDescription(e.detail.value) } />
+                  </IonItem>
+
+                  <IonItem>
+                    <IonLabel position="stacked">Accolades</IonLabel>
+
+                    {/* {console.log(accolades)} */}
+
+                    {accolades ? accolades.map((accolade: string, index: any) => {
+
+                      // {console.log(accolade)}
+
+                      return <IonInput placeholder="Your Accolade" key={index} value={accolade && accolade} id={"accolade-" + index} onIonChange={ (e:any) => createAccolades(e) } />
+
+                    })
+
+                     : 
+                     
+                     <IonInput value={""} onIonChange={ (e:any) => createAccolades(e.detail.value) } /> 
+                     
+                     }
+
+
+
+                    <IonButton onClick={ () => addAccolade() } >Add Accolade</IonButton>
+                  </IonItem>
+
+                  <IonItem>
+                    <input type="file" name="files" />
+                    <IonButton onClick={ (e) => uploadImage(e) } >Upload</IonButton>
                   </IonItem>
 
               </div>

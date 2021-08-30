@@ -12,6 +12,9 @@ const useUpdateProfile = () => {
 		  location: string; 
 		  priceRange: string; 
 		  website: string;
+		  socialMedia: any;
+		  shortDescription: string;
+		  accolades: any;
 		}) => {
   
 		const profilesResponse = await fetch(process.env.REACT_APP_API_URL + "/profiles/me", {
@@ -26,6 +29,9 @@ const useUpdateProfile = () => {
 			  location: data.location, 
 			  priceRange: data.priceRange, 
 			  website: data.website, 
+			  socialMedia: data.socialMedia,
+			  shortDescription: data.shortDescription,
+			  accolades: data.accolades,
 			}), 
 		});
 	
