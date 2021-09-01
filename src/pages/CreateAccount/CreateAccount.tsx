@@ -78,11 +78,9 @@ const CreateAccount: React.FC = () => {
   // console.log(location);
 
   const doCreateAccount = async () => {
-    console.log(username, password, yourName);
+    // console.log(username, password, yourName);
 
-    const URL = "http://localhost:1337";
-
-    const createAccountResp = await fetch(URL + "/auth/local/register", {
+    const createAccountResp = await fetch(process.env.REACT_APP_API_URL + "/auth/local/register", {
       headers: {
         "Content-Type": "application/json"
       },
@@ -103,12 +101,12 @@ const CreateAccount: React.FC = () => {
 
       // alert( "Error: " + createAccountInfo.data[0].messages[0].message );
 
-      console.log(createAccountInfo.data);
+      console.log(createAccountInfo);
 
       present({
         cssClass: 'my-css',
         header: 'Account Error',
-        message: createAccountInfo.data[0].messages[0].message,
+        message: createAccountInfo?.data[0].messages[0].message,
         buttons: [
           'Cancel',
           { text: 'Ok', handler: () => console.log('ok pressed') },
@@ -117,15 +115,15 @@ const CreateAccount: React.FC = () => {
       })
     } else {
 
-      console.log("User account created");
-      console.log(createAccountInfo);
+      // console.log("User account created");
+      // console.log(createAccountInfo);
 
       dispatch && dispatch({
         type: "setUser",
         payload: createAccountInfo
       });
 
-      console.log(profileName, yourSport, location, latLong);
+      // console.log(profileName, yourSport, location, latLong);
 
 
       const createProfileResp = await fetch(process.env.REACT_APP_API_URL + "/profiles/me", {
