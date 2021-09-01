@@ -3,7 +3,7 @@ import Header from '../../components/Header';
 import { useHistory, useParams } from 'react-router';
 import Cookies from 'js-cookie';
 import { AuthContext } from "../../App";
-import React from 'react';
+import React, { useState } from 'react';
 import LogoutButton from '../../components/LogoutButton';
 import { useQueryClient, useQuery } from 'react-query';
 import useProfile from '../../hooks/useProfile';
@@ -28,15 +28,14 @@ const Profile: React.FC = () => {
 	const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
 
-  
-
-  // authState?.user.profile === parseInt(profileId.id) && console.log('your profile');
+  const [showFullDescription, setShowFullDescription] = useState<boolean>(false)
 
   
   const {isLoading, data, error} = useProfile( profileId.id );
 
   error && console.log(error);
 
+  // console.log(data?.profilePicture);
 
   return (
     <IonPage>
@@ -46,7 +45,7 @@ const Profile: React.FC = () => {
           <IonButtons className="ion-justify-content-around">
             <IonButton className="" size="small" onClick={()=> history.push( "/dashboard" )}>Dashboard</IonButton>
             <IonButton className="" size="small" onClick={()=> history.push( "/opportunities/" + profileId.id )}>Manage Opportunities</IonButton>
-            <IonButton className="" size="small" onClick={()=> history.push( "/profile/edit" )}>Edit Profile</IonButton>
+            <IonButton className="" size="small" onClick={()=> history.push( "/profile/" + profileId.id +"/edit" )}>Edit Profile</IonButton>
           </IonButtons>
           
         </IonToolbar> }
@@ -125,7 +124,13 @@ const Profile: React.FC = () => {
               
               <div className="profile-detail-about ion-text-left ion-padding-top">
                 <h4>About</h4>
-                { data?.shortDescription }  
+                { data?.shortDescription } 
+                <div className="read-more ion-color-primary ion-padding-top" onClick={() => setShowFullDescription(!showFullDescription)}>{showFullDescription ? "Read less" : "Read more"}</div>
+                <div className="fullDescription ion-padding-top">
+                  { showFullDescription && data?.description}
+                  
+                </div>
+
               </div>
             
             } 

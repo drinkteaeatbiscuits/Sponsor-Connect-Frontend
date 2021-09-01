@@ -1,36 +1,39 @@
 import { useMutation, useQueryClient } from 'react-query';
 
-const useUploadImage = () => {
-  
+const useUploadImage = (profileId:any, field:any, ref:any ) => {
+
+    // console.log(profileId);
+
     const client = useQueryClient();
     
     return useMutation(
       "uploadedImages",
-      async (data: { imageUpload: any; }) => {
-        
-      console.log(data.imageUpload);
+      async (data: any) => {
+
+
+      var formdata = new FormData();
+      formdata.append( "files", data, data.path );
+      formdata.append( "ref", ref );
+      formdata.append( "refId", profileId );
+      formdata.append( "field", field );
+    
+      const imagePostResp = await fetch(process.env.REACT_APP_API_URL + "/upload", {
+        credentials: "include",
+        method: "POST",
+        body: formdata 
+        });
   
-    //   const URL = "https://app.api.dteb.io";
-  
-    //   const imagePostResp = await fetch(URL + "/tests", {
-    //       headers: {
-    //           "Content-Type": "application/json"
-    //       },
-    //       method: "POST",
-    //       body: JSON.stringify({ dtebText: data.dtebText }), 
-    //     });
-  
-    //     return await imagePostResp.json();
+        return await imagePostResp.json();
   
       },
       {
-        // onSuccess: (data) => {
-        //   client.invalidateQueries("imagePosts");
+        onSuccess: (data) => {
+          client.invalidateQueries("imagePosts");
   
-        //   // console.log(client);
-        //   // console.log(data.id);
+          // console.log(client);
+          // console.log(data);
           
-        // }
+        }
       }
     )
   }

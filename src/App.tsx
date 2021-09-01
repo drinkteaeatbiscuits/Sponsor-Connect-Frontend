@@ -157,12 +157,14 @@ const App: React.FC = () => {
         <Route exact path="/login">
           {state.isAuthenticated ? <Dashboard /> : <Login />}
         </Route>
-        <Route exact path="/profile/edit">
+        <Route exact path="/profile/:id/edit">
           {state.isAuthenticated ? <EditProfile /> : <Login />}
         </Route>
         <Route exact path="/profile/:id">
           {state.isAuthenticated ? <Profile /> : <Login />}
         </Route>
+
+
         
         {/* <Route exact path="/opportunities">
           {state.isAuthenticated ? <Opportunities /> : <Login />}
