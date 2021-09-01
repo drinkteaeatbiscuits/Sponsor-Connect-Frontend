@@ -5,7 +5,7 @@ const useUpdateProfile = () => {
 	const client = useQueryClient();
 	  
 	  return useMutation(
-		"myProfile",
+		"profiles",
 		async (data: { 
 		  profileName: string; 
 		  sport: string;
@@ -15,6 +15,7 @@ const useUpdateProfile = () => {
 		  socialMedia: any;
 		  shortDescription: string;
 		  accolades: any;
+		  description: string;
 		}) => {
   
 		const profilesResponse = await fetch(process.env.REACT_APP_API_URL + "/profiles/me", {
@@ -32,6 +33,7 @@ const useUpdateProfile = () => {
 			  socialMedia: data.socialMedia,
 			  shortDescription: data.shortDescription,
 			  accolades: data.accolades,
+			  description: data.description,
 			}), 
 		});
 	
@@ -40,7 +42,8 @@ const useUpdateProfile = () => {
 		},
 		{
 		  onSuccess: () => {
-			client.invalidateQueries("myProfile");
+			client.invalidateQueries("profiles");
+			client.invalidateQueries("profile");
 		  }
 		}
 	  )

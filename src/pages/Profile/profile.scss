@@ -134,3 +134,12 @@
 .accolade {
 	margin: 0 0 8px;
 }
+
+.read-more {
+	font-size: 0.9em;
+	text-decoration: underline;
+	cursor: pointer;
+	&:hover {
+		color: var(--ion-color-primary-shade);
+	}
+}

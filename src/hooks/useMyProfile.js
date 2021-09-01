@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from 'react-query';
 const useMyProfile = () => {
 	const client = useQueryClient();
 	return useQuery(
-	  "myProfile",
+	  "profiles",
 	  async() => {
 		console.log("in query");
 		const response = await fetch(process.env.REACT_APP_API_URL + '/profiles/me', {
@@ -15,7 +15,7 @@ const useMyProfile = () => {
   
 		// pre load the cache
 		posts.forEach((p: any) => {
-		  client.setQueryData(["myProfile", p.id], p);
+		  client.setQueryData(["profiles", p.id], p);
 		});
   
 		return posts;

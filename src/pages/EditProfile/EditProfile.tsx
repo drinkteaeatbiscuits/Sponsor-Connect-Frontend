@@ -9,12 +9,22 @@ import { useMutation, useQuery, useQueryClient } from 'react-query';
 import useUpdateProfile from '../../hooks/useUpdateProfile';
 import useMyProfile from '../../hooks/useMyProfile';
 import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
+import ReactCrop from 'react-image-crop';
+import { saveAs } from 'file-saver';
+
+
+import 'react-image-crop/dist/ReactCrop.css';
+
+// import '../../../node_modules/react-image-crop/lib/ReactCrop.scss';
+
 
 import './edit-profile.scss';
 
 import sports from '../CreateAccount/sports.json'; 
 import { env } from 'process';
 import useUploadImage from '../../hooks/useUploadImage';
+import UploadImage from '../../components/UploadImage/UploadImage';
+import { constructOutline } from 'ionicons/icons';
 
 export interface props {}
 
@@ -55,9 +65,18 @@ const EditProfile: React.FC = () => {
   
   
   const [shortDescription, setShortDescription] = useState<any>("");
+  const [fullDescription, setFullDescription] = useState<any>("");
 
 
-  const {isLoading: isLoadingUploadImage, error: isLoadingUploadImageError , mutateAsync: addUploadImageMutation} = useUploadImage();
+  const [profilePicture, setProfilePicture] = useState<any>("");
+
+  const [src, setSrc] = useState<any>("");
+  const [crop, setCrop] = useState<any>({ aspect: 2 / 1 });
+  const [imageRef, setImageRef] = useState<any>("");
+  const [fileUrl, setFileUrl] = useState<any>("");
+  const [croppedImageUrl, setCroppedImageUrl] = useState<any>("");
+
+  const { isLoading: isLoadingUploadImage, error: isLoadingUploadImageError, mutateAsync: addUploadImageMutation } = useUploadImage( authState?.user.profile, "profilePicture", "profile" );
 
 
   const updateProfile = async () => {
@@ -71,6 +90,7 @@ const EditProfile: React.FC = () => {
       socialMedia: socialMediaObject,
       shortDescription,
       accolades: accolades.filter(Boolean),
+      description: fullDescription
     });
     
     history.goBack();
@@ -102,9 +122,45 @@ const EditProfile: React.FC = () => {
       setYouTubeUrl(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'youTube'; })[0]?.socialMediaUrl);
 
       setShortDescription(profileData.data[0]?.shortDescription);
+      setFullDescription(profileData.data[0]?.description);
       setAccolades(profileData.data[0]?.accolades);
     }
   }, [profileData.status, profileData.data]);
+
+
+  const blobToFile = (theBlob:any, fileName:any) => {
+    //A Blob() is almost a File() - it's just missing the two properties below which we will add
+    const lastModifiedDate = new Date().getTime();
+
+    const file = new File([theBlob], fileName, {lastModified: lastModifiedDate, type: "image/jpg"});
+    return file;
+  }
+ 
+  const uploadImage = async () => {
+
+    if(croppedImageUrl) {
+      let blob = await fetch(croppedImageUrl).then(r => r.blob());
+      // blob.push("name": 'test');
+
+      // saveAs(new Blob([blob], {type:"jpg"}), "newimage.jpg");
+      
+      
+      
+      console.log(blobToFile(blob, "afile.jpg"));
+
+      addUploadImageMutation( blobToFile(blob, "afile.jpg") );
+
+    } else if (profilePicture) { 
+
+      console.log(profilePicture)
+
+      addUploadImageMutation( profilePicture );
+
+    }
+    
+  }
+
+  // console.log(src);
 
   
   const focusOnSport = () => {
@@ -226,12 +282,75 @@ const EditProfile: React.FC = () => {
     
   }
 
-  const uploadImage = async (e:any) => {
-    console.log(e);
-    await addUploadImageMutation(e);
+  const makeClientCrop = async (crop:any)  => {
+    if (imageRef && crop.width && crop.height) {
+      const croppedImageUrl = await getCroppedImg(
+        imageRef,
+        crop,
+        'newFile.jpeg'
+      );
+      
+      setCroppedImageUrl(croppedImageUrl);
+    }
   }
 
-  // console.log(accolades);
+
+
+  const getCroppedImg = (image:any, crop:any, fileName:any) => {
+    const canvas = document.createElement('canvas');
+    const pixelRatio = window.devicePixelRatio;
+    const scaleX = image.naturalWidth / image.width;
+    const scaleY = image.naturalHeight / image.height;
+    const ctx = canvas.getContext('2d');
+
+    
+    if(ctx){
+
+      canvas.width = crop.width * pixelRatio * scaleX;
+      canvas.height = crop.height * pixelRatio * scaleY;
+
+      ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
+      ctx.imageSmoothingQuality = 'high';
+
+      ctx.drawImage(
+        image,
+        crop.x * scaleX,
+        crop.y * scaleY,
+        crop.width * scaleX,
+        crop.height * scaleY,
+        0,
+        0,
+        crop.width * scaleX,
+        crop.height * scaleY
+      );
+
+    }
+
+    return new Promise((resolve, reject) => {
+
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            //reject(new Error('Canvas is empty'));
+            console.error('Canvas is empty');
+            return;
+          }
+          blob.name = fileName;
+          // window.URL.revokeObjectURL(fileUrl);
+
+          var urlCreator = window.URL || window.webkitURL;
+          var imageUrl = urlCreator.createObjectURL(blob);
+
+          resolve(imageUrl);
+
+        },
+        'image/jpeg',
+        1
+      );
+    });
+  }
+
+  
 
   return (
     <IonPage>
@@ -291,10 +410,6 @@ const EditProfile: React.FC = () => {
                     <IonInput type="text" value={ website ? website : p.website } onIonChange={ (e:any) => setWebsite(e.detail.value) } />
                   </IonItem>
 
-                  
-
-                  
-
                   <IonItem>
                     <IonLabel position="stacked">Facebook Total</IonLabel>
                     <IonInput type="number" value={ facebookTotal && facebookTotal } onIonChange={ (e:any) => setFacebookTotal(e.detail.value) } />
@@ -341,6 +456,11 @@ const EditProfile: React.FC = () => {
                   </IonItem>
 
                   <IonItem>
+                    <IonLabel position="stacked">Full Description</IonLabel>
+                    <IonTextarea value={ fullDescription ? fullDescription : p.description } onIonChange={ (e:any) => setFullDescription(e.detail.value) } />
+                  </IonItem>
+
+                  <IonItem>
                     <IonLabel position="stacked">Accolades</IonLabel>
 
                     {/* {console.log(accolades)} */}
@@ -364,10 +484,35 @@ const EditProfile: React.FC = () => {
                     <IonButton onClick={ () => addAccolade() } >Add Accolade</IonButton>
                   </IonItem>
 
-                  <IonItem>
-                    <input type="file" name="files" />
-                    <IonButton onClick={ (e) => uploadImage(e) } >Upload</IonButton>
-                  </IonItem>
+                  <div>
+
+                    {/* { console.log( profilePicture ) } */}
+
+                    <UploadImage setImage={setProfilePicture} setSrc={setSrc} />
+
+
+                    <ReactCrop src={src} crop={crop} 
+                    onImageLoaded={(image:any) => setImageRef(image)}
+                    onComplete={(crop:any) => makeClientCrop(crop)}
+                    onChange={(newCrop:any) => setCrop(newCrop)} />
+
+                    {croppedImageUrl && (
+
+                       <img alt="Crop" style={{ maxWidth: '100%' }} src={croppedImageUrl} />
+
+                    )}
+
+                    {croppedImageUrl && console.log(croppedImageUrl)}
+                    
+                    {profilePicture && <div>
+                      <p>{profilePicture.name}</p>
+                      <p>Filetype: {profilePicture.type}</p>
+					            <p>Size in bytes: {profilePicture.size}</p>
+                      </div> }
+
+                    <div className="upload" onClick={() => uploadImage()}>upload</div>
+                     
+                  </div>
 
               </div>
             )
