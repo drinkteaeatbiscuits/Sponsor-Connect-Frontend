@@ -67,10 +67,12 @@ const reducer = (state: any, action: any) => {
   
   switch (action.type) {
     case "LOGIN":
+      let isAuthenticated = false;
+      action.payload.status = "Authenticated" ? isAuthenticated = true : isAuthenticated = false;
       return {
         ...state,
         isAuthenticated: true,
-        user: action.payload.user,
+        user: action.payload.user, 
       };
     case "LOGOUT":
       // localStorage.clear();

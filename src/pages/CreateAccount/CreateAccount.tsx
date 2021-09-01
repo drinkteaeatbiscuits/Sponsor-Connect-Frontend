@@ -51,8 +51,6 @@ const CreateAccount: React.FC = () => {
 
   const [profileName, setProfileName] = useState<string>("");
 
-
-
   const [searchText, setSearchText] = useState<string>("");
 
   const [yourSport, setYourSport] = useState<string>("");
@@ -118,10 +116,7 @@ const CreateAccount: React.FC = () => {
       // console.log("User account created");
       // console.log(createAccountInfo);
 
-      dispatch && dispatch({
-        type: "setUser",
-        payload: createAccountInfo
-      });
+      
 
       // console.log(profileName, yourSport, location, latLong);
 
@@ -163,6 +158,11 @@ const CreateAccount: React.FC = () => {
       } else {
 
         console.log(createProfileInfo);
+
+        dispatch && dispatch({
+          type: "setUser",
+          payload: createAccountInfo
+        });
       
       }
 
