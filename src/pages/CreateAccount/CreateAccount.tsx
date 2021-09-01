@@ -161,7 +161,7 @@ const CreateAccount: React.FC = () => {
 
         dispatch && dispatch({
           type: "setUser",
-          payload: createAccountInfo
+          payload: createAccountInfo.user
         });
       
       }
