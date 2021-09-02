@@ -76,12 +76,12 @@ const CreateAccount: React.FC = () => {
   const doCreateAccount = async () => {
     // console.log(username, password, yourName);
 
-    const createAccountResp = await fetch(process.env.REACT_APP_API_URL + "/auth/local/register", {
+    const createAccountResp = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/auth/local/register", {
       headers: {
         "Content-Type": "application/json"
       },
       method: "POST",
-      body: JSON.stringify({
+      body: JSON.stringify({ 
         username: username,
         email: username,
         password: password,
@@ -117,7 +117,7 @@ const CreateAccount: React.FC = () => {
       // });
 
   
-      const createProfileResp = await fetch(process.env.REACT_APP_API_URL + "/profiles/me", {
+      const createProfileResp = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/profiles/me", {
         credentials: "include",
         headers: {
           "Content-Type": "application/json"

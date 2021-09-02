@@ -17,7 +17,7 @@ const useUploadImage = (profileId:any, field:any, ref:any ) => {
       formdata.append( "refId", profileId );
       formdata.append( "field", field );
     
-      const imagePostResp = await fetch(process.env.REACT_APP_API_URL + "/upload", {
+      const imagePostResp = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/upload", {
         credentials: "include",
         method: "POST",
         body: formdata 

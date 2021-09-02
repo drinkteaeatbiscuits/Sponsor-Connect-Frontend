@@ -6,7 +6,7 @@ import { AuthContext } from '../App';
 import React from 'react';
 import LogoutButton from '../components/LogoutButton';
 
-const backendUrl = process.env.REACT_APP_API_URL;
+const backendUrl = (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL);
 
 const LoginButton = (props: any) => <a href={`${backendUrl}/connect/${props.providerName}`}>
     <button style={{ width: '150px' }}>Connect to {props.providerName}</button>

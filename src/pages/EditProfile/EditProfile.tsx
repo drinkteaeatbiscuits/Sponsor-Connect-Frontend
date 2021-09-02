@@ -89,7 +89,7 @@ const EditProfile: React.FC = () => {
       website,
       socialMedia: socialMediaObject,
       shortDescription,
-      accolades: accolades.filter(Boolean),
+      accolades: accolades?.filter(Boolean),
       description: fullDescription
     });
     
@@ -128,8 +128,15 @@ const EditProfile: React.FC = () => {
   }, [profileData.status, profileData.data]);
 
 
+  const dateNumber = new Date().getTime();
+  const randomString = [...Array(12)].map(() => Math.random().toString(36)[2]).join('');
+  const fileName = profilePicture?.name?.replace(/\.[^/.]+$/, "").replace(/[^a-z0-9]/gi, '-').toLowerCase();
+  const fileExtension = profilePicture?.name?.split('.').pop();
+  const newFileName = dateNumber + "-" + randomString + "-" + fileName + "." + fileExtension;
+    
+
   const blobToFile = (theBlob:any, fileName:any) => {
-    //A Blob() is almost a File() - it's just missing the two properties below which we will add
+
     const lastModifiedDate = new Date().getTime();
 
     const file = new File([theBlob], fileName, {lastModified: lastModifiedDate, type: "image/jpg"});
@@ -140,21 +147,12 @@ const EditProfile: React.FC = () => {
 
     if(croppedImageUrl) {
       let blob = await fetch(croppedImageUrl).then(r => r.blob());
-      // blob.push("name": 'test');
 
-      // saveAs(new Blob([blob], {type:"jpg"}), "newimage.jpg");
-      
-      
-      
-      console.log(blobToFile(blob, "afile.jpg"));
-
-      addUploadImageMutation( blobToFile(blob, "afile.jpg") );
+      addUploadImageMutation( blobToFile(blob, newFileName) );
 
     } else if (profilePicture) { 
 
-      console.log(profilePicture)
-
-      addUploadImageMutation( profilePicture );
+      addUploadImageMutation( blobToFile(profilePicture, newFileName) );
 
     }
     
@@ -261,13 +259,9 @@ const EditProfile: React.FC = () => {
   const createAccolades = (e:any) => {
     
     let accoladeIndex = e.srcElement.id.match(/\d+/)[0];
-
     let newAccolades: Array<any> = [];
-
     newAccolades = newAccolades.concat(accolades);
-
     newAccolades[accoladeIndex] = e.detail.value;
-
     setAccolades(newAccolades);
   }
     
@@ -282,17 +276,21 @@ const EditProfile: React.FC = () => {
     
   }
 
+ 
+
   const makeClientCrop = async (crop:any)  => {
     if (imageRef && crop.width && crop.height) {
       const croppedImageUrl = await getCroppedImg(
         imageRef,
         crop,
-        'newFile.jpeg'
+        newFileName
       );
       
       setCroppedImageUrl(croppedImageUrl);
     }
   }
+
+
 
 
 

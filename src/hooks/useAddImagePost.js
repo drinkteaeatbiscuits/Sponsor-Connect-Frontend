@@ -8,11 +8,9 @@ const useAddImagePost = () => {
       "imagePosts",
       async (data: { dtebText: string; }) => {
         
-        // console.log(data.dtebText);
+
   
-      const URL = "https://app.api.dteb.io";
-  
-      const imagePostResp = await fetch(URL + "/tests", {
+      const imagePostResp = await fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/tests", {
           headers: {
               "Content-Type": "application/json"
           },
@@ -27,8 +25,7 @@ const useAddImagePost = () => {
         onSuccess: (data) => {
           client.invalidateQueries("imagePosts");
   
-          // console.log(client);
-          // console.log(data.id);
+
           
         }
       }

@@ -60,7 +60,7 @@ const Profile: React.FC = () => {
 
          <div className="profile-header">
           
-          { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.coverImage && <img className="cover-image" alt={ "Cover Photo " + data?.coverImage.id } src={ data?.coverImage.url } />  }
+          { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.coverImage && <img className="cover-image" alt={ "Cover Photo " + data?.coverImage.id } src={ (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL + '/') + data?.coverImage.url } />  }
             
         </div>
 
@@ -69,7 +69,7 @@ const Profile: React.FC = () => {
         <div className="avatar">
           <div className="avatar-image">
             
-            { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.profilePicture ? <img className="profile-picture" alt={ "Profile Image " + data?.profilePicture.id } src={ data?.profilePicture.url } /> : <IonIcon color="medium" icon={personCircle} /> }
+            { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.profilePicture ? <img className="profile-picture" alt={ "Profile Image " + data?.profilePicture.id } src={ (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL + '/') + data?.profilePicture.url } /> : <IonIcon color="medium" icon={personCircle} /> }
             
           </div>
         </div>

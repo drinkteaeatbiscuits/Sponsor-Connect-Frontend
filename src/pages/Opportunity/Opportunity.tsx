@@ -51,7 +51,7 @@ const Opportunity: React.FC = () => {
           <div className="opportunity">
 
 
-            {data?.images[0] && <img src={process.env.REACT_APP_API_URL + data?.images[0]?.url} alt={data?.title} />}
+            {data?.images[0] && <img src={(process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + data?.images[0]?.url} alt={data?.title} />}
 
             <div className="ion-padding">
               <h1 className="ion-text-uppercase ion-color-dark line-height-1">{data?.title}</h1>

@@ -25,11 +25,9 @@ const Login: React.FC<props> = () => {
 
 
     const doLogin = async () => {
-      
-
-      const URL = process.env.REACT_APP_API_URL;
+    
   
-      const loginResp = await fetch( URL + "/auth/local", {
+      const loginResp = await fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/auth/local", {
           method: "POST",
           headers: {
             "content-type": "application/json"

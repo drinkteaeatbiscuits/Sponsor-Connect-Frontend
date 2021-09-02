@@ -98,8 +98,7 @@ const reducer = (state: any, action: any) => {
 
 const checkIfAuthenticated = async () => {
 
-    const URL = process.env.REACT_APP_API_URL;
-    const loginResp = await fetch(URL + "/profiles/auth", {
+    const loginResp = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/profiles/auth", {
       method: "GET",
       credentials: "include",
     });
@@ -111,8 +110,6 @@ const checkIfAuthenticated = async () => {
     return profileInfo?.statusCode ? false : profileInfo;
     
 }
-
-
 
 const App: React.FC = () => {
 
@@ -129,6 +126,8 @@ const App: React.FC = () => {
   wasUserHere && ( initialState.user = wasUserHere );
 
   // console.log(initialState.user);
+
+  
   
   return (  
   

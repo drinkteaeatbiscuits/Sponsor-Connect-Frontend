@@ -12,7 +12,6 @@ const Profiles: React.FC = () => {
 
   error && console.log(error);
 
-  // console.log(process.env.REACT_APP_API_URL);
 
   return (
     <IonPage>
