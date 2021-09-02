@@ -1,5 +1,5 @@
 {
-  "name": "Sponsor Connect",
+  "name": "myApp",
   "version": "0.0.1",
   "homepage": "https://app.sponsor-connect.com",
   "private": true,
@@ -73,7 +73,7 @@
       "last 1 safari version"
     ]
   },
-  "description": "Sponsor Connect Web App",
+  "description": "An Ionic project",
   "devDependencies": {
     "@svgr/cli": "^5.5.0",
     "@types/file-saver": "^2.0.3",
