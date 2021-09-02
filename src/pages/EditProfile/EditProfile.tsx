@@ -152,7 +152,7 @@ const EditProfile: React.FC = () => {
 
   let showSports = null;
 
-  if (filteredSports.length > 0) {
+  if (filteredSports?.length > 0) {
 
     showSports = filteredSports.map((data: any) => {
       return (
@@ -242,7 +242,7 @@ const EditProfile: React.FC = () => {
 
     newAccolades = newAccolades.concat(accolades);
 
-    accolades.length < 1 && (newAccolades.push(""));
+    accolades?.length < 1 && (newAccolades.push(""));
     
     newAccolades.push("");
 
@@ -382,7 +382,7 @@ const EditProfile: React.FC = () => {
 
                     {/* {console.log(accolades)} */}
                     <IonList className="accolade-list">
-                    {accolades.length > 0 ? accolades.map((accolade: string, index: any) => {
+                    {accolades?.length > 0 ? accolades.map((accolade: string, index: any) => {
 
                       // {console.log(accolade)}
 
