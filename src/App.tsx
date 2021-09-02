@@ -147,7 +147,7 @@ const App: React.FC = () => {
     <IonReactRouter>
       <IonRouterOutlet  animated={false}>
 
-        <Route exact path="/index.html">
+        <Route exact path="/">
           {state.isAuthenticated ? <Redirect to="/dashboard" /> : <Redirect to="/landing" />}
         </Route>
         <Route exact path="/home">
