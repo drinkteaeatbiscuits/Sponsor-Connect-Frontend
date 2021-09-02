@@ -130,7 +130,7 @@ const Profile: React.FC = () => {
               </div>
             
             } 
-            { isLoading ? <IonSkeletonText animated style={{ width: '90%', margin: '10px  auto' }} /> : data?.accolades.length > 0 && 
+            { isLoading ? <IonSkeletonText animated style={{ width: '90%', margin: '10px  auto' }} /> : data?.accolades?.length > 0 && 
               
               <div className="profile-detail-about ion-text-left ion-padding-top accolades">
                 <h4>Accolades</h4>
@@ -144,12 +144,12 @@ const Profile: React.FC = () => {
         
 
 
-          { isLoading ? <IonSkeletonText animated style={{ width: '90%', margin: '10px  auto' }} /> : data?.images.length > 0 && 
+          { isLoading ? <IonSkeletonText animated style={{ width: '90%', margin: '10px  auto' }} /> : data?.images?.length > 0 && 
 
             <div className="profile-images ion-padding-top  ion-padding-bottom images ion-text-center">
              
-              { data?.images.length > 1 && <ImageSlider images={data?.images}/> }
-              { data?.images.length === 1 && <img alt={ "Profile Image " + data?.images.id } src={ data?.images.url } /> }
+              { data?.images?.length > 1 && <ImageSlider images={data?.images}/> }
+              { data?.images?.length === 1 && <img alt={ "Profile Image " + data?.images.id } src={ data?.images?.url } /> }
               
             </div>
 
