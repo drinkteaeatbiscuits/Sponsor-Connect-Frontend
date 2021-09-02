@@ -2,3 +2,23 @@
 	position: relative;
 	z-index: 99;
 }
+
+.accolade-list {
+	width: 100%;
+	margin: 5px 0 0;
+	padding-bottom: 0;
+}
+
+ion-buttons.buttons-end {
+	justify-content: flex-end;
+	padding-right: 5px;
+	ion-button.link {
+		margin: 0;
+		padding: 5px 0;
+		--padding-bottom: 5px;
+		transition: 0.25s ease-out;
+		&:hover {
+			color: var(--ion-color-primary);
+		}
+	}
+}

@@ -60,7 +60,7 @@ const Profile: React.FC = () => {
 
          <div className="profile-header">
           
-          { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.coverImage && <img className="cover-image" alt={ "Cover Photo " + data?.coverImage.id } src={ (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL + '/') + data?.coverImage.url } />  }
+          { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.coverImage && <img className="cover-image" alt={ "Cover Photo " + data?.coverImage.id } src={ (process.env.NODE_ENV === "development" && 'http://localhost:1337') + data?.coverImage.url } />  }
             
         </div>
 
@@ -69,7 +69,7 @@ const Profile: React.FC = () => {
         <div className="avatar">
           <div className="avatar-image">
             
-            { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.profilePicture ? <img className="profile-picture" alt={ "Profile Image " + data?.profilePicture.id } src={ (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL + '/') + data?.profilePicture.url } /> : <IonIcon color="medium" icon={personCircle} /> }
+            { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.profilePicture ? <img className="profile-picture" alt={ "Profile Image " + data?.profilePicture.id } src={ (process.env.NODE_ENV === "development" && 'http://localhost:1337') + data?.profilePicture.url } /> : <IonIcon color="medium" icon={personCircle} /> }
             
           </div>
         </div>
@@ -80,16 +80,15 @@ const Profile: React.FC = () => {
             
             { isLoading ? <IonSkeletonText animated style={{ width: '20%', margin: '20px  auto' }} /> : data?.sport && <h2 className="profile-sport ion-no-margin">{ data.sport }</h2>  }
 
-            { isLoading ? <IonSkeletonText animated style={{ width: '40%', margin: '40px  auto' }} /> : data?.socialMedia && <SocialMediaTotals socialMediaData={data.socialMedia} /> } 
+            { isLoading ? <IonSkeletonText animated style={{ width: '40%', margin: '40px  auto' }} /> : data?.socialMedia.length > 0 && <SocialMediaTotals socialMediaData={data.socialMedia} /> } 
             
             <div className="profile-details ion-padding-top">
-
-              { isLoading ? <IonSkeletonText animated style={{ width: '90%', margin: '10px  auto' }} /> : data?.location && 
+              { isLoading ? <IonSkeletonText animated style={{ width: '90%', margin: '10px  auto' }} /> : data?.location?.label?.length > 0 && 
                 
                 <div className="profile-detail location ion-text-left">
                   
                     <IonIcon color="tertiary" size="large" icon={location} />
-                    <p>{data.location.label}</p>
+                    <p>{data?.location?.label}</p>
 
                 </div> 
               
@@ -114,7 +113,6 @@ const Profile: React.FC = () => {
               
               } 
 
-
             </div>  
 
 
@@ -128,13 +126,11 @@ const Profile: React.FC = () => {
                 <div className="read-more ion-color-primary ion-padding-top" onClick={() => setShowFullDescription(!showFullDescription)}>{showFullDescription ? "Read less" : "Read more"}</div>
                 <div className="fullDescription ion-padding-top">
                   { showFullDescription && data?.description}
-                  
                 </div>
-
               </div>
             
             } 
-            { isLoading ? <IonSkeletonText animated style={{ width: '90%', margin: '10px  auto' }} /> : data?.accolades && 
+            { isLoading ? <IonSkeletonText animated style={{ width: '90%', margin: '10px  auto' }} /> : data?.accolades.length > 0 && 
               
               <div className="profile-detail-about ion-text-left ion-padding-top accolades">
                 <h4>Accolades</h4>
@@ -148,13 +144,15 @@ const Profile: React.FC = () => {
         
 
 
-          { isLoading ? <IonSkeletonText animated style={{ width: '90%', margin: '10px  auto' }} /> : data?.images && 
+          { isLoading ? <IonSkeletonText animated style={{ width: '90%', margin: '10px  auto' }} /> : data?.images.length > 0 && 
+
             <div className="profile-images ion-padding-top  ion-padding-bottom images ion-text-center">
              
               { data?.images.length > 1 && <ImageSlider images={data?.images}/> }
               { data?.images.length === 1 && <img alt={ "Profile Image " + data?.images.id } src={ data?.images.url } /> }
               
             </div>
+
           } 
 
           

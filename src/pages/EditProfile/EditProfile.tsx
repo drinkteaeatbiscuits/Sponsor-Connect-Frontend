@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonSearchbar, IonTextarea, IonToolbar } from '@ionic/react';
+import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonSearchbar, IonTextarea, IonToolbar } from '@ionic/react';
 import Header from '../../components/Header';
 import { useHistory } from 'react-router';
 import Cookies from 'js-cookie';
@@ -24,7 +24,7 @@ import sports from '../CreateAccount/sports.json';
 import { env } from 'process';
 import useUploadImage from '../../hooks/useUploadImage';
 import UploadImage from '../../components/UploadImage/UploadImage';
-import { constructOutline } from 'ionicons/icons';
+import { constructOutline, closeCircleOutline, happy, close } from 'ionicons/icons';
 
 export interface props {}
 
@@ -66,18 +66,12 @@ const EditProfile: React.FC = () => {
   
   const [shortDescription, setShortDescription] = useState<any>("");
   const [fullDescription, setFullDescription] = useState<any>("");
+  
+  const [currentProfilePicture, setCurrentProfilePicture] = useState<any>("");
+  
+  const [coverImage, setCoverImage] = useState<any>("");
 
-
-  const [profilePicture, setProfilePicture] = useState<any>("");
-
-  const [src, setSrc] = useState<any>("");
-  const [crop, setCrop] = useState<any>({ aspect: 2 / 1 });
-  const [imageRef, setImageRef] = useState<any>("");
-  const [fileUrl, setFileUrl] = useState<any>("");
-  const [croppedImageUrl, setCroppedImageUrl] = useState<any>("");
-
-  const { isLoading: isLoadingUploadImage, error: isLoadingUploadImageError, mutateAsync: addUploadImageMutation } = useUploadImage( authState?.user.profile, "profilePicture", "profile" );
-
+  
 
   const updateProfile = async () => {
     
@@ -90,7 +84,7 @@ const EditProfile: React.FC = () => {
       socialMedia: socialMediaObject,
       shortDescription,
       accolades: accolades?.filter(Boolean),
-      description: fullDescription
+      description: fullDescription,
     });
     
     history.goBack();
@@ -124,39 +118,16 @@ const EditProfile: React.FC = () => {
       setShortDescription(profileData.data[0]?.shortDescription);
       setFullDescription(profileData.data[0]?.description);
       setAccolades(profileData.data[0]?.accolades);
+      
+      setCurrentProfilePicture(profileData.data[0]?.profilePicture);
+      setCoverImage(profileData.data[0]?.coverImage);
     }
+
+    
   }, [profileData.status, profileData.data]);
 
 
-  const dateNumber = new Date().getTime();
-  const randomString = [...Array(12)].map(() => Math.random().toString(36)[2]).join('');
-  const fileName = profilePicture?.name?.replace(/\.[^/.]+$/, "").replace(/[^a-z0-9]/gi, '-').toLowerCase();
-  const fileExtension = profilePicture?.name?.split('.').pop();
-  const newFileName = dateNumber + "-" + randomString + "-" + fileName + "." + fileExtension;
-    
-
-  const blobToFile = (theBlob:any, fileName:any) => {
-
-    const lastModifiedDate = new Date().getTime();
-
-    const file = new File([theBlob], fileName, {lastModified: lastModifiedDate, type: "image/jpg"});
-    return file;
-  }
- 
-  const uploadImage = async () => {
-
-    if(croppedImageUrl) {
-      let blob = await fetch(croppedImageUrl).then(r => r.blob());
-
-      addUploadImageMutation( blobToFile(blob, newFileName) );
-
-    } else if (profilePicture) { 
-
-      addUploadImageMutation( blobToFile(profilePicture, newFileName) );
-
-    }
-    
-  }
+  
 
   // console.log(src);
 
@@ -258,7 +229,7 @@ const EditProfile: React.FC = () => {
 
   const createAccolades = (e:any) => {
     
-    let accoladeIndex = e.srcElement.id.match(/\d+/)[0];
+    let accoladeIndex = Array.prototype.indexOf.call(e.target.parentElement.parentElement.children, e.target.parentElement);
     let newAccolades: Array<any> = [];
     newAccolades = newAccolades.concat(accolades);
     newAccolades[accoladeIndex] = e.detail.value;
@@ -266,11 +237,28 @@ const EditProfile: React.FC = () => {
   }
     
   const addAccolade = () => {
-
+    
     let newAccolades: Array<string> = [];
 
     newAccolades = newAccolades.concat(accolades);
+
+    accolades.length < 1 && (newAccolades.push(""));
+    
     newAccolades.push("");
+
+    setAccolades(newAccolades);
+    
+  }
+
+  const removeAccolade = (e: any) => {
+
+    const removeIndex = Array.prototype.indexOf.call(e.target.parentElement.parentElement.children, e.target.parentElement);
+    let newAccolades: Array<string> = [];
+    newAccolades = newAccolades.concat(accolades);
+
+    console.log(removeIndex);
+
+    newAccolades.splice(removeIndex, 1);
 
     setAccolades(newAccolades);
     
@@ -278,75 +266,6 @@ const EditProfile: React.FC = () => {
 
  
 
-  const makeClientCrop = async (crop:any)  => {
-    if (imageRef && crop.width && crop.height) {
-      const croppedImageUrl = await getCroppedImg(
-        imageRef,
-        crop,
-        newFileName
-      );
-      
-      setCroppedImageUrl(croppedImageUrl);
-    }
-  }
-
-
-
-
-
-  const getCroppedImg = (image:any, crop:any, fileName:any) => {
-    const canvas = document.createElement('canvas');
-    const pixelRatio = window.devicePixelRatio;
-    const scaleX = image.naturalWidth / image.width;
-    const scaleY = image.naturalHeight / image.height;
-    const ctx = canvas.getContext('2d');
-
-    
-    if(ctx){
-
-      canvas.width = crop.width * pixelRatio * scaleX;
-      canvas.height = crop.height * pixelRatio * scaleY;
-
-      ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
-      ctx.imageSmoothingQuality = 'high';
-
-      ctx.drawImage(
-        image,
-        crop.x * scaleX,
-        crop.y * scaleY,
-        crop.width * scaleX,
-        crop.height * scaleY,
-        0,
-        0,
-        crop.width * scaleX,
-        crop.height * scaleY
-      );
-
-    }
-
-    return new Promise((resolve, reject) => {
-
-      canvas.toBlob(
-        (blob) => {
-          if (!blob) {
-            //reject(new Error('Canvas is empty'));
-            console.error('Canvas is empty');
-            return;
-          }
-          blob.name = fileName;
-          // window.URL.revokeObjectURL(fileUrl);
-
-          var urlCreator = window.URL || window.webkitURL;
-          var imageUrl = urlCreator.createObjectURL(blob);
-
-          resolve(imageUrl);
-
-        },
-        'image/jpeg',
-        1
-      );
-    });
-  }
 
   
 
@@ -462,63 +381,49 @@ const EditProfile: React.FC = () => {
                     <IonLabel position="stacked">Accolades</IonLabel>
 
                     {/* {console.log(accolades)} */}
-
-                    {accolades ? accolades.map((accolade: string, index: any) => {
+                    <IonList className="accolade-list">
+                    {accolades.length > 0 ? accolades.map((accolade: string, index: any) => {
 
                       // {console.log(accolade)}
 
-                      return <IonInput placeholder="Your Accolade" key={index} value={accolade && accolade} id={"accolade-" + index} onIonChange={ (e:any) => createAccolades(e) } />
+                      return <IonItem className="accolade-field" key={index}>
+                              <IonInput placeholder="Your Accolade" value={accolade && accolade} id={"accolade-" + index} onIonChange={ (e:any) => createAccolades(e) } />
+                              <IonIcon icon={close} onClick={ (e) => { removeAccolade(e); } } />
+                            </IonItem>
 
-                    })
+                     })
 
                      : 
+                     <IonItem className="accolade-field" >
+                      <IonInput value={""} placeholder="Your Accolade" onIonChange={ (e:any) => createAccolades(e.detail.value) } /> 
+                      <IonIcon icon={close} />
+                     </IonItem>
                      
-                     <IonInput value={""} onIonChange={ (e:any) => createAccolades(e.detail.value) } /> 
-                     
-                     }
+                     }</IonList>
 
-
-
-                    <IonButton onClick={ () => addAccolade() } >Add Accolade</IonButton>
+                    <IonButton buttonType="link"  className="link ion-align-self-end" onClick={ () => addAccolade() } >Add Accolade</IonButton>
                   </IonItem>
 
+                  
                   <div>
 
-                    {/* { console.log( profilePicture ) } */}
-
-                    <UploadImage setImage={setProfilePicture} setSrc={setSrc} />
-
-
-                    <ReactCrop src={src} crop={crop} 
-                    onImageLoaded={(image:any) => setImageRef(image)}
-                    onComplete={(crop:any) => makeClientCrop(crop)}
-                    onChange={(newCrop:any) => setCrop(newCrop)} />
-
-                    {croppedImageUrl && (
-
-                       <img alt="Crop" style={{ maxWidth: '100%' }} src={croppedImageUrl} />
-
-                    )}
-
-                    {croppedImageUrl && console.log(croppedImageUrl)}
                     
-                    {profilePicture && <div>
-                      <p>{profilePicture.name}</p>
-                      <p>Filetype: {profilePicture.type}</p>
-					            <p>Size in bytes: {profilePicture.size}</p>
-                      </div> }
-
-                    <div className="upload" onClick={() => uploadImage()}>upload</div>
+                    <UploadImage currentImage={ coverImage } setCurrentImage={ setCoverImage } field="coverImage" theref="profile" crop={{ aspect: 2 / 1 }} circularCrop={ false } showCroppedPreview={ false } />
                      
                   </div>
+
+                  <div>
+                    
+                    <UploadImage currentImage={ currentProfilePicture } setCurrentImage={ setCurrentProfilePicture } field="profilePicture" theref="profile" crop={{ aspect: 1 / 1 }} circularCrop={ true } showCroppedPreview={ false } />
+                    
+                  </div>
+
 
               </div>
             )
           }) 
          } 
         
-        
-          
 
           <div style={{paddingTop: 8}}><IonButton onClick={()=> updateProfile()} expand="block">SAVE</IonButton></div>
 
@@ -535,8 +440,7 @@ const EditProfile: React.FC = () => {
           <IonContent className="ion-padding-bottom">
             <IonList className="sports-list">
 
-              {showSports}
-
+              { showSports }
 
 
             </IonList>
