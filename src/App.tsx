@@ -145,10 +145,10 @@ const App: React.FC = () => {
     {/* {!state.isAuthenticated ? <p>logged out</p> : <p>logged in</p>} */}
     
     <IonReactRouter>
-      <IonRouterOutlet  animated={false}>
+      <IonRouterOutlet animated={false}>
 
         <Route exact path="/">
-          {state.isAuthenticated ? <Redirect to="/dashboard" /> : <Redirect to="/landing" />}
+          {state.isAuthenticated ? <Dashboard /> : <Landing />}
         </Route>
         <Route exact path="/home">
           <Home />
