@@ -128,7 +128,7 @@ const App: React.FC = () => {
   wasUserHere && ( initialState.isAuthenticated = true); 
   wasUserHere && ( initialState.user = wasUserHere );
 
-  console.log(initialState.user);
+  // console.log(initialState.user);
   
   return (  
   
@@ -145,9 +145,10 @@ const App: React.FC = () => {
     {/* {!state.isAuthenticated ? <p>logged out</p> : <p>logged in</p>} */}
     
     <IonReactRouter>
-      <IonRouterOutlet  animated={false}>        
-        <Route exact path="/">
-          <Redirect to="/home" />
+      <IonRouterOutlet  animated={false}>
+
+        <Route exact path="/index.html">
+          {state.isAuthenticated ? <Redirect to="/dashboard" /> : <Redirect to="/landing" />}
         </Route>
         <Route exact path="/home">
           <Home />

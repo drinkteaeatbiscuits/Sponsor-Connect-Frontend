@@ -68,7 +68,6 @@ const CreateAccount: React.FC = () => {
   const [location, setLocation] = useState<any>({});
   const [latLong, setLatLong] = useState<any>({});
 
-
   const [filteredSports, setFilteredSports] = useState<any>(sports);
 
 
@@ -98,7 +97,7 @@ const CreateAccount: React.FC = () => {
 
       // alert( "Error: " + createAccountInfo.data[0].messages[0].message );
 
-      console.log(createAccountInfo);
+      // console.log(createAccountInfo);
 
       present({
         cssClass: 'account-error',
