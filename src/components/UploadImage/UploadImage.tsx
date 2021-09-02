@@ -219,7 +219,7 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 		
 			<div className="current-image-thumb">
 				
-				<img alt="current thumbnail" src={(process.env.NODE_ENV === "development" && 'http://localhost:1337') + SocialMediaTotalsProps.currentImage.url} />
+				<img alt="current thumbnail" src={(process.env.NODE_ENV === "development" ? 'http://localhost:1337' : '') + SocialMediaTotalsProps.currentImage.url} />
 				<IonButtons slot="end" className="buttons-end">
 					<IonButton buttonType="link" className="link" onClick={ () => changeImage() } >Change Image</IonButton>
 					<IonButton buttonType="link" className="link" onClick={ () => removeImage() } >Remove Image</IonButton>
