@@ -112,6 +112,8 @@ const checkIfAuthenticated = async () => {
     
 }
 
+
+
 const App: React.FC = () => {
 
   const [state, dispatch] = React.useReducer(reducer, initialState);
@@ -126,7 +128,7 @@ const App: React.FC = () => {
   wasUserHere && ( initialState.isAuthenticated = true); 
   wasUserHere && ( initialState.user = wasUserHere );
 
-
+  console.log(initialState.user);
   
   return (  
   

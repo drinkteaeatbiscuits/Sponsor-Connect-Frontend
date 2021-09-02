@@ -48,7 +48,6 @@ const CreateAccount: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [passwordStrongEnough, setPasswordStrongEnough] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<string>("Individual");
-
   const [profileName, setProfileName] = useState<string>("");
 
   const [searchText, setSearchText] = useState<string>("");
@@ -66,8 +65,8 @@ const CreateAccount: React.FC = () => {
   });
 
 
-  const [location, setLocation] = useState<any>("");
-  const [latLong, setLatLong] = useState<any>("");
+  const [location, setLocation] = useState<any>({});
+  const [latLong, setLatLong] = useState<any>({});
 
 
   const [filteredSports, setFilteredSports] = useState<any>(sports);
@@ -102,7 +101,7 @@ const CreateAccount: React.FC = () => {
       console.log(createAccountInfo);
 
       present({
-        cssClass: 'my-css',
+        cssClass: 'account-error',
         header: 'Account Error',
         message: createAccountInfo?.data[0].messages[0].message,
         buttons: [
@@ -113,14 +112,12 @@ const CreateAccount: React.FC = () => {
       })
     } else {
 
-      // console.log("User account created");
-      // console.log(createAccountInfo);
+      // dispatch && dispatch({
+      //   type: "setUser",
+      //   payload: createAccountInfo
+      // });
 
-      
-
-      // console.log(profileName, yourSport, location, latLong);
-
-
+  
       const createProfileResp = await fetch(process.env.REACT_APP_API_URL + "/profiles/me", {
         credentials: "include",
         headers: {
@@ -145,7 +142,7 @@ const CreateAccount: React.FC = () => {
         // alert( "Error: " + createProfileInfo.data[0].messages[0].message );
 
         present({
-          cssClass: 'my-css',
+          cssClass: 'profile-error',
           header: 'Profile Error',
           message: createProfileInfo.data[0].messages[0].message,
           buttons: [
@@ -157,19 +154,19 @@ const CreateAccount: React.FC = () => {
 
       } else {
 
-        console.log(createProfileInfo);
+        createAccountInfo.user.profile = createProfileInfo.id;
+
+        // console.log(createAccountInfo);
 
         dispatch && dispatch({
           type: "setUser",
-          payload: createAccountInfo.user
+          payload: createAccountInfo
         });
       
       }
 
     }
   }
-
-
 
 
   const doNextStep = () => {

@@ -39,14 +39,14 @@ const Dashboard: React.FC = () => {
       <IonContent fullscreen className="ion-padding dashboard">
         
         <div className="ion-padding-top ion-padding-bottom ion-margin-bottom">
-          <p className="hello ion-no-margin"><strong>Hello{authState.user.yourName && (" " + authState.user?.yourName?.split(" ")[0]) },</strong></p>
+          <p className="hello ion-no-margin"><strong>Hello{authState.user?.yourName && (" " + authState.user?.yourName?.split(" ")[0]) },</strong></p>
           <p className="greeting ion-no-margin">{greeting()}</p>
         </div>
 
         <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
 
           <div className="menu-list-option ion-margin-top"
-            onClick={() => history.push( "/profile/" + authState?.user.profile ) }>
+            onClick={() => history.push( "/profile/" + authState?.user?.profile ) }>
             <div className="icon">
               <IonIcon color="primary" icon={personCircle} />
             </div>
@@ -57,7 +57,7 @@ const Dashboard: React.FC = () => {
           </div>
 
           <div className='menu-list-option'
-            onClick={() => history.push( "/opportunities/" + authState?.user.profile ) }>
+            onClick={() => history.push( "/opportunities/" + authState?.user?.profile ) }>
             <div className="icon">
               <IonIcon color="primary" icon={trailSign} />
             </div>
