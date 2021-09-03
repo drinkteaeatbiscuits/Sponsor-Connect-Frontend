@@ -243,7 +243,7 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 					}
 				</div> }
 				
-				<ReactCrop src={src} circularCrop={ SocialMediaTotalsProps.circularCrop } crop={crop} 
+				<ReactCrop src={src} keepSelection={true} circularCrop={ SocialMediaTotalsProps.circularCrop } crop={crop} 
 				onImageLoaded={(img:any) => {
 					 
 					const aspect = crop?.aspect;
