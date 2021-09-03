@@ -11,11 +11,11 @@ import TabBar from '../../components/TabBar';
 import './dashboard.scss';
 import { personCircle, trailSign, settings } from 'ionicons/icons';
 
-export interface props {}
+export interface props { }
 
 const Dashboard: React.FC = () => {
 
-	const history = useHistory();
+  const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
 
   const greeting = () => {
@@ -31,58 +31,58 @@ const Dashboard: React.FC = () => {
     }
   }
 
-  
+
 
   return (
     <IonPage>
-      <TabBar activeTab="dashboard"/>
+      <TabBar activeTab="dashboard" />
       <IonContent fullscreen className="ion-padding dashboard">
         <div className="content">
-        <div className="hello-message ion-padding-top ion-padding-bottom ion-margin-bottom">
-          <p className="hello ion-no-margin"><strong>Hello{authState.user?.yourName && (" " + authState.user?.yourName?.split(" ")[0]) },</strong></p>
-          <p className="greeting ion-no-margin">{greeting()}</p>
-        </div>
-
-        <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
-
-          <div className="menu-list-option ion-margin-top"
-            onClick={() => history.push( "/profile/" + authState?.user?.profile ) }>
-            <div className="icon">
-              <IonIcon color="primary" icon={personCircle} />
-            </div>
-            <div className="text">
-              <p className="main-text">Your Profile</p>
-              <p className="sub-text">View and edit your profile</p>
-            </div>
+          <div className="hello-message ion-padding-top ion-padding-bottom ion-margin-bottom">
+            <p className="hello ion-no-margin"><strong>Hello{authState.user?.yourName && (" " + authState.user?.yourName?.split(" ")[0])},</strong></p>
+            <p className="greeting ion-no-margin">{greeting()}</p>
           </div>
 
-          <div className='menu-list-option'
-            onClick={() => history.push( "/opportunities/" + authState?.user?.profile ) }>
-            <div className="icon">
-              <IonIcon color="primary" icon={trailSign} />
+          <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
+
+            <div className="menu-list-option ion-margin-top"
+              onClick={() => history.push("/profile/" + authState?.user?.profile)}>
+              <div className="icon">
+                <IonIcon color="primary" icon={personCircle} />
+              </div>
+              <div className="text">
+                <p className="main-text">Your Profile</p>
+                <p className="sub-text">View and edit your profile</p>
+              </div>
             </div>
-            <div className="text">
-              <p className="main-text">Your Opportunities</p>
-              <p className="sub-text">Manage your sponsorship opportunities </p>
+
+            <div className='menu-list-option'
+              onClick={() => history.push("/opportunities/" + authState?.user?.profile)}>
+              <div className="icon">
+                <IonIcon color="primary" icon={trailSign} />
+              </div>
+              <div className="text">
+                <p className="main-text">Your Opportunities</p>
+                <p className="sub-text">Manage your sponsorship opportunities </p>
+              </div>
             </div>
+
+            <div className='menu-list-option'
+              onClick={() => history.push("/settings/")}>
+              <div className="icon">
+                <IonIcon color="primary" icon={settings} />
+              </div>
+              <div className="text">
+                <p className="main-text">Settings</p>
+                <p className="sub-text">Update account, billing &amp; notifications</p>
+              </div>
+            </div>
+
+            <LogoutButton className="logout-button button-tertiary ion-margin-bottom" expand="block" size="small" />
+
           </div>
 
-          <div className='menu-list-option'
-            onClick={() => history.push( "/settings/" )  }>
-            <div className="icon">
-              <IonIcon color="primary" icon={settings} />
-            </div>
-            <div className="text">
-              <p className="main-text">Settings</p>
-              <p className="sub-text">Update account, billing &amp; notifications</p>
-            </div>
-          </div>
 
-          <LogoutButton className="logout-button button-tertiary ion-margin-bottom" expand="block" size="small" />
-          
-        </div>
-
-      
         </div>
       </IonContent>
     </IonPage>

@@ -218,13 +218,13 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 	// 	return false; // Return false if you set crop state in here.
 	//   }, []);
 
-	return <div>
+	return <div className="upload-image-wrap">
 
 		{ SocialMediaTotalsProps.currentImage && !aNewImage ? 
 		
 			<div className="current-image-thumb">
 				
-				<img alt="current thumbnail" src={(process.env.NODE_ENV === "development" ? 'http://localhost:1337' : '') + SocialMediaTotalsProps.currentImage.url} />
+				<img className={ SocialMediaTotalsProps.circularCrop ? "circle-crop" : "" } alt="current thumbnail" src={(process.env.NODE_ENV === "development" ? 'http://localhost:1337' : '') + SocialMediaTotalsProps.currentImage.url} />
 				<IonButtons slot="end" className="buttons-end">
 					<IonButton buttonType="link" className="link" onClick={ () => changeImage() } >Change Image</IonButton>
 					<IonButton buttonType="link" className="link" onClick={ () => removeImage() } >Remove Image</IonButton>
@@ -233,13 +233,13 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 			</div>
 			: 
 			
-			 <div className="upload-image ion-padding">
-				{ !src && <div {...getRootProps()}>
+			 <div className="upload-image">
+				{ !src && <div className="dropzone" {...getRootProps()}>
 				 	<input {...getInputProps()} /> 
 					{
 						isDragActive ?
 						<p>Drop the files here ...</p> :
-						<p>Drag 'n' drop some files here, or click to select files</p>
+						<p>Drag &amp; drop your image here, or click to select image</p>
 					}
 				</div> }
 				
@@ -283,12 +283,12 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 				onComplete={(crop:any) => makeClientCrop(crop)}
 				onChange={(newCrop:any) => {setCrop(newCrop);}} />
 
-				{croppedImageUrl && SocialMediaTotalsProps.showCroppedPreview && (<img alt="Crop" style={{ maxWidth: '100%' }} src={croppedImageUrl} />)}
+				{croppedImageUrl && SocialMediaTotalsProps.showCroppedPreview && (<img alt="Crop" className={ SocialMediaTotalsProps.circularCrop ? "circle-crop" : "" } style={{ maxWidth: '100%' }} src={croppedImageUrl} />)}
 				
 				
 
 				{theImage && src && <IonButtons slot="end" className="buttons-end">
-					<IonButton buttonType="link" className="link" onClick={() => uploadImage(SocialMediaTotalsProps.field, SocialMediaTotalsProps.theref)} >Upload</IonButton>
+					<IonButton color="primary" size="small" className="" onClick={() => uploadImage(SocialMediaTotalsProps.field, SocialMediaTotalsProps.theref)} >Upload</IonButton>
 					<IonButton buttonType="link" className="link" onClick={ () => cancelUpload() } >Cancel</IonButton>
 				</IonButtons>}
 

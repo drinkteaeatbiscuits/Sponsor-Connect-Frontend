@@ -5,6 +5,10 @@
 	aspect-ratio: 2/1;
 	position: relative;
 
+	max-height: 400px;
+    min-width: 100%;
+	
+
 
 	// aspect ratio fallback
 	@supports not (aspect-ratio: auto) { 
@@ -141,5 +145,13 @@
 	cursor: pointer;
 	&:hover {
 		color: var(--ion-color-primary-shade);
+	}
+}
+
+
+.profile ion-toolbar {
+	@media screen and ( min-width: 768px ) {
+		position: fixed;
+    	top: 80px;
 	}
 }

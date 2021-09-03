@@ -22,3 +22,39 @@ ion-buttons.buttons-end {
 		}
 	}
 }
+
+.upload-image-wrap {
+	width: 100%;
+	padding: 15px 0;
+}
+
+.upload-image .dropzone {
+	display: block;
+	border: 2px dashed #d2d2d2;
+    border-radius: 3px;
+	width: 100%;
+	text-align: center;
+	cursor: pointer;
+}
+
+.edit-profile {
+	padding-bottom: 40px;
+	--offset-bottom: 40px;
+	--padding-bottom: 40px;
+}
+
+.upload-image-wrap .circle-crop {
+	border-radius: 100%;
+	
+}
+
+.profile-picture-upload .upload-image-wrap .circle-crop {
+	display: inline-block;
+	width: 124px;
+	height: 124px;
+	border-radius: 75px;
+	border: #d4d4d4 1px solid;
+	background-color: #fff;
+	overflow: hidden;
+	position: relative;
+}

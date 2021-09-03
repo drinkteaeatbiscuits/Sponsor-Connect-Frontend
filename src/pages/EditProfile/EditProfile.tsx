@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonSearchbar, IonTextarea, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonSearchbar, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
 import Header from '../../components/Header';
 import { useHistory } from 'react-router';
 import Cookies from 'js-cookie';
@@ -266,23 +266,45 @@ const EditProfile: React.FC = () => {
 
  
 
-
-  
-
   return (
     <IonPage>
-      <Header headerTitle="Edit Profile"/>
-      <IonContent fullscreen>
+      <IonToolbar color="light" className="toolbar">
+        <IonButtons slot="start">
+          
+          <IonButton onClick={()=> updateProfile()}>CANCEL</IonButton>
+      
+        </IonButtons>
+        <IonTitle className="ion-text-center" >Edit Profile</IonTitle>
+        <IonButtons slot="end">
+          
+          <IonButton onClick={()=> updateProfile()}>&nbsp;&nbsp;SAVE</IonButton>
+        
+          
+        </IonButtons>
+			</IonToolbar>
+      <IonContent className="edit-profile" fullscreen>
         
           <IonLoading isOpen={isLoading} message="Updating Profile" />
           <IonLoading isOpen={profileData.isLoading} message="Loading Profile" />
             
           {/* <IonButton fill="clear" expand="full" onClick={()=> history.push( "/opportunities/" )}>Opportunities</IonButton>
           <IonButton fill="clear" expand="full" onClick={()=> history.push( "/dashboard/" )}>Back to Dashboard</IonButton> */}
-
+          <div className="content">
           {  !profileData.isLoading && profileData.data?.map((p: any) => { 
             return (
               <div className="ion-text-center" key={p.id}>
+
+                  <IonItem className="">
+                    <IonLabel position="stacked">Cover Image</IonLabel>
+                    <UploadImage currentImage={ coverImage } setCurrentImage={ setCoverImage } field="coverImage" theref="profile" crop={{ aspect: 2 / 1 }} circularCrop={ false } showCroppedPreview={ false } />
+                  </IonItem> 
+                
+
+                  <IonItem className="profile-picture-upload">
+                    <IonLabel position="stacked">Profile Picture</IonLabel>
+                    <UploadImage currentImage={ currentProfilePicture } setCurrentImage={ setCurrentProfilePicture } field="profilePicture" theref="profile" crop={{ aspect: 1 / 1 }} circularCrop={ true } showCroppedPreview={ false } />
+                  </IonItem> 
+
 
                   <IonItem>
                     <IonLabel position="stacked">Profile Name</IonLabel>
@@ -405,18 +427,9 @@ const EditProfile: React.FC = () => {
                   </IonItem>
 
                   
-                  <div>
-
-                    
-                    <UploadImage currentImage={ coverImage } setCurrentImage={ setCoverImage } field="coverImage" theref="profile" crop={{ aspect: 2 / 1 }} circularCrop={ false } showCroppedPreview={ false } />
-                     
-                  </div>
-
-                  <div>
-                    
-                    <UploadImage currentImage={ currentProfilePicture } setCurrentImage={ setCurrentProfilePicture } field="profilePicture" theref="profile" crop={{ aspect: 1 / 1 }} circularCrop={ true } showCroppedPreview={ false } />
-                    
-                  </div>
+                  
+                  
+                 
 
 
               </div>
@@ -427,6 +440,11 @@ const EditProfile: React.FC = () => {
 
           <div style={{paddingTop: 8}}><IonButton onClick={()=> updateProfile()} expand="block">SAVE</IonButton></div>
 
+
+          
+          </div>
+          
+          
           <IonModal isOpen={showModal} animated={true} cssClass='select-sport-modal' backdropDismiss={false} >
 
 

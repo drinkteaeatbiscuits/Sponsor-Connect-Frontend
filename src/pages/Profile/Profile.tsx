@@ -34,7 +34,7 @@ const Profile: React.FC = () => {
   // console.log(data?.profilePicture);
 
   return (
-    <IonPage>
+    <IonPage className="profile">
 
       { authState?.user.profile === parseInt(profileId.id) && 
         <IonToolbar>
