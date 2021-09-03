@@ -256,7 +256,7 @@ const EditProfile: React.FC = () => {
     let newAccolades: Array<string> = [];
     newAccolades = newAccolades.concat(accolades);
 
-    console.log(removeIndex);
+    // console.log(removeIndex);
 
     newAccolades.splice(removeIndex, 1);
 

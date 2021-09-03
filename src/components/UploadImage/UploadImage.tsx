@@ -36,7 +36,7 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 	const { isLoading: isLoadingUploadImage, error: isLoadingUploadImageError, mutateAsync: addUploadImageMutation } = useUploadImage( authState?.user.profile, SocialMediaTotalsProps.setCurrentImage );
 	const { isLoading: isDeletingImage, error: isDeletingImageError, mutateAsync: addDeletingImageMutation } = useDeleteImage();
 
-	console.log(imageRef);
+	// console.log(imageRef);
 
 	useEffect(() => {
 		setCrop(SocialMediaTotalsProps.crop);
@@ -152,7 +152,9 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 				console.error('Canvas is empty');
 				return;
 			}
-			blob.name = fileName;
+				
+			// blob.name = fileName;
+			
 			// window.URL.revokeObjectURL(fileUrl);
 
 			var urlCreator = window.URL || window.webkitURL;
@@ -179,7 +181,7 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 
 	const changeImage = () => {
 		
-		console.log('change image');
+		// console.log('change image');
 
 		setANewImage(true);
 		setSrc(null);
@@ -188,7 +190,10 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 
 	const cancelUpload = () => {
 
-		console.log('cancel upload');
+		// console.log('cancel upload');
+		setANewImage(true);
+		setSrc(null);
+		setCroppedImageUrl(null);
 	
 	}
 
@@ -237,7 +242,7 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 						<p>Drag 'n' drop some files here, or click to select files</p>
 					}
 				</div> }
-				{console.log(crop?.aspect)}
+				
 				<ReactCrop src={src} circularCrop={ SocialMediaTotalsProps.circularCrop } crop={crop} 
 				onImageLoaded={(img:any) => {
 					 
@@ -276,7 +281,7 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 					return false;
 					 }}
 				onComplete={(crop:any) => makeClientCrop(crop)}
-				onChange={(newCrop:any) => {setCrop(newCrop); console.log(newCrop)}} />
+				onChange={(newCrop:any) => {setCrop(newCrop);}} />
 
 				{croppedImageUrl && SocialMediaTotalsProps.showCroppedPreview && (<img alt="Crop" style={{ maxWidth: '100%' }} src={croppedImageUrl} />)}
 				
