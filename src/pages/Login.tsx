@@ -4,103 +4,89 @@ import React, { useEffect, useState } from 'react';
 
 import { AuthContext } from "../App";
 import OnBoardingProgress from '../components/OnBoardingProgress/OnBoardingProgress';
-import SvgScLogo from './Landing/images/SvgScLogo';
+import SvgScLogo from './OnBoardingSport/images/SvgScLogo';
 import { useHistory } from 'react-router';
 import { keypadOutline } from 'ionicons/icons';
 
-export interface props {}
+export interface props { }
 
-const Login: React.FC<props> = () => { 
+const Login: React.FC<props> = () => {
 
-    const history = useHistory();
- 
-    const [username, setUsername] = useState<any>("");
-    const [password, setPassword] = useState<any>("");
-    
+  const history = useHistory();
 
-
-    const { dispatch } = React.useContext( AuthContext );
+  const [username, setUsername] = useState<any>("");
+  const [password, setPassword] = useState<any>("");
 
 
+  const { dispatch } = React.useContext(AuthContext);
+
+  const doLogin = async () => {
 
 
-    const doLogin = async () => {
-    
-  
-      const loginResp = await fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/auth/local", {
-          method: "POST",
-          headers: {
-            "content-type": "application/json"
-          },
-          credentials: "include",
-          body: JSON.stringify({ 
-              identifier: username,
-              password: password 
-            }), 
-          
-        });
-  
-        const loginInfo = await loginResp.json();
+    const loginResp = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/auth/local", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      credentials: "include",
+      body: JSON.stringify({
+        identifier: username,
+        password: password
+      }),
 
-        if(loginInfo?.statusCode) {
+    });
 
-            alert( "Error: " + loginInfo.data[0].messages[0].message );
+    const loginInfo = await loginResp.json();
 
-        }else{
-            // alert( "User logged in" );
-            
-            // console.log(loginInfo);
+    if (loginInfo?.statusCode) {
 
-            // Cookies.set('strapi_user_jwt', loginInfo.jwt);
+      alert("Error: " + loginInfo.data[0].messages[0].message);
 
-            dispatch && dispatch({
-              type: "setUser",
-              payload: loginInfo
-            });
-            
-        }
+    } else {
+
+      console.log(loginInfo);
+
+      loginInfo.user.profile = loginInfo.user.profile.id;
+
+      dispatch && dispatch({
+        type: "setUser",
+        payload: loginInfo
+      });
+
     }
+  }
 
-    const keyUp = (event:any) => {
-      if (event.keyCode === 13) {
-        doLogin();
-      }
+  const keyUp = (event: any) => {
+    if (event.keyCode === 13) {
+      doLogin();
     }
-    
-    // console.log(username, password);
+  }
 
   return (
     <IonPage>
-      {/* <Header headerTitle={ !authState.isAuthenticated ? 'Login' : 'Logout'}/> */}
-      <IonContent fullscreen className="ion-padding">
 
+      <IonContent fullscreen className="on-boarding">
 
-      <IonGrid className="flex-direction-column ">
+        <IonGrid className="on-boarding-grid">
           <IonRow className="">
-            <IonCol className="logo ion-text-center ion-padding" size="auto">
+            <IonCol className="app-sidebar logo ion-text-center ion-padding">
               <div onClick={() => history.push("/")}><SvgScLogo /></div>
             </IonCol>
-            <IonCol className="login-image">
-
-
-            <OnBoardingProgress percentage={10} />
-              
             
-            </IonCol>
-            <IonCol className="" size="auto">
+            <IonCol className="on-boarding-buttons">
 
               <div className="login-form">
                 <IonItem className="ion-no-padding">
                   <IonLabel position="stacked">Username</IonLabel>
-                  <IonInput type="email" onKeyUp={ (e:any)=> keyUp(e) } onIonChange={ (e:any) => setUsername(e.detail.value) } />
+                  <IonInput type="email" onKeyUp={(e: any) => keyUp(e)} onIonChange={(e: any) => setUsername(e.detail.value)} />
                 </IonItem>
                 <IonItem className="ion-no-padding">
                   <IonLabel position="stacked">Password</IonLabel>
-                  <IonInput type="password" onKeyUp={ (e:any)=> keyUp(e) } onIonChange={ (e:any) => setPassword(e.detail.value) } />
-                </IonItem> 
-                <div style={{paddingTop: 8}}><IonButton onClick={()=> doLogin()} expand="block">Login</IonButton></div>
+                  <IonInput type="password" onKeyUp={(e: any) => keyUp(e)} onIonChange={(e: any) => setPassword(e.detail.value)} />
+                </IonItem>
+                <div style={{ paddingTop: 8 }}><IonButton onClick={() => doLogin()} expand="block">Login</IonButton></div>
 
-                <IonButton button-type="link"  onClick={() => history.push("/landing")} >cancel</IonButton>
+                <IonButton button-type="link" onClick={() => history.push("/landing")} >cancel</IonButton>
               </div>
 
             </IonCol>
@@ -108,7 +94,7 @@ const Login: React.FC<props> = () => {
         </IonGrid>
 
 
-    
+
       </IonContent>
     </IonPage>
   );

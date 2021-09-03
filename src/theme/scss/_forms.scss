@@ -29,6 +29,8 @@ ion-input {
 
 ion-label {
 	color: var(--ion-color-dark);
+	position: relative;
+	z-index: 9;
 }
 
 ion-button.arrow {

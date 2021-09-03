@@ -1,4 +1,25 @@
 
+.create-account {
+	.login-image {
+		@media screen and (min-width: 768px) {
+			flex-wrap: wrap;
+		}
+		.sc-logo {
+			display: none;
+			@media screen and (min-width: 768px) {
+				width: 100%;
+				display: block;
+				text-align: center;
+				svg {
+					width: 140px;
+					height: auto;
+				}
+			}
+		
+		}
+	}
+}
+
 .progress-circle {
 	
 	position: relative;
@@ -28,6 +49,10 @@
 		color: var(--ion-color-dark, #3A3939);
 		line-height: 0.9;
 		margin: 0;
+		@media screen and (min-width: 768px) {
+			margin: 0 -40px 20px; 
+			font-size: 4.5em;
+		}
 		span.ion-color-primary {
 			color: var(--ion-color-primary);
 			display: inline-block;
@@ -36,11 +61,17 @@
 	&.create-account {
 		h1 {
 			margin: 16px 0 10px;
+			@media screen and (min-width: 768px) {
+				margin: 0 -40px 20px; 
+			}
 		}
 	}
 	&.who-is-this-account-for {
 		h1 {
 			margin: 0px 0 10px;
+			@media screen and (min-width: 768px) {
+				margin: 0 -40px 20px; 
+			}
 		}
 	}
 }
@@ -226,3 +257,5 @@ ion-item.password-item {
 	}
 	
 }
+
+

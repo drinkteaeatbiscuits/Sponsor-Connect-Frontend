@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 
 // import { AuthContext } from '../../App';
 
-import SvgScLogo from './images/SvgScLogo';
+import SvgScLogo from './images/SvgScLogoWhite';
 
 
 // import { CircularProgressbar } from 'react-circular-progressbar';
@@ -14,6 +14,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import './landing.scss';
 import OnBoardingProgress from '../../components/OnBoardingProgress/OnBoardingProgress';
 import { AuthContext } from '../../App';
+import SvgScLogoWhite from './images/SvgScLogoWhite';
  
 // import TabBar from '../../components/TabBar';
 // import Header from '../../components/Header';
@@ -44,7 +45,7 @@ const Landing: React.FC = () => {
         <IonGrid className="landing-grid flex-direction-column ion-padding-bottom">
             <IonRow className="ion-padding-bottom">
               <IonCol className="logo ion-text-center ion-padding" size="auto">
-                <SvgScLogo />
+                <SvgScLogoWhite />
               </IonCol>
               <IonCol className="select-sport-business ion-padding">
                 <div className="please-select"><p>Please select</p></div>

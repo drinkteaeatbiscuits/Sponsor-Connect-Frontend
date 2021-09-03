@@ -1,11 +1,12 @@
 import * as React from "react";
 
-function SvgScLogo(props) {
+function SvgScLogoWhite(props) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width={113.351}
       height={71.213}
+      viewBox="0 0 113.351 71.213"
       {...props}
     >
       <path
@@ -20,4 +21,4 @@ function SvgScLogo(props) {
   );
 }
 
-export default SvgScLogo;
+export default SvgScLogoWhite;

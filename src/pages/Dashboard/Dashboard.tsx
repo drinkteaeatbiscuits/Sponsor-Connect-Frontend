@@ -37,8 +37,8 @@ const Dashboard: React.FC = () => {
     <IonPage>
       <TabBar activeTab="dashboard"/>
       <IonContent fullscreen className="ion-padding dashboard">
-        
-        <div className="ion-padding-top ion-padding-bottom ion-margin-bottom">
+        <div className="content">
+        <div className="hello-message ion-padding-top ion-padding-bottom ion-margin-bottom">
           <p className="hello ion-no-margin"><strong>Hello{authState.user?.yourName && (" " + authState.user?.yourName?.split(" ")[0]) },</strong></p>
           <p className="greeting ion-no-margin">{greeting()}</p>
         </div>
@@ -83,7 +83,7 @@ const Dashboard: React.FC = () => {
         </div>
 
       
-
+        </div>
       </IonContent>
     </IonPage>
   );

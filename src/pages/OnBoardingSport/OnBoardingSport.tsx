@@ -28,26 +28,27 @@ const OnBoardingSport: React.FC = () => {
   const history = useHistory();
 
 
-
   return (
     <IonPage>
-      <IonContent fullscreen>
+      <IonContent className="on-boarding" fullscreen>
 
-
-
-          <IonGrid className="flex-direction-column ion-padding-bottom">
+          <IonGrid className="on-boarding-grid ion-padding-bottom">
             <IonRow className="ion-padding-bottom">
-              <IonCol className="logo ion-text-center ion-padding" size="auto">
+
+
+              <IonCol className="app-sidebar logo ion-text-center ion-padding">
                 <div onClick={() => history.push("/")}><SvgScLogo /></div>
               </IonCol>
-              <IonCol className="login-image">
- 
-              </IonCol>
-              <IonCol className="ion-padding-bottom" size="auto">
+              
+
+
+              <IonCol className="ion-padding-bottom on-boarding-buttons">
                 <IonButton className="primary-button" color="primary" onClick={() => history.push("/login")} expand="block">Login</IonButton>
-              <IonButton color="secondary" onClick={() => history.push("/create-account")} expand="block">Create Account</IonButton>
-              <IonButton button-type="link" size="small"  onClick={() => history.push("/")} >cancel</IonButton>
+                <IonButton color="secondary" onClick={() => history.push("/create-account-sports")} expand="block">Create Account</IonButton>
+                <IonButton button-type="link" size="small"  onClick={() => history.push("/")} >cancel</IonButton>
               </IonCol>
+
+
             </IonRow>
           </IonGrid>
           

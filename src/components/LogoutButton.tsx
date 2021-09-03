@@ -33,7 +33,7 @@ const LogoutButton: React.FC<LogoutProps> = ( props: LogoutProps ) => {
   
 		  }else{
 			  
-			  console.log(logoutInfo);
+			//   console.log(logoutInfo);
 
 			  dispatch && dispatch({
 				type: "LOGOUT"

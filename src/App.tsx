@@ -1,4 +1,4 @@
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, useHistory } from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import React, { useState } from "react";
 import { IonReactRouter } from '@ionic/react-router';
@@ -130,7 +130,7 @@ const App: React.FC = () => {
   // console.log(initialState.user);
 
 
-
+  const history = useHistory();
 
 
   return (
@@ -151,11 +151,11 @@ const App: React.FC = () => {
             <IonRouterOutlet animated={false}>
 
               <Route exact path="/">
-                {state.isAuthenticated ? <Dashboard /> : <Landing />}
+                {state.isAuthenticated ? <Redirect to="dashboard" /> : <Landing />}
               </Route>
 
               <Route exact path="/sports">
-                {state.isAuthenticated ? <Dashboard /> : <OnBoardingSport />}
+                {state.isAuthenticated ? <Redirect to="dashboard" /> : <OnBoardingSport />}
               </Route>
 
               <Route exact path="/business">
@@ -166,12 +166,20 @@ const App: React.FC = () => {
                 {state.isAuthenticated ? <Dashboard /> : <Landing />}
               </Route>
 
+              <Route exact path="/create-account-sports">
+                {state.isAuthenticated ? <Redirect to="/dashboard" /> : <CreateAccount />}
+              </Route> 
+
+              <Route exact path="/create-account-business">
+                {state.isAuthenticated ? <Redirect to="/dashboard" /> : <CreateAccount />}
+              </Route> 
 
               <Route exact path="/dashboard">
-                {state.isAuthenticated ? <Dashboard /> : <Login />}
+                {state.isAuthenticated ? <Dashboard /> : <Redirect to="login" />}
               </Route>
-             <Route exact path="/login">
-                {state.isAuthenticated ? <Dashboard /> : <Login />}
+
+              <Route exact path="/login">
+                {state.isAuthenticated ? <Redirect to="/dashboard" /> : <Login />}
               </Route>
 
                <Route exact path="/profile/:id">
@@ -217,12 +225,8 @@ const App: React.FC = () => {
                 <Profiles />
               </Route>
 
-              <Route exact path="/create-account">
-                {state.isAuthenticated ? <Dashboard /> : <CreateAccount />}
-              </Route> 
-
-
               
+
 
 
             </IonRouterOutlet>

@@ -5,4 +5,16 @@ ion-content {
 		--padding-start: 16px;
     	--padding-end: 16px;
 	}
+	
+
+	
+}
+
+@media screen and ( min-width: 768px ) {
+	.content {
+		
+		padding-top: 100px;
+		max-width: 920px;
+		margin: 0 auto;
+	}
 }

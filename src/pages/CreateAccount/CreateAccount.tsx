@@ -11,7 +11,7 @@ import { useHistory } from 'react-router';
 import { AuthContext } from '../../App';
 import React from 'react';
 import OnBoardingProgress from '../../components/OnBoardingProgress/OnBoardingProgress';
-import SvgScLogo from '../Landing/images/SvgScLogo';
+import SvgScLogo from '../OnBoardingSport/images/SvgScLogo';
 import Arrow from './images/Arrow';
 
 import sports from './sports.json';
@@ -347,18 +347,19 @@ const CreateAccount: React.FC = () => {
   return (
     <IonPage>
 
-      <IonContent fullscreen scrollY={true} className="ion-padding-start ion-padding-end ion-padding-bottom">
+      <IonContent fullscreen scrollY={true} className="on-boarding create-account">
 
-        <IonGrid className="flex-direction-column ion-padding-top">
+        <IonGrid className="on-boarding-grid">
           <IonRow className="">
 
-            <IonCol className="login-image">
+            <IonCol className="login-image app-sidebar">
 
+              <div className="sc-logo" onClick={() => history.push("/")}><SvgScLogo /></div>
               <OnBoardingProgress percentage={onBoardingPercentage} />
 
             </IonCol>
 
-            <IonCol className="" size="auto">
+            <IonCol className="on-boarding-fields">
 
               <div className="create-account-steps">
 
@@ -370,19 +371,19 @@ const CreateAccount: React.FC = () => {
                     <div className="login-form">
                       <IonItem className="ion-no-padding">
                         <IonLabel position="stacked">Your Name</IonLabel>
-                        <IonInput placeholder="Your Name" value={yourName} autocomplete="name" required={true} autofocus={true} enterkeyhint="next" type="text" autocapitalize="words" onIonChange={(e: any) => { setYourName(e.detail.value); validateYourName(e.detail.value); }} />
+                        <IonInput id="your-name" placeholder="Your Name" value={yourName} autocomplete="name" required={true} autofocus={true} enterkeyhint="next" type="text" autocapitalize="words" onIonChange={(e: any) => { setYourName(e.detail.value); validateYourName(e.detail.value); }} />
                         <p className="error-message ion-no-margin"><small>{errorMessages.yourName}</small></p>
                       </IonItem>
 
                       <IonItem className="ion-no-padding">
                         <IonLabel position="stacked">Email Address</IonLabel>
-                        <IonInput placeholder="your@email.com" value={username} autocomplete="off" required={true} pattern="email" type="email" enterkeyhint="next" inputmode="email" onIonChange={(e: any) => { setUsername(e.detail.value); validateUsername(e.detail.value); }} />
+                        <IonInput id="your-email" placeholder="your@email.com" value={username} autocomplete="email" required={true} pattern="email" type="email" enterkeyhint="next" inputmode="email" onIonChange={(e: any) => { setUsername(e.detail.value); validateUsername(e.detail.value); }} />
                         <p className="error-message ion-no-margin"><small>{errorMessages.username}</small></p>
                       </IonItem>
                       <IonItem className="ion-no-padding password-item">
                         <IonLabel position="stacked">Password</IonLabel>
                         <EyeSVG className={ showPassword ? "password-show active" : "password-show"}  onClick={() => { showPassword ? setShowPassword(false) : setShowPassword(true) } } />
-                        <IonInput className="password-input" value={password} enterkeyhint="go" type={ showPassword ? "text" : "password" } autocomplete="off" required={true} minlength={6} onIonChange={(e: any) => { setPassword(e.detail.value); validatePassword(e.detail.value); }} />
+                        <IonInput id="your-password" className="password-input" value={password} enterkeyhint="go" type={ showPassword ? "text" : "password" } autocomplete="off" required={true} minlength={6} onIonChange={(e: any) => { setPassword(e.detail.value); validatePassword(e.detail.value); }} />
                         <PasswordStrengthBar className="password-strength" onChangeScore={(score) => { score >= 3 ? setPasswordStrongEnough(true) : setPasswordStrongEnough(false) }} password={password} barColors={['#ddd', '#ef4836', '#ff5722', '#0eb567', '#0EB59A']} />
                         <p className="error-message ion-no-margin"><small>{errorMessages.password}</small></p>
                       </IonItem>
@@ -482,7 +483,7 @@ const CreateAccount: React.FC = () => {
 
                   <div className="prev-next-buttons">
 
-                    {stepNumber === 1 && <IonButton className="arrow previous" onClick={() => history.push("/landing")} expand="block"><Arrow /></IonButton>}
+                    {stepNumber === 1 && <IonButton className="arrow previous" onClick={() => history.push("/sports")} expand="block"><Arrow /></IonButton>}
 
                     {stepNumber > 1 ? <IonButton className="arrow previous" onClick={() => doPreviousStep()} expand="block"><Arrow /></IonButton> : <div></div>}
 

@@ -14,4 +14,106 @@
 		object-position: center center;
 	
 	}
+	
 } 
+
+
+.on-boarding .logo svg {
+	@media screen and (min-width: 370px) {
+		width: 150px;
+		height: auto;
+	}
+	@media screen and (min-width: 620px) {
+		width: 160px;
+		height: auto;
+	}
+	@media screen and (min-width: 720px) {
+		width: 180px;
+		height: auto;
+	}
+	
+}
+
+
+.on-boarding {
+	min-height: 100%;
+	@media screen and (min-width: 768px) { 
+		--padding-start: 0px;
+		--padding-end: 0px; 
+	}
+	.on-boarding-grid {
+		min-height: inherit;
+		height: 100%;
+
+		@media screen and (min-width: 768px) {
+			--padding-bottom: 0;
+    		padding-bottom: 0;
+			padding-inline-start: 0;
+			padding-inline-end: 0;
+			padding-top: 0;
+		}
+		ion-row {
+			min-height: inherit;
+			flex-direction: column;
+			height: 100%;
+			
+			@media screen and (min-width: 768px) {
+				flex-direction: row;
+				align-items: center;
+				--padding-bottom: 0;
+    			padding-bottom: 0;
+				
+			}
+		}
+	}
+}
+
+.on-boarding-buttons {
+	
+	ion-button {
+		max-width: 420px;
+		width: 100%;
+		margin-left: auto;
+		margin-right: auto;
+	}
+	@media screen and (min-width: 768px) {
+		padding-top: 80px;
+	}
+}
+
+.app-sidebar {
+	
+	@media screen and (min-width: 768px) {
+		height: 100%;
+		min-height: inherit;
+		background-color: #fff;
+		width: 275px;
+		max-width: 275px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		padding-bottom: 80px;
+	}
+	@media screen and (min-width: 992px) {
+		width: 300px;
+		max-width: 300px;
+	}
+}
+
+.on-boarding-fields {
+	flex: 0 1 auto;
+	@media screen and (min-width: 768px) {
+		flex: 1 1 0;
+	}
+	width: 100%;
+	.create-account-steps,
+	.create-account-buttons {
+		max-width: 360px;
+		margin: 0 auto;
+	}
+}
+
+.login-form {
+	max-width: 360px;
+	margin: 0 auto;
+}

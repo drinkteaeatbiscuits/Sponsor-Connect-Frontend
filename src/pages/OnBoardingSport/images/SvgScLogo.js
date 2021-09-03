@@ -6,6 +6,7 @@ function SvgScLogo(props) {
       xmlns="http://www.w3.org/2000/svg"
       width={113.351}
       height={71.213}
+      viewBox="0 0 113.351 71.213"
       {...props}
     >
       <path
