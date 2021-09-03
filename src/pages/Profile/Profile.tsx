@@ -24,13 +24,9 @@ interface ParamTypes {
 const Profile: React.FC = () => {
 
   const profileId = useParams<ParamTypes>();
-
 	const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
-
-  const [showFullDescription, setShowFullDescription] = useState<boolean>(false)
-
-  
+  const [showFullDescription, setShowFullDescription] = useState<boolean>(false) 
   const {isLoading, data, error} = useProfile( profileId.id );
 
   error && console.log(error);

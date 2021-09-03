@@ -18,7 +18,7 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
                 <div className={ ( activeTab === 'dashboard' && "active " ) + " tab-button"} onClick={()=> history.push("/dashboard")}>
                     <IonIcon icon={speedometer} />
                     <IonLabel>Dashboard</IonLabel>
-                    <IonBadge>2</IonBadge>
+                    {/* <IonBadge>2</IonBadge> */}
                 </div>
 
                 <div className={ ( activeTab === 'profile' && "active " ) + " tab-button"} onClick={()=> history.push("/profile/" + authState?.user.profile )}>

@@ -48,6 +48,8 @@ import Notifications from './pages/Notifications';
 import Subscription from './pages/Subscription';
 import Landing from './pages/Landing/Landing';
 import Opportunity from './pages/Opportunity/Opportunity';
+import OnBoardingSport from './pages/OnBoardingSport/OnBoardingSport';
+import OnBoardingBusiness from './pages/OnBoardingBusiness/OnBoardingBusiness';
 
 
 const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
@@ -151,12 +153,20 @@ const App: React.FC = () => {
               <Route exact path="/">
                 {state.isAuthenticated ? <Dashboard /> : <Landing />}
               </Route>
-              <Route exact path="/home">
-                <Home />
+
+              <Route exact path="/sports">
+                {state.isAuthenticated ? <Dashboard /> : <OnBoardingSport />}
               </Route>
+
+              <Route exact path="/business">
+                {state.isAuthenticated ? <Dashboard /> : <OnBoardingBusiness />}
+              </Route>
+
               <Route exact path="/landing">
                 {state.isAuthenticated ? <Dashboard /> : <Landing />}
               </Route>
+
+
               <Route exact path="/dashboard">
                 {state.isAuthenticated ? <Dashboard /> : <Login />}
               </Route>

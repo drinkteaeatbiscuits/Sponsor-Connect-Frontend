@@ -1,0 +1,17 @@
+.login-image {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	ion-img {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		top: 0;
+		left: 0;
+
+		max-width: 330px;
+		object-fit: contain;
+		object-position: center center;
+	
+	}
+} 
