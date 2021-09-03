@@ -117,7 +117,6 @@ const Profile: React.FC = () => {
 
 
           
-
           { isLoading ? <IonSkeletonText animated style={{ width: '90%', margin: '10px  auto' }} /> : data?.shortDescription && 
               
               <div className="profile-detail-about ion-text-left ion-padding-top">
@@ -141,8 +140,6 @@ const Profile: React.FC = () => {
 
           </div>
 
-        
-
 
           { isLoading ? <IonSkeletonText animated style={{ width: '90%', margin: '10px  auto' }} /> : data?.images?.length > 0 && 
 
@@ -154,7 +151,6 @@ const Profile: React.FC = () => {
             </div>
 
           } 
-
           
           </div>
             
@@ -162,14 +158,7 @@ const Profile: React.FC = () => {
           <p className="ion-padding ion-color-dark line-height-12 section-title">Sponsorship Opportunities</p>
        
           <OpportunitiesList profileId={ profileId.id } />
-       
-
-          
-
-          
-          {/* <IonButton fill="clear" expand="full" onClick={()=> history.push( "/opportunities/" )}>Opportunities</IonButton>
-          <IonButton fill="clear" expand="full" onClick={()=> history.push( "/dashboard/" )}>Back to Dashboard</IonButton>
-           */}
+      
 
       </IonContent>
       

@@ -31,7 +31,7 @@ const SocialMediaTotals: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsP
 				
 				<a target="_blank" rel="noreferrer" href={item.socialMediaUrl}>
 					<IonIcon color="primary" size="large" icon={socialMediaIcon(item.socialMediaName)} />
-					{ item.socialMediaTotal && <p className="ion-no-margin social-media-total-figure">{item.socialMediaTotal.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",")}</p> }
+					{ item.socialMediaTotal && <p className="ion-no-margin social-media-total-figure">{ item.socialMediaTotal.toLocaleString() }</p> }
 				</a>
 
 			</IonCol>
