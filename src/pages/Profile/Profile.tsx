@@ -50,15 +50,17 @@ const Profile: React.FC = () => {
       
       <IonContent className="profile-content" fullscreen>
 
-        
+         
 
         <IonLoading isOpen={isLoading} message="Loading Profile" />
 
          <div className="profile-header">
           
           { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.coverImage && <img className="cover-image" alt={ "Cover Photo " + data?.coverImage.id } src={ (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : '') + data?.coverImage.url } />  }
-            
+          
         </div>
+
+        <div className="profile-content-inner">
 
         <div className="profile-info">
 
@@ -150,12 +152,13 @@ const Profile: React.FC = () => {
           
           </div>
             
-
-          <p className="ion-padding ion-color-dark line-height-12 section-title">Sponsorship Opportunities</p>
+            <div className="profile-opportunities">
+              <p className="ion-padding ion-color-dark line-height-12 section-title">Sponsorship Opportunities</p>
        
-          <OpportunitiesList profileId={ profileId.id } />
-      
-
+              <OpportunitiesList profileId={ profileId.id } />
+            </div>
+          </div>
+          
       </IonContent>
       
     </IonPage>

@@ -225,6 +225,11 @@ const App: React.FC = () => {
                 <Profiles />
               </Route>
 
+
+              <Route exact path="/the-dugout">
+                <Landing />
+              </Route>
+
               
 
 

@@ -15,9 +15,11 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 	// console.log(OpportunitiesListProps);
 
 	const {isLoading, data, error} = useOpportunities( OpportunitiesListProps?.profileId );
-
+console.log(data)
 
 	return <div className="opportunities">
+
+		
 	
 			{ data?.map(( p:any )=>{
 				return <IonCard className="opportunity" key={p.id} button={true} href={"http://localhost:3000/opportunity/" + p.id}>
@@ -26,24 +28,24 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 					
 
 						<IonCardHeader>
-							<p className="price">£{p.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>
-							<IonCardTitle className="title">{p.title}</IonCardTitle>
+							{p.price && <p className="price">£{p.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>}
+							
+							{p.title && <IonCardTitle className="title">{p.title}</IonCardTitle> }
 						</IonCardHeader>
 			
-						<IonCardContent className="description">
-							{p.description}
-
-						</IonCardContent>
+						{p.title && <IonCardContent className="description">
+							{p.description} 
+						</IonCardContent> }
 
 				  	</IonCard>
 				})}
 
-		<div className="ion-padding">
-		<p>Have any other sponsorship ideas? <br/>
-          Please get in touch here.</p>
-		</div>
+		<div className="other-sponsorship-ideas ion-padding">
+			<p>Have any other sponsorship ideas? <br/>
+			Please get in touch <a href="/">here.</a></p>
+			</div>
 	
-	</div>;
+		</div>;
 
 }
 
