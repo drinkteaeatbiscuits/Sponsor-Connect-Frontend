@@ -9,6 +9,7 @@ import TabBar from '../../components/TabBar';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
 import useOpportunity from '../../hooks/useOpportunity';
 import useAddOpportunity from '../../hooks/useAddOpportunity';
+import UploadImage from '../../components/UploadImage/UploadImage';
 
 
 
@@ -33,7 +34,7 @@ const AddOpportunity: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [fullDescription, setFullDescription] = useState<string>("");
-  // const [images, setImages] = useState<string>("");
+  const [images, setImages] = useState<object>({});
   const [price, setPrice] = useState<string>("");
   const [opportunityError, setOpportunityError] = useState<string>("");
   
@@ -44,7 +45,7 @@ const AddOpportunity: React.FC = () => {
       title,
       description,
       fullDescription,
-      // images,
+      images,
       price,
     });
     
@@ -81,6 +82,11 @@ const AddOpportunity: React.FC = () => {
           
             <div className="ion-padding">
               <IonList>
+
+                  <IonItem className="">
+                    <IonLabel position="stacked">Opportunity Image</IonLabel>
+                    <UploadImage currentImage={ images } setCurrentImage={ setImages } field="images" theref="" crop={{ aspect: 2 / 1 }} circularCrop={ false } showCroppedPreview={ false } />
+                  </IonItem> 
 
 
                   <IonItem>
