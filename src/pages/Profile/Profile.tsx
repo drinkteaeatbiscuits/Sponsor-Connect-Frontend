@@ -110,6 +110,10 @@ const Profile: React.FC = () => {
                 </div> 
               
               } 
+              <div className="contact-button ion-padding-top">
+                <IonButton expand="block" className="contact-now ">Contact Now</IonButton>
+              </div>
+              
 
             </div>  
 
@@ -156,6 +160,11 @@ const Profile: React.FC = () => {
               <p className="ion-padding ion-color-dark line-height-12 section-title">Sponsorship Opportunities</p>
        
               <OpportunitiesList profileId={ profileId.id } />
+
+              <div className="other-sponsorship-ideas ion-padding">
+                <p>Have any other sponsorship ideas? <br/>
+                Please get in touch <a href="/">here.</a></p>
+              </div>
             </div>
           </div>
           

@@ -40,10 +40,7 @@ console.log(data)
 				  	</IonCard>
 				})}
 
-		<div className="other-sponsorship-ideas ion-padding">
-			<p>Have any other sponsorship ideas? <br/>
-			Please get in touch <a href="/">here.</a></p>
-			</div>
+		
 	
 		</div>;
 

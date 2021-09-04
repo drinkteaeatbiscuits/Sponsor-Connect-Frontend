@@ -36,3 +36,13 @@ ion-label {
 ion-button.arrow {
 	display: inline-block;
 }
+
+ion-input {
+	position: relative;
+	.error-message {
+		position: absolute;
+		top: 8px;
+		right: 0;
+		color: var(--ion-color-danger);
+	}
+}

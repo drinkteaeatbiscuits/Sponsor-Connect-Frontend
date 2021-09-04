@@ -50,6 +50,8 @@ import Landing from './pages/Landing/Landing';
 import Opportunity from './pages/Opportunity/Opportunity';
 import OnBoardingSport from './pages/OnBoardingSport/OnBoardingSport';
 import OnBoardingBusiness from './pages/OnBoardingBusiness/OnBoardingBusiness';
+import AddOpportunity from './pages/Opportunity/AddOpportunity';
+import EditOpportunity from './pages/Opportunity/EditOpportunity';
 
 
 const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
@@ -198,6 +200,14 @@ const App: React.FC = () => {
 
               <Route exact path="/opportunity/:id">
                 {state.isAuthenticated ? <Opportunity /> : <Login />}
+              </Route>
+
+              <Route exact path="/add-opportunity/:id">
+                {state.isAuthenticated ? <AddOpportunity /> : <Login />}
+              </Route>
+
+              <Route exact path="/edit-opportunity/:id">
+                {state.isAuthenticated ? <EditOpportunity /> : <Login />}
               </Route>
 
               <Route exact path="/settings">

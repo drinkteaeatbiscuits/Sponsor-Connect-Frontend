@@ -216,14 +216,10 @@ ion-item.password-item {
   }
 
   .error-message {
-	  display: none;
 	  position: absolute;
 	  top: 8px;
 	  right: 0;
 	  color: var(--ion-color-danger);
-	  &.show {
-		  display: block;
-	  }
   }
 
   .account-for-option .icon {

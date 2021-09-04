@@ -9,13 +9,13 @@ import TabBar from '../../components/TabBar';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
 import useOpportunity from '../../hooks/useOpportunity';
 
-
-
 export interface props { }
 
 interface ParamTypes {
   id: string;
 }
+
+
 
 const Opportunity: React.FC = () => {
 
@@ -37,7 +37,7 @@ const Opportunity: React.FC = () => {
         <IonToolbar>
           <IonButtons className="ion-justify-content-around">
             <IonButton className="" size="small" onClick={() => history.push("/opportunities/" + data?.profile.id )}>Back to Opportunities</IonButton>
-            {authState?.user.profile === parseInt(data?.profile.id) && <IonButton className="" size="small" onClick={() => history.push("/opportunities/" + opportunityId.id + "/edit")}>Edit Opportunity</IonButton>}
+            {authState?.user.profile === parseInt(data?.profile.id) && <IonButton className="" size="small" onClick={() => history.push("/edit-opportunity/" + opportunityId.id)}>Edit Opportunity</IonButton>}
           </IonButtons>
 
         </IonToolbar>
