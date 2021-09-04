@@ -1,5 +1,6 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonGrid, IonIcon, IonImg, IonItem, IonList, IonRow, IonSlide, IonSlides } from "@ionic/react";
 import React from "react";
+import { useHistory } from "react-router";
 import useOpportunities from "../../hooks/useOpportunities";
 
 import './OpportunitiesList.scss';
@@ -13,16 +14,16 @@ interface OpportunitiesListProps {
 const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListProps ) => {
 
 	// console.log(OpportunitiesListProps);
-
+	const history = useHistory();
 	const {isLoading, data, error} = useOpportunities( OpportunitiesListProps?.profileId );
-console.log(data)
+
 
 	return <div className="opportunities">
 
 		
 	
 			{ data?.map(( p:any )=>{
-				return <IonCard className="opportunity" key={p.id} button={true} href={"http://localhost:3000/opportunity/" + p.id}>
+				return <IonCard className="opportunity" key={p.id} button={true} onClick={ ()=> history.push("/opportunity/" + p.id) }>
 						
 						{ p.images[0] && <img src={(process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + p.images[0]?.url} alt={p.title} /> }
 					
