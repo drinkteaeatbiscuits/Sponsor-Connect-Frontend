@@ -47,7 +47,7 @@ const Opportunity: React.FC = () => {
       <IonContent className="opportunity-content" fullscreen>
 
         {!isLoading &&
-
+<div className="content">
           <div className="opportunity">
 
 
@@ -69,15 +69,11 @@ const Opportunity: React.FC = () => {
               }
 
             </div>
-            
+            {authState?.user.profile === parseInt(data?.profile.id) && <IonButton className="" size="small" onClick={() => history.push("/edit-opportunity/" + opportunityId.id)}>Edit Opportunity</IonButton>}
+        
           </div>
-
+          </div>
         }
-
-
-
-
-
 
 
       </IonContent>
