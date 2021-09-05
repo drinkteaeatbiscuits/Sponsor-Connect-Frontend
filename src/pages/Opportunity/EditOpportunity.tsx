@@ -30,16 +30,14 @@ const EditOpportunity: React.FC = () => {
   const { isLoading, data, error } = useOpportunity(opportunityId.id);
 
   
-
-  const {isLoading: isAddingOpportunity, error: addOpportunityError, mutateAsync: editOpportunityMutation} = useEditOpportunity( opportunityId.id );
-
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [fullDescription, setFullDescription] = useState<string>("");
-  // const [images, setImages] = useState<string>("");
+  const [images, setImages] = useState<any>("");
   const [price, setPrice] = useState<string>("");
   const [opportunityError, setOpportunityError] = useState<string>("");
   
+  const {isLoading: isAddingOpportunity, error: addOpportunityError, mutateAsync: editOpportunityMutation} = useEditOpportunity( opportunityId.id );
 
   useEffect(() => {
     
@@ -48,9 +46,12 @@ const EditOpportunity: React.FC = () => {
       setDescription(data.description);
       setFullDescription(data.fullDescription);
       setPrice(data.price);
+      setImages(data.images[0]);
     }
     
   }, [data, isLoading]);
+
+  // console.log(images[0]?.url)
 
   
   const editOpportunity = async () => {
@@ -74,7 +75,7 @@ const EditOpportunity: React.FC = () => {
        
         <IonToolbar>
           <IonButtons className="ion-justify-content-around">
-            <IonButton className="" size="small" onClick={() => history.push("/opportunity/" + opportunityId )}>Back to Opportunity</IonButton>
+            <IonButton className="" size="small" onClick={() => history.push("/opportunity/" + opportunityId.id )}>Back to Opportunity</IonButton>
             {/* {authState?.user.profile === parseInt(data?.profile.id) && <IonButton className="" size="small" onClick={() => history.push("/opportunities/" + profileId.id + "/edit")}>Add Opportunity</IonButton>} */}
           </IonButtons>
 
@@ -92,11 +93,9 @@ const EditOpportunity: React.FC = () => {
           <div className="opportunity">
 
 
-           
-
                 <IonItem className="">
                     <IonLabel position="stacked">Opportunity Image</IonLabel>
-                    <UploadImage setCurrentImage={ data?.images[0]?.url } field="images" theref="" crop={{ aspect: 2 / 1 }} circularCrop={ false } showCroppedPreview={ false } />
+                    <UploadImage currentImage={ images } setCurrentImage={ setImages } field="images" theref="opportunity" crop={{ aspect: 2 / 1 }} circularCrop={ false } showCroppedPreview={ false } />
                   </IonItem> 
 
 

@@ -44,9 +44,9 @@ const Login: React.FC<props> = () => {
 
     } else {
 
-      console.log(loginInfo);
+      // console.log(loginInfo);
 
-      loginInfo.user.profile = loginInfo.user.profile.id;
+      loginInfo.user.accountType !== "Business" && (loginInfo.user.profile = loginInfo.user.profile.id)
 
       dispatch && dispatch({
         type: "setUser",

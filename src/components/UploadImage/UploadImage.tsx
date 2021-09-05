@@ -7,7 +7,7 @@ import useDeleteImage from "../../hooks/useDeleteImage";
 import useUploadImage from "../../hooks/useUploadImage";
 
 
-interface SocialMediaTotalsProps {
+interface UploadImageProps {
 	// socialMediaData?: any,
 	// setImage: Function;
 	// setSrc: Function;
@@ -20,7 +20,7 @@ interface SocialMediaTotalsProps {
 	showCroppedPreview?: boolean,
 }
 
-const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps ) => {
+const UploadImage: React.FC<UploadImageProps> = ( UploadImageProps ) => {
 
 	const { state: authState } = React.useContext(AuthContext);
 	const [src, setSrc] = useState<any>("");
@@ -32,18 +32,17 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 
 	const [uploadProgress, setUploadProgress] = useState<any>("");
 
-
 	const [aNewImage, setANewImage] = useState<boolean>(false);
 
-	const { isLoading: isLoadingUploadImage, error: isLoadingUploadImageError, mutateAsync: addUploadImageMutation } = useUploadImage( authState?.user.profile, SocialMediaTotalsProps.setCurrentImage, setUploadProgress );
+	const { isLoading: isLoadingUploadImage, error: isLoadingUploadImageError, mutateAsync: addUploadImageMutation } = useUploadImage( authState?.user.profile, UploadImageProps.setCurrentImage, setUploadProgress );
 	const { isLoading: isDeletingImage, error: isDeletingImageError, mutateAsync: addDeletingImageMutation } = useDeleteImage();
 
 	// console.log(imageRef);
 
 	useEffect(() => {
-		setCrop(SocialMediaTotalsProps.crop);
-	}, [SocialMediaTotalsProps.crop])
-	// console.log( SocialMediaTotalsProps.currentImage );
+		setCrop(UploadImageProps.crop);
+	}, [UploadImageProps.crop])
+	// console.log( UploadImageProps.currentImage );
 
 	const onDrop = useCallback((acceptedFiles) => {
 		const reader = new FileReader();
@@ -79,12 +78,17 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 
 			addUploadImageMutation( [ { data: blobToFile(blob, newFileName), field: field, theref: theref } ] );
 
-
 		} else if (theImage) { 
+
 			addUploadImageMutation( [ { data: blobToFile(theImage, newFileName), field: field, theref: theref } ] );
+
 		}
 
-		// SocialMediaTotalsProps.setCurrentImage(null);
+		// setANewImage(true);
+
+
+
+		// UploadImageProps.setCurrentImage(null);
 
 	}
 
@@ -174,9 +178,9 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 	const removeImage = () => {
 		// console.log('remove image');
 		
-		addDeletingImageMutation(SocialMediaTotalsProps.currentImage.id);
+		addDeletingImageMutation(UploadImageProps.currentImage.id);
 
-		SocialMediaTotalsProps.setCurrentImage(null);
+		UploadImageProps.setCurrentImage(null);
 		setSrc(null);
 		setCroppedImageUrl(null);
 	}
@@ -199,36 +203,17 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 	
 	}
 
-	// const onLoad = useCallback(img => {
-	// 	imgRef.current = img;
-	  
-	// 	const aspect = 16 / 9;
-	// 	const width = img.width / aspect < img.height * aspect ? 100 : ((img.height * aspect) / img.width) * 100;
-	// 	const height = img.width / aspect > img.height * aspect ? 100 : (img.width / aspect / img.height) * 100;
-	// 	const y = (100 - height) / 2;
-	// 	const x = (100 - width) / 2;
-	  
-	// 	setCrop({
-	// 	  unit: '%',
-	// 	  width,
-	// 	  height,
-	// 	  x,
-	// 	  y,
-	// 	  aspect,
-	// 	});
-	  
-	// 	return false; // Return false if you set crop state in here.
-	//   }, []);
+	
 
 	return <div className="upload-image-wrap">
 
 		
 
-		{ SocialMediaTotalsProps.currentImage && !aNewImage ? 
+		{ UploadImageProps.currentImage && !aNewImage ? 
 		
 			<div className="current-image-thumb">
 				
-				<img className={ SocialMediaTotalsProps.circularCrop ? "circle-crop" : "" } alt="current thumbnail" src={(process.env.NODE_ENV === "development" ? 'http://localhost:1337' : '') + SocialMediaTotalsProps.currentImage.url} />
+				<img className={ UploadImageProps.circularCrop ? "circle-crop" : "" } alt="current thumbnail" src={(process.env.NODE_ENV === "development" ? 'http://localhost:1337' : '') + UploadImageProps.currentImage.url} />
 				<IonButtons slot="end" className="buttons-end">
 					<IonButton buttonType="link" className="link" onClick={ () => changeImage() } >Change Image</IonButton>
 					<IonButton buttonType="link" className="link" onClick={ () => removeImage() } >Remove Image</IonButton>
@@ -248,7 +233,7 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 					}
 				</div> }
 				
-				<ReactCrop src={src} keepSelection={true} circularCrop={ SocialMediaTotalsProps.circularCrop } crop={crop} 
+				<ReactCrop src={src} keepSelection={true} circularCrop={ UploadImageProps.circularCrop } crop={crop} 
 				onImageLoaded={(img:any) => {
 					 
 					const aspect = crop?.aspect;
@@ -288,7 +273,7 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 				onComplete={(crop:any) => makeClientCrop(crop)}
 				onChange={(newCrop:any) => {setCrop(newCrop);}} />
 
-				{croppedImageUrl && SocialMediaTotalsProps.showCroppedPreview && (<img alt="Crop" className={ SocialMediaTotalsProps.circularCrop ? "circle-crop" : "" } style={{ maxWidth: '100%' }} src={croppedImageUrl} />)}
+				{croppedImageUrl && UploadImageProps.showCroppedPreview && (<img alt="Crop" className={ UploadImageProps.circularCrop ? "circle-crop" : "" } style={{ maxWidth: '100%' }} src={croppedImageUrl} />)}
 				
 				
 				{ uploadProgress > 0 &&
@@ -298,7 +283,7 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 
 				{theImage && src && <IonButtons slot="end" className="buttons-end">
 				{ uploadProgress > 0 && <h2 className="ion-align-self-start upload-progress">{uploadProgress}%</h2> }
-					<IonButton color="primary" size="small" className="" onClick={() => uploadImage(SocialMediaTotalsProps.field, SocialMediaTotalsProps.theref)} >Upload</IonButton>
+					<IonButton color="primary" size="small" className="" onClick={() => uploadImage(UploadImageProps.field, UploadImageProps.theref)} >Upload</IonButton>
 					<IonButton buttonType="link" className="link" onClick={ () => cancelUpload() } >Cancel</IonButton>
 				</IonButtons>}
 

@@ -33,6 +33,8 @@ const Dashboard: React.FC = () => {
 
 
 
+
+
   return (
     <IonPage>
       <TabBar activeTab="dashboard" />
@@ -42,9 +44,9 @@ const Dashboard: React.FC = () => {
             <p className="hello ion-no-margin"><strong>Hello{authState.user?.yourName && (" " + authState.user?.yourName?.split(" ")[0])},</strong></p>
             <p className="greeting ion-no-margin">{greeting()}</p>
           </div>
-
+        {authState.user?.accountType ==! "Business" ?
           <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
-
+          
             <div className="menu-list-option ion-margin-top"
               onClick={() => history.push("/profile/" + authState?.user?.profile)}>
               <div className="icon">
@@ -81,7 +83,47 @@ const Dashboard: React.FC = () => {
             <LogoutButton className="logout-button button-tertiary ion-margin-bottom" expand="block" size="small" />
 
           </div>
+      :
+      <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
+          
+            <div className="menu-list-option ion-margin-top"
+              onClick={() => history.push("/profiles")}>
+              <div className="icon">
+                <IonIcon color="primary" icon={personCircle} />
+              </div>
+              <div className="text">
+                <p className="main-text">Search Profiles</p>
+                <p className="sub-text">Search and view profiles</p>
+              </div>
+            </div>
 
+            <div className='menu-list-option'
+              onClick={() => history.push("/search-opportunities")}>
+              <div className="icon">
+                <IonIcon color="primary" icon={trailSign} />
+              </div>
+              <div className="text">
+                <p className="main-text">Search Opportunities</p>
+                <p className="sub-text">Search the latest sponsorship opportunities </p>
+              </div>
+            </div>
+
+            <div className='menu-list-option'
+              onClick={() => history.push("/settings/")}>
+              <div className="icon">
+                <IonIcon color="primary" icon={settings} />
+              </div>
+              <div className="text">
+                <p className="main-text">Settings</p>
+                <p className="sub-text">Update account, billing &amp; notifications</p>
+              </div>
+            </div>
+
+            <LogoutButton className="logout-button button-tertiary ion-margin-bottom" expand="block" size="small" />
+
+          </div>
+
+      }
 
         </div>
       </IonContent>

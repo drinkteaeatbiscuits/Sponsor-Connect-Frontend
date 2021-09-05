@@ -52,6 +52,8 @@ import OnBoardingSport from './pages/OnBoardingSport/OnBoardingSport';
 import OnBoardingBusiness from './pages/OnBoardingBusiness/OnBoardingBusiness';
 import AddOpportunity from './pages/Opportunity/AddOpportunity';
 import EditOpportunity from './pages/Opportunity/EditOpportunity';
+import CreateAccountBusiness from './pages/CreateAccountBusiness/CreateAccountBusiness';
+import SearchOpportunities from './pages/SearchOpportunities/SearchOpportunities';
 
 
 const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
@@ -107,6 +109,7 @@ const checkIfAuthenticated = async () => {
     credentials: "include",
   });
 
+  
   const profileInfo = await loginResp.json();
 
   // console.log(profileInfo);
@@ -173,7 +176,7 @@ const App: React.FC = () => {
               </Route> 
 
               <Route exact path="/create-account-business">
-                {state.isAuthenticated ? <Redirect to="/dashboard" /> : <CreateAccount />}
+                {state.isAuthenticated ? <Redirect to="/dashboard" /> : <CreateAccountBusiness />}
               </Route> 
 
               <Route exact path="/dashboard">
@@ -208,6 +211,11 @@ const App: React.FC = () => {
 
               <Route exact path="/edit-opportunity/:id">
                 {state.isAuthenticated ? <EditOpportunity /> : <Login />}
+              </Route>
+
+
+              <Route exact path="/search-opportunities">
+                {state.isAuthenticated ? <SearchOpportunities /> : <Login />}
               </Route>
 
               <Route exact path="/settings">

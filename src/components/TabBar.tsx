@@ -54,15 +54,31 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
                     {/* <IonBadge>2</IonBadge> */}
                 </div>
 
+                {authState.user?.accountType === "Business" ? 
+                <div className={ ( activeTab === 'profile' && "active " ) + " tab-button"} onClick={()=> history.push("/profiles")}>
+                    <IonIcon icon={personCircle} />
+                    <IonLabel>Profiles</IonLabel>
+                </div>
+                :
                 <div className={ ( activeTab === 'profile' && "active " ) + " tab-button"} onClick={()=> history.push("/profile/" + authState?.user.profile )}>
                     <IonIcon icon={personCircle} />
                     <IonLabel>Profile</IonLabel>
                 </div>
+                }
 
+
+                {authState.user?.accountType === "Business" ? 
+                <div className={ ( activeTab === 'opportunities' && "active " ) + " tab-button"} onClick={()=> history.push("/search-opportunities/")}>
+                    <IonIcon icon={trailSign} />
+                    <IonLabel>Opportunities</IonLabel>
+                </div>
+                :
                 <div className={ ( activeTab === 'opportunities' && "active " ) + " tab-button"} onClick={()=> history.push("/opportunities/"  + authState?.user.profile )}>
                     <IonIcon icon={trailSign} />
                     <IonLabel>Opportunities</IonLabel>
                 </div>
+                }
+
 
                 <div className={ ( activeTab === 'the-dugout' && "active " ) + " tab-button"} onClick={()=> history.push("/the-dugout")}>
                     <IonIcon icon={newspaper} />

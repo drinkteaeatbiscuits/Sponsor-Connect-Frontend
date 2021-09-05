@@ -20,7 +20,7 @@ const useProfiles = () => {
           client.setQueryData(["profiles", p.id], p);
         });
 
-		    console.log(profiles);
+		    // console.log(profiles);
   
         return profiles;
   
