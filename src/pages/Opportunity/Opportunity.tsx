@@ -3,11 +3,13 @@ import Header from '../../components/Header';
 import { useHistory, useParams } from 'react-router';
 import Cookies from 'js-cookie';
 import { AuthContext } from "../../App";
-import React from 'react';
+import React, { useEffect } from 'react';
 import LogoutButton from '../../components/LogoutButton';
 import TabBar from '../../components/TabBar';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
 import useOpportunity from '../../hooks/useOpportunity';
+import { useMutation, useQueryClient } from 'react-query';
+import useDeleteOpportunity from '../../hooks/useDeleteOpportunity';
 
 export interface props { }
 
@@ -16,19 +18,27 @@ interface ParamTypes {
 }
 
 
-
 const Opportunity: React.FC = () => {
 
   const opportunityId = useParams<ParamTypes>();
 
-
   const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
 
-
   const { isLoading, data, error } = useOpportunity(opportunityId.id);
+  const {isLoading: isDeletingOpportunity, error: deleteOpportunityError, mutateAsync: deleteOpportunityMutation} = useDeleteOpportunity( opportunityId.id );
 
-  console.log(data?.profile );
+  
+  const deleteOpportunity = async () => {
+    console.log('delete opportunity');
+
+    await deleteOpportunityMutation();
+
+    history.goBack();
+
+  }
+
+  // console.log(data?.profile );
 
   return (
     <IonPage>
@@ -36,7 +46,7 @@ const Opportunity: React.FC = () => {
        
         <IonToolbar>
           <IonButtons className="ion-justify-content-around">
-            <IonButton className="" size="small" onClick={() => history.push("/opportunities/" + data?.profile.id )}>Back to Opportunities</IonButton>
+            {/* <IonButton className="" size="small" onClick={() => history.push("/opportunities/" + data?.profile.id )}>Back to Opportunities</IonButton> */}
             {authState?.user.profile === parseInt(data?.profile.id) && <IonButton className="" size="small" onClick={() => history.push("/edit-opportunity/" + opportunityId.id)}>Edit Opportunity</IonButton>}
           </IonButtons>
 
@@ -47,7 +57,7 @@ const Opportunity: React.FC = () => {
       <IonContent className="opportunity-content" fullscreen>
 
         {!isLoading &&
-<div className="content">
+        <div className="content">
           <div className="opportunity">
 
 
@@ -69,7 +79,10 @@ const Opportunity: React.FC = () => {
               }
 
             </div>
-            {authState?.user.profile === parseInt(data?.profile.id) && <IonButton className="" size="small" onClick={() => history.push("/edit-opportunity/" + opportunityId.id)}>Edit Opportunity</IonButton>}
+            {authState?.user.profile === parseInt(data?.profile.id) && <IonButtons>
+              <IonButton className="" size="small" onClick={() => history.push("/edit-opportunity/" + opportunityId.id)}>Edit Opportunity</IonButton>
+            
+            <IonButton className="" size="small" onClick={() => deleteOpportunity()}>Delete Opportunity</IonButton></IonButtons>}
         
           </div>
           </div>

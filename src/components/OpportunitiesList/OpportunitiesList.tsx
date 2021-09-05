@@ -22,9 +22,11 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 
 		
 	
-			{ data?.map(( p:any )=>{
+			{ data?.length > 0 && data?.map(( p:any )=>{
 				return <IonCard className="opportunity" key={p.id} button={true} onClick={ ()=> history.push("/opportunity/" + p.id) }>
-						
+
+					
+			
 						{ p.images[0] && <img src={(process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + p.images[0]?.url} alt={p.title} /> }
 					
 

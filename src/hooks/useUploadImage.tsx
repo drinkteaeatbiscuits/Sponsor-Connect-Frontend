@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from 'react-query';
 
 import axios from 'axios';
 
-const useUploadImage = ( profileId:any, setTheImage:Function ) => {
+const useUploadImage = ( profileId:any, setTheImage:Function, setUploadProgress:Function ) => {
 
     // console.log(profileId);
 
@@ -25,7 +25,7 @@ const useUploadImage = ( profileId:any, setTheImage:Function ) => {
         formdata, 
         {
           withCredentials: true,
-          onUploadProgress: progressEvent => console.log(progressEvent.loaded),
+          onUploadProgress: progressEvent => setUploadProgress(Math.round( (progressEvent.loaded * 100) / progressEvent.total )),
         })
         .then(function (response) {
 

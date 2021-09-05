@@ -30,7 +30,7 @@ const useAddOpportunity = () => {
       },
       {
         onSuccess: (data) => {
-            console.log(client);
+            // console.log(client);
           client.invalidateQueries("opportunities");
         }
       }

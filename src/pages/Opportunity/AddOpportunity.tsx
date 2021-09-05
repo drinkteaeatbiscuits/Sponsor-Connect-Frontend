@@ -27,7 +27,7 @@ const AddOpportunity: React.FC = () => {
   const { state: authState } = React.useContext(AuthContext);
 
 // console.log(profileId);
-  // const { isLoading, data, error } = useOpportunity(profileId.id);
+// const { isLoading, data, error } = useOpportunity(profileId.id);
 
   const {isLoading: isAddingOpportunity, error: addOpportunityError, mutateAsync: addOpportunityMutation} = useAddOpportunity();
 
@@ -37,6 +37,7 @@ const AddOpportunity: React.FC = () => {
   const [images, setImages] = useState<object>({});
   const [price, setPrice] = useState<string>("");
   const [opportunityError, setOpportunityError] = useState<string>("");
+
   
   const addOpportunity = async () => {
     
@@ -85,7 +86,7 @@ const AddOpportunity: React.FC = () => {
 
                   <IonItem className="">
                     <IonLabel position="stacked">Opportunity Image</IonLabel>
-                    <UploadImage currentImage={ images } setCurrentImage={ setImages } field="images" theref="" crop={{ aspect: 2 / 1 }} circularCrop={ false } showCroppedPreview={ false } />
+                    <UploadImage setCurrentImage={ setImages } field="images" theref="" crop={{ aspect: 2 / 1 }} circularCrop={ false } showCroppedPreview={ false } />
                   </IonItem> 
 
 

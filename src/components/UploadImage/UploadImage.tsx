@@ -1,4 +1,4 @@
-import { IonButton, IonButtons } from "@ionic/react";
+import { IonButton, IonButtons, IonProgressBar } from "@ionic/react";
 import React, { useCallback, useEffect, useState } from "react";
 import {useDropzone} from 'react-dropzone';
 import ReactCrop from "react-image-crop";
@@ -30,10 +30,12 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 	const [croppedImageUrl, setCroppedImageUrl] = useState<any>("");
 	const [theImage, setTheImage] = useState<any>("");
 
+	const [uploadProgress, setUploadProgress] = useState<any>("");
+
 
 	const [aNewImage, setANewImage] = useState<boolean>(false);
 
-	const { isLoading: isLoadingUploadImage, error: isLoadingUploadImageError, mutateAsync: addUploadImageMutation } = useUploadImage( authState?.user.profile, SocialMediaTotalsProps.setCurrentImage );
+	const { isLoading: isLoadingUploadImage, error: isLoadingUploadImageError, mutateAsync: addUploadImageMutation } = useUploadImage( authState?.user.profile, SocialMediaTotalsProps.setCurrentImage, setUploadProgress );
 	const { isLoading: isDeletingImage, error: isDeletingImageError, mutateAsync: addDeletingImageMutation } = useDeleteImage();
 
 	// console.log(imageRef);
@@ -220,6 +222,8 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 
 	return <div className="upload-image-wrap">
 
+		
+
 		{ SocialMediaTotalsProps.currentImage && !aNewImage ? 
 		
 			<div className="current-image-thumb">
@@ -234,6 +238,7 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 			: 
 			
 			 <div className="upload-image">
+				 
 				{ !src && <div className="dropzone" {...getRootProps()}>
 				 	<input {...getInputProps()} /> 
 					{
@@ -286,8 +291,13 @@ const UploadImage: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsProps )
 				{croppedImageUrl && SocialMediaTotalsProps.showCroppedPreview && (<img alt="Crop" className={ SocialMediaTotalsProps.circularCrop ? "circle-crop" : "" } style={{ maxWidth: '100%' }} src={croppedImageUrl} />)}
 				
 				
+				{ uploadProgress > 0 &&
+				 <IonProgressBar color="primary" value={ uploadProgress / 100 }></IonProgressBar> }
+				 
+				
 
 				{theImage && src && <IonButtons slot="end" className="buttons-end">
+				{ uploadProgress > 0 && <h2 className="ion-align-self-start upload-progress">{uploadProgress}%</h2> }
 					<IonButton color="primary" size="small" className="" onClick={() => uploadImage(SocialMediaTotalsProps.field, SocialMediaTotalsProps.theref)} >Upload</IonButton>
 					<IonButton buttonType="link" className="link" onClick={ () => cancelUpload() } >Cancel</IonButton>
 				</IonButtons>}

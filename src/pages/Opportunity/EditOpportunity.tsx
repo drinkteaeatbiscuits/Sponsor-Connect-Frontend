@@ -10,6 +10,7 @@ import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesL
 import useOpportunity from '../../hooks/useOpportunity';
 import useAddOpportunity from '../../hooks/useAddOpportunity';
 import useEditOpportunity from '../../hooks/useEditOpportunity';
+import UploadImage from '../../components/UploadImage/UploadImage';
 
 
 export interface props { }
@@ -91,7 +92,13 @@ const EditOpportunity: React.FC = () => {
           <div className="opportunity">
 
 
-            {data?.images[0] && <img src={(process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + data?.images[0]?.url} alt={data?.title} />}
+           
+
+                <IonItem className="">
+                    <IonLabel position="stacked">Opportunity Image</IonLabel>
+                    <UploadImage setCurrentImage={ data?.images[0]?.url } field="images" theref="" crop={{ aspect: 2 / 1 }} circularCrop={ false } showCroppedPreview={ false } />
+                  </IonItem> 
+
 
             <div className="ion-padding">
               <IonList>
