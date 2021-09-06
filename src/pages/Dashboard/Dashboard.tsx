@@ -44,7 +44,7 @@ const Dashboard: React.FC = () => {
             <p className="hello ion-no-margin"><strong>Hello{authState.user?.yourName && (" " + authState.user?.yourName?.split(" ")[0])},</strong></p>
             <p className="greeting ion-no-margin">{greeting()}</p>
           </div>
-        {authState.user?.accountType ==! "Business" ?
+        {authState.user?.accountType !== "Business" ?
           <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
           
             <div className="menu-list-option ion-margin-top"

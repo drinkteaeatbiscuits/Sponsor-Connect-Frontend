@@ -41,7 +41,7 @@ const Settings: React.FC = () => {
 
             <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
             
-            {authState.user?.accountType ==! "Business" &&
+            {authState.user?.accountType !== "Business" &&
           
             <div className="menu-list-option ion-margin-top"
               onClick={() => history.push("/settings/billing/")}>

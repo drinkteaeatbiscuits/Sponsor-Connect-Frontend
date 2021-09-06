@@ -36,7 +36,7 @@ import './theme/app.scss';
 
 import { useEffect } from 'react';
 import Dashboard from './pages/Dashboard/Dashboard';
-import Profiles from './pages/Profiles';
+import Profiles from './pages/Profiles/Profiles';
 import Profile from './pages/Profile/Profile';
 import Opportunities from './pages/Opportunities/Opportunities';
 import Settings from './pages/Settings';
