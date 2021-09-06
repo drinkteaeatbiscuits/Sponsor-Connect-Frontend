@@ -128,10 +128,6 @@ const EditProfile: React.FC = () => {
 
 
   
-
-  // console.log(src);
-
-  
   const focusOnSport = () => {
     
     document.addEventListener('ionModalDidPresent', () => { document.querySelector('ion-searchbar')?.setFocus(); });
@@ -228,24 +224,23 @@ const EditProfile: React.FC = () => {
   // console.log(socialMediaObject);
 
   const createAccolades = (e:any) => {
+
+    console.log(e);
     
     let accoladeIndex = Array.prototype.indexOf.call(e.target.parentElement.parentElement.children, e.target.parentElement);
     let newAccolades: Array<any> = [];
     newAccolades = newAccolades.concat(accolades);
     newAccolades[accoladeIndex] = e.detail.value;
     setAccolades(newAccolades);
+
   }
     
   const addAccolade = () => {
     
     let newAccolades: Array<string> = [];
-
     newAccolades = newAccolades.concat(accolades);
-
     accolades?.length < 1 && (newAccolades.push(""));
-    
     newAccolades.push("");
-
     setAccolades(newAccolades);
     
   }
@@ -255,11 +250,8 @@ const EditProfile: React.FC = () => {
     const removeIndex = Array.prototype.indexOf.call(e.target.parentElement.parentElement.children, e.target.parentElement);
     let newAccolades: Array<string> = [];
     newAccolades = newAccolades.concat(accolades);
-
     // console.log(removeIndex);
-
     newAccolades.splice(removeIndex, 1);
-
     setAccolades(newAccolades);
     
   }
@@ -404,22 +396,20 @@ const EditProfile: React.FC = () => {
 
                     {/* {console.log(accolades)} */}
                     <IonList className="accolade-list">
-                    {accolades?.length > 0 ? accolades.map((accolade: string, index: any) => {
 
-                      // {console.log(accolade)}
+                      {accolades?.length > 0 ? accolades.map((accolade: string, index: any) => {
 
-                      return <IonItem className="accolade-field" key={index}>
-                              <IonInput placeholder="Your Accolade" value={accolade && accolade} id={"accolade-" + index} onIonChange={ (e:any) => createAccolades(e) } />
-                              <IonIcon icon={close} onClick={ (e) => { removeAccolade(e); } } />
-                            </IonItem>
+                        return <IonItem className="accolade-field" key={index}>
+                                <IonInput placeholder="Your Accolade" value={accolade && accolade} id={"accolade-" + index} onIonChange={ (e:any) => createAccolades(e) } />
+                                <IonIcon icon={close} onClick={ (e) => { removeAccolade(e); } } />
+                              </IonItem>
 
-                     })
+                      })
 
-                     : 
-                     <IonItem className="accolade-field" >
-                      <IonInput value={""} placeholder="Your Accolade" onIonChange={ (e:any) => createAccolades(e.detail.value) } /> 
-                      <IonIcon icon={close} />
-                     </IonItem>
+                      : <IonItem className="accolade-field" >
+                          <IonInput value={""} placeholder="Your Accolade" onIonChange={ (e:any) => createAccolades(e) } /> 
+                          <IonIcon icon={close} />
+                        </IonItem>
                      
                      }</IonList>
 

@@ -1,0 +1,42 @@
+.profiles-content .content {
+	padding-top: 20px;
+	padding-bottom: 100px;
+	padding-left: 8px;
+	padding-right: 8px;
+	@media screen and ( min-width: 768px ) {
+	padding-top: 100px;
+	}
+	max-width: 1024px;
+
+} 
+
+
+.my-masonry-grid {
+	display: flex;
+	margin-left: 0px; /* gutter size offset */
+	width: auto;
+  }
+  .my-masonry-grid_column {
+	padding-left: 0px; /* gutter size */
+	background-clip: padding-box;
+  }
+  
+  /* Style your items */
+  .my-masonry-grid_column > ion-card { 
+	/* change div to reference your elements you put in <Masonry> */
+	// background: grey;
+	margin-bottom: 10px;
+  }
+
+
+//   @media (max-width: 600px) {
+// 	.my-masonry-grid {
+// 	  margin-left: -15px; /* gutter size offset */
+// 	}
+// 	.my-masonry-grid_column {
+// 	  padding-left: 15px; /* gutter size offset */
+// 	}
+// 	.my-masonry-grid_column > div {
+// 	  margin-bottom: 15px; /* space between items */
+// 	}
+//   }

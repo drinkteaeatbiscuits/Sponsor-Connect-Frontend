@@ -46,3 +46,25 @@ ion-input {
 		color: var(--ion-color-danger);
 	}
 }
+
+.form-secondary-buttons {
+	display: flex;
+	justify-content: space-between;
+	p {
+		margin: 0;
+		padding: 12px 0;
+		font-size: 0.9em;
+		color: var(--ion-color-tertiary);
+		cursor: pointer;
+		&:hover {
+			color: var(--ion-color-primary)
+		}
+		&.text-center {
+			text-align: center;
+			display: block;
+			flex-grow: 1;
+		}
+		
+
+	}
+}

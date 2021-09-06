@@ -4,10 +4,7 @@ ion-content {
 	@media screen and ( min-width: 576px ) {
 		--padding-start: 16px;
     	--padding-end: 16px;
-	}
-	
-
-	
+	}	
 }
 
 @media screen and ( min-width: 768px ) {
@@ -24,5 +21,6 @@ ion-content {
 				--background: #fff;
 			}
 		}
+		
 	}
 }

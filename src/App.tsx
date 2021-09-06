@@ -9,7 +9,7 @@ import { loadStripe } from '@stripe/stripe-js';
 
 import Home from './pages/Home';
 import AddItem from './pages/AddItem';
-import Login from './pages/Login';
+import Login from './pages/Login/Login';
 import CreateAccount from './pages/CreateAccount/CreateAccount';
 import Menu from './pages/Menu';
 
@@ -54,6 +54,8 @@ import AddOpportunity from './pages/Opportunity/AddOpportunity';
 import EditOpportunity from './pages/Opportunity/EditOpportunity';
 import CreateAccountBusiness from './pages/CreateAccountBusiness/CreateAccountBusiness';
 import SearchOpportunities from './pages/SearchOpportunities/SearchOpportunities';
+import ResetPassword from './pages/ResetPassword/ResetPassword';
+import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
 
 
 const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
@@ -196,7 +198,6 @@ const App: React.FC = () => {
               </Route>
               
               
-
                <Route exact path="/opportunities/:id">
                 {state.isAuthenticated ? <Opportunities /> : <Login />}
               </Route>
@@ -232,6 +233,12 @@ const App: React.FC = () => {
               </Route>
               <Route exact path="/settings/notifications">
                 {state.isAuthenticated ? <Notifications /> : <Login />}
+              </Route>
+              <Route exact path="/reset-password">
+                <ResetPassword />
+              </Route>
+              <Route exact path="/forgot-password">
+                <ForgotPassword />
               </Route>
               <Route exact path="/menu">
                 <Menu />

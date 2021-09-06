@@ -1,10 +1,10 @@
-import { IonButton, IonCol, IonContent, IonGrid, IonInput, IonItem, IonLabel, IonPage, IonRow, useIonViewDidEnter } from '@ionic/react';
+import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonInput, IonItem, IonLabel, IonPage, IonRow, useIonViewDidEnter } from '@ionic/react';
 
 import React, { useEffect, useState } from 'react';
 
-import { AuthContext } from "../App";
-import OnBoardingProgress from '../components/OnBoardingProgress/OnBoardingProgress';
-import SvgScLogo from './OnBoardingSport/images/SvgScLogo';
+import { AuthContext } from "../../App";
+import OnBoardingProgress from '../../components/OnBoardingProgress/OnBoardingProgress';
+import SvgScLogo from '../OnBoardingSport/images/SvgScLogo';
 import { useHistory } from 'react-router';
 import { keypadOutline } from 'ionicons/icons';
 
@@ -40,7 +40,7 @@ const Login: React.FC<props> = () => {
 
     if (loginInfo?.statusCode) {
 
-      alert("Error: " + loginInfo.data[0].messages[0].message);
+      alert("Error: " + loginInfo?.data[0]?.messages[0]?.message);
 
     } else {
 
@@ -83,10 +83,16 @@ const Login: React.FC<props> = () => {
                 <IonItem className="ion-no-padding">
                   <IonLabel position="stacked">Password</IonLabel>
                   <IonInput type="password" onKeyUp={(e: any) => keyUp(e)} onIonChange={(e: any) => setPassword(e.detail.value)} />
+                  
                 </IonItem>
+                
                 <div style={{ paddingTop: 8 }}><IonButton onClick={() => doLogin()} expand="block">Login</IonButton></div>
-
-                <IonButton button-type="link" onClick={() => history.push("/landing")} >cancel</IonButton>
+                
+                <div className="form-secondary-buttons">
+                  <p className="cancel-button" onClick={() => history.push("/landing")}>Cancel</p>
+                  <p className="forgot-password-button" onClick={() => history.push("/forgot-password")}>Forgot password?</p>
+                </div>
+                
               </div>
 
             </IonCol>

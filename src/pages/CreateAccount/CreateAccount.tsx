@@ -59,9 +59,9 @@ const CreateAccount: React.FC = () => {
 
   const [validForm, setValidForm] = useState<boolean>(false);
   const [errorMessages, setErrorMessages] = useState<any>({
-    "yourName": "Please enter your name",
-    "username": "Please enter an email address",
-    "password": "Please enter a password"
+    yourName: "",
+    username: "",
+    password: ""
   });
 
 
@@ -266,8 +266,8 @@ const CreateAccount: React.FC = () => {
       setErrorMessages(newArray);
 
     } else {
-
-      let newArray = { ...errorMessages, "yourName": "Please enter your name" };
+     
+      let newArray = { ...errorMessages, yourName: "Please enter your name" };
 
       setErrorMessages(newArray);
 
