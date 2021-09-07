@@ -11,7 +11,7 @@ const useAddOpportunity = () => {
           title?: string;
           description?: string;
           fullDescription?: string;
-          images?: object;
+          images?: Array;
           price?: string;
         
         }) => {
