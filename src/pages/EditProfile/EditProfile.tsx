@@ -331,10 +331,10 @@ const EditProfile: React.FC = () => {
 
                       </IonItem>
 
-                  <IonItem>
+                  {/* <IonItem>
                     <IonLabel position="stacked">Price Range</IonLabel>
                     <IonInput type="text" value={ priceRange ? priceRange : p.priceRange } onIonChange={ (e:any) => setPriceRange(e.detail.value) } />
-                  </IonItem>
+                  </IonItem> */}
 
                   <IonItem>
                     <IonLabel position="stacked">Website</IonLabel>
