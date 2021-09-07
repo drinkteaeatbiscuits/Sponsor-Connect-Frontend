@@ -34,7 +34,7 @@ const AddOpportunity: React.FC = () => {
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [fullDescription, setFullDescription] = useState<string>("");
-  const [images, setImages] = useState<object>({});
+  const [images, setImages] = useState<Array<any>>([]);
   const [price, setPrice] = useState<string>("");
   const [opportunityError, setOpportunityError] = useState<string>("");
 
