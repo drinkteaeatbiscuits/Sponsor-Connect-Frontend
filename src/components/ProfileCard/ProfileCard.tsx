@@ -18,11 +18,12 @@ const ProfileCard: React.FC<ProfileProps> = ( ProfileProps ) => {
 
 	const totalSocialFollowing = ( socialMediaArray: any ) => {
 		
-		let socialMediaTotal = 0;
+		let socialMediaTotal:number = 0;
 
 		if(socialMediaArray){
 			socialMediaArray.forEach((socialMedia:any) => {
-				socialMediaTotal = socialMediaTotal + socialMedia.socialMediaTotal;
+				
+				socialMediaTotal = socialMediaTotal + parseFloat(socialMedia.socialMediaTotal);
 			});
 		}
 		return socialMediaTotal;
