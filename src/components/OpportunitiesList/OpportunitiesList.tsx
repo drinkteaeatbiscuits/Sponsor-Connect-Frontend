@@ -3,6 +3,8 @@ import React from "react";
 import { useHistory } from "react-router";
 import useOpportunities from "../../hooks/useOpportunities";
 
+import Image from '../Image/Image';
+
 import './OpportunitiesList.scss';
 
 interface OpportunitiesListProps {
@@ -27,7 +29,7 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 
 					
 			
-						{ p.images[0] && <img src={(process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + p.images[0]?.url} alt={p.title} /> }
+						{ p.images[0] && <Image image={p.images} alt={p.title} /> }
 					
 
 						<IonCardHeader>

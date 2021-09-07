@@ -130,7 +130,7 @@ const EditOpportunity: React.FC = () => {
             </div>
 
             
-            <IonButton expand="block" className="add-opportunity" onClick={title ? () => editOpportunity() : () => setOpportunityError('Please enter a title')}>Edit Opportunity</IonButton>
+            <IonButton expand="block" className="add-opportunity" onClick={title ? () => editOpportunity() : () => setOpportunityError('Please enter a title')}>Save</IonButton>
             <IonButton buttonType="link" className="link" size="small" onClick={() => history.push("/opportunity/" + opportunityId )}>Cancel</IonButton>
             
           </div>

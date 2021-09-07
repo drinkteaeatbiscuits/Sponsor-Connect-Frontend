@@ -92,23 +92,23 @@ const AddOpportunity: React.FC = () => {
 
                   <IonItem>
                     <IonLabel position="stacked">Title</IonLabel>
-                    <IonInput autocomplete="off" id="opportunity-title" type="text" value={ title } onIonChange={ (e:any) => setTitle(e.detail.value) } />
+                    <IonInput autocomplete="off" autocapitalize="on" id="opportunity-title" type="text" value={ title } onIonChange={ (e:any) => setTitle(e.detail.value) } />
                    { opportunityError && <p className="error-message ion-no-margin"><small>{opportunityError}</small></p> }
                   </IonItem>
                   
                   <IonItem>
                     <IonLabel position="stacked">Price</IonLabel>
-                    <IonInput autocomplete="off" id="opportunity-price" type="text" value={ price } onIonChange={ (e:any) => setPrice(e.detail.value) } />
+                    <IonInput autocomplete="off" id="opportunity-price" type="number" value={ price } onIonChange={ (e:any) => setPrice(e.detail.value) } />
                   </IonItem>
 
                   <IonItem>
                     <IonLabel position="stacked">Description</IonLabel>
-                    <IonInput autocomplete="off" id="opportunity-description" type="text" value={ description } onIonChange={ (e:any) => setDescription(e.detail.value) } />
+                    <IonInput autocomplete="off" autocapitalize="on" id="opportunity-description" type="text" value={ description } onIonChange={ (e:any) => setDescription(e.detail.value) } />
                   </IonItem>
 
                   <IonItem>
                     <IonLabel position="stacked">Full Description</IonLabel>
-                    <IonInput autocomplete="off" id="opportunity-full-description" type="text" value={ fullDescription } onIonChange={ (e:any) => setFullDescription(e.detail.value) } />
+                    <IonInput autocomplete="off" autocapitalize="on" id="opportunity-full-description" type="text" value={ fullDescription } onIonChange={ (e:any) => setFullDescription(e.detail.value) } />
                   </IonItem>
 
                   
