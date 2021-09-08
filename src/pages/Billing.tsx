@@ -52,7 +52,7 @@ const Billing: React.FC = () => {
 
         // Create PaymentIntent as soon as the page loads
         window
-          .fetch( process.env.REACT_APP_API_URL + "/subscriptions/create-customer", {
+          .fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/subscriptions/create-customer", {
             method: "POST",
             credentials: "include",
             headers: {
@@ -69,7 +69,7 @@ const Billing: React.FC = () => {
           })
           .then(data => {
 
-            fetch( process.env.REACT_APP_API_URL + "/subscriptions/create-subscription", {
+            fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/subscriptions/create-subscription", {
               method: "POST",
               credentials: "include",
               headers: {
@@ -188,7 +188,7 @@ const Billing: React.FC = () => {
 
     event.preventDefault();
 
-      const subscriptionResponse = await fetch(process.env.REACT_APP_API_URL + "/subscriptions/cancel-subscription", {
+      const subscriptionResponse = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/subscriptions/cancel-subscription", {
         credentials: "include",
         headers: {
           "Content-Type": "application/json"

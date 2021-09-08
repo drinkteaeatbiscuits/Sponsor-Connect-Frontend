@@ -34,6 +34,9 @@ ion-button {
 		font-size: 0.9em;
 		color: var(--ion-color-tertiary);
 		padding: 16px 0;
+		&.ion-align-self-end {
+			margin: 0;
+		}
 	}
 	&.button-small {
 		height: 51px;

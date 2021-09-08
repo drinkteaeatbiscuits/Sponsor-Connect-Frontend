@@ -7,9 +7,9 @@ const useProfiles = () => {
       "profiles",
       async () => {
         
-        // const response = await fetch(process.env.REACT_APP_API_URL + "/profiles");
+      
 
-        const profilesResponse = await fetch(process.env.REACT_APP_API_URL + "/profiles", {
+        const profilesResponse = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/profiles", {
             credentials: 'include'
         });
 
@@ -20,7 +20,7 @@ const useProfiles = () => {
           client.setQueryData(["profiles", p.id], p);
         });
 
-		    console.log(profiles);
+		    // console.log(profiles);
   
         return profiles;
   

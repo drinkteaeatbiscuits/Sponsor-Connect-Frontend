@@ -19,10 +19,8 @@ const LogoutButton: React.FC<LogoutProps> = ( props: LogoutProps ) => {
 
 
 	const doLogout = async () => {
-
-		const URL = process.env.REACT_APP_API_URL;
 	
-		const logoutResp = await fetch( URL + "/logout", {
+		const logoutResp = await fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/logout", {
 			method: "POST",
 			credentials: "include",
 		  });
@@ -35,7 +33,7 @@ const LogoutButton: React.FC<LogoutProps> = ( props: LogoutProps ) => {
   
 		  }else{
 			  
-			  console.log(logoutInfo);
+			//   console.log(logoutInfo);
 
 			  dispatch && dispatch({
 				type: "LOGOUT"

@@ -29,8 +29,42 @@ ion-input {
 
 ion-label {
 	color: var(--ion-color-dark);
+	position: relative;
+	z-index: 9;
 }
 
 ion-button.arrow {
 	display: inline-block;
+}
+
+ion-input {
+	position: relative;
+	.error-message {
+		position: absolute;
+		top: 8px;
+		right: 0;
+		color: var(--ion-color-danger);
+	}
+}
+
+.form-secondary-buttons {
+	display: flex;
+	justify-content: space-between;
+	p {
+		margin: 0;
+		padding: 12px 0;
+		font-size: 0.9em;
+		color: var(--ion-color-tertiary);
+		cursor: pointer;
+		&:hover {
+			color: var(--ion-color-primary)
+		}
+		&.text-center {
+			text-align: center;
+			display: block;
+			flex-grow: 1;
+		}
+		
+
+	}
 }

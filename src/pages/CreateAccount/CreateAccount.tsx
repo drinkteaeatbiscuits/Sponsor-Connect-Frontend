@@ -11,7 +11,7 @@ import { useHistory } from 'react-router';
 import { AuthContext } from '../../App';
 import React from 'react';
 import OnBoardingProgress from '../../components/OnBoardingProgress/OnBoardingProgress';
-import SvgScLogo from '../Landing/images/SvgScLogo';
+import SvgScLogo from '../OnBoardingSport/images/SvgScLogo';
 import Arrow from './images/Arrow';
 
 import sports from './sports.json';
@@ -48,10 +48,7 @@ const CreateAccount: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [passwordStrongEnough, setPasswordStrongEnough] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<string>("Individual");
-
   const [profileName, setProfileName] = useState<string>("");
-
-
 
   const [searchText, setSearchText] = useState<string>("");
 
@@ -62,15 +59,14 @@ const CreateAccount: React.FC = () => {
 
   const [validForm, setValidForm] = useState<boolean>(false);
   const [errorMessages, setErrorMessages] = useState<any>({
-    "yourName": "Please enter your name",
-    "username": "Please enter an email address",
-    "password": "Please enter a password"
+    yourName: "",
+    username: "",
+    password: ""
   });
 
 
-  const [location, setLocation] = useState<any>("");
-  const [latLong, setLatLong] = useState<any>("");
-
+  const [location, setLocation] = useState<any>({});
+  const [latLong, setLatLong] = useState<any>({});
 
   const [filteredSports, setFilteredSports] = useState<any>(sports);
 
@@ -80,12 +76,12 @@ const CreateAccount: React.FC = () => {
   const doCreateAccount = async () => {
     // console.log(username, password, yourName);
 
-    const createAccountResp = await fetch(process.env.REACT_APP_API_URL + "/auth/local/register", {
+    const createAccountResp = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/auth/local/register", {
       headers: {
         "Content-Type": "application/json"
       },
       method: "POST",
-      body: JSON.stringify({
+      body: JSON.stringify({ 
         username: username,
         email: username,
         password: password,
@@ -101,10 +97,10 @@ const CreateAccount: React.FC = () => {
 
       // alert( "Error: " + createAccountInfo.data[0].messages[0].message );
 
-      console.log(createAccountInfo);
+      // console.log(createAccountInfo);
 
       present({
-        cssClass: 'my-css',
+        cssClass: 'account-error',
         header: 'Account Error',
         message: createAccountInfo?.data[0].messages[0].message,
         buttons: [
@@ -115,18 +111,13 @@ const CreateAccount: React.FC = () => {
       })
     } else {
 
-      // console.log("User account created");
-      // console.log(createAccountInfo);
+      // dispatch && dispatch({
+      //   type: "setUser",
+      //   payload: createAccountInfo
+      // });
 
-      dispatch && dispatch({
-        type: "setUser",
-        payload: createAccountInfo
-      });
-
-      // console.log(profileName, yourSport, location, latLong);
-
-
-      const createProfileResp = await fetch(process.env.REACT_APP_API_URL + "/profiles/me", {
+  
+      const createProfileResp = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/profiles/me", {
         credentials: "include",
         headers: {
           "Content-Type": "application/json"
@@ -150,7 +141,7 @@ const CreateAccount: React.FC = () => {
         // alert( "Error: " + createProfileInfo.data[0].messages[0].message );
 
         present({
-          cssClass: 'my-css',
+          cssClass: 'profile-error',
           header: 'Profile Error',
           message: createProfileInfo.data[0].messages[0].message,
           buttons: [
@@ -162,14 +153,19 @@ const CreateAccount: React.FC = () => {
 
       } else {
 
-        console.log(createProfileInfo);
+        createAccountInfo.user.profile = createProfileInfo.id;
+
+        // console.log(createAccountInfo);
+
+        dispatch && dispatch({
+          type: "setUser",
+          payload: createAccountInfo
+        });
       
       }
 
     }
   }
-
-
 
 
   const doNextStep = () => {
@@ -270,8 +266,8 @@ const CreateAccount: React.FC = () => {
       setErrorMessages(newArray);
 
     } else {
-
-      let newArray = { ...errorMessages, "yourName": "Please enter your name" };
+     
+      let newArray = { ...errorMessages, yourName: "Please enter your name" };
 
       setErrorMessages(newArray);
 
@@ -351,18 +347,19 @@ const CreateAccount: React.FC = () => {
   return (
     <IonPage>
 
-      <IonContent fullscreen scrollY={true} className="ion-padding-start ion-padding-end ion-padding-bottom">
+      <IonContent fullscreen scrollY={true} className="on-boarding create-account">
 
-        <IonGrid className="flex-direction-column ion-padding-top">
+        <IonGrid className="on-boarding-grid">
           <IonRow className="">
 
-            <IonCol className="login-image">
+            <IonCol className="login-image app-sidebar">
 
+              <div className="sc-logo" onClick={() => history.push("/")}><SvgScLogo /></div>
               <OnBoardingProgress percentage={onBoardingPercentage} />
 
             </IonCol>
 
-            <IonCol className="" size="auto">
+            <IonCol className="on-boarding-fields">
 
               <div className="create-account-steps">
 
@@ -374,21 +371,21 @@ const CreateAccount: React.FC = () => {
                     <div className="login-form">
                       <IonItem className="ion-no-padding">
                         <IonLabel position="stacked">Your Name</IonLabel>
-                        <IonInput placeholder="Your Name" value={yourName} autocomplete="name" required={true} autofocus={true} enterkeyhint="next" type="text" autocapitalize="words" onIonChange={(e: any) => { setYourName(e.detail.value); validateYourName(e.detail.value); }} />
-                        <p className="error-message ion-no-margin"><small>{errorMessages.yourName}</small></p>
+                        <IonInput id="your-name" placeholder="Your Name" value={yourName} autocomplete="name" required={true} autofocus={true} enterkeyhint="next" type="text" autocapitalize="words" onIonChange={(e: any) => { setYourName(e.detail.value); validateYourName(e.detail.value); }} />
+                        {errorMessages.yourName && <p className="error-message ion-no-margin"><small>{errorMessages.yourName}</small></p>}
                       </IonItem>
 
                       <IonItem className="ion-no-padding">
                         <IonLabel position="stacked">Email Address</IonLabel>
-                        <IonInput placeholder="your@email.com" value={username} autocomplete="off" required={true} pattern="email" type="email" enterkeyhint="next" inputmode="email" onIonChange={(e: any) => { setUsername(e.detail.value); validateUsername(e.detail.value); }} />
-                        <p className="error-message ion-no-margin"><small>{errorMessages.username}</small></p>
+                        <IonInput id="your-email" placeholder="your@email.com" value={username} autocomplete="email" required={true} pattern="email" type="email" enterkeyhint="next" inputmode="email" onIonChange={(e: any) => { setUsername(e.detail.value); validateUsername(e.detail.value); }} />
+                        {errorMessages.username && <p className="error-message ion-no-margin"><small>{errorMessages.username}</small></p> }
                       </IonItem>
                       <IonItem className="ion-no-padding password-item">
                         <IonLabel position="stacked">Password</IonLabel>
                         <EyeSVG className={ showPassword ? "password-show active" : "password-show"}  onClick={() => { showPassword ? setShowPassword(false) : setShowPassword(true) } } />
-                        <IonInput className="password-input" value={password} enterkeyhint="go" type={ showPassword ? "text" : "password" } autocomplete="off" required={true} minlength={6} onIonChange={(e: any) => { setPassword(e.detail.value); validatePassword(e.detail.value); }} />
+                        <IonInput id="your-password" className="password-input" value={password} enterkeyhint="go" type={ showPassword ? "text" : "password" } autocomplete="off" required={true} minlength={6} onIonChange={(e: any) => { setPassword(e.detail.value); validatePassword(e.detail.value); }} />
                         <PasswordStrengthBar className="password-strength" onChangeScore={(score) => { score >= 3 ? setPasswordStrongEnough(true) : setPasswordStrongEnough(false) }} password={password} barColors={['#ddd', '#ef4836', '#ff5722', '#0eb567', '#0EB59A']} />
-                        <p className="error-message ion-no-margin"><small>{errorMessages.password}</small></p>
+                        {errorMessages.password && <p className="error-message ion-no-margin"><small>{errorMessages.password}</small></p> }
                       </IonItem>
                     </div>
                   </div>
@@ -486,7 +483,7 @@ const CreateAccount: React.FC = () => {
 
                   <div className="prev-next-buttons">
 
-                    {stepNumber === 1 && <IonButton className="arrow previous" onClick={() => history.push("/landing")} expand="block"><Arrow /></IonButton>}
+                    {stepNumber === 1 && <IonButton className="arrow previous" onClick={() => history.push("/sports")} expand="block"><Arrow /></IonButton>}
 
                     {stepNumber > 1 ? <IonButton className="arrow previous" onClick={() => doPreviousStep()} expand="block"><Arrow /></IonButton> : <div></div>}
 

@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from 'react-query';
 
-const useUploadImage = (profileId:any, field:any, ref:any ) => {
+import axios from 'axios';
+
+const useUploadImage = ( profileId:any, setTheImage:Function, setUploadProgress:Function ) => {
 
     // console.log(profileId);
 
@@ -10,32 +12,40 @@ const useUploadImage = (profileId:any, field:any, ref:any ) => {
       "uploadedImages",
       async (data: any) => {
 
-
       var formdata = new FormData();
-      formdata.append( "files", data, data.path );
-      formdata.append( "ref", ref );
+      formdata.append( "files", data[0].data, data[0].data.path );
+      formdata.append( "ref", data[0].theref );
       formdata.append( "refId", profileId );
-      formdata.append( "field", field );
+      formdata.append( "field", data[0].field );
     
-      const imagePostResp = await fetch(process.env.REACT_APP_API_URL + "/upload", {
-        credentials: "include",
-        method: "POST",
-        body: formdata 
-        });
-  
-        return await imagePostResp.json();
-  
-      },
-      {
-        onSuccess: (data) => {
-          client.invalidateQueries("imagePosts");
-  
-          // console.log(client);
-          // console.log(data);
+      // console.log(formdata);
+
+      await axios.post(
+        (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/upload", 
+        formdata, 
+        {
+          withCredentials: true,
+          onUploadProgress: progressEvent => setUploadProgress(Math.round( (progressEvent.loaded * 100) / progressEvent.total )),
+        })
+        .then(function (response) {
+
           
-        }
-      }
-    )
+          client.invalidateQueries("uploadedImages");
+          // setImageRef(response.data[0]);
+          setTheImage(response.data[0]);
+          
+        })
+        .catch(function (error) {
+
+          console.log(error);
+
+        });
+
+        
+
+    });
+
+    
   }
 
   export default useUploadImage;

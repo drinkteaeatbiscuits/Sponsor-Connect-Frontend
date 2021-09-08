@@ -7,21 +7,22 @@ const useOpportunity = ( id:any ) => {
 	
     
     return useQuery(
-      "opportunity",
+      "opportunity " + id,
       async () => {
-        // const response = await fetch(process.env.REACT_APP_API_URL + "/profiles");
 
 		if(id){
 
-			const opportunityResponse = await fetch(process.env.REACT_APP_API_URL + "/opportunities/" + id, {
+			const opportunityResponse = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/opportunities/" + id, {
 				credentials: 'include'
 			});
 	
 			// console.log(opportunityResponse);
 	
 			const opportunity = await opportunityResponse.json();
+
 			
-			client.setQueryData(["opportunity", opportunity.id], opportunity);
+			
+			client.setQueryData([ "opportunity " + id ], opportunity);
 	
 		   
 	  
