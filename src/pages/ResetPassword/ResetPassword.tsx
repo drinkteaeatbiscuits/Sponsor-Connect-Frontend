@@ -28,7 +28,7 @@ const ResetPassword: React.FC<props> = () => {
 
   // const code = useParams<ParamTypes>();
 
-  console.log(code);
+  // console.log(code);
 
   const doForgotPassword = async () => {
 
