@@ -87,7 +87,7 @@ const CreateAccount: React.FC = () => {
         password: password,
         yourName: yourName
       }),
-      credentials: "include",
+      // credentials: "include",
     });
 
 

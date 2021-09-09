@@ -28,7 +28,7 @@ const Login: React.FC<props> = () => {
       headers: {
         "content-type": "application/json"
       },
-      credentials: "include",
+      // credentials: "include",
       body: JSON.stringify({
         identifier: username,
         password: password
