@@ -87,7 +87,7 @@ const CreateAccount: React.FC = () => {
         password: password,
         yourName: yourName
       }),
-      // credentials: "include",
+      credentials: "include",
     });
 
 
@@ -95,9 +95,6 @@ const CreateAccount: React.FC = () => {
 
     if (createAccountInfo?.statusCode) {
 
-      // alert( "Error: " + createAccountInfo.data[0].messages[0].message );
-
-      // console.log(createAccountInfo);
 
       present({
         cssClass: 'account-error',
@@ -109,6 +106,8 @@ const CreateAccount: React.FC = () => {
         ],
         onDidDismiss: () => console.log('did dismiss'),
       })
+
+
     } else {
 
       // dispatch && dispatch({
