@@ -10,10 +10,16 @@ import useUploadImage from "../../hooks/useUploadImage";
 const NewImageUpload2: React.FC = () => {
 
 	const [file, setFile] = useState<any>("");
+	const [total, setTotal] = useState<any>("");
+	const [loaded, setLoaded] = useState<any>("");
 
 	const handleEvent = (e:any) => {
 		console.log(e);
 		console.log(e.loaded);
+		console.log(e.total);
+		
+		setLoaded(e.loaded);
+		setTotal(e.total);
 	}
 
 	// console.log(file);
@@ -37,6 +43,8 @@ const NewImageUpload2: React.FC = () => {
 		<input type="file" name="image-1" onChange={(e) => setFile(e.target.files)} />
 
 		<IonButton onClick={() => uploadFile()} >Upload Image</IonButton>
+
+		{ total && "<p>" + loaded + "/" + total + "bytes</p>" }
 		
 	</div>
 
