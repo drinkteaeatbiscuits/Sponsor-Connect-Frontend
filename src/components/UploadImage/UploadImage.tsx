@@ -212,8 +212,10 @@ const UploadImage: React.FC<UploadImageProps> = ( UploadImageProps ) => {
 		{ UploadImageProps.currentImage && !aNewImage ? 
 		
 			<div className="current-image-thumb">
+
+				{console.log(UploadImageProps.currentImage)}
 				
-				<img className={ UploadImageProps.circularCrop ? "circle-crop" : "" } alt="current thumbnail" src={(process.env.NODE_ENV === "development" ? 'http://localhost:1337' : '') + UploadImageProps.currentImage.url} />
+				<img className={ UploadImageProps.circularCrop ? "circle-crop" : "" } alt="current thumbnail" src={(process.env.IMAGES_LOCATION === "aws" ? 'http://localhost:1337' : '') + UploadImageProps.currentImage.formats.thumbnail.url} />
 				<IonButtons slot="end" className="buttons-end">
 					<IonButton buttonType="link" className="link" onClick={ () => changeImage() } >Change Image</IonButton>
 					<IonButton buttonType="link" className="link" onClick={ () => removeImage() } >Remove Image</IonButton>
