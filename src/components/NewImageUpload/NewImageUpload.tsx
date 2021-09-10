@@ -20,7 +20,7 @@ interface UploadImageProps {
 	showCroppedPreview?: boolean,
 }
 
-const UploadImage: React.FC<UploadImageProps> = ( UploadImageProps ) => {
+const NewImageUpload: React.FC<UploadImageProps> = ( UploadImageProps ) => {
 
 	const { state: authState } = React.useContext(AuthContext);
 	const [src, setSrc] = useState<any>("");
@@ -298,5 +298,5 @@ const UploadImage: React.FC<UploadImageProps> = ( UploadImageProps ) => {
 
 }
 
-export default UploadImage;
+export default NewImageUpload;
 

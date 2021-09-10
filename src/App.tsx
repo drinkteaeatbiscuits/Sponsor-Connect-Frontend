@@ -56,6 +56,7 @@ import CreateAccountBusiness from './pages/CreateAccountBusiness/CreateAccountBu
 import SearchOpportunities from './pages/SearchOpportunities/SearchOpportunities';
 import ResetPassword from './pages/ResetPassword/ResetPassword';
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
+import NewUpload from './pages/NewUpload';
 
 
 const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
@@ -253,6 +254,11 @@ const App: React.FC = () => {
 
               <Route exact path="/the-dugout">
                 <Landing />
+              </Route>
+
+
+              <Route exact path="/new-upload">
+                <NewUpload />
               </Route>
 
               

@@ -55,6 +55,8 @@ const Profile: React.FC = () => {
         <IonLoading isOpen={isLoading} message="Loading Profile" />
 
          <div className="profile-header">
+
+           {console.log(data?.coverImage)}
           
           { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.coverImage && <img className="cover-image" alt={ "Cover Photo " + data?.coverImage.id } src={ (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : '') + data?.coverImage.url } />  }
           
