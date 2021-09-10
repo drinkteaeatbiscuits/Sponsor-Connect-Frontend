@@ -11,6 +11,11 @@ const NewImageUpload2: React.FC = () => {
 
 	const [file, setFile] = useState<any>("");
 
+	const handleEvent = (e:any) => {
+		console.log(e);
+		console.log(e.loaded);
+	}
+
 	// console.log(file);
 
 	const uploadFile = () => {
@@ -21,8 +26,9 @@ const NewImageUpload2: React.FC = () => {
 
 		const request = new XMLHttpRequest();
 
-		request.open('POST', (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + '/upload');
-
+		request.open('POST', (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + '/upload', true);
+		request.addEventListener('progress', handleEvent);
+		request.withCredentials = true;
 		request.send(formData);
 
 	}
