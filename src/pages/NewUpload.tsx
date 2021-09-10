@@ -49,9 +49,11 @@ const NewUpload: React.FC = () => {
 	formData.append( "field", "coverImage" ); 
 	// formData.append('source', "users-permissions");
 
-    axios.post((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/upload", formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-		withCredentials: true,
+    axios.post((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/upload", 
+	formData, 
+	{
+        headers: { 'Content-Type': 'multipart/form-data', 'Access-Control-Allow-Credentials': true, "Access-Control-Allow-Origin": "*" },
+		
       })
       .then(res => {
         console.log(res);
