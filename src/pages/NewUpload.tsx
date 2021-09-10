@@ -8,6 +8,7 @@ import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import ReactCrop from 'react-image-crop';
 import { useMutation } from 'react-query';
+import NewImageUpload2 from '../components/NewImageUpload2/NewImageUpload2';
 // import TabBar from '../components/TabBar'; 
 
 export interface props { }
@@ -77,10 +78,6 @@ const NewUpload: React.FC = () => {
 
   }, []);
 
-
-  
-
-	
 
   const uploadCroppedImage = async () => {
 	const formData = new FormData();
@@ -273,6 +270,10 @@ const getCroppedImg = (image:any, crop:any, fileName:any) => {
 				{ uploadedCroppedImage && <img src={uploadedCroppedImage} alt="cropped and uploaded result" />}
 				
 				{ errorMessages && <pre>{ errorMessages }</pre>}
+
+
+
+				<NewImageUpload2 />
           
       </IonContent>
     </IonPage>
