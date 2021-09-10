@@ -52,8 +52,9 @@ const NewUpload: React.FC = () => {
 
 
     axios.post((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/upload", 
-	{data: formData}, 
+	formData, 
 	  {
+		headers: { 'Content-Type': 'multipart/form-data' },
 		withCredentials: true,
       })
       .then(res => {
