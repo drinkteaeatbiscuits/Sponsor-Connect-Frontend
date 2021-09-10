@@ -7,6 +7,7 @@ import UploadImage from '../components/UploadImage/UploadImage';
 import { useDropzone } from 'react-dropzone';
 import axios from 'axios';
 import ReactCrop from 'react-image-crop';
+import { useMutation } from 'react-query';
 // import TabBar from '../components/TabBar'; 
 
 export interface props { }
@@ -44,15 +45,16 @@ const NewUpload: React.FC = () => {
 	const formData = new FormData();
 
 	formData.append( "files", acceptedFiles[0], acceptedFiles[0].path );
-	formData.append( "ref", "profile" );
-	formData.append( "refId", "1" );
-	formData.append( "field", "coverImage" ); 
+	// formData.append( "ref", "profile" );
+	// formData.append( "refId", "1" );
+	// formData.append( "field", "coverImage" ); 
 	// formData.append('source', "users-permissions");
+
 
     axios.post((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/upload", 
 	formData, 
-	{
-        headers: { 'Content-Type': 'multipart/form-data' },
+	  {
+		headers: { 'Content-Type': 'multipart/form-data' },
 		withCredentials: true,
       })
       .then(res => {
@@ -70,8 +72,15 @@ const NewUpload: React.FC = () => {
 		setErrorMessages( JSON.stringify(err) );
       });
 
+	
+
 
   }, []);
+
+
+  
+
+	
 
   const uploadCroppedImage = async () => {
 	const formData = new FormData();
@@ -263,7 +272,7 @@ const getCroppedImg = (image:any, crop:any, fileName:any) => {
 
 				{ uploadedCroppedImage && <img src={uploadedCroppedImage} alt="cropped and uploaded result" />}
 				
-				{ errorMessages && <p>{ errorMessages }</p>}
+				{ errorMessages && <pre>{ errorMessages }</pre>}
           
       </IonContent>
     </IonPage>
