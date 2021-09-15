@@ -52,8 +52,7 @@ const NewUpload: React.FC = () => {
 	// formData.append('source', "users-permissions");
 
 
-    axios.post((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/upload", 
-	formData, 
+    axios.post((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/upload",  
 	  {
 		headers: { 'Content-Type': 'multipart/form-data' },
 		withCredentials: true,

@@ -1,10 +1,12 @@
-import { IonButton, IonButtons, IonProgressBar } from "@ionic/react";
+import { IonButton, IonButtons, IonProgressBar, IonSpinner } from "@ionic/react";
 import React, { useCallback, useEffect, useState } from "react";
 import {useDropzone} from 'react-dropzone';
 import ReactCrop from "react-image-crop";
 import { AuthContext } from "../../App";
 import useDeleteImage from "../../hooks/useDeleteImage";
 import useUploadImage from "../../hooks/useUploadImage";
+
+import './UploadImage.scss';
 
 
 interface UploadImageProps {
@@ -34,14 +36,20 @@ const UploadImage: React.FC<UploadImageProps> = ( UploadImageProps ) => {
 
 	const [aNewImage, setANewImage] = useState<boolean>(false);
 
-	const { isLoading: isLoadingUploadImage, error: isLoadingUploadImageError, mutateAsync: addUploadImageMutation } = useUploadImage( authState?.user.profile, UploadImageProps.setCurrentImage, setUploadProgress );
+	const { isLoading: isLoadingUploadImage, isSuccess: isSuccessUploadImage, error: isLoadingUploadImageError, mutateAsync: addUploadImageMutation } = useUploadImage( authState?.user.profile, UploadImageProps.setCurrentImage, setUploadProgress );
 	const { isLoading: isDeletingImage, error: isDeletingImageError, mutateAsync: addDeletingImageMutation } = useDeleteImage();
 
 	// console.log(imageRef);
 
+	// console.log(isLoadingUploadImage);
+
 	useEffect(() => {
+
 		setCrop(UploadImageProps.crop);
+
 	}, [UploadImageProps.crop])
+
+	// !isLoadingUploadImage && setUploadProgress(0);
 	// console.log( UploadImageProps.currentImage );
 
 	const onDrop = useCallback((acceptedFiles) => {
@@ -50,6 +58,7 @@ const UploadImage: React.FC<UploadImageProps> = ( UploadImageProps ) => {
 		reader.readAsDataURL(acceptedFiles[0]);
 		setTheImage(acceptedFiles[0]);
 		
+		setUploadProgress(0);
 		// console.log(acceptedFiles[0]);
 	}, []);
  
@@ -206,16 +215,15 @@ const UploadImage: React.FC<UploadImageProps> = ( UploadImageProps ) => {
 	
 
 	return <div className="upload-image-wrap">
-
-		
-
-		{ UploadImageProps.currentImage && !aNewImage ? 
+	
+	
+			{ UploadImageProps.currentImage && !aNewImage ? 
 		
 			<div className="current-image-thumb">
 
 				{console.log(UploadImageProps.currentImage)}
 				
-				<img className={ UploadImageProps.circularCrop ? "circle-crop" : "" } alt="current thumbnail" src={(process.env.IMAGES_LOCATION === "aws" ? 'http://localhost:1337' : '') + UploadImageProps.currentImage.formats.thumbnail.url} />
+				<img className={ UploadImageProps.circularCrop ? "circle-crop" : "" } alt="current thumbnail" src={  process.env.REACT_APP_S3_URL + "/cover_sm_" +  UploadImageProps.currentImage?.hash + UploadImageProps.currentImage?.ext } />
 				<IonButtons slot="end" className="buttons-end">
 					<IonButton buttonType="link" className="link" onClick={ () => changeImage() } >Change Image</IonButton>
 					<IonButton buttonType="link" className="link" onClick={ () => removeImage() } >Remove Image</IonButton>
@@ -225,6 +233,7 @@ const UploadImage: React.FC<UploadImageProps> = ( UploadImageProps ) => {
 			: 
 			
 			 <div className="upload-image">
+
 				 
 				{ !src && <div className="dropzone" {...getRootProps()}>
 				 	<input {...getInputProps()} /> 
@@ -235,6 +244,10 @@ const UploadImage: React.FC<UploadImageProps> = ( UploadImageProps ) => {
 					}
 				</div> }
 				
+				<div className="crop-area">
+
+				{ isLoadingUploadImage && <div className="loading-overlay"><IonSpinner name="dots" color="light" /></div> }
+
 				<ReactCrop src={src} keepSelection={true} circularCrop={ UploadImageProps.circularCrop } crop={crop} 
 				onImageLoaded={(img:any) => {
 					 
@@ -262,36 +275,34 @@ const UploadImage: React.FC<UploadImageProps> = ( UploadImageProps ) => {
 					setCrop(firstCrop);
 					makeClientCrop(firstCrop); 
 					
-					// getCroppedImg(img, firstCrop, img.name);
 
 					makeFirstCrop(img, firstCrop, img.name);
 
 					setImageRef(img);
 
-					
-
 					return false;
 					 }}
 				onComplete={(crop:any) => makeClientCrop(crop)}
 				onChange={(newCrop:any) => {setCrop(newCrop);}} />
-
+				</div>
+				
 				{croppedImageUrl && UploadImageProps.showCroppedPreview && (<img alt="Crop" className={ UploadImageProps.circularCrop ? "circle-crop" : "" } style={{ maxWidth: '100%' }} src={croppedImageUrl} />)}
 				
-				
-				{ uploadProgress > 0 &&
+				{ uploadProgress > 0 && isLoadingUploadImage &&
 				 <IonProgressBar color="primary" value={ uploadProgress / 100 }></IonProgressBar> }
 				 
 				
 
 				{theImage && src && <IonButtons slot="end" className="buttons-end">
 				{ uploadProgress > 0 && <h2 className="ion-align-self-start upload-progress">{uploadProgress}%</h2> }
-					<IonButton color="primary" size="small" className="" onClick={() => uploadImage(UploadImageProps.field, UploadImageProps.theref)} >Upload</IonButton>
+					{ !isLoadingUploadImage && <IonButton color="primary" size="small" className="" onClick={() => uploadImage(UploadImageProps.field, UploadImageProps.theref)} >Upload</IonButton> }
 					<IonButton buttonType="link" className="link" onClick={ () => cancelUpload() } >Cancel</IonButton>
 				</IonButtons>}
 
 				
 			</div>
 			
+		
 		}
 			
 	</div>;

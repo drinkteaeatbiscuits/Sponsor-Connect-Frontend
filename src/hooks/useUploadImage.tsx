@@ -18,6 +18,7 @@ const useUploadImage = ( profileId:any, setTheImage:Function, setUploadProgress:
       formdata.append( "refId", profileId );
       formdata.append( "field", data[0].field ); 
     
+      setUploadProgress(0);
       // console.log(formdata);
 
       await axios.post(

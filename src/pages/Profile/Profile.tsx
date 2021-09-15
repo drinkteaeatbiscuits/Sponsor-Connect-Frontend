@@ -38,8 +38,7 @@ const Profile: React.FC = () => {
 
       { authState?.user.profile === parseInt(profileId.id) && 
         <IonToolbar>
-          <IonButtons className="ion-justify-content-around">
-            <IonButton className="" size="small" onClick={()=> history.push( "/dashboard" )}>Dashboard</IonButton>
+          <IonButtons className="ion-justify-content-between ion-padding-start ion-padding-end">
             <IonButton className="" size="small" onClick={()=> history.push( "/opportunities/" + profileId.id )}>Manage Opportunities</IonButton>
             <IonButton className="" size="small" onClick={()=> history.push( "/profile/" + profileId.id +"/edit" )}>Edit Profile</IonButton>
           </IonButtons>
@@ -50,15 +49,36 @@ const Profile: React.FC = () => {
       
       <IonContent className="profile-content" fullscreen>
 
-         
+      {console.log(process.env.REACT_APP_S3_URL)}
 
         <IonLoading isOpen={isLoading} message="Loading Profile" />
 
          <div className="profile-header">
 
-           {console.log(data?.coverImage)}
           
-          { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.coverImage && <img className="cover-image" alt={ "Cover Photo " + data?.coverImage.id } src={ (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : '') + data?.coverImage.url } />  }
+
+          
+          
+          { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.coverImage && 
+         
+
+          <picture>
+            <source type="image/webp" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xs_" +  data?.coverImage?.hash + ".webp" } />
+            <source type="image/webp" media="(max-width: 768px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_sm_" +  data?.coverImage?.hash + ".webp" } />
+            <source type="image/webp" media="(max-width: 992px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_md_" +  data?.coverImage?.hash + ".webp" } />
+            <source type="image/webp" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_lg_" +  data?.coverImage?.hash + ".webp" } />
+            <source type="image/webp" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xl_" +  data?.coverImage?.hash + ".webp" } />
+
+            <source type="image/jpeg" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xs_" +  data?.coverImage?.hash + ".jpg" } />
+            <source type="image/jpeg" media="(max-width: 768px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_sm_" +  data?.coverImage?.hash + ".jpg" } />
+            <source type="image/jpeg" media="(max-width: 992px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_md_" +  data?.coverImage?.hash + ".jpg" } />
+            <source type="image/jpeg" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_lg_" +  data?.coverImage?.hash + ".jpg" } />
+            <source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xl_" +  data?.coverImage?.hash + ".jpg" } />
+
+            <img className="cover-image" src={  process.env.REACT_APP_S3_URL + "/cover_xl_" + data?.coverImage?.hash + ".jpg" } alt="Profile Cover" />
+          </picture>  
+          
+          }
           
         </div>
 
@@ -69,7 +89,15 @@ const Profile: React.FC = () => {
         <div className="avatar">
           <div className="avatar-image">
             
-            { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.profilePicture ? <img className="profile-picture" alt={ "Profile Image " + data?.profilePicture.id } src={ (process.env.NODE_ENV === "development" ? 'http://localhost:1337'  : '') + data?.profilePicture.url } /> : <IonIcon color="medium" icon={personCircle} /> }
+            { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.profilePicture ? 
+            
+              <picture>
+                  <source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/profile_" +  data?.profilePicture?.hash + ".webp" } />
+                  <source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/profile_" +  data?.profilePicture?.hash + ".jpg" } />
+                  <img className="profile-picture" alt={ "Profile Image " + data?.profilePicture.id } src={ process.env.REACT_APP_S3_URL + "/profile_" +  data?.profilePicture?.hash + ".jpg" } /> 
+              </picture>
+            
+            : <IonIcon color="medium" icon={personCircle} /> }
             
           </div>
         </div>
