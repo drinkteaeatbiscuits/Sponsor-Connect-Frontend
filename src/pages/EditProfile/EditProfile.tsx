@@ -288,7 +288,7 @@ const EditProfile: React.FC = () => {
 
                   <IonItem className="">
                     <IonLabel position="stacked">Cover Image</IonLabel>
-                    <UploadImage currentImage={ coverImage } setCurrentImage={ setCoverImage } field="coverImage" theref="profile" crop={{ aspect: 2 / 1 }} circularCrop={ false } showCroppedPreview={ false } />
+                    <UploadImage currentImage={ coverImage } setCurrentImage={ setCoverImage } field="coverImage" theref="profile" crop={{ aspect: 3 / 1 }} circularCrop={ false } showCroppedPreview={ false } />
                   </IonItem> 
                 
 

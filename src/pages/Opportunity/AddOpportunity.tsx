@@ -118,7 +118,7 @@ const AddOpportunity: React.FC = () => {
             </div>
 
             
-            <IonButton expand="block" className="add-opportunity" onClick={title ? () => addOpportunity() : () => setOpportunityError('Please enter a title')}>Add New Opportunity</IonButton>
+            <IonButton expand="block" className="add-opportunity" onClick={title ? () => addOpportunity() : () => setOpportunityError('Please enter a title')}>Save</IonButton>
 
             
           </div>
