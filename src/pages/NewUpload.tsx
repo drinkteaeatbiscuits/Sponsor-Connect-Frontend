@@ -36,12 +36,32 @@ const NewUpload: React.FC = () => {
   
   const [errorMessages, setErrorMessages] = useState<any>(null);
 
+  const fileValidation = (file:File) => {
+		
+		const fileSize = file.size;
+		const roundedFile = Math.round((fileSize / 1024));
+		// The size of the file.
+		if (roundedFile >= 10240) {
+			setErrorMessages("File too large, please select a file less than 10mb");	
+			return false
+		} else {
+			return true
+		}
+	}
+	
   
   const onDrop = useCallback((acceptedFiles) => {
+
+	console.log(fileValidation(acceptedFiles[0]));
+
+	if(fileValidation(acceptedFiles[0])) {
+
 	const reader = new FileReader();
 	reader.addEventListener('load', () => setSrc(reader.result));
 	reader.readAsDataURL(acceptedFiles[0]);
 	setTheImage(acceptedFiles[0]);
+
+	
 
 	const formData = new FormData();
 
@@ -73,7 +93,7 @@ const NewUpload: React.FC = () => {
       });
 
 	
-
+	}
 
   }, []);
 
