@@ -43,11 +43,11 @@ const UploadImage: React.FC<UploadImageProps> = ( UploadImageProps ) => {
 
 	// console.log(isLoadingUploadImage);
 
-	useEffect(() => {
+	// useEffect(() => {
 
-		setCrop(UploadImageProps.crop);
+	// 	setCrop(UploadImageProps.crop);
 
-	})
+	// }, [setCrop(UploadImageProps.crop)])
 
 	// !isLoadingUploadImage && setUploadProgress(0);
 	// console.log( UploadImageProps.currentImage );
