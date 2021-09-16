@@ -44,11 +44,11 @@ const UploadImage: React.FC<UploadImageProps> = ( UploadImageProps ) => {
 
 	// console.log(isLoadingUploadImage);
 
-	useEffect(() => {
+	// useEffect(() => {
 
-		setCrop(UploadImageProps.crop);
+	// 	setCrop(UploadImageProps.crop);
 
-	}, [UploadImageProps.crop])
+	// }, [setCrop(UploadImageProps.crop)])
 
 	// !isLoadingUploadImage && setUploadProgress(0);
 	// console.log( UploadImageProps.currentImage );
@@ -249,7 +249,7 @@ const UploadImage: React.FC<UploadImageProps> = ( UploadImageProps ) => {
 
 				{ isLoadingUploadImage && <div className="loading-overlay"><IonSpinner name="dots" color="light" /></div> }
 
-				<ReactCrop src={src} keepSelection={true} circularCrop={ UploadImageProps.circularCrop } crop={crop} 
+				<ReactCrop src={src} keepSelection={true} ruleOfThirds={true} circularCrop={ UploadImageProps.circularCrop } crop={crop} 
 				onImageLoaded={(img:any) => {
 					 
 					const aspect = crop?.aspect;
@@ -276,7 +276,6 @@ const UploadImage: React.FC<UploadImageProps> = ( UploadImageProps ) => {
 					setCrop(firstCrop);
 					makeClientCrop(firstCrop); 
 					
-
 					makeFirstCrop(img, firstCrop, img.name);
 
 					setImageRef(img);

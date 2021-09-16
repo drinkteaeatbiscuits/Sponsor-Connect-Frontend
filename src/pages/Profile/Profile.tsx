@@ -49,7 +49,6 @@ const Profile: React.FC = () => {
       
       <IonContent className="profile-content" fullscreen>
 
-      {console.log(process.env.REACT_APP_S3_URL)}
 
         <IonLoading isOpen={isLoading} message="Loading Profile" />
 
