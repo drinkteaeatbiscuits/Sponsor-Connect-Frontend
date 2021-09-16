@@ -29,7 +29,28 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 
 					
 			
-						{ p.images[0] && <Image image={p.images} alt={p.title} /> }
+					
+
+						{ p.images && 
+         
+
+		 <picture>
+		   <source type="image/webp" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xs_" +  p.images?.hash + ".webp" } />
+		   <source type="image/webp" media="(max-width: 768px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_sm_" +  p.images?.hash + ".webp" } />
+		   <source type="image/webp" media="(max-width: 992px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_md_" +  p.images?.hash + ".webp" } />
+		   <source type="image/webp" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_lg_" +  p.images?.hash + ".webp" } />
+		   <source type="image/webp" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xl_" +  p.images?.hash + ".webp" } />
+
+		   <source type="image/jpeg" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xs_" +  p.images?.hash + ".jpg" } />
+		   <source type="image/jpeg" media="(max-width: 768px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_sm_" +  p.images?.hash + ".jpg" } />
+		   <source type="image/jpeg" media="(max-width: 992px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_md_" +  p.images?.hash + ".jpg" } />
+		   <source type="image/jpeg" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_lg_" +  p.images?.hash + ".jpg" } />
+		   <source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xl_" +  p.images?.hash + ".jpg" } />
+
+		   <img className="cover-image" src={  process.env.REACT_APP_S3_URL + "/cover_xl_" + p.images?.hash + ".jpg" } alt="Profile Cover" />
+		 </picture>  
+		 
+		 }
 					
 
 						<IonCardHeader>

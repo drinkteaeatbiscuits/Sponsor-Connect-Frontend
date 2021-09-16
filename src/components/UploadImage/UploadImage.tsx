@@ -17,6 +17,7 @@ interface UploadImageProps {
 	setCurrentImage: Function,
 	field?: any,
 	theref?: any,
+	refId?: any,
 	crop?: any,
 	circularCrop?: boolean,
 	showCroppedPreview?: boolean,
@@ -78,18 +79,18 @@ const UploadImage: React.FC<UploadImageProps> = ( UploadImageProps ) => {
 	}
 
   	
-	const uploadImage = async (field:any, theref:any) => {
+	const uploadImage = async (field:any, theref:any, refId:any ) => {
 
 		setANewImage(false);
 
 		if(croppedImageUrl) {
 		let blob = await fetch(croppedImageUrl).then(r => r.blob());
 
-			addUploadImageMutation( [ { data: blobToFile(blob, newFileName), field: field, theref: theref } ] );
+			addUploadImageMutation( [ { data: blobToFile(blob, newFileName), field: field, theref: theref, refId: refId } ] );
 
 		} else if (theImage) { 
 
-			addUploadImageMutation( [ { data: blobToFile(theImage, newFileName), field: field, theref: theref } ] );
+			addUploadImageMutation( [ { data: blobToFile(theImage, newFileName), field: field, theref: theref,  refId: refId } ] );
 
 		}
 
@@ -294,7 +295,7 @@ const UploadImage: React.FC<UploadImageProps> = ( UploadImageProps ) => {
 
 				{theImage && src && <IonButtons slot="end" className="buttons-end">
 				{ uploadProgress > 0 && <h2 className="ion-align-self-start upload-progress">{uploadProgress}%</h2> }
-					{ !isLoadingUploadImage && <IonButton color="primary" size="small" className="" onClick={() => uploadImage(UploadImageProps.field, UploadImageProps.theref)} >Upload</IonButton> }
+					{ !isLoadingUploadImage && <IonButton color="primary" size="small" className="" onClick={() => uploadImage(UploadImageProps.field, UploadImageProps.theref, UploadImageProps.refId )} >Upload</IonButton> }
 					<IonButton buttonType="link" className="link" onClick={ () => cancelUpload() } >Cancel</IonButton>
 				</IonButtons>}
 
