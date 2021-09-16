@@ -38,8 +38,7 @@ const Profile: React.FC = () => {
 
       { authState?.user.profile === parseInt(profileId.id) && 
         <IonToolbar>
-          <IonButtons className="ion-justify-content-between ion-padding-start ion-padding-end">
-            <IonButton className="" size="small" onClick={()=> history.push( "/opportunities/" + profileId.id )}>Manage Opportunities</IonButton>
+          <IonButtons className="ion-justify-content-center ion-padding-start ion-padding-end">
             <IonButton className="" size="small" onClick={()=> history.push( "/profile/" + profileId.id +"/edit" )}>Edit Profile</IonButton>
           </IonButtons>
           
@@ -53,8 +52,6 @@ const Profile: React.FC = () => {
         <IonLoading isOpen={isLoading} message="Loading Profile" />
 
          <div className="profile-header">
-
-          
 
           
           
