@@ -57,6 +57,7 @@ import SearchOpportunities from './pages/SearchOpportunities/SearchOpportunities
 import ResetPassword from './pages/ResetPassword/ResetPassword';
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
 import NewUpload from './pages/NewUpload';
+import ErrorPage from './pages/ErrorPage/ErrorPage';
 
 
 const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
@@ -220,9 +221,7 @@ const App: React.FC = () => {
                 {state.isAuthenticated ? <SearchOpportunities /> : <Login />}
               </Route>
 
-              <Route exact path="/settings">
-                {state.isAuthenticated ? <Settings /> : <Login />}
-              </Route>
+              
               <Route exact path="/settings/billing">
                 {state.isAuthenticated ? <Billing /> : <Login />}
               </Route>
@@ -235,6 +234,11 @@ const App: React.FC = () => {
               <Route exact path="/settings/notifications">
                 {state.isAuthenticated ? <Notifications /> : <Login />}
               </Route>
+              
+              <Route exact path="/settings">
+                {state.isAuthenticated ? <Settings /> : <Login />}
+              </Route>
+
               <Route exact path="/reset-password">
                 <ResetPassword />
               </Route>
@@ -262,7 +266,9 @@ const App: React.FC = () => {
               </Route>
 
               
-
+              <Route>
+                <ErrorPage />
+              </Route>
 
 
             </IonRouterOutlet>
