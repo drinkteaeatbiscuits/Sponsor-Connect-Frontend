@@ -15,7 +15,7 @@ const useUploadImage = ( profileId:any, setTheImage:Function, setUploadProgress:
       var formdata = new FormData();
       formdata.append( "files", data[0].data, data[0].data.path );
       formdata.append( "ref", data[0].theref );
-      formdata.append( "refId", profileId );
+      formdata.append( "refId", data[0].refId );
       formdata.append( "field", data[0].field ); 
     
       setUploadProgress(0);

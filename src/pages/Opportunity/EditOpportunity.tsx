@@ -46,13 +46,13 @@ const EditOpportunity: React.FC = () => {
       setDescription(data.description);
       setFullDescription(data.fullDescription);
       setPrice(data.price);
-      setImages(data.images[0]);
+      setImages(data.images);
     }
     
   }, [data, isLoading]);
 
   // console.log(images[0]?.url)
-
+console.log(opportunityId);
   
   const editOpportunity = async () => {
     
@@ -95,7 +95,8 @@ const EditOpportunity: React.FC = () => {
 
                 <IonItem className="">
                     <IonLabel position="stacked">Opportunity Image</IonLabel>
-                    <UploadImage currentImage={ images } setCurrentImage={ setImages } field="images" theref="opportunity" crop={{ aspect: 2 / 1 }} circularCrop={ false } showCroppedPreview={ false } />
+                   
+                    <UploadImage currentImage={ images } setCurrentImage={ setImages } field="images" theref="opportunity" crop={{ aspect: 2 / 1 }} circularCrop={ false } showCroppedPreview={ false } refId={opportunityId.id} />
                   </IonItem> 
 
 
