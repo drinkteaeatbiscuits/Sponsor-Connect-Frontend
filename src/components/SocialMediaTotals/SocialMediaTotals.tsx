@@ -29,7 +29,7 @@ const SocialMediaTotals: React.FC<SocialMediaTotalsProps> = ( SocialMediaTotalsP
 		return (
 			<IonCol size="auto" key={item.socialMediaName} className="social-media-total ion-padding">
 				
-				<a target="_blank" rel="noreferrer" href={item.socialMediaUrl}>
+				<a target="_blank" rel="noreferrer" href={!/^https?:\/\//i.test(item.socialMediaUrl) ? `https://${item.socialMediaUrl}` : item.socialMediaUrl }>
 					<IonIcon color="primary" size="large" icon={socialMediaIcon(item.socialMediaName)} />
 					{ item.socialMediaTotal && <p className="ion-no-margin social-media-total-figure">{ item.socialMediaTotal.toLocaleString() }</p> }
 				</a>

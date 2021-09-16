@@ -40,10 +40,11 @@ const Billing: React.FC = () => {
   const stripe = useStripe();
   const elements = useElements();
 
+  
+
   useEffect(() => {
 
     
-
    if (mySubscription.status === "success") {
       
       setSubscriptionStatus(mySubscription.data[0]?.subscriptionStatus);
@@ -114,8 +115,7 @@ const Billing: React.FC = () => {
 
   }, [authState.user.email, mySubscription.data, mySubscription.status ]);
 
-  
- 
+
   
   const CARD_OPTIONS = {
     // iconStyle: "solid",
@@ -207,12 +207,14 @@ const Billing: React.FC = () => {
       }
 
 
+
+
   return (
     <IonPage>
       <Header headerTitle="Billing"/>
       <TabBar activeTab="settings"/>
       <IonContent className="ion-padding" fullscreen >
-
+        <div className="content"> 
         { subscriptionStatus !== 'active' ?
         <form id="payment-form" onSubmit={handleSubmit}>
 
@@ -258,7 +260,7 @@ const Billing: React.FC = () => {
 
         </div>
         }
-        
+        </div>
 
       </IonContent>
     </IonPage>

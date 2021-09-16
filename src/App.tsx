@@ -45,7 +45,7 @@ import Billing from './pages/Billing';
 import Account from './pages/Account';
 import Notifications from './pages/Notifications';
 // import MainMenu from './components/MainMenu';
-import Subscription from './pages/Subscription';
+import Subscription from './pages/Subscription/Subscription';
 import Landing from './pages/Landing/Landing';
 import Opportunity from './pages/Opportunity/Opportunity';
 import OnBoardingSport from './pages/OnBoardingSport/OnBoardingSport';
@@ -239,7 +239,7 @@ const App: React.FC = () => {
                 <ResetPassword />
               </Route>
               <Route exact path="/forgot-password">
-                <ForgotPassword />
+                <ForgotPassword /> 
               </Route>
               <Route exact path="/menu">
                 <Menu />

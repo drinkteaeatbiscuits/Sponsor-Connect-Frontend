@@ -44,7 +44,7 @@ const Settings: React.FC = () => {
             {authState.user?.accountType !== "Business" &&
           
             <div className="menu-list-option ion-margin-top"
-              onClick={() => history.push("/settings/billing/")}>
+              onClick={() => history.push("/settings/subscription/")}>
               <div className="icon">
                 <IonIcon color="primary" icon={card} />
               </div>

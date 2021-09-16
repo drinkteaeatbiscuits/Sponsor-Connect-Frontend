@@ -48,11 +48,11 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
                 <div className="logo-header">
                     <div className="" onClick={()=> history.push("/dashboard")}><SvgScLogoHorizontal /></div>
                 </div>
-                <div className={ ( activeTab === 'dashboard' && "active " ) + " tab-button"} onClick={()=> history.push("/dashboard")}>
-                    <IonIcon icon={speedometer} />
-                    <IonLabel>Dashboard</IonLabel>
+                {/* <div className={ ( activeTab === 'dashboard' && "active " ) + " tab-button"} onClick={()=> history.push("/dashboard")}> */}
+                    {/* <IonIcon icon={speedometer} /> */}
+                    {/* <IonLabel>Dashboard</IonLabel> */}
                     {/* <IonBadge>2</IonBadge> */}
-                </div>
+                {/* </div> */}
 
                 {authState.user?.accountType === "Business" ? 
                 <div className={ ( activeTab === 'profile' && "active " ) + " tab-button"} onClick={()=> history.push("/profiles")}>
