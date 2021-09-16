@@ -19,6 +19,7 @@
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
     "axios": "^0.21.1",
+    "currency-symbol-map": "^5.0.1",
     "eruda": "^2.4.1",
     "file-saver": "^2.0.5",
     "ionicons": "^5.4.0",
