@@ -222,7 +222,7 @@ const UploadImage: React.FC<UploadImageProps> = ( UploadImageProps ) => {
 		
 			<div className="current-image-thumb">
 
-				{console.log(UploadImageProps.currentImage)}
+				{/* {console.log(UploadImageProps.currentImage)} */}
 				
 				<img className={ UploadImageProps.circularCrop ? "circle-crop" : "" } alt="current thumbnail" src={  process.env.REACT_APP_S3_URL + "/cover_sm_" +  UploadImageProps.currentImage?.hash + UploadImageProps.currentImage?.ext } />
 				<IonButtons slot="end" className="buttons-end">

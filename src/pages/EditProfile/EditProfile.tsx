@@ -25,6 +25,7 @@ import { env } from 'process';
 import useUploadImage from '../../hooks/useUploadImage';
 import UploadImage from '../../components/UploadImage/UploadImage';
 import { constructOutline, closeCircleOutline, happy, close } from 'ionicons/icons';
+import NewImageUpload3 from '../../components/NewImageUpload3/NewImageUpload3';
 
 export interface props {}
 
@@ -288,13 +289,36 @@ const EditProfile: React.FC = () => {
 
                   <IonItem className="">
                     <IonLabel position="stacked">Cover Image</IonLabel>
-                    <UploadImage currentImage={ coverImage } setCurrentImage={ setCoverImage } field="coverImage" theref="profile" crop={{ aspect: 3 / 1 }} circularCrop={ false } showCroppedPreview={ false } />
+
+                    <NewImageUpload3 
+                    currentImage={ coverImage } 
+                    setCurrentImage={ setCoverImage } 
+                    field="coverImage" 
+                    theref="profile" 
+                    refId={ authState?.user.profile }
+                    imageCropAspectRatio={3 / 1} 
+                    circularCrop={false}
+                    // showCroppedPreview={ false }  
+                    />
+      
+
+                    {/* <UploadImage currentImage={ coverImage } setCurrentImage={ setCoverImage } field="coverImage" theref="profile" crop={{ aspect: 3 / 1 }} circularCrop={ false } showCroppedPreview={ false } /> */}
                   </IonItem> 
                 
 
                   <IonItem className="profile-picture-upload">
                     <IonLabel position="stacked">Profile Picture</IonLabel>
-                    <UploadImage currentImage={ currentProfilePicture } setCurrentImage={ setCurrentProfilePicture } field="profilePicture" theref="profile" crop={{ aspect: 1 / 1 }} circularCrop={ true } showCroppedPreview={ false } />
+                    <NewImageUpload3 
+                    currentImage={ currentProfilePicture } 
+                    setCurrentImage={ setCurrentProfilePicture } 
+                    field="profilePicture" 
+                    theref="profile" 
+                    refId={ authState?.user.profile }
+                    imageCropAspectRatio={1} 
+                    circularCrop={true}
+                    // showCroppedPreview={ false }  
+                    />
+                    {/* <UploadImage currentImage={ currentProfilePicture } setCurrentImage={ setCurrentProfilePicture } field="profilePicture" theref="profile" crop={{ aspect: 1 / 1 }} circularCrop={ true } showCroppedPreview={ false } /> */}
                   </IonItem> 
 
 
