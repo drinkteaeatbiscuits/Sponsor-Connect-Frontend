@@ -9,6 +9,7 @@ import axios from 'axios';
 import ReactCrop from 'react-image-crop';
 import { useMutation } from 'react-query';
 import NewImageUpload2 from '../components/NewImageUpload2/NewImageUpload2';
+import NewImageUpload3 from '../components/NewImageUpload3/NewImageUpload3';
 // import TabBar from '../components/TabBar'; 
 
 export interface props { }
@@ -224,75 +225,8 @@ const getCroppedImg = (image:any, crop:any, fileName:any) => {
       {/* <TabBar/> */}
       <IonContent fullscreen>
 
-        <h1>New Upload</h1>
 
-		{!uploadedImage ? (
-		 !uploadingImage ? <IonButton className="Upload Image" onClick={() => setUploadingImage(true)} >Upload Image</IonButton> 
-		: <div className="upload-image">
-
-				<div className="dropzone" {...getRootProps()}>
-				 	<input {...getInputProps()} /> 
-					{
-						isDragActive ?
-						<p>Drop the files here ...</p> :
-						<p>Drag &amp; drop your image here, or click to select image</p>
-					}
-				</div>
-
-		</div> ) : 
-		
-		<ReactCrop src={ src } keepSelection={true} circularCrop={ false } crop={ crop } 
-				onImageLoaded={(img:any) => {
-					 
-					const aspect = crop?.aspect;
-					const width = img.width / aspect < img.height * aspect ? 100 : ((img.height * aspect) / img.width) * 100;
-					const height = img.width / aspect > img.height * aspect ? 100 : (img.width / aspect / img.height) * 100;
-					const y = (100 - height) / 2;
-					const x = (100 - width) / 2;
-
-					const widthpx = Math.round(img.width /100 * width);
-					const heightpx = Math.round(img.height /100 * height);
-					const xpx = Math.round(img.width /100 * x);
-					const ypx = Math.round(img.height /100 * y);
-					
-					const firstCrop = {
-						unit: 'px',
-						width: widthpx,
-						height: heightpx,
-						x: xpx,
-						y: ypx,
-						aspect,
-					  }
-
-					setCrop(firstCrop);
-					makeClientCrop(firstCrop); 
-					
-					// getCroppedImg(img, firstCrop, img.name);
-
-					makeFirstCrop(img, firstCrop, img.name);
-
-					setImageRef(img);
-
-					
-
-					return false;
-					 }}
-				onComplete={(crop:any) => makeClientCrop(crop)}
-				onChange={(newCrop:any) => {setCrop(newCrop);}} />
-				
-				}
-
-				
-
-				{croppedImageUrl && <IonButton onClick={() => uploadCroppedImage()}>Upload Cropped Image</IonButton>}
-
-				{ uploadedCroppedImage && <img src={uploadedCroppedImage} alt="cropped and uploaded result" />}
-				
-				{ errorMessages && <pre>{ errorMessages }</pre>}
-
-
-
-				<NewImageUpload2 />
+				<NewImageUpload3 />
           
       </IonContent>
     </IonPage>
