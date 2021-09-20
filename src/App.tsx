@@ -99,10 +99,16 @@ const reducer = (state: any, action: any) => {
         user: action.payload.user,
       }
     }
+    case "setSubscription": {
+      return {
+        ...state,
+        selectedSubscription: action.payload
+      }
+    }
 
     default:
 
-      return state;
+    return state;
   }
 };
 

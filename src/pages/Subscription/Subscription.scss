@@ -1,0 +1,18 @@
+.select-plan {
+	display: flex;
+	.plan {
+		cursor: pointer;
+		padding: 10px 18px;
+		margin-right: 10px;
+		border: 1px solid #b7b7b7;
+		border-radius: 3px;
+		 p {
+			 margin: 0;
+			 padding: 0;
+		 }
+		 &.active {
+			border: 1px solid var(--ion-color-primary); 
+			background-color: #fff;
+		 }
+	}
+}

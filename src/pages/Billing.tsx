@@ -35,14 +35,19 @@ const Billing: React.FC = () => {
   const [clientSecret, setClientSecret] = useState('');
   const [subscriptionId, setSubscriptionId] = useState('');
   const [subscriptionStatus, setSubscriptionStatus] = useState('');
+  const [selectedSubscription, setSelectedSubscription] = useState('');
   // const [customerId, setCustomerId] = useState('');
 
   const stripe = useStripe();
   const elements = useElements();
 
-  console.log(mySubscription)
+  // console.log(selectedSubscription)
+
+  // console.log();
 
   useEffect(() => {
+
+    setSelectedSubscription(authState.selectedSubscription);
     
    if (mySubscription.status === "success") {
       
@@ -82,7 +87,7 @@ const Billing: React.FC = () => {
               },
               body: JSON.stringify({
                 customerId: data.customer?.id,
-                priceId: "price_1JFxqWBwWs8b52mUO0mJqChD"
+                priceId: selectedSubscription
               })
             })
             .then(res => {
@@ -149,7 +154,7 @@ const Billing: React.FC = () => {
 
     }
 
-  }, [authState.user.email, mySubscription.data, mySubscription.status ]);
+  }, [authState.selectedSubscription, authState.user.email, mySubscription.data, mySubscription.status, selectedSubscription]);
 
 
   
@@ -256,7 +261,9 @@ const Billing: React.FC = () => {
       <IonContent className="ion-padding" fullscreen >
         <div className="content"> 
 
-        { mySubscription.status === "success" && subscriptionStatus !== 'active' ?
+        { !selectedSubscription ? <IonButton className="link" buttonType="link" onClick={() => history.push('/settings/subscription/')}>Please select a how you want to pay here.</IonButton> :  
+
+         mySubscription.status === "success" && subscriptionStatus !== 'active' ?
 
         <form id="payment-form" onSubmit={handleSubmit}>
 

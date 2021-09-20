@@ -33,6 +33,9 @@ const useUploadImage = ( profileId:any, setTheImage:Function, setUploadProgress:
           
           client.invalidateQueries("uploadedImages");
           // setImageRef(response.data[0]);
+
+          
+
           setTheImage(response.data[0]);
           
         })

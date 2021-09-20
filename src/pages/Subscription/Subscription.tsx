@@ -12,20 +12,42 @@ import {CardElement, useStripe, Elements, useElements} from '@stripe/react-strip
 import getSymbolFromCurrency from 'currency-symbol-map'
 
 
-// import './subscription.css';
+import './Subscription.scss';
 import useMySubscription from '../../hooks/useMySubscription';
+import usePrices from '../../hooks/usePrices';
 
 
 export interface props {}
 
 const Subscription: React.FC = () => {
+  
 
 	const history = useHistory();
-  const { state: authState } = React.useContext(AuthContext);
-  const {isLoading, data, isSuccess, error} = useMySubscription();
+  const { state: authState, dispatch } = React.useContext(AuthContext);
 
-  console.log(data);
+
+  const {isLoading, data, isSuccess, error} = useMySubscription();
+  
+  const {isLoading: isLoadingPrices, data: dataPrices, isSuccess: isSuccessPrices, error: errorPrices} = usePrices();
+
+  const [selectedPrice, setSelectedPrice] = useState();
+ 
+
+  const makePayment = async () => {
+    
+    dispatch && dispatch({
+      type: "setSubscription",
+      payload: selectedPrice
+    });
+
+    history.push("/settings/billing");
+  }
+
+  
+
+  
   useEffect(() => {
+    
   });
 
    const switchBilling = (data: string) => {
@@ -56,6 +78,7 @@ const Subscription: React.FC = () => {
           return getSymbolFromCurrency(currency) + (Math.round(price) / 100).toFixed(2);
         }
 
+
   return (
     <IonPage>
       <Header headerTitle="Billing"/>
@@ -65,12 +88,14 @@ const Subscription: React.FC = () => {
 
           { isSuccess && authState.user.subscription && data[0].subscriptionId ? 
           
-          !isLoading && 
+          data[0]?.subscriptionStatus === 'active' ?
+
+
           <div className="subscription-info">
             <h2>Subscription</h2>
             <p>Sponsor Connect Subscription</p>
-            <p>{ switchBilling(data[0].subscriptionObject.plan.interval) }</p>
-            <p>Your next invoice is for <strong>{ getPrice(data[0].subscriptionObject.plan.amount, data[0].subscriptionObject.plan.currency ) }</strong> on <strong>{ getDate(data[0].currentPeriodEnd) }</strong></p>
+            <p>{ switchBilling(data[0]?.subscriptionObject?.plan?.interval) }</p>
+            <p>Your next invoice is for <strong>{ getPrice(data[0]?.subscriptionObject?.plan?.amount, data[0]?.subscriptionObject?.plan?.currency ) }</strong> on <strong>{ getDate(data[0]?.currentPeriodEnd) }</strong></p>
 
 
             <p>Customer ID: { data[0]?.stripeCustomerId }</p>
@@ -79,6 +104,53 @@ const Subscription: React.FC = () => {
 
           </div>
           
+          : data[0]?.subscriptionStatus === 'active' ?
+          
+          <p>Subscription Active</p>
+          
+            : data[0]?.subscriptionStatus === 'canceled' ?
+          
+          <p>Subscription Canceled</p>
+          
+            : data[0]?.subscriptionStatus ?
+
+            <p>Subscription { data[0]?.subscriptionStatus }</p>
+
+          : <div className="please-subscribe">
+              <h2>Subscription</h2>
+              <p>Subscribe now to start displaying your profile and sponsorship opportunities to potential sponsors!</p>
+              <p>Choose your billing frequency:</p>
+              
+                {isSuccessPrices && 
+
+                  <div className="select-plan">
+
+                    {dataPrices?.data.map((element:any) => {
+
+                      return <div className={ selectedPrice === element.id ? "plan active" : "plan" } key={element.id} onClick={() => setSelectedPrice(element.id)}>
+                        
+                 
+
+                        <p><strong>Pay {element.recurring.interval === 'year' ? 'Annually' : 'Monthly'}</strong></p>
+                        
+                        <p>{getPrice(element.unit_amount, element.currency )} per {element.recurring.interval}</p>
+                      
+                        {element.metadata?.discount && <div className="discount"><small>{ element.metadata?.discount }</small></div>}
+
+                      </div>
+
+                    })}
+
+                  </div>
+
+                  
+
+                }
+
+              <IonButton onClick={() => makePayment()}>Make A Payment</IonButton>
+                
+              
+            </div>
         : 
 
         <div className="not-subscribed">
