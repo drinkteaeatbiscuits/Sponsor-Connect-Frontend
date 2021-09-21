@@ -31,20 +31,7 @@ const Subscription: React.FC = () => {
   const {isLoading: isLoadingPrices, data: dataPrices, isSuccess: isSuccessPrices, error: errorPrices} = usePrices();
 
   const [selectedPrice, setSelectedPrice] = useState();
- 
-
-  const makePayment = async () => {
-    
-    dispatch && dispatch({
-      type: "setSubscription",
-      payload: selectedPrice
-    });
-
-    history.push("/settings/billing");
-  }
-
   
-
   
   useEffect(() => {
     
@@ -73,7 +60,6 @@ const Subscription: React.FC = () => {
         }
 
         const getPrice = (price:any, currency:any) => {
-          
 
           return getSymbolFromCurrency(currency) + (Math.round(price) / 100).toFixed(2);
         }
@@ -143,11 +129,9 @@ const Subscription: React.FC = () => {
 
                   </div>
 
-                  
-
                 }
 
-              <IonButton onClick={() => makePayment()}>Make A Payment</IonButton>
+              <IonButton>Make A Payment</IonButton>
                 
               
             </div>

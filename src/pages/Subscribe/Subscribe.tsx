@@ -1,26 +1,26 @@
 import { IonButton, IonContent, IonPage } from '@ionic/react';
-import Header from '../components/Header';
+import Header from '../../components/Header';
 import { useHistory } from 'react-router';
 import Cookies from 'js-cookie';
-import { AuthContext } from "../App";
+import { AuthContext } from "../../App";
 import React, { useEffect, useState } from 'react';
-import LogoutButton from '../components/LogoutButton';
-import TabBar from '../components/TabBar';
+import LogoutButton from '../../components/LogoutButton';
+import TabBar from '../../components/TabBar';
 import { loadStripe } from "@stripe/stripe-js";
 import {CardElement, useStripe, Elements, useElements} from '@stripe/react-stripe-js';
 
-import './billing.css';
-import useMySubscription from '../hooks/useMySubscription';
+// import './billing.css';
+import useMySubscription from '../../hooks/useMySubscription';
 import { AnyARecord } from 'dns';
-import useCancelMySubscription from '../hooks/useCancelMySubscription';
+import useCancelMySubscription from '../../hooks/useCancelMySubscription';
 import { useQueryClient, useMutation } from 'react-query';
-import usePrices from '../hooks/usePrices';
+import usePrices from '../../hooks/usePrices';
 import getSymbolFromCurrency from 'currency-symbol-map';
 
 
 export interface props {}
 
-const Billing: React.FC = () => {
+const Subscribe: React.FC = () => {
 
 	// const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
@@ -57,21 +57,7 @@ const Billing: React.FC = () => {
 
   useEffect(() => {
 
-    setSelectedSubscription(authState.selectedSubscription);
-    
-   if (mySubscription.status === "success") {
-      
-      setSubscriptionStatus(mySubscription.data[0]?.subscriptionStatus);
-
-      // if user has an active subscription, hide payment
-      if(mySubscription.data[0]?.subscriptionStatus !== 'active'){
-
-    // if user doesn't yet have a subscription, create one
-      if( !mySubscription.data[0]?.subscriptionId ){
-
-        // Create PaymentIntent as soon as the page loads
-
-        window
+       if(selectedPrice) { window
           .fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/subscriptions/create-customer", {
             method: "POST",
             credentials: "include",
@@ -113,60 +99,19 @@ const Billing: React.FC = () => {
               
               }else{
 
-                console.log('test');
+                console.log('not succeeded');
+                console.log(data);
               
-                setClientSecret(data.subscription.latest_invoice.payment_intent.client_secret);
+                // setClientSecret(data.subscription.latest_invoice.payment_intent.client_secret);
 
               }
 
             });
           
         });
-
-      } else {
-
-        if(mySubscription.data[0] !== 'active' || mySubscription.data[0] !== 'trialing'){
-
-          window
-          .fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/subscriptions/retrieve-subscription", {
-            method: "POST",
-            credentials: "include",
-          }).then(res => {
-            
-            return res.json();
-
-          }).then(data => {
-            
-            if(data.subscription?.status === "succeeded"){
-                
-              setSucceeded(true);
-            
-            }else{
-
-              // console.log(data.latest_invoice.payment_intent.client_secret);
-            
-              setClientSecret(data.latest_invoice?.payment_intent?.client_secret);
-
-            }
-
-          });
-
-
-        }
-
-        console.log('user has a subscription already - ' + mySubscription.data[0].subscriptionId );
-
-      }
-
     }
 
-    }else{
-
-      console.log('user has an active subscription already' );
-
-    }
-
-  }, [authState.selectedSubscription, authState.user.email, mySubscription.data, mySubscription.status, selectedSubscription]);
+  }, [selectedPrice]);
 
 
   
@@ -356,4 +301,4 @@ const Billing: React.FC = () => {
   );
 };
 
-export default Billing;
+export default Subscribe;
