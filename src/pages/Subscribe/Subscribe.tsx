@@ -57,8 +57,10 @@ const Subscribe: React.FC = () => {
 
   useEffect(() => {
 
-       if(selectedPrice) { window
-          .fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/subscriptions/create-customer", {
+    
+       if(mySubscription.status === "success" && mySubscription.data[0]?.subscriptionStatus !== 'active' && selectedPrice && !subscriptionId) { 
+
+         window.fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/subscriptions/create-customer", {
             method: "POST",
             credentials: "include",
             headers: {
@@ -68,6 +70,7 @@ const Subscribe: React.FC = () => {
               email: authState.user.email,
             })
           })
+
           .then(res => {
             
             return res.json();
@@ -101,8 +104,8 @@ const Subscribe: React.FC = () => {
 
                 console.log('not succeeded');
                 console.log(data);
-              
-                // setClientSecret(data.subscription.latest_invoice.payment_intent.client_secret);
+                setSubscriptionId(data.subscription.id);
+                setClientSecret(data.subscription.latest_invoice.payment_intent.client_secret);
 
               }
 
@@ -111,7 +114,7 @@ const Subscribe: React.FC = () => {
         });
     }
 
-  }, [selectedPrice]);
+  }, [authState.user.email, mySubscription.data, mySubscription.status, selectedPrice, subscriptionId]);
 
 
   
@@ -185,6 +188,7 @@ const Subscribe: React.FC = () => {
     }
   }
 
+  
 
   const HandleCancelSubscription = async (event: any) => {
 
@@ -221,13 +225,28 @@ const Subscribe: React.FC = () => {
       <IonContent className="ion-padding" fullscreen >
         <div className="content"> 
 
-        {isSuccessPrices &&
+        
+
+        {mySubscription.status === "success" && mySubscription.data[0]?.subscriptionStatus !== 'active' && isSuccessPrices && subscriptionStatus !== 'active' &&
 
         <div className="select-plan ion-padding-bottom">
 
           {dataPrices?.data.map((element:any) => {
 
-            return <div className={ selectedPrice === element.id ? "plan active" : "plan" } key={element.id} onClick={() => setSelectedPrice(element.id)}>
+            return <div className={ selectedPrice === element.id ? "plan active" : "plan" } key={element.id} 
+            onClick={(e) => { 
+              
+
+              // console.log((e.target as Element));
+
+              !(e.currentTarget as Element).classList.contains("active") && 
+                
+                setSelectedPrice(element.id); 
+                setSubscriptionId(""); 
+                setClientSecret("");
+                
+            
+            }}>
               
               <p><strong>Pay {element.recurring.interval === 'year' ? 'Annually' : 'Monthly'}</strong></p>
               
@@ -243,10 +262,11 @@ const Subscribe: React.FC = () => {
 
         }
 
+        {/* {console.log(selectedPrice)}
+        {console.log(mySubscription?.status)}
+        {console.log(subscriptionStatus)} */}
 
-        { selectedPrice &&  
-
-         mySubscription.status === "success" && subscriptionStatus !== 'active' ?
+        { mySubscription.status === "success" && mySubscription.data[0]?.subscriptionStatus !== 'active' && selectedPrice && subscriptionStatus !== 'active' && subscriptionId && clientSecret &&
 
         <form id="payment-form" onSubmit={handleSubmit}>
 
@@ -285,14 +305,16 @@ const Subscribe: React.FC = () => {
 
           
         </form>
-        : 
-        <div>
+        }
+
+         {mySubscription.status === "success" && mySubscription.data[0]?.subscriptionStatus === 'active' && <div>
           <h2>Subscription Active</h2>
           
           <IonButton fill="clear" expand="full" onClick={ HandleCancelSubscription }>Cancel Subscription</IonButton>
           <IonButton fill="clear" expand="full" onClick={()=> history.push( "/settings/" )}>Back to Settings</IonButton>
 
         </div>
+
         }
         </div>
 
