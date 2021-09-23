@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonIcon, IonPage, IonSpinner } from '@ionic/react';
+import { IonButton, IonContent, IonIcon, IonPage, IonSpinner, IonToast } from '@ionic/react';
 import Header from '../../components/Header';
 import { useHistory } from 'react-router';
 import Cookies from 'js-cookie';
@@ -42,6 +42,7 @@ const Subscribe: React.FC = () => {
   const [selectedCost, setSelectedCost] = useState('');
   const [selectedFrequency, setSelectedFrequency] = useState("");
   const [activatingSubscription, setActivatingSubscription] = useState(false);
+  const [isToastOpen, setIsToastOpen] = useState(false);
   // const [customerId, setCustomerId] = useState('');
 
 
@@ -172,6 +173,7 @@ const Subscribe: React.FC = () => {
     // const nameInput = document.getElementById('name');
 
     setProcessing(true);
+    setError("");
 
     if (!stripe || !elements) {
       // Stripe.js has not loaded yet. Make sure to disable
@@ -190,7 +192,7 @@ const Subscribe: React.FC = () => {
       }).then((result) => { 
         if(result.error) {
 
-          setError(`Payment failed ${result.error.message}`);
+          setError(`Payment failed - ${result.error.message}`);
           setProcessing(false);
 
         } else {
@@ -227,6 +229,15 @@ const Subscribe: React.FC = () => {
     <IonPage>
       <TabBar activeTab="settings"/>
       <IonContent className="ion-padding" fullscreen >
+
+      <IonToast
+        isOpen={error ? true : false}
+        color="danger"
+        translucent={true}
+        onDidDismiss={() => console.log('test')}
+        message={error}
+        duration={0}
+      />
         <div className="content subscribe-content"> 
 
         
@@ -325,11 +336,11 @@ const Subscribe: React.FC = () => {
             </button>
 
             {/* Show any error that happens when processing the payment */}
-            {error && (
+            {/* {error && (
               <div className="card-error" role="alert">
                 {error}
               </div>
-            )}
+            )} */}
             
           </form>
         </div>
