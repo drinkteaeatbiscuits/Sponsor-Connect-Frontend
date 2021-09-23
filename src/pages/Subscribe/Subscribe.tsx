@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonPage } from '@ionic/react';
+import { IonButton, IonContent, IonIcon, IonPage, IonSpinner } from '@ionic/react';
 import Header from '../../components/Header';
 import { useHistory } from 'react-router';
 import Cookies from 'js-cookie';
@@ -16,6 +16,7 @@ import useCancelMySubscription from '../../hooks/useCancelMySubscription';
 import { useQueryClient, useMutation } from 'react-query';
 import usePrices from '../../hooks/usePrices';
 import getSymbolFromCurrency from 'currency-symbol-map';
+import { newspaper, personCircle, settings, trailSign } from 'ionicons/icons';
 
 
 export interface props {}
@@ -27,7 +28,7 @@ const Subscribe: React.FC = () => {
 
   const history = useHistory();
 
-  const mySubscription = useMySubscription();
+//   const mySubscription = useMySubscription();
     
   
   const [succeeded, setSucceeded] = useState<any>(false);
@@ -39,7 +40,8 @@ const Subscribe: React.FC = () => {
   const [subscriptionStatus, setSubscriptionStatus] = useState('');
   const [selectedSubscription, setSelectedSubscription] = useState('');
   const [selectedCost, setSelectedCost] = useState('');
-  const [selectedFrequency, setSelectedFrequency] = useState('');
+  const [selectedFrequency, setSelectedFrequency] = useState("");
+  const [activatingSubscription, setActivatingSubscription] = useState(false);
   // const [customerId, setCustomerId] = useState('');
 
 
@@ -49,18 +51,28 @@ const Subscribe: React.FC = () => {
   const stripe = useStripe();
   const elements = useElements();
 
-  
+  const [refetchInterval, setRefetchInterval] = useState<any>(false);
+//   const [expectedStatus, setExpectedStatus] = useState("");
   
   const {isLoading: isLoadingPrices, data: dataPrices, isSuccess: isSuccessPrices, error: errorPrices} = usePrices();
 
+  const {isLoading, data: mySubscription, isSuccess, error: errorMySubscription, refetch: refetchMySubscription } = useMySubscription(refetchInterval);
   // console.log(selectedSubscription)
 
   // console.log();
 
   useEffect(() => {
 
-    
-       if(mySubscription.status === "success" && mySubscription.data[0]?.subscriptionStatus !== 'active' && selectedPrice && !subscriptionId) { 
+        if(isSuccess && mySubscription[0]?.subscriptionStatus === 'active'){
+            
+            setRefetchInterval(false) 
+            setSucceeded(false);
+            setSelectedPrice(undefined);
+
+        } 
+        isSuccess && setSubscriptionStatus(mySubscription[0]?.subscriptionStatus);
+
+       if(isSuccess && subscriptionStatus !== 'active' && selectedPrice && !subscriptionId) { 
 
          window.fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/subscriptions/create-customer", {
             method: "POST",
@@ -116,7 +128,7 @@ const Subscribe: React.FC = () => {
         });
     }
 
-  }, [authState.user.email, mySubscription.data, mySubscription.status, selectedPrice, subscriptionId]);
+  }, [authState.user.email, mySubscription, isSuccess, selectedPrice, subscriptionId]);
 
 
   
@@ -159,6 +171,8 @@ const Subscribe: React.FC = () => {
     event.preventDefault();
     // const nameInput = document.getElementById('name');
 
+    setProcessing(true);
+
     if (!stripe || !elements) {
       // Stripe.js has not loaded yet. Make sure to disable
       // form submission until Stripe.js has loaded.
@@ -185,36 +199,19 @@ const Subscribe: React.FC = () => {
           setProcessing(false);
           setSucceeded(true);
 
-          setSubscriptionStatus('active');
+          setActivatingSubscription(true);
+          
+        //   setSubscriptionStatus('active');
+
+          setRefetchInterval(2000);
+          refetchMySubscription();
 
         }
       });
     }
   }
 
-  
 
-  const HandleCancelSubscription = async (event: any) => {
-
-    event.preventDefault();
-
-      const subscriptionResponse = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/subscriptions/cancel-subscription", {
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        method: "POST", 
-      });
-        
-        setSubscriptionStatus('cancelled');
-        setSucceeded(false);
-        setClientSecret('');
-
-        history.push("/settings");
-
-        return await subscriptionResponse.json();
-    
-      }
 
 
     const getPrice = (price:any, currency:any) => {
@@ -222,17 +219,22 @@ const Subscribe: React.FC = () => {
       return getSymbolFromCurrency(currency) + (Math.round(price) / 100).toFixed(2);
     }
 
+    // console.log(processing);
+    // console.log(disabled);
+    // console.log(succeeded);
+
   return (
     <IonPage>
       <TabBar activeTab="settings"/>
       <IonContent className="ion-padding" fullscreen >
-        <div className="content"> 
+        <div className="content subscribe-content"> 
 
         
-        <h1 className="" style={{color: 'var(--ion-color-dark)'}}>SUBSCRIBE</h1>
+        <h1 className="" style={{color: 'var(--ion-color-dark)'}}>{subscriptionStatus === 'active' ? "SUBSCRIBED" : "SUBSCRIBE" }</h1>
 
-        {mySubscription.status === "success" && mySubscription.data[0]?.subscriptionStatus !== 'active' && isSuccessPrices && subscriptionStatus !== 'active' &&
-
+        { refetchInterval && <div className=""><IonSpinner name="dots" color="primary" /><p>Setting up subscription</p></div> }
+        
+        {isSuccess && isSuccessPrices && subscriptionStatus !== 'active' && !refetchInterval &&
 
         <div className="select-plan">
 
@@ -274,7 +276,8 @@ const Subscribe: React.FC = () => {
 
         }
 
-        {selectedPrice && <div>
+        {isSuccess && subscriptionStatus !== 'active' && isSuccessPrices && selectedPrice && !refetchInterval &&
+        <div className="billing-details">
           <p style={{fontSize: '1.2em', fontWeight: 700, letterSpacing: '-0.01em', paddingTop: '15px', color: 'var(--ion-color-dark)'}}>Billing details</p>
           <div className="billing-details-table">
             <div className="billing-row billing-item">
@@ -296,7 +299,7 @@ const Subscribe: React.FC = () => {
         {console.log(mySubscription?.status)}
         {console.log(subscriptionStatus)} */}
 
-        { mySubscription.status === "success" && mySubscription.data[0]?.subscriptionStatus !== 'active' && selectedPrice && subscriptionStatus !== 'active' && subscriptionId && clientSecret &&
+        { isSuccess && mySubscription[0]?.subscriptionStatus !== 'active' && selectedPrice && subscriptionStatus !== 'active' && subscriptionId && clientSecret && !refetchInterval &&
         <div className="payment-details">
           <p style={{fontSize: '1.2em', fontWeight: 700, letterSpacing: '-0.01em', paddingTop: '15px', color: 'var(--ion-color-dark)'}}>Payment details</p>
           
@@ -308,15 +311,15 @@ const Subscribe: React.FC = () => {
             {/* <IonButton buttonType="submit" id="submit" className="primary-button" color="primary" disabled={processing || disabled || succeeded} expand="block">Pay and Subscribe</IonButton> */}
                 
             <button
-              className="primary-button"
+              className="pay-button primary-button ion-color-primary button-block"
               disabled={processing || disabled || succeeded}
               id="submit"
             >
               <span id="button-text">
                 {processing ? (
-                  <div className="spinner" id="spinner"></div>
+                  <IonSpinner name="dots" color="light" />
                 ) : (
-                  "Pay now"
+                  "Pay and Subscribe"
                 )}
               </span>
             </button>
@@ -327,28 +330,66 @@ const Subscribe: React.FC = () => {
                 {error}
               </div>
             )}
-            {/* Show a success message upon completion */}
-            
-            {succeeded && <p className={succeeded ? "result-message" : "result-message hidden"}>
-              Payment succeeded, see the result in your
-              <a
-                href={`https://dashboard.stripe.com/test/payments`}
-              >
-                {" "}
-                Stripe dashboard.
-              </a> Refresh the page to pay again.
-            </p> }
-
             
           </form>
         </div>
         }
 
-         {mySubscription.status === "success" && mySubscription.data[0]?.subscriptionStatus === 'active' && <div>
-          <h2>Subscription Active</h2>
+         {isSuccess && mySubscription[0]?.subscriptionStatus === 'active' && <div className="subscription-active">
+         
+         <p style={{fontSize: '1.2em', fontWeight: 700, letterSpacing: '-0.01em', color: 'var(--ion-color-dark)'}}>Thank you for subscribing!</p>
+
+         <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
           
-          <IonButton fill="clear" expand="full" onClick={ HandleCancelSubscription }>Cancel Subscription</IonButton>
-          <IonButton fill="clear" expand="full" onClick={()=> history.push( "/settings/" )}>Back to Settings</IonButton>
+            <div className="menu-list-option ion-margin-top"
+              onClick={() => history.push("/profile/" + authState?.user?.profile)}>
+              <div className="icon">
+                <IonIcon color="primary" icon={personCircle} />
+              </div>
+              <div className="text">
+                <p className="main-text">Your Profile</p>
+                <p className="sub-text">View and edit your profile</p>
+              </div>
+            </div>
+
+            <div className='menu-list-option'
+              onClick={() => history.push("/opportunities/" + authState?.user?.profile)}>
+              <div className="icon">
+                <IonIcon color="primary" icon={trailSign} />
+              </div>
+              <div className="text">
+                <p className="main-text">Your Opportunities</p>
+                <p className="sub-text">Manage your sponsorship opportunities </p>
+              </div>
+            </div>
+
+            <div className='menu-list-option'
+              onClick={() => history.push("/the-dugout/")}>
+              <div className="icon">
+                <IonIcon color="primary" icon={newspaper} />
+              </div>
+              <div className="text">
+                <p className="main-text">The Dugout</p>
+                <p className="sub-text">Tips and information about sponsorship</p>
+              </div>
+            </div>
+
+            <div className='menu-list-option'
+              onClick={() => history.push("/settings/")}>
+              <div className="icon">
+                <IonIcon color="primary" icon={settings} />
+              </div>
+              <div className="text">
+                <p className="main-text">Settings</p>
+                <p className="sub-text">Update account, billing &amp; notifications</p>
+              </div>
+            </div>
+
+            <LogoutButton className="logout-button button-tertiary ion-margin-bottom" expand="block" size="small" />
+
+          </div>
+
+          
 
         </div>
 

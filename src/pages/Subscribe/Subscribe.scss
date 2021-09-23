@@ -1,3 +1,26 @@
+.subscribe-content {
+	padding-bottom: 150px;
+
+	.pay-button {
+		margin-top: 32px;
+	}
+}
+@keyframes fadein {
+	from {
+	  opacity: 0;
+	}
+  
+	to {
+	  opacity: 1;
+	}
+  }
+
+.select-plan,
+.billing-details {
+	animation: fadein;
+	animation-duration: 0.5s;
+}
+
 .price-plans {
 	.plan {
 		background-color: #fff;
