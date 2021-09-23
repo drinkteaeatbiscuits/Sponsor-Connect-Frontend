@@ -49,8 +49,6 @@ const Subscription: React.FC = () => {
   }, [data, expectedCancelling, expectedStatus, isSuccess]);
 
 
-  
-
 
    const switchBilling = (data: string) => {
      switch ( data ) 
@@ -124,6 +122,29 @@ const Subscription: React.FC = () => {
           return await subscriptionResponse.json();
           
         }
+        
+        const HandleCancelSubscriptionNow = async (event: any) => {
+
+          event.preventDefault();
+
+            setExpectedStatus('canceled');
+            setExpectedCancelling(true);
+            setRefetchInterval(2000);
+      
+            const subscriptionResponse = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/subscriptions/delete-subscription", {
+              credentials: "include",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              method: "POST", 
+            });            
+              
+            subscriptionResponse.ok && refetchMySubscription();
+              
+      
+          return await subscriptionResponse.json();
+          
+        }
 
   return (
     <IonPage>
@@ -137,7 +158,7 @@ const Subscription: React.FC = () => {
           <div className="subscription-info">
 
             <h2 style={{textTransform: "uppercase", fontSize:"3em"}}>Subscription</h2>
-            <div className={"active-subscription " + data[0]?.subscriptionStatus + ( subscriptionCancelling && " is-cancelling") }>
+            <div className={"active-subscription " + data[0]?.subscriptionStatus + " " + ( subscriptionCancelling && " is-cancelling") }>
               
               {refetchInterval && <div className="updating-subscription-overlay"><IonSpinner name="dots" color="light" /></div>}
 
@@ -150,7 +171,7 @@ const Subscription: React.FC = () => {
               
               {subscriptionCancelling && subscriptionStatus === 'active' && <p style={{padding: "12px 0"}}>Your subscription has been cancelled<br/> and will expire on <strong>{ getDate(data[0]?.currentPeriodEnd) }</strong></p> }
               
-              {data[0]?.subscriptionStatus === 'canceled' && <p style={{padding: "12px 0"}}>Your subscription has been cancelled<br/> and will expired on <strong>{ getDate(data[0]?.currentPeriodEnd) }</strong></p> }
+              {data[0]?.subscriptionStatus === 'canceled' && <p style={{padding: "12px 0"}}>Your subscription has been cancelled<br/> and expired on <strong>{ getDate(data[0]?.currentPeriodEnd) }</strong></p> }
               
               
               {!data[0]?.subscriptionStatus && <p style={{padding: "12px 0"}}>Subscribe now to start displaying your profile and sponsorship opportunities to potential sponsors!</p> }
@@ -173,8 +194,9 @@ const Subscription: React.FC = () => {
             }
 
               {subscriptionStatus === 'active' && subscriptionCancelling && <IonButton className="button-tertiary" expand="block" size="small" onClick={ (e) => HandleReactivateSubscription(e) }>Reactivate Subscription</IonButton> }
+              {subscriptionStatus === 'active' && subscriptionCancelling && <IonButton className="button-tertiary" style={{marginTop: '12px'}} expand="block" size="small" onClick={ (e) => HandleCancelSubscriptionNow(e) }>Cancel Subscription Now</IonButton> }
               {subscriptionStatus === 'active' && !subscriptionCancelling && <IonButton className="button-tertiary" expand="block" size="small" onClick={ (e) => HandleCancelSubscription(e) }>Cancel Subscription</IonButton> }
-              {subscriptionStatus !== 'active' && <IonButton className="button-primary" expand="block" size="small" onClick={ (e) => history.push('/subscribe') }>Subscribe Now</IonButton> }
+              {subscriptionStatus !== 'active' && <IonButton className="button-tertiary" color="danger" expand="block" size="small" onClick={ (e) => history.push('/subscribe') }>Subscribe Now</IonButton> }
 
             </div>
 
