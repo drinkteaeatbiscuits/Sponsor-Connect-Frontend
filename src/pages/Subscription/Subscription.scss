@@ -1,3 +1,34 @@
+.subscription-info {
+	position: relative;
+}
+
+.updating-subscription-overlay {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0,0,0,0.6);
+	top: 0;
+	left: 0;
+	border-radius: 0 5px 5px 0;
+	transition: 0.2s ease;
+	z-index: 99;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	animation: fadein;
+	animation-duration: 0.25s;
+}
+
+@keyframes fadein {
+	from {
+	  opacity: 0;
+	}
+  
+	to {
+	  opacity: 1;
+	}
+  }
+
 .select-plan {
 	display: flex;
 	.plan {
@@ -14,5 +45,176 @@
 			border: 1px solid var(--ion-color-primary); 
 			background-color: #fff;
 		 }
+	}
+}
+
+.active-subscription {
+	position: relative;
+	border-radius: 5px;
+	border-left: 8px var(--ion-color-primary) solid;
+	background-color: var(--ion-color-light-tint);
+	transition: 0.25s background-color ease, 
+		0.25s box-shadow ease;	
+	padding: 8px 12px 18px 14px;
+	@media screen and (min-width: 576px) {
+		padding: 16px 16px 24px 24px;
+	}
+	&.is-cancelling {
+		border-left: 8px var(--ion-color-warning) solid;
+	}
+	&.canceled {
+		border-left: 8px var(--ion-color-danger) solid;
+	}
+	
+
+	.subscription-status {
+		position: absolute;
+		right: 16px; 
+		top: 16px;
+		background-color: var(--ion-color-success-contrast);
+		color: var(--ion-color-primary);
+		font-weight: 700;
+		padding: 3px 10px;
+		border-radius: 5px;
+		text-transform: capitalize;
+	}
+	&.is-cancelling .subscription-status {
+		color: var(--ion-color-warning);
+		background-color: var(--ion-color-warning-contrast);
+	}
+	&.canceled .subscription-status {
+		color: var(--ion-color-danger);
+		background-color: var(--ion-color-danger-contrast);
+	}
+
+	.payment-method {
+		display: flex;
+		align-items: center;
+		width: 100%;
+	}
+	.card-logo {
+		padding: 0 18px 0 0;
+		svg {
+			display: block;
+			max-width: 32px;
+			height: auto;
+		}
+		
+	}
+	.card-details {
+		flex-grow: 1;
+	}
+	.card-update {
+		align-self: flex-end;
+		.link {
+			font-weight: 700;
+			color: var(--ion-color-dark);
+			background-color: transparent;
+			--background: transparent;
+			--overflow: visible;
+			.ripple-effect {
+				background-color: transparent;
+			}
+			&:hover {
+				color: var(--ion-color-primary);
+			}
+		}
+	}
+	ion-button.button-tertiary,
+	ion-button.button-primary {
+		margin: 28px 0 0;
+		--ripple-color: transparent;
+	}
+}
+
+
+
+.payments {
+	border-radius: 5px;
+	margin: 10px -15px 120px;
+	padding: 15px 5px;
+	font-size: 0.85em;
+	background-color: #fff;
+	@media screen and (min-width: 375px) {
+		margin: 10px 0 120px;
+		padding: 15px 10px;
+	}
+	@media screen and (min-width: 400px) {
+		font-size: 0.9em;
+		margin: 10px 0 120px;
+		padding: 15px;
+	}
+	@media screen and (min-width: 500px) {
+		font-size: 1em;
+		
+	}
+	
+	.payment-row {
+		display: flex;
+		align-items: center;
+		width: 100%;
+		padding: 10px 5px;
+		border-bottom: 1px solid #e8e8e8;
+		&.header  {
+			font-weight: 700;
+			padding-top: 5px;
+			padding-bottom: 10px;
+			border-bottom: 0;
+		}
+		.payment-column {
+			flex-grow: 1;
+			text-align: center;
+			&:first-of-type {
+				text-align: left;
+			}
+			&:last-of-type {
+				text-align: right;
+			}
+			&.amount {
+				flex-basis: 15%;
+			}
+			&.date {
+				flex-basis: 20%;
+			}
+			&.payment-method {
+				flex-basis: 30%;
+			}
+			&.download-receipt {
+				flex-basis: 13%;
+			}
+			&.status {
+				flex-basis: 13%;
+			}
+			// &.payment-method {
+			// 	flex-grow: 2;
+
+			// }
+		}
+
+	}
+	.card-details {
+		display: inline-block;
+		vertical-align: middle;
+	}
+	.card-logo {
+		display: inline-block;
+		padding: 0 3px 0 0;
+		vertical-align: middle;
+		svg {
+			display: block;
+			max-width: 24px;
+			height: auto;
+		}
+		
+	}
+	.payment-status {
+		display: inline-block;
+		background-color: var(--ion-color-success-contrast);
+		color: var(--ion-color-primary);
+		font-weight: 700;
+		padding: 3px 10px;
+		border-radius: 5px;
+		font-size: 0.9em;
+		
 	}
 }

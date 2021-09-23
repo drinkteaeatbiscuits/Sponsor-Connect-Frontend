@@ -213,10 +213,10 @@ const Subscribe: React.FC = () => {
       }
 
 
-        const getPrice = (price:any, currency:any) => {
+    const getPrice = (price:any, currency:any) => {
 
-          return getSymbolFromCurrency(currency) + (Math.round(price) / 100).toFixed(2);
-        }
+      return getSymbolFromCurrency(currency) + (Math.round(price) / 100).toFixed(2);
+    }
 
   return (
     <IonPage>
@@ -305,6 +305,7 @@ const Subscribe: React.FC = () => {
 
           
         </form>
+        
         }
 
          {mySubscription.status === "success" && mySubscription.data[0]?.subscriptionStatus === 'active' && <div>

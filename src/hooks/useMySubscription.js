@@ -1,11 +1,30 @@
-import { useQuery, useQueryClient } from 'react-query';
+import { useQuery, useQueryClient, useMutation } from 'react-query';
+
+import React, { useEffect, useState } from 'react';
+
+const useMySubscription = (refetchInterval) => {
+
+	// const [refetchIntervalState, setRefetchIntervalState] = useState(refetchInterval);
+
+	// useEffect(() => {
+	// 	setRefetchIntervalState(refetchInterval)
+	// }, [refetchInterval]);
 
 
-const useMySubscription = () => {
+	// console.log(refetchIntervalState);
+
 	const client = useQueryClient();
+
+	// const addMutation = useMutation(value => fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + '/subscriptions/my-subscription', {
+	// 	credentials: "include",
+	//   }), {
+	// 	onSuccess: () => client.invalidateQueries("mySubscription"),
+	//   });
+
 	return useQuery(
 	  "mySubscription",
-	  async() => {
+
+	  async () => {
 		console.log("in query");
 		const response = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + '/subscriptions/my-subscription', {
 		  credentials: "include",
@@ -19,7 +38,12 @@ const useMySubscription = () => {
 		});
   
 		return posts;
+	  },
+	  {
+		  refetchInterval: refetchInterval
 	  }
+	  
+	  
 	)
   }
 
