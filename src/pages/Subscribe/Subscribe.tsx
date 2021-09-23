@@ -1,26 +1,26 @@
 import { IonButton, IonContent, IonPage } from '@ionic/react';
-import Header from '../components/Header';
+import Header from '../../components/Header';
 import { useHistory } from 'react-router';
 import Cookies from 'js-cookie';
-import { AuthContext } from "../App";
+import { AuthContext } from "../../App";
 import React, { useEffect, useState } from 'react';
-import LogoutButton from '../components/LogoutButton';
-import TabBar from '../components/TabBar';
+import LogoutButton from '../../components/LogoutButton';
+import TabBar from '../../components/TabBar';
 import { loadStripe } from "@stripe/stripe-js";
 import {CardElement, useStripe, Elements, useElements} from '@stripe/react-stripe-js';
 
-import './billing.css';
-import useMySubscription from '../hooks/useMySubscription';
+// import './billing.css';
+import useMySubscription from '../../hooks/useMySubscription';
 import { AnyARecord } from 'dns';
-import useCancelMySubscription from '../hooks/useCancelMySubscription';
+import useCancelMySubscription from '../../hooks/useCancelMySubscription';
 import { useQueryClient, useMutation } from 'react-query';
-import usePrices from '../hooks/usePrices';
+import usePrices from '../../hooks/usePrices';
 import getSymbolFromCurrency from 'currency-symbol-map';
 
 
 export interface props {}
 
-const Billing: React.FC = () => {
+const Subscribe: React.FC = () => {
 
 	// const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
@@ -57,22 +57,10 @@ const Billing: React.FC = () => {
 
   useEffect(() => {
 
-    setSelectedSubscription(authState.selectedSubscription);
     
-   if (mySubscription.status === "success") {
-      
-      setSubscriptionStatus(mySubscription.data[0]?.subscriptionStatus);
+       if(mySubscription.status === "success" && mySubscription.data[0]?.subscriptionStatus !== 'active' && selectedPrice && !subscriptionId) { 
 
-      // if user has an active subscription, hide payment
-      if(mySubscription.data[0]?.subscriptionStatus !== 'active'){
-
-    // if user doesn't yet have a subscription, create one
-      if( !mySubscription.data[0]?.subscriptionId ){
-
-        // Create PaymentIntent as soon as the page loads
-
-        window
-          .fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/subscriptions/create-customer", {
+         window.fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/subscriptions/create-customer", {
             method: "POST",
             credentials: "include",
             headers: {
@@ -82,6 +70,7 @@ const Billing: React.FC = () => {
               email: authState.user.email,
             })
           })
+
           .then(res => {
             
             return res.json();
@@ -113,8 +102,9 @@ const Billing: React.FC = () => {
               
               }else{
 
-                console.log('test');
-              
+                console.log('not succeeded');
+                console.log(data);
+                setSubscriptionId(data.subscription.id);
                 setClientSecret(data.subscription.latest_invoice.payment_intent.client_secret);
 
               }
@@ -122,51 +112,9 @@ const Billing: React.FC = () => {
             });
           
         });
-
-      } else {
-
-        if(mySubscription.data[0] !== 'active' || mySubscription.data[0] !== 'trialing'){
-
-          window
-          .fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/subscriptions/retrieve-subscription", {
-            method: "POST",
-            credentials: "include",
-          }).then(res => {
-            
-            return res.json();
-
-          }).then(data => {
-            
-            if(data.subscription?.status === "succeeded"){
-                
-              setSucceeded(true);
-            
-            }else{
-
-              // console.log(data.latest_invoice.payment_intent.client_secret);
-            
-              setClientSecret(data.latest_invoice?.payment_intent?.client_secret);
-
-            }
-
-          });
-
-
-        }
-
-        console.log('user has a subscription already - ' + mySubscription.data[0].subscriptionId );
-
-      }
-
     }
 
-    }else{
-
-      console.log('user has an active subscription already' );
-
-    }
-
-  }, [authState.selectedSubscription, authState.user.email, mySubscription.data, mySubscription.status, selectedSubscription]);
+  }, [authState.user.email, mySubscription.data, mySubscription.status, selectedPrice, subscriptionId]);
 
 
   
@@ -240,6 +188,7 @@ const Billing: React.FC = () => {
     }
   }
 
+  
 
   const HandleCancelSubscription = async (event: any) => {
 
@@ -264,10 +213,10 @@ const Billing: React.FC = () => {
       }
 
 
-        const getPrice = (price:any, currency:any) => {
+    const getPrice = (price:any, currency:any) => {
 
-          return getSymbolFromCurrency(currency) + (Math.round(price) / 100).toFixed(2);
-        }
+      return getSymbolFromCurrency(currency) + (Math.round(price) / 100).toFixed(2);
+    }
 
   return (
     <IonPage>
@@ -276,13 +225,28 @@ const Billing: React.FC = () => {
       <IonContent className="ion-padding" fullscreen >
         <div className="content"> 
 
-        {isSuccessPrices &&
+        
+
+        {mySubscription.status === "success" && mySubscription.data[0]?.subscriptionStatus !== 'active' && isSuccessPrices && subscriptionStatus !== 'active' &&
 
         <div className="select-plan ion-padding-bottom">
 
           {dataPrices?.data.map((element:any) => {
 
-            return <div className={ selectedPrice === element.id ? "plan active" : "plan" } key={element.id} onClick={() => setSelectedPrice(element.id)}>
+            return <div className={ selectedPrice === element.id ? "plan active" : "plan" } key={element.id} 
+            onClick={(e) => { 
+              
+
+              // console.log((e.target as Element));
+
+              !(e.currentTarget as Element).classList.contains("active") && 
+                
+                setSelectedPrice(element.id); 
+                setSubscriptionId(""); 
+                setClientSecret("");
+                
+            
+            }}>
               
               <p><strong>Pay {element.recurring.interval === 'year' ? 'Annually' : 'Monthly'}</strong></p>
               
@@ -298,10 +262,11 @@ const Billing: React.FC = () => {
 
         }
 
+        {/* {console.log(selectedPrice)}
+        {console.log(mySubscription?.status)}
+        {console.log(subscriptionStatus)} */}
 
-        { selectedPrice &&  
-
-         mySubscription.status === "success" && subscriptionStatus !== 'active' ?
+        { mySubscription.status === "success" && mySubscription.data[0]?.subscriptionStatus !== 'active' && selectedPrice && subscriptionStatus !== 'active' && subscriptionId && clientSecret &&
 
         <form id="payment-form" onSubmit={handleSubmit}>
 
@@ -340,14 +305,17 @@ const Billing: React.FC = () => {
 
           
         </form>
-        : 
-        <div>
+        
+        }
+
+         {mySubscription.status === "success" && mySubscription.data[0]?.subscriptionStatus === 'active' && <div>
           <h2>Subscription Active</h2>
           
           <IonButton fill="clear" expand="full" onClick={ HandleCancelSubscription }>Cancel Subscription</IonButton>
           <IonButton fill="clear" expand="full" onClick={()=> history.push( "/settings/" )}>Back to Settings</IonButton>
 
         </div>
+
         }
         </div>
 
@@ -356,4 +324,4 @@ const Billing: React.FC = () => {
   );
 };
 
-export default Billing;
+export default Subscribe;

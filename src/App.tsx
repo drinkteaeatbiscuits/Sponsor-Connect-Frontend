@@ -58,6 +58,7 @@ import ResetPassword from './pages/ResetPassword/ResetPassword';
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
 import NewUpload from './pages/NewUpload';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
+import Subscribe from './pages/Subscribe/Subscribe';
 
 
 const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
@@ -99,10 +100,16 @@ const reducer = (state: any, action: any) => {
         user: action.payload.user,
       }
     }
+    case "setSubscription": {
+      return {
+        ...state,
+        selectedSubscription: action.payload
+      }
+    }
 
     default:
 
-      return state;
+    return state;
   }
 };
 
@@ -224,6 +231,9 @@ const App: React.FC = () => {
               
               <Route exact path="/settings/billing">
                 {state.isAuthenticated ? <Billing /> : <Login />}
+              </Route>
+              <Route exact path="/subscribe">
+                {state.isAuthenticated ? <Subscribe /> : <Login />}
               </Route>
               <Route exact path="/settings/subscription">
                 {state.isAuthenticated ? <Subscription /> : <Login />}
