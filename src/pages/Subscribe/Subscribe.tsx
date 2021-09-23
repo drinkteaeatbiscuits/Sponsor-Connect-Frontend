@@ -9,7 +9,7 @@ import TabBar from '../../components/TabBar';
 import { loadStripe } from "@stripe/stripe-js";
 import {CardElement, useStripe, Elements, useElements} from '@stripe/react-stripe-js';
 
-// import './billing.css';
+import './Subscribe.scss';
 import useMySubscription from '../../hooks/useMySubscription';
 import { AnyARecord } from 'dns';
 import useCancelMySubscription from '../../hooks/useCancelMySubscription';
@@ -38,6 +38,8 @@ const Subscribe: React.FC = () => {
   const [subscriptionId, setSubscriptionId] = useState('');
   const [subscriptionStatus, setSubscriptionStatus] = useState('');
   const [selectedSubscription, setSelectedSubscription] = useState('');
+  const [selectedCost, setSelectedCost] = useState('');
+  const [selectedFrequency, setSelectedFrequency] = useState('');
   // const [customerId, setCustomerId] = useState('');
 
 
@@ -123,16 +125,18 @@ const Subscribe: React.FC = () => {
     style: {
       base: {
         iconColor: "#c4f0ff",
-        color: "#000",
+        backgroundColor: '#fff',
+        padding: "10px",
+        color: "#3A3939",
         fontWeight: 500,
-        fontFamily: "Roboto, Open Sans, Segoe UI, sans-serif",
+        fontFamily: 'neue-haas-unica, sans-serif',
         fontSize: "16px",
         fontSmoothing: "antialiased",
         ":-webkit-autofill": {
           color: "#fce883"
         },
         "::placeholder": {
-          color: "#87bbfd"
+          color: "#B1B1B1"
         }
       },
       invalid: {
@@ -220,37 +224,43 @@ const Subscribe: React.FC = () => {
 
   return (
     <IonPage>
-      <Header headerTitle="Billing"/>
       <TabBar activeTab="settings"/>
       <IonContent className="ion-padding" fullscreen >
         <div className="content"> 
 
         
+        <h1 className="" style={{color: 'var(--ion-color-dark)'}}>SUBSCRIBE</h1>
 
         {mySubscription.status === "success" && mySubscription.data[0]?.subscriptionStatus !== 'active' && isSuccessPrices && subscriptionStatus !== 'active' &&
 
-        <div className="select-plan ion-padding-bottom">
 
+        <div className="select-plan">
+
+          <p style={{fontSize: '1.2em', fontWeight: 700, letterSpacing: '-0.01em', color: 'var(--ion-color-dark)'}}>Choose your billing frequency</p>
+
+            <div className="price-plans">
           {dataPrices?.data.map((element:any) => {
 
             return <div className={ selectedPrice === element.id ? "plan active" : "plan" } key={element.id} 
-            onClick={(e) => { 
+                        onClick={(e) => { 
+                          
+                          !(e.currentTarget as Element).classList.contains("active") && 
+                            
+                            setSelectedPrice(element.id); 
+                            setSubscriptionId(""); 
+                            setClientSecret("");
+                            setSelectedCost( getPrice(element.unit_amount, element.currency ) );
+                            setSelectedFrequency( element.recurring.interval );
+                        
+                        }}>
               
+              <div className="selected-circle"></div>
 
-              // console.log((e.target as Element));
-
-              !(e.currentTarget as Element).classList.contains("active") && 
-                
-                setSelectedPrice(element.id); 
-                setSubscriptionId(""); 
-                setClientSecret("");
-                
-            
-            }}>
+              <div className="plan-cost">
+                <p style={{margin: 0, padding: 0, fontSize: '1.1em', lineHeight: 1, letterSpacing: '-0.01em', color: 'var(--ion-color-dark)'}}><strong>{getPrice(element.unit_amount, element.currency )} per {element.recurring.interval}</strong></p>
+                <p style={{margin: 0, padding: '5px 0 0', lineHeight: 1, fontSize: '0.95em', fontWeight: 500, color: 'var(--ion-color-medium)'}}>Pay {element.recurring.interval === 'year' ? 'Annually' : 'Monthly'}</p>
+              </div>
               
-              <p><strong>Pay {element.recurring.interval === 'year' ? 'Annually' : 'Monthly'}</strong></p>
-              
-              <p>{getPrice(element.unit_amount, element.currency )} per {element.recurring.interval}</p>
             
               {element.metadata?.discount && <div className="discount"><small>{ element.metadata?.discount }</small></div>}
 
@@ -258,54 +268,80 @@ const Subscribe: React.FC = () => {
 
           })}
 
+          </div>
+
         </div>
 
         }
 
+        {selectedPrice && <div>
+          <p style={{fontSize: '1.2em', fontWeight: 700, letterSpacing: '-0.01em', paddingTop: '15px', color: 'var(--ion-color-dark)'}}>Billing details</p>
+          <div className="billing-details-table">
+            <div className="billing-row billing-item">
+              <div className="billing-columm quantity">1 x</div>
+              <div className="billing-columm description" style={{letterSpacing: '-0.01em'}}>Sponsor Connect Subscription</div>
+              <div className="billing-columm price"><p>{selectedCost}</p><p className="frequency">every { selectedFrequency }</p></div>
+            </div>
+            <div className="billing-row tax">
+              <div className="billing-columm tax">VAT</div>
+              <div className="billing-columm tax-price">£0.00</div>
+            </div>
+            <div className="billing-row total">
+              <div className="billing-columm total">Total</div>
+              <div className="billing-columm total-price">{selectedCost}</div>
+            </div>
+          </div>
+        </div> }
         {/* {console.log(selectedPrice)}
         {console.log(mySubscription?.status)}
         {console.log(subscriptionStatus)} */}
 
         { mySubscription.status === "success" && mySubscription.data[0]?.subscriptionStatus !== 'active' && selectedPrice && subscriptionStatus !== 'active' && subscriptionId && clientSecret &&
-
-        <form id="payment-form" onSubmit={handleSubmit}>
-
-          <CardElement id="card-element" options={CARD_OPTIONS} onChange={handleChange} />
-
-          <button
-            disabled={processing || disabled || succeeded}
-            id="submit"
-          >
-            <span id="button-text">
-              {processing ? (
-                <div className="spinner" id="spinner"></div>
-              ) : (
-                "Pay now"
-              )}
-            </span>
-          </button>
-
-          {/* Show any error that happens when processing the payment */}
-          {error && (
-            <div className="card-error" role="alert">
-              {error}
-            </div>
-          )}
-          {/* Show a success message upon completion */}
+        <div className="payment-details">
+          <p style={{fontSize: '1.2em', fontWeight: 700, letterSpacing: '-0.01em', paddingTop: '15px', color: 'var(--ion-color-dark)'}}>Payment details</p>
           
-          {succeeded && <p className={succeeded ? "result-message" : "result-message hidden"}>
-            Payment succeeded, see the result in your
-            <a
-              href={`https://dashboard.stripe.com/test/payments`}
+          <form id="payment-form" onSubmit={handleSubmit}>
+
+            <CardElement id="card-element" options={CARD_OPTIONS} onChange={handleChange} />
+
+
+            {/* <IonButton buttonType="submit" id="submit" className="primary-button" color="primary" disabled={processing || disabled || succeeded} expand="block">Pay and Subscribe</IonButton> */}
+                
+            <button
+              className="primary-button"
+              disabled={processing || disabled || succeeded}
+              id="submit"
             >
-              {" "}
-              Stripe dashboard.
-            </a> Refresh the page to pay again.
-          </p> }
+              <span id="button-text">
+                {processing ? (
+                  <div className="spinner" id="spinner"></div>
+                ) : (
+                  "Pay now"
+                )}
+              </span>
+            </button>
 
-          
-        </form>
-        
+            {/* Show any error that happens when processing the payment */}
+            {error && (
+              <div className="card-error" role="alert">
+                {error}
+              </div>
+            )}
+            {/* Show a success message upon completion */}
+            
+            {succeeded && <p className={succeeded ? "result-message" : "result-message hidden"}>
+              Payment succeeded, see the result in your
+              <a
+                href={`https://dashboard.stripe.com/test/payments`}
+              >
+                {" "}
+                Stripe dashboard.
+              </a> Refresh the page to pay again.
+            </p> }
+
+            
+          </form>
+        </div>
         }
 
          {mySubscription.status === "success" && mySubscription.data[0]?.subscriptionStatus === 'active' && <div>
