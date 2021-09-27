@@ -12,6 +12,8 @@ import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-goo
 import ReactCrop from 'react-image-crop';
 import { saveAs } from 'file-saver';
 
+import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
+
 
 import 'react-image-crop/dist/ReactCrop.css';
 
@@ -26,6 +28,7 @@ import useUploadImage from '../../hooks/useUploadImage';
 import UploadImage from '../../components/UploadImage/UploadImage';
 import { constructOutline, closeCircleOutline, happy, close } from 'ionicons/icons';
 import NewImageUpload3 from '../../components/NewImageUpload3/NewImageUpload3';
+import TextEditor from '../../components/TextEditor/TextEditor';
 
 export interface props {}
 
@@ -72,7 +75,10 @@ const EditProfile: React.FC = () => {
   
   const [coverImage, setCoverImage] = useState<any>("");
 
-  
+
+  const [fullDescriptionText, setFullDescriptionText] = useState();
+
+  // console.log(textEditorText);
 
   const updateProfile = async () => {
     
@@ -86,6 +92,7 @@ const EditProfile: React.FC = () => {
       shortDescription,
       accolades: accolades?.filter(Boolean),
       description: fullDescription,
+      fullDescriptionText: fullDescriptionText ? convertToRaw( fullDescriptionText ) : fullDescriptionText
     });
     
     history.goBack();
@@ -118,6 +125,9 @@ const EditProfile: React.FC = () => {
 
       setShortDescription(profileData.data[0]?.shortDescription);
       setFullDescription(profileData.data[0]?.description);
+      
+      setFullDescriptionText( profileData.data[0]?.fullDescriptionText && convertFromRaw( profileData.data[0]?.fullDescriptionText ) );
+      
       setAccolades(profileData.data[0]?.accolades);
       
       setCurrentProfilePicture(profileData.data[0]?.profilePicture);
@@ -410,11 +420,24 @@ const EditProfile: React.FC = () => {
                     <IonTextarea value={ shortDescription ? shortDescription : p.shortDescription } onIonChange={ (e:any) => setShortDescription(e.detail.value) } />
                   </IonItem>
 
+
+
+
+
                   <IonItem>
                     <IonLabel position="stacked">Full Description</IonLabel>
-                    <IonTextarea value={ fullDescription ? fullDescription : p.description } onIonChange={ (e:any) => setFullDescription(e.detail.value) } />
+                    {/* <IonTextarea value={ fullDescription ? fullDescription : p.description } onIonChange={ (e:any) => setFullDescription(e.detail.value) } />
+                   */}
+                  
+                      <TextEditor 
+                      placeholder="Enter your description here." 
+                      initialText={profileData.data[0]?.fullDescriptionText && convertFromRaw( profileData.data[0]?.fullDescriptionText )} 
+                      textEditorText={fullDescriptionText} 
+                      setTextEditorText={setFullDescriptionText} />
+                   
                   </IonItem>
 
+ 
                   <IonItem>
                     <IonLabel position="stacked">Accolades</IonLabel>
 
@@ -440,11 +463,7 @@ const EditProfile: React.FC = () => {
                     <IonButton buttonType="link"  className="link ion-align-self-end" onClick={ () => addAccolade() } >Add Accolade</IonButton>
                   </IonItem>
 
-                  
-                  
-                  
-                 
-
+                
 
               </div>
             )

@@ -3,11 +3,14 @@ import Header from '../../components/Header';
 import { useHistory, useParams } from 'react-router';
 import Cookies from 'js-cookie';
 import { AuthContext } from "../../App";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LogoutButton from '../../components/LogoutButton';
 import { useQueryClient, useQuery } from 'react-query';
 import useProfile from '../../hooks/useProfile';
 import TabBar from '../../components/TabBar';
+import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
+import { stateToHTML } from "draft-js-export-html";
+// import { stateToMarkdown } from "draft-js-export-markdown";
 
 import './profile.scss';
 import { personCircle, location, cash, wallet, cellular, browsersOutline, logoVimeo, settings } from 'ionicons/icons';
@@ -27,11 +30,19 @@ const Profile: React.FC = () => {
 	const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
   const [showFullDescription, setShowFullDescription] = useState<boolean>(false) 
-  const {isLoading, data, error} = useProfile( profileId.id );
+  const [fullDescriptionText, setFullDescriptionText] = useState<any>(""); 
+  const {isLoading, data, error, isSuccess} = useProfile( profileId.id );
 
   error && console.log(error);
 
-  // console.log(data?.profilePicture);
+  useEffect(() => {
+
+    isSuccess && setFullDescriptionText(  data?.fullDescriptionText  );
+    
+    
+  }, [data?.fullDescriptionText, isSuccess])
+
+  fullDescriptionText && console.log( fullDescriptionText );
 
   return (
     <IonPage className="profile">
@@ -180,6 +191,39 @@ const Profile: React.FC = () => {
 
           } 
           
+          </div>
+
+          { data?.fullDescriptionText && console.log( data?.fullDescriptionText ) }
+
+          {fullDescriptionText && console.log( fullDescriptionText )}
+         <div className="profile-description">
+            
+          {
+          
+          fullDescriptionText && fullDescriptionText.blocks.map( (block: { text: string; key: any; type: any; }, i, array) => 
+
+
+            
+          block.type === "unstyled" && <p key={ block.key }> { block.text } </p>
+          ||
+          block.type === "header-two" && <h2 key={ block.key }> { block.text } </h2>
+          ||
+          block.type === "unordered-list-item" && array[i - 1].type !== "unordered-list-item" && <ul key={ block.key + "-ul"}><li key={ block.key }>  { block.text } </li></ul>
+          ||
+          block.type === "unordered-list-item" && <li key={ block.key }>  { block.text } </li>
+          ||
+          <div key={ block.key }>{ block.text }</div>
+
+            // block.type === "unordered-list-item" && array[i - 1].type !== "unordered-list-item" && <ul></ul> :
+
+            // block.type === "unordered-list-item" ? <li key={ block.key }>  { block.text } </li> :
+
+
+            // 
+            
+          )}
+          
+ 
           </div>
             
             <div className="profile-opportunities">

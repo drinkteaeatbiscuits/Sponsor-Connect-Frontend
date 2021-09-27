@@ -16,7 +16,10 @@ const useUpdateProfile = () => {
 		  shortDescription: string;
 		  accolades: any;
 		  description: string;
+		  fullDescriptionText: any;
 		}) => {
+
+			// console.log( data.textEditor);
   
 		const profilesResponse = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/profiles/me", {
 			credentials: "include",
@@ -34,6 +37,7 @@ const useUpdateProfile = () => {
 			  shortDescription: data.shortDescription,
 			  accolades: data.accolades,
 			  description: data.description,
+			  fullDescriptionText: data.fullDescriptionText
 			}), 
 		});
 	
