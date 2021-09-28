@@ -17,7 +17,7 @@ import { personCircle, location, cash, wallet, cellular, browsersOutline, logoVi
 import SocialMediaTotals from '../../components/SocialMediaTotals/SocialMediaTotals';
 import ImageSlider from '../../components/ImageSlider/ImageSlider';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
-import ProfileDescription from '../../components/ProfileDescription/ProfileDescription';
+import TextEditorContent from '../../components/TextEditorContent/TextEditorContent';
 
 export interface props {}
 
@@ -40,10 +40,9 @@ const Profile: React.FC = () => {
 
     isSuccess && setFullDescriptionText(  data?.fullDescriptionText  );
     
-    
   }, [data?.fullDescriptionText, isSuccess])
 
-  fullDescriptionText && console.log( fullDescriptionText );
+  // fullDescriptionText && console.log( fullDescriptionText );
 
   return (
     <IonPage className="profile">
@@ -196,7 +195,7 @@ const Profile: React.FC = () => {
 
 
 
-          { data?.fullDescriptionText && <ProfileDescription fullDescriptionText={fullDescriptionText} /> }
+          { data?.fullDescriptionText && <TextEditorContent editorContent={fullDescriptionText} /> }
 
             {fullDescriptionText && console.log( fullDescriptionText )}
          

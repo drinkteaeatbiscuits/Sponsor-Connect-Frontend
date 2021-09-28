@@ -44,6 +44,8 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
+    "react-transition-group": "^4.4.2",
+    "redraft": "^0.10.2",
     "typescript": "^4.1.3",
     "web-vitals": "^0.2.4",
     "workbox-background-sync": "^5.1.4",
@@ -88,6 +90,7 @@
     "@svgr/cli": "^5.5.0",
     "@types/draft-js": "^0.11.5",
     "@types/file-saver": "^2.0.3",
-    "@types/js-cookie": "^2.2.7"
+    "@types/js-cookie": "^2.2.7",
+    "@types/react-transition-group": "^4.4.3"
   }
 }

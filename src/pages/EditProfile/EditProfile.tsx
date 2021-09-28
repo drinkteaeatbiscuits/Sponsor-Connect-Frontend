@@ -92,7 +92,7 @@ const EditProfile: React.FC = () => {
       shortDescription,
       accolades: accolades?.filter(Boolean),
       description: fullDescription,
-      fullDescriptionText: fullDescriptionText ? convertToRaw( fullDescriptionText ) : fullDescriptionText
+      fullDescriptionText: fullDescriptionText && convertToRaw( fullDescriptionText )
     });
     
     history.goBack();

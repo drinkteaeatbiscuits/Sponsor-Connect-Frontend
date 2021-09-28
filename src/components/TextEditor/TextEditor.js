@@ -39,6 +39,7 @@ class TextEditor extends React.Component {
 	};
 
 	this.handleKeyCommand = (command) => this._handleKeyCommand(command);
+	this.handleReturn = (command) => this._handleReturn(command);
 	this.onTab = (e) => this._onTab(e);
 	this.toggleBlockType = (type) => this._toggleBlockType(type);
 	this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
@@ -58,7 +59,23 @@ class TextEditor extends React.Component {
 	}
   }
 
+
+  _handleReturn(command) {
+    const { editorState } = this.state;
+    if (command.shiftKey) {
+      
+		console.log(editorState);
+		
+		this.setState({ editorState: RichUtils.insertSoftNewline(editorState) });
+	  
+	  
+      return 'handled';
+    }
+    return 'not-handled';
+  }
+
   _handleKeyCommand(command) {
+
 	const {editorState} = this.state;
 	const newState = RichUtils.handleKeyCommand(editorState, command);
 	if (newState) {
@@ -91,6 +108,8 @@ class TextEditor extends React.Component {
 	);
   }
 
+  
+
 
   render() {
 	const { editorState } = this.state;
@@ -105,6 +124,7 @@ class TextEditor extends React.Component {
 	  }
 	}
 
+	
 
 	// console.log(this.props.textEditorText);
 
@@ -129,7 +149,7 @@ class TextEditor extends React.Component {
 		  <Editor
 			blockStyleFn={getBlockStyle}
 			customStyleMap={styleMap}
-			
+			handleReturn={this.handleReturn}
 			editorState={editorState}
 			handleKeyCommand={this.handleKeyCommand}
 			onChange={this.onChange}
