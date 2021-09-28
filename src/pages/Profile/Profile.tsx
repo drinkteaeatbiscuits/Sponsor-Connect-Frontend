@@ -17,6 +17,7 @@ import { personCircle, location, cash, wallet, cellular, browsersOutline, logoVi
 import SocialMediaTotals from '../../components/SocialMediaTotals/SocialMediaTotals';
 import ImageSlider from '../../components/ImageSlider/ImageSlider';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
+import ProfileDescription from '../../components/ProfileDescription/ProfileDescription';
 
 export interface props {}
 
@@ -193,38 +194,12 @@ const Profile: React.FC = () => {
           
           </div>
 
-          { data?.fullDescriptionText && console.log( data?.fullDescriptionText ) }
-
-          {fullDescriptionText && console.log( fullDescriptionText )}
-         <div className="profile-description">
-            
-          {
-          
-          fullDescriptionText && fullDescriptionText.blocks.map( (block: { text: string; key: any; type: any; }, i, array) => 
 
 
-            
-          block.type === "unstyled" && <p key={ block.key }> { block.text } </p>
-          ||
-          block.type === "header-two" && <h2 key={ block.key }> { block.text } </h2>
-          ||
-          block.type === "unordered-list-item" && array[i - 1].type !== "unordered-list-item" && <ul key={ block.key + "-ul"}><li key={ block.key }>  { block.text } </li></ul>
-          ||
-          block.type === "unordered-list-item" && <li key={ block.key }>  { block.text } </li>
-          ||
-          <div key={ block.key }>{ block.text }</div>
+          { data?.fullDescriptionText && <ProfileDescription fullDescriptionText={fullDescriptionText} /> }
 
-            // block.type === "unordered-list-item" && array[i - 1].type !== "unordered-list-item" && <ul></ul> :
-
-            // block.type === "unordered-list-item" ? <li key={ block.key }>  { block.text } </li> :
-
-
-            // 
-            
-          )}
-          
- 
-          </div>
+            {fullDescriptionText && console.log( fullDescriptionText )}
+         
             
             <div className="profile-opportunities">
               <p className="ion-padding ion-color-dark line-height-12 section-title">Sponsorship Opportunities</p>
