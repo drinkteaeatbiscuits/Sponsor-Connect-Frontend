@@ -3,17 +3,21 @@ import Header from '../../components/Header';
 import { useHistory, useParams } from 'react-router';
 import Cookies from 'js-cookie';
 import { AuthContext } from "../../App";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LogoutButton from '../../components/LogoutButton';
 import { useQueryClient, useQuery } from 'react-query';
 import useProfile from '../../hooks/useProfile';
 import TabBar from '../../components/TabBar';
+import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
+import { stateToHTML } from "draft-js-export-html";
+// import { stateToMarkdown } from "draft-js-export-markdown";
 
 import './profile.scss';
 import { personCircle, location, cash, wallet, cellular, browsersOutline, logoVimeo, settings } from 'ionicons/icons';
 import SocialMediaTotals from '../../components/SocialMediaTotals/SocialMediaTotals';
 import ImageSlider from '../../components/ImageSlider/ImageSlider';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
+import TextEditorContent from '../../components/TextEditorContent/TextEditorContent';
 
 export interface props {}
 
@@ -27,11 +31,18 @@ const Profile: React.FC = () => {
 	const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
   const [showFullDescription, setShowFullDescription] = useState<boolean>(false) 
-  const {isLoading, data, error} = useProfile( profileId.id );
+  const [fullDescriptionText, setFullDescriptionText] = useState<any>(""); 
+  const {isLoading, data, error, isSuccess} = useProfile( profileId.id );
 
   error && console.log(error);
 
-  // console.log(data?.profilePicture);
+  useEffect(() => {
+
+    isSuccess && setFullDescriptionText(  data?.fullDescriptionText  );
+    
+  }, [data?.fullDescriptionText, isSuccess])
+
+  // fullDescriptionText && console.log( fullDescriptionText );
 
   return (
     <IonPage className="profile">
@@ -181,6 +192,13 @@ const Profile: React.FC = () => {
           } 
           
           </div>
+
+
+
+          { data?.fullDescriptionText && <TextEditorContent editorContent={fullDescriptionText} /> }
+
+            {fullDescriptionText && console.log( fullDescriptionText )}
+         
             
             <div className="profile-opportunities">
               <p className="ion-padding ion-color-dark line-height-12 section-title">Sponsorship Opportunities</p>

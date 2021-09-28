@@ -19,7 +19,7 @@ import getSymbolFromCurrency from 'currency-symbol-map';
 import { newspaper, personCircle, settings, trailSign } from 'ionicons/icons';
 
 
-export interface props {}
+export interface props {} 
 
 const Subscribe: React.FC = () => {
 

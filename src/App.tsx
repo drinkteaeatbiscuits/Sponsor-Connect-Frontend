@@ -59,6 +59,8 @@ import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
 import NewUpload from './pages/NewUpload';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
 import Subscribe from './pages/Subscribe/Subscribe';
+import TextEditor from './components/TextEditor/TextEditor';
+import NewTextEditor from './pages/NewTextEditor/NewTextEditor';
 
 
 const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
@@ -273,6 +275,10 @@ const App: React.FC = () => {
 
               <Route exact path="/new-upload">
                 <NewUpload />
+              </Route>
+
+              <Route exact path="/text-editor">
+                <NewTextEditor />
               </Route>
 
               
