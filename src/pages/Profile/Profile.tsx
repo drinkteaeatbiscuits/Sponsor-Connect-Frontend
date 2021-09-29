@@ -197,7 +197,7 @@ const Profile: React.FC = () => {
 
           { data?.fullDescriptionText && <TextEditorContent editorContent={fullDescriptionText} /> }
 
-            {fullDescriptionText && console.log( fullDescriptionText )}
+            {/* {fullDescriptionText && console.log( fullDescriptionText )} */}
          
             
             <div className="profile-opportunities">

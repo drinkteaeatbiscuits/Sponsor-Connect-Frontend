@@ -46,7 +46,7 @@ const useUpdateProfile = () => {
 		},
 		{
 		  onSuccess: () => {
-			console.log('profile updated');
+			// console.log('profile updated');
 			client.invalidateQueries("profiles");
 			client.invalidateQueries("profile");
 		  }

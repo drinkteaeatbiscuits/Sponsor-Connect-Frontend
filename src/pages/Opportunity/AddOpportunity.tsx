@@ -3,15 +3,16 @@ import Header from '../../components/Header';
 import { useHistory, useParams } from 'react-router';
 import Cookies from 'js-cookie';
 import { AuthContext } from "../../App";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LogoutButton from '../../components/LogoutButton';
 import TabBar from '../../components/TabBar';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
 import useOpportunity from '../../hooks/useOpportunity';
 import useAddOpportunity from '../../hooks/useAddOpportunity';
 import UploadImage from '../../components/UploadImage/UploadImage';
-
-
+import urlSlug from 'url-slug';
+import useEditOpportunity from '../../hooks/useEditOpportunity';
+import NewImageUpload3 from '../../components/NewImageUpload3/NewImageUpload3';
 
 export interface props { }
 
@@ -29,25 +30,58 @@ const AddOpportunity: React.FC = () => {
 // console.log(profileId);
 // const { isLoading, data, error } = useOpportunity(profileId.id);
 
-  const {isLoading: isAddingOpportunity, error: addOpportunityError, mutateAsync: addOpportunityMutation} = useAddOpportunity();
-
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [fullDescription, setFullDescription] = useState<string>("");
-  const [images, setImages] = useState<Array<any>>([]);
+  const [images, setImages] = useState<any>("");
   const [price, setPrice] = useState<string>("");
   const [opportunityError, setOpportunityError] = useState<string>("");
+  const [publishedAt, setPublishedAt] = useState<any>(null);
+  const [opportunityId, setOpportunityId] = useState<any>("");
+  const [opportunitySlug, setOpportunitySlug] = useState<any>("");
 
+  const {isLoading: isAddingOpportunity, data: opportunityData, error: addOpportunityError, isSuccess: opportunitySuccess, mutateAsync: addOpportunityMutation} = useAddOpportunity();
+  const {isLoading: isEditingOpportunity, error: editOpportunityError, mutateAsync: editOpportunityMutation} = useEditOpportunity( opportunityId );
+
+
+  useEffect(() => {
+
+    !opportunityId && !opportunitySuccess && createOpportunity();
+
+    opportunitySuccess && setOpportunityId(opportunityData.id);
+    
+    setOpportunitySlug( urlSlug(profileId.id + '-' + opportunityId + '-' + title));
+
+    opportunityId && !publishedAt && setPublishedAt(new Date().toISOString());
+
+
+  }, [title, opportunityId, publishedAt, opportunitySuccess])
   
-  const addOpportunity = async () => {
+
+  // console.log(opportunityData);
+  console.log(opportunityId);
+  console.log(opportunityId);
+  // console.log(opportunitySlug);
+
+  const createOpportunity = async () => {
     
     await addOpportunityMutation({
+      profile: profileId.id,
+      published_at: publishedAt 
+    });
+
+  }
+
+  const saveOpportunity = async () => {
+    
+    await editOpportunityMutation({
       profile: profileId.id,
       title,
       description,
       fullDescription,
-      images,
+      // images,
       price,
+      published_at: publishedAt 
     });
     
     history.goBack();
@@ -86,7 +120,20 @@ const AddOpportunity: React.FC = () => {
 
                   <IonItem className="">
                     <IonLabel position="stacked">Opportunity Image</IonLabel>
-                    <UploadImage setCurrentImage={ setImages } field="images" theref="" crop={{ aspect: 2 / 1 }} circularCrop={ false } showCroppedPreview={ false } />
+                 
+                    {opportunityId && <NewImageUpload3 
+                                      currentImage={ images } 
+                                      setCurrentImage={ setImages } 
+                                      field="images" 
+                                      theref="opportunity" 
+                                      refId={ opportunityId }
+                                      imageCropAspectRatio={2 / 1} 
+                                      circularCrop={false}
+                                      // showCroppedPreview={ false }  
+                                      /> }
+                    
+                    {/* <UploadImage setCurrentImage={ setImages } field="images" theref="" crop={{ aspect: 2 / 1 }} circularCrop={ false } showCroppedPreview={ false } /> */}
+                 
                   </IonItem> 
 
 
@@ -118,7 +165,7 @@ const AddOpportunity: React.FC = () => {
             </div>
 
             
-            <IonButton expand="block" className="add-opportunity" onClick={title ? () => addOpportunity() : () => setOpportunityError('Please enter a title')}>Save</IonButton>
+            {opportunitySuccess && <IonButton expand="block" className="add-opportunity" onClick={title ? () => saveOpportunity() : () => setOpportunityError('Please enter a title')}>Save</IonButton>}
 
             
           </div>
