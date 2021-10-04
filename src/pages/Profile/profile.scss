@@ -193,3 +193,50 @@
     	top: 80px;
 	}
 }
+
+.profile-tabs {
+	background-color: #fff;
+	padding: 0 15px;
+	flex-basis: 100%;
+	margin-bottom: 60px;
+	.profile-tab-navigation {
+		display: flex;
+		p {
+			padding: 0 15px;
+			font-weight: 700;
+			color: var(--ion-color-dark);
+			cursor: pointer;
+			transition: 0.25s ease-out;
+			position: relative;
+			&:hover {
+				color: var(--ion-color-primary);
+			}
+			&.active {
+				color: var(--ion-color-primary);
+				cursor: default;
+				// &:before {
+				// 	content: "";
+				// 	position: absolute;
+				// 	width: 6px;
+				// 	height: 6px;
+				// 	border-radius: 4px;
+				// 	background-color: var(--ion-color-primary);
+				// 	left: calc(50% - 4px);
+				// 	top: calc(100% + 2px);
+				// }
+				&:hover {
+					opacity: 1;
+				}
+			}
+			
+		}
+	}
+}
+
+.tab-title {
+	font-family: 'neue-haas-unica', sans-serif;
+	font-weight: 700;
+	letter-spacing: -0.01em;
+	font-size: 1.8em;
+	padding: 0 18px 18px;
+}

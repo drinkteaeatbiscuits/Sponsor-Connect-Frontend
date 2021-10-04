@@ -61,6 +61,7 @@ import ErrorPage from './pages/ErrorPage/ErrorPage';
 import Subscribe from './pages/Subscribe/Subscribe';
 import TextEditor from './components/TextEditor/TextEditor';
 import NewTextEditor from './pages/NewTextEditor/NewTextEditor';
+import ProfileImages from './pages/ProfileImages/ProfileImages';
 
 
 const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
@@ -206,6 +207,10 @@ const App: React.FC = () => {
 
                <Route exact path="/profile/:id/edit">
                 {state.isAuthenticated ? <EditProfile /> : <Login />}
+              </Route>
+
+               <Route exact path="/profile/profile-images">
+                {state.isAuthenticated ? <ProfileImages /> : <Login />}
               </Route>
               
               

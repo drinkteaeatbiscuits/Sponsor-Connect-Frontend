@@ -7,7 +7,7 @@ const useDeleteImage = () => {
     const client = useQueryClient();
     
     return useMutation(
-      "uploadedImages",
+      "profileImages",
       async (data: any) => {
     
       axios.delete(
@@ -18,7 +18,7 @@ const useDeleteImage = () => {
         .then(function (response) {
 
           // console.log(response);
-          client.invalidateQueries("imagePosts");
+          client.invalidateQueries("profileImages");
           // response.json();
         })
         .catch(function (error) {

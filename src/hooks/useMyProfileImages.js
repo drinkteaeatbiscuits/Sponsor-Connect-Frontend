@@ -1,10 +1,11 @@
 import { useQuery, useQueryClient } from 'react-query';
 
 
-const useMyProfile = () => {
+const useMyProfileImages = () => {
 	const client = useQueryClient();
+	
 	return useQuery(
-	  "profiles",
+	  "profileImages",
 	  async() => {
 		console.log("in query");
 
@@ -14,16 +15,15 @@ const useMyProfile = () => {
 		
 		const posts = await response.json();
   
-		// pre load the cache
-		posts.forEach((p: any) => {
+		
 
-		  client.setQueryData(["profiles", p.id], p);
-		  
-		});
+		client.setQueryData("profileImages", posts[0].images);
+
+		
   
-		return posts;
+		return posts[0].images;
 	  }
 	)
   }
 
-  export default useMyProfile;
+  export default useMyProfileImages;

@@ -47,7 +47,7 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 		   <source type="image/jpeg" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_lg_" +  p.images?.hash + ".jpg" } />
 		   <source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xl_" +  p.images?.hash + ".jpg" } />
 
-		   <img className="cover-image" src={  process.env.REACT_APP_S3_URL + "/cover_xl_" + p.images?.hash + ".jpg" } alt="Profile Cover" />
+		   <img className="opportunity-image" src={  process.env.REACT_APP_S3_URL + "/cover_xl_" + p.images?.hash + ".jpg" } alt={p.title} />
 		 </picture>  
 		 
 		 }

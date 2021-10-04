@@ -34,6 +34,8 @@ const Profile: React.FC = () => {
   const [fullDescriptionText, setFullDescriptionText] = useState<any>(""); 
   const {isLoading, data, error, isSuccess} = useProfile( profileId.id );
 
+  const [profileTabNumber, setProfileTabNumber] = useState(1);
+
   error && console.log(error);
 
   useEffect(() => {
@@ -161,17 +163,14 @@ const Profile: React.FC = () => {
               <div className="profile-detail-about ion-text-left ion-padding-top">
                 <h4>About</h4>
                 { data?.shortDescription } 
-                <div className="read-more ion-color-primary ion-padding-top" onClick={() => setShowFullDescription(!showFullDescription)}>{showFullDescription ? "Read less" : "Read more"}</div>
-                <div className="fullDescription ion-padding-top">
-                  { showFullDescription && data?.description}
-                </div>
+                <div className="read-more ion-color-primary ion-padding-top" onClick={() => setProfileTabNumber(2)}>Read more</div>
               </div>
             
             } 
             { isLoading ? <IonSkeletonText animated style={{ width: '90%', margin: '10px  auto' }} /> : data?.accolades?.length > 0 && 
               
               <div className="profile-detail-about ion-text-left ion-padding-top accolades">
-                <h4>Accolades</h4>
+                <h4>Achievements</h4>
                 { data?.accolades.map((item: any) => { return <p className="accolade" key={ item }>{ item }</p>; } ) } 
               </div>
             
@@ -195,22 +194,35 @@ const Profile: React.FC = () => {
 
 
 
-          { data?.fullDescriptionText && <TextEditorContent editorContent={fullDescriptionText} /> }
-
-            {/* {fullDescriptionText && console.log( fullDescriptionText )} */}
-         
-            
-            <div className="profile-opportunities">
-              <p className="ion-padding ion-color-dark line-height-12 section-title">Sponsorship Opportunities</p>
-       
-              <OpportunitiesList profileId={ profileId.id } />
-
-              <div className="other-sponsorship-ideas ion-padding">
-                <p>Have any other sponsorship ideas? <br/>
-                Please get in touch <a href="/">here.</a></p>
+            <div className= "profile-tabs">
+              <div className="profile-tab-navigation">
+                <p className={profileTabNumber === 1 ? "active" : ""} onClick={() => setProfileTabNumber(1)}>Sponsorship</p>
+                <p className={profileTabNumber === 2 ? "active" : ""} onClick={() => setProfileTabNumber(2)}>Description</p>
+                <p className={profileTabNumber === 3 ? "active" : ""} onClick={() => setProfileTabNumber(3)}>Photos</p>
+                <p className={profileTabNumber === 4 ? "active" : ""} onClick={() => setProfileTabNumber(4)}>Contact</p>
               </div>
-            </div>
+
+
+               {profileTabNumber === 1 && 
+                <div className="profile-opportunities">
+                    <h2 className="ion-color-dark line-height-12 tab-title">Sponsorship Opportunities</h2>
+            
+                    <OpportunitiesList profileId={ profileId.id } />
+
+                    <div className="other-sponsorship-ideas ion-padding">
+                      <p>Have any other sponsorship ideas? <br/>
+                      Please get in touch <a href="/">here.</a></p>
+                    </div>
+                  </div>
+                }
+
+
+                { profileTabNumber === 2 && data?.fullDescriptionText && <TextEditorContent editorContent={fullDescriptionText} /> }
+          
           </div>
+          
+          </div>
+
           
       </IonContent>
       
