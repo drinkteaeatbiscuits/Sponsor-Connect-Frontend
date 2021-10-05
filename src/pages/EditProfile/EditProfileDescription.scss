@@ -1,0 +1,57 @@
+.editor-section {
+	.edit-content {
+		display: none;
+	}
+	&.show-editor {
+		.editor-section-content {
+			display: none;
+		}
+		.edit-content {
+			display: block;
+		}
+	}
+.editor-section-title {
+	font-size: 1.4em;
+	color: var(--ion-color-dark);
+	margin: 0;
+
+}	
+
+.editor-options {
+	display: flex;
+	justify-content: space-between;
+	padding: 0 10px;
+	> div {
+		padding: 0 5px;
+		cursor: pointer;
+		font-size: 0.9em;
+		&.cancel {
+			color: var(--ion-color-medium);
+		}
+		&.save {
+			color: var(--ion-color-dark);
+			&:hover {
+				color: var(--ion-color-primary);
+			}
+		}
+	}
+}
+}
+
+.editor-section-content {
+	background-color: #fff;
+	padding: 5px 5px 0;
+	margin: 10px 0;
+	.edit {
+		display: flex;
+		justify-content: flex-end;
+		font-size: 0.9em;
+		padding: 10px;
+		color: var(--ion-color-medium);
+		transition: 0.2s ease-out;
+		cursor: pointer;
+		&:hover {
+			color: var(--ion-color-primary);
+		}
+	}
+}

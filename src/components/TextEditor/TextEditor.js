@@ -59,6 +59,8 @@ class TextEditor extends React.Component {
 	}
   }
 
+  
+
 
   _handleReturn(command) {
     const { editorState } = this.state;

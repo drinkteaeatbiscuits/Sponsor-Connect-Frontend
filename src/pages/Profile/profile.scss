@@ -201,8 +201,11 @@
 	margin-bottom: 60px;
 	.profile-tab-navigation {
 		display: flex;
+		flex-wrap: wrap;
+		padding: 15px 0;
 		p {
-			padding: 0 15px;
+			padding: 5px 15px;
+			margin: 0;
 			font-weight: 700;
 			color: var(--ion-color-dark);
 			cursor: pointer;
@@ -239,4 +242,37 @@
 	letter-spacing: -0.01em;
 	font-size: 1.8em;
 	padding: 0 18px 18px;
+}
+
+.profile-tabs .photos {
+	.profile-images {
+		padding: 15px 5px;
+		margin: 15px 0 80px;
+		background-color: #fff;
+		.profile-image {
+			max-width: 50%;
+			padding: 3px;
+			cursor: pointer;
+			transition: 0.25s ease-out;
+			@media screen and (min-width: 450px) {
+				max-width: 50%;
+				padding: 1px;
+			}
+			@media screen and (min-width: 620px) {
+				max-width: 25%;
+				padding: 2px;
+			}
+			@media screen and (min-width: 768px) {
+				max-width: 33.333%;
+				padding: 2px;
+			}
+			@media screen and (min-width: 992px) {
+				max-width: 25%;
+				padding: 2px;
+			}
+			&:hover {
+				opacity: 0.6;
+			}
+		}
+	}
 }
