@@ -26,16 +26,16 @@ const EditorSection: React.FC<EditorSectionProps> = ( EditorSectionProps ) => {
 				
 				<div className="editor-section-content">
 
-					<TextEditorContent editorContent={ initialEditorContent } />
+					<TextEditorContent editorContent={ initialEditorContent && initialEditorContent } />
 				
-					<div className="edit" onClick={() => setShowEditor(true)}>Edit</div>
+					<div className="edit" onClick={() => setShowEditor(true)}>{initialEditorContent ? "Edit" : "Add" }</div>
 
 				</div>
 
 				<div className="edit-content">
 					<TextEditor 
 						placeholder="Enter your description here." 
-						initialText={ convertFromRaw( initialEditorContent )} 
+						initialText={ initialEditorContent && convertFromRaw( initialEditorContent )} 
 						textEditorText={ editorContent } 
 						setTextEditorText={ setEditorContent } />
 					<div className="editor-options">

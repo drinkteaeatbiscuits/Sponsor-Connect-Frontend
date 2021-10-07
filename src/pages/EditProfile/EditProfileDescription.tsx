@@ -79,6 +79,7 @@ const EditProfileDescription: React.FC = () => {
 
             <h1 className="text-uppercase">Edit Profile Description</h1>
 
+    
 
             { profileData.status === "success" && <EditorSection title="Information About You" initialEditorContent={ profileData?.data[0]?.informationAboutYou } editorContent={ informationAboutYou } setEditorContent={ setInformationAboutYou } saveContent={() => updateProfile()} /> }
             
@@ -89,6 +90,9 @@ const EditProfileDescription: React.FC = () => {
             { profileData.status === "success" && <EditorSection title="Any Other Information" initialEditorContent={ profileData?.data[0]?.anyOtherInfo } editorContent={ anyOtherInfo } setEditorContent={ setAnyOtherInfo } saveContent={() => updateProfile()} /> }
 
             
+           <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/profile/' + profileData.data[0]?.id ) } >Back to profile</IonButton>
+
+
           </div>
 
       </IonContent>

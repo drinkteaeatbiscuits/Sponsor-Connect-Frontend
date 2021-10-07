@@ -231,12 +231,29 @@ const Profile: React.FC = () => {
                 }
 
 
-                { profileTabNumber === 2 && data?.fullDescriptionText && <div className="profile-description">
+                { profileTabNumber === 2 && <div className="profile-description">
 
                     { authState?.user.profile === parseInt(profileId.id) && <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/edit-profile-description') } >Edit Description</IonButton> }
 
-   
-                    <TextEditorContent editorContent={fullDescriptionText} />
+                    {data?.informationAboutYou && <div className="profile-description-section">
+                    <p className="ion-color-dark" style={{paddingLeft: "16px", fontWeight: 700, fontSize: "1.3em"}}>About</p>
+                    <TextEditorContent editorContent={data?.informationAboutYou} />
+                    </div> }
+                    
+                    {data?.competitionInformation && <div className="profile-description-section">
+                      <p className="ion-color-dark" style={{paddingLeft: "16px", fontWeight: 700, fontSize: "1.3em"}}>Competitions</p>
+                    <TextEditorContent editorContent={data?.competitionInformation} />
+                    </div>  }
+                    
+                    {data?.supportersInformation && <div className="profile-description-section">
+                      <p className="ion-color-dark" style={{paddingLeft: "16px", fontWeight: 700, fontSize: "1.3em"}}>Supporters</p>
+                    <TextEditorContent editorContent={data?.supportersInformation} />
+                    </div>  }
+                    
+                    {data?.anyOtherInfo && <div className="profile-description-section">
+                      <p className="ion-color-dark" style={{paddingLeft: "16px", fontWeight: 700, fontSize: "1.3em"}}>Other Info</p>
+                    <TextEditorContent editorContent={data?.anyOtherInfo} />
+                    </div>  }
                   
                   </div>
 
