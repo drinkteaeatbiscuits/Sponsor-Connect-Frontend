@@ -59,12 +59,14 @@ class TextEditor extends React.Component {
 	}
   }
 
+  
+
 
   _handleReturn(command) {
     const { editorState } = this.state;
     if (command.shiftKey) {
       
-		console.log(editorState);
+		//console.log(editorState);
 		
 		this.setState({ editorState: RichUtils.insertSoftNewline(editorState) });
 	  

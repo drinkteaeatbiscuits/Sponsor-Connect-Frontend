@@ -157,7 +157,7 @@ const EditProfile: React.FC = () => {
       );
   }
 
-  let showSports = null;
+  let showSports;
 
   if (filteredSports?.length > 0) {
 

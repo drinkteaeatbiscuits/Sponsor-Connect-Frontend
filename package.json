@@ -5,6 +5,7 @@
   "private": true,
   "dependencies": {
     "@auth0/auth0-react": "^1.5.0",
+    "@fancyapps/ui": "^4.0.5",
     "@ionic/react": "^5.5.0",
     "@ionic/react-router": "^5.5.0",
     "@stripe/react-stripe-js": "^1.4.1",
@@ -47,6 +48,7 @@
     "react-transition-group": "^4.4.2",
     "redraft": "^0.10.2",
     "typescript": "^4.1.3",
+    "url-slug": "^3.0.2",
     "web-vitals": "^0.2.4",
     "workbox-background-sync": "^5.1.4",
     "workbox-broadcast-update": "^5.1.4",

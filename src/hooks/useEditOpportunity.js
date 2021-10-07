@@ -1,18 +1,23 @@
 import { useMutation, useQueryClient } from 'react-query';
 
 const useEditOpportunity = ( opportunityId: any ) => {
+
+  console.log(opportunityId);
   
     const client = useQueryClient();
     
     return useMutation(
       "opportunity",
       async (data: { 
+          id?: any;
           profile: string;
           title?: string;
           description?: string;
           fullDescription?: string;
           images?: object;
           price?: string;
+          slug?: string;
+          published_at?: any;
         
         }) => {
   

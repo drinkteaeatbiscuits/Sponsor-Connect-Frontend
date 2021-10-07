@@ -13,6 +13,8 @@ const useAddOpportunity = () => {
           fullDescription?: string;
           images?: Array;
           price?: string;
+          slug?: string;
+          published_at?: any;
         
         }) => {
   
@@ -23,7 +25,7 @@ const useAddOpportunity = () => {
           credentials: "include",
           method: "POST",
           body: JSON.stringify(data), 
-    });
+      });
   
         return await opportunityResponse.json();
   
@@ -31,6 +33,8 @@ const useAddOpportunity = () => {
       {
         onSuccess: (data) => {
             // console.log(client);
+          return data;
+
           client.invalidateQueries("opportunities");
         }
       }

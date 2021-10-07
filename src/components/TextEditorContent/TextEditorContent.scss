@@ -1,8 +1,10 @@
 .text-editor-content {
-	padding: 0 16px;
+	padding: 0 16px 40px;
 	user-select: text;
     white-space: pre-wrap;
     overflow-wrap: break-word;
+
+	color: var(--ion-color-dark);
 
 	h1, h2, h3, h4, h5, h6 {
 		font-family: 'neue-haas-unica', sans-serif;
