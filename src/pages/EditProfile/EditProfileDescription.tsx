@@ -75,7 +75,7 @@ const EditProfileDescription: React.FC = () => {
       <TabBar activeTab="profile"/>
       <IonContent fullscreen>
 
-          <div className="content">
+          <div className="content edit-profile-description-content">
 
             <h1 className="text-uppercase">Edit Profile Description</h1>
 

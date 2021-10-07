@@ -210,11 +210,11 @@ const App: React.FC = () => {
                 {state.isAuthenticated ? <EditProfile /> : <Login />}
               </Route>
 
-               <Route exact path="/profile/profile-images">
+               <Route exact path="/manage-profile-images">
                 {state.isAuthenticated ? <ProfileImages /> : <Login />}
               </Route>
 
-               <Route exact path="/profile/profile-description">
+               <Route exact path="/edit-profile-description">
                 {state.isAuthenticated ? <EditProfileDescription /> : <Login />}
               </Route>
               

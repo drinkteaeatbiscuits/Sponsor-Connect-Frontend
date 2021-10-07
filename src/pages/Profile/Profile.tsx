@@ -233,7 +233,7 @@ const Profile: React.FC = () => {
 
                 { profileTabNumber === 2 && data?.fullDescriptionText && <div className="profile-description">
 
-                    { authState?.user.profile === parseInt(profileId.id) && <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/profile/profile-description') } >Edit Description</IonButton> }
+                    { authState?.user.profile === parseInt(profileId.id) && <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/edit-profile-description') } >Edit Description</IonButton> }
 
    
                     <TextEditorContent editorContent={fullDescriptionText} />
@@ -245,7 +245,7 @@ const Profile: React.FC = () => {
 
 
                 { profileTabNumber === 3 && <div className="photos">
-                  { authState?.user.profile === parseInt(profileId.id) && <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/profile/profile-images') } >Add/Edit Photos</IonButton> }
+                  { authState?.user.profile === parseInt(profileId.id) && <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/manage-profile-images') } >Add/Edit Photos</IonButton> }
 
                   <div className="profile-images">
                   { profileImages && profileImages.map((profileImage: any) => {
