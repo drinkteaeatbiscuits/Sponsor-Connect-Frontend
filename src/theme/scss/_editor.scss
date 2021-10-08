@@ -1,0 +1,56 @@
+.editor-wrap {
+	background-color: #fff;
+	padding: 16px 8px;
+
+	@media screen and (min-width: 576px) {
+		padding: 16px;
+	}
+}
+
+.editor-content {
+	.content {
+		padding-top: 40px;
+	}
+}
+
+.editor-section {
+	margin: 8px 0;
+	padding: 8px 8px;
+	border-top: 1px solid #F0F0F0;
+
+	.editor-section-top {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+	}
+
+	.editor-section-title {
+		font-weight: 700;
+		font-size: 1.2em;
+		letter-spacing: -0.02em;
+		color: var(--ion-color-dark);
+	}
+
+	.editor-section-button {
+		color: var(--ion-color-primary);
+		font-weight: 500;
+		cursor: pointer;
+		transition: 0.25s color ease-out;
+		&:hover {
+			color: var(--ion-color-primary-hover);
+		}
+	}
+
+	.editor-section-bottom {
+		padding: 15px 0 0;
+	}
+
+	.current-image img {
+		max-width: 500px;
+	}
+
+	ion-input {
+		border: 1px solid #dddddd;
+	}
+
+}

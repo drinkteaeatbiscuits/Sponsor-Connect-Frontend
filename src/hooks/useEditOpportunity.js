@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from 'react-query';
 
 const useEditOpportunity = ( opportunityId: any ) => {
 
-  console.log(opportunityId);
+  // console.log(opportunityId);
   
     const client = useQueryClient();
     
@@ -18,6 +18,7 @@ const useEditOpportunity = ( opportunityId: any ) => {
           price?: string;
           slug?: string;
           published_at?: any;
+          opportunityDescription?: any;
         
         }) => {
   
@@ -38,6 +39,7 @@ const useEditOpportunity = ( opportunityId: any ) => {
             
           client.invalidateQueries("opportunity");
           client.invalidateQueries("opportunities");
+          
         }
       }
     )

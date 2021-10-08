@@ -11,6 +11,10 @@ import useOpportunity from '../../hooks/useOpportunity';
 import useAddOpportunity from '../../hooks/useAddOpportunity';
 import useEditOpportunity from '../../hooks/useEditOpportunity';
 import UploadImage from '../../components/UploadImage/UploadImage';
+import NewImageUpload3 from '../../components/NewImageUpload3/NewImageUpload3';
+import { convertFromRaw, convertToRaw } from 'draft-js';
+import TextEditor from '../../components/TextEditor/TextEditor';
+import OpportunityImagesUpload from '../../components/OpportunityImagesUpload/OpportunityImagesUpload';
 
 
 export interface props { }
@@ -27,7 +31,7 @@ const EditOpportunity: React.FC = () => {
   const { state: authState } = React.useContext(AuthContext);
 
 // console.log(profileId);
-  const { isLoading, data, error } = useOpportunity(opportunityId.id);
+  const { isLoading, isSuccess: opportunitySuccess, refetch: opportunityRefetch, data, error } = useOpportunity(opportunityId.id);
 
   
   const [title, setTitle] = useState<string>("");
@@ -36,8 +40,16 @@ const EditOpportunity: React.FC = () => {
   const [images, setImages] = useState<any>("");
   const [price, setPrice] = useState<string>("");
   const [opportunityError, setOpportunityError] = useState<string>("");
+
+  const [editorContent, setEditorContent] = useState(null);
+
+  const [showEditTitle, setShowEditTitle] = useState(false);
+
+  const [showOpportunityCoverImageUpload, setShowOpportunityCoverImageUpload] = useState(false);
   
-  const {isLoading: isAddingOpportunity, error: addOpportunityError, mutateAsync: editOpportunityMutation} = useEditOpportunity( opportunityId.id );
+  // const {isLoading: isAddingOpportunity, error: addOpportunityError, mutateAsync: editOpportunityMutation} = useEditOpportunity( opportunityId.id );
+
+  const {isLoading: isEditingOpportunity, error: editOpportunityError, mutateAsync: editOpportunityMutation} = useEditOpportunity( opportunityId.id );
 
   useEffect(() => {
     
@@ -47,20 +59,22 @@ const EditOpportunity: React.FC = () => {
       setFullDescription(data.fullDescription);
       setPrice(data.price);
       setImages(data.images);
+      setEditorContent( data?.opportunityDescription && convertFromRaw( data?.opportunityDescription ));
     }
     
   }, [data, isLoading]);
 
   // console.log(images[0]?.url)
-console.log(opportunityId);
+
   
-  const editOpportunity = async () => {
+  const saveOpportunity = async () => {
     
     await editOpportunityMutation({
       profile: authState?.user.profile.id,
       title,
       description,
       fullDescription,
+      opportunityDescription: editorContent && convertToRaw(editorContent),
       // images,
       price,
     });
@@ -83,66 +97,98 @@ console.log(opportunityId);
 
       
       <TabBar activeTab="opportunities" />
-      <IonContent className="opportunity-content" fullscreen>
+      <IonContent className="editor-content" fullscreen>
+      <div className="content">
+        
+        <div className="opportunity">
 
-<div className="content">
-      
+          <h1 style={{color: "var(--ion-color-dark)", lineHeight: 0.8, fontSize: "4em", padding: "15px"}}>EDIT <br/><span style={{color: "var(--ion-color-primary)"}}>OPPORTUNITY</span></h1>
+  
+          <div className="editor-wrap">
+            
 
-        {!isLoading &&
+          { opportunityId && <NewImageUpload3 
+                                    currentImage={ images } 
+                                    setCurrentImage={ setImages } 
+                                    field="images" 
+                                    theref="opportunity" 
+                                    refId={ opportunityId.id }
+                                    imageCropAspectRatio={3 / 1} 
+                                    circularCrop={false}
+                                    // showCroppedPreview={ false }  
+                                    label="Opportunity Cover Image"
+                                    /> 
+             }
 
-          <div className="opportunity">
 
+            <div className="editor-section upload-image-wrap">
 
-                <IonItem className="">
-                    <IonLabel position="stacked">Opportunity Image</IonLabel>
-                   
-                    <UploadImage currentImage={ images } setCurrentImage={ setImages } field="images" theref="opportunity" crop={{ aspect: 2 / 1 }} circularCrop={ false } showCroppedPreview={ false } refId={opportunityId.id} />
-                  </IonItem> 
+                <div className="editor-section-top">
 
-
-            <div className="ion-padding">
-              <IonList>
-
-                  <IonItem>
-                    <IonLabel position="stacked">Title</IonLabel>
-                    <IonInput autocomplete="off" id="opportunity-title" type="text" value={ title } onIonChange={ (e:any) => setTitle(e.detail.value) } />
-                   { opportunityError && <p className="error-message ion-no-margin"><small>{opportunityError}</small></p> }
-                  </IonItem>
+                  <label className="editor-section-title">Opportunity Name</label>
                   
-                  <IonItem>
-                    <IonLabel position="stacked">Price</IonLabel>
-                    <IonInput autocomplete="off" id="opportunity-price" type="text" value={ price } onIonChange={ (e:any) => setPrice(e.detail.value) } />
-                  </IonItem>
+                  <div className="editor-section-top-buttons">
 
-                  <IonItem>
-                    <IonLabel position="stacked">Description</IonLabel>
-                    <IonInput autocomplete="off" id="opportunity-description" type="text" value={ description } onIonChange={ (e:any) => setDescription(e.detail.value) } />
-                  </IonItem>
+                    {!showEditTitle ? <div className="editor-section-button" onClick={() => setShowEditTitle(true)}>Edit</div> : 
+                    <div className="editor-section-button" onClick={() => setShowEditTitle(false)}>Cancel</div> }
 
-                  <IonItem>
-                    <IonLabel position="stacked">Full Description</IonLabel>
-                    <IonInput autocomplete="off" id="opportunity-full-description" type="text" value={ fullDescription } onIonChange={ (e:any) => setFullDescription(e.detail.value) } />
-                  </IonItem>
+                  </div>	
 
+                </div>
+
+                <div className="editor-section-bottom">
                   
-              </IonList>
-              
+                  { !showEditTitle ? title && title : <IonInput autocomplete="off" autocapitalize="on" id="opportunity-title" type="text" value={ title } onIonChange={ (e:any) => setTitle(e.detail.value) } />
+                  }
+
+                  { opportunityError && <p className="error-message ion-no-margin"><small>{opportunityError}</small></p> }
+                </div>
 
             </div>
 
-            
-            <IonButton expand="block" className="add-opportunity" onClick={title ? () => editOpportunity() : () => setOpportunityError('Please enter a title')}>Save</IonButton>
-            <IonButton buttonType="link" className="link" size="small" onClick={() => history.push("/opportunity/" + opportunityId )}>Cancel</IonButton>
+
+
+            <IonList>
+
+                
+                
+                <IonItem>
+                  <IonLabel position="stacked">Price</IonLabel>
+                  <IonInput autocomplete="off" id="opportunity-price" type="number" value={ price } onIonChange={ (e:any) => setPrice(e.detail.value) } />
+                </IonItem>
+
+                <IonItem>
+                  <IonLabel position="stacked">Description</IonLabel>
+                  <IonInput autocomplete="off" autocapitalize="on" id="opportunity-description" type="text" value={ description } onIonChange={ (e:any) => setDescription(e.detail.value) } />
+                </IonItem>
+
+                <IonItem>
+                  <IonLabel position="stacked">Full Description</IonLabel>
+                  <IonInput autocomplete="off" autocapitalize="on" id="opportunity-full-description" type="text" value={ fullDescription } onIonChange={ (e:any) => setFullDescription(e.detail.value) } />
+                </IonItem>
+
+                <IonItem>
+                      <IonLabel position="stacked">Full Description</IonLabel>
+                      {opportunitySuccess &&  <TextEditor 
+                      placeholder="Enter your description here." 
+                      initialText={ data?.opportunityDescription && convertFromRaw( data?.opportunityDescription ) } 
+                      textEditorText={ editorContent } 
+                      setTextEditorText={ setEditorContent } /> }
+                    </IonItem>
+
+            </IonList>
+
+
+            {opportunitySuccess && <OpportunityImagesUpload opportunityData={ data } refetchOpportunityImages={ opportunityRefetch } />}
             
           </div>
+          
+          {opportunitySuccess && <IonButton expand="block" className="add-opportunity" onClick={title ? () => saveOpportunity() : () => setOpportunityError('Please enter a title')}>Save</IonButton>}
 
+          
+          </div>
 
-
-        }
-
-
-</div>
-
+      </div>
 
 
 

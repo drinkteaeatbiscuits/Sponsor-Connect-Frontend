@@ -8,6 +8,7 @@ http://ionicframework.com/docs/theming/ */
 
   /** primary **/
   --ion-color-primary: #0EB59A;
+  --ion-color-primary-hover: #13dfbd;
   --ion-color-primary-rgb: 14, 181, 154;
   --ion-color-primary-contrast: #ffffff;
   --ion-color-primary-contrast-rgb: 255, 255, 255;

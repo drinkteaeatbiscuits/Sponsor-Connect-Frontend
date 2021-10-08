@@ -11,6 +11,7 @@ import useOpportunity from '../../hooks/useOpportunity';
 import { useMutation, useQueryClient } from 'react-query';
 import useDeleteOpportunity from '../../hooks/useDeleteOpportunity';
 import Image from '../../components/Image/Image';
+import OpportunityExpanded from '../../components/OpportunityExpanded/OpportunityExpanded';
 
 export interface props { }
 
@@ -26,89 +27,28 @@ const Opportunity: React.FC = () => {
   const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
 
-  const { isLoading, data, error } = useOpportunity(opportunityId.id);
-  const {isLoading: isDeletingOpportunity, error: deleteOpportunityError, mutateAsync: deleteOpportunityMutation} = useDeleteOpportunity( opportunityId.id );
-
+  const { isLoading, data: opportunityData, error } = useOpportunity(opportunityId.id);
   
-  const deleteOpportunity = async () => {
-    console.log('delete opportunity');
 
-    await deleteOpportunityMutation();
+  // useEffect(() => {
 
-    history.goBack();
+	// }, [opportunityData]);
 
-  }
 
-  // console.log(data?.profile );
 
   return (
     <IonPage>
 
-       
-        <IonToolbar>
-          <IonButtons className="ion-justify-content-around">
-            {/* <IonButton className="" size="small" onClick={() => history.push("/opportunities/" + data?.profile.id )}>Back to Opportunities</IonButton> */}
-            {authState?.user.profile === parseInt(data?.profile.id) && <IonButton className="" size="small" onClick={() => history.push("/edit-opportunity/" + opportunityId.id)}>Edit Opportunity</IonButton>}
-          </IonButtons>
-
-        </IonToolbar>
-
-      
       <TabBar activeTab="opportunities" />
       <IonContent className="opportunity-content" fullscreen>
 
         {!isLoading &&
-        <div className="content">
-          <div className="opportunity">
+          <div className="content">
 
-            {console.log(data)}
-
-            { data?.images && 
-         
-
-          <picture>
-            <source type="image/webp" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xs_" +  data?.images?.hash + ".webp" } />
-            <source type="image/webp" media="(max-width: 768px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_sm_" +  data?.images?.hash + ".webp" } />
-            <source type="image/webp" media="(max-width: 992px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_md_" +  data?.images?.hash + ".webp" } />
-            <source type="image/webp" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_lg_" +  data?.images?.hash + ".webp" } />
-            <source type="image/webp" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xl_" +  data?.images?.hash + ".webp" } />
-
-            <source type="image/jpeg" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xs_" +  data?.images?.hash + ".jpg" } />
-            <source type="image/jpeg" media="(max-width: 768px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_sm_" +  data?.images?.hash + ".jpg" } />
-            <source type="image/jpeg" media="(max-width: 992px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_md_" +  data?.images?.hash + ".jpg" } />
-            <source type="image/jpeg" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_lg_" +  data?.images?.hash + ".jpg" } />
-            <source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xl_" +  data?.images?.hash + ".jpg" } />
-
-            <img className="cover-image" src={  process.env.REACT_APP_S3_URL + "/cover_xl_" + data?.images?.hash + ".jpg" } alt="Profile Cover" />
-          </picture>  
-          
-          }
-
-            <div className="ion-padding">
-              <h1 className="ion-text-uppercase ion-color-dark line-height-1">{data?.title}</h1>
-
-              { data?.price && <p className="price">£{data?.price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p> }
-
-              { data?.description && 
-              <div className="description ion-margin-bottom">
-                {data.description}
-              </div> }
-              { data?.fullDescription && 
-              <div className="full-description">
-               {data.fullDescription} 
-              </div>
-              }
-
-            </div>
-            {authState?.user.profile === parseInt(data?.profile.id) && <IonButtons>
-              <IonButton className="" size="small" onClick={() => history.push("/edit-opportunity/" + opportunityId.id)}>Edit Opportunity</IonButton>
-            
-            <IonButton className="" size="small" onClick={() => deleteOpportunity()}>Delete Opportunity</IonButton></IonButtons>}
+              { opportunityData &&  <OpportunityExpanded opportunityData={opportunityData}  /> }
         
           </div>
-          </div>
         }
-
 
       </IonContent>
     </IonPage>
