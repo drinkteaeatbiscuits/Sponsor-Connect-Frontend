@@ -19,7 +19,6 @@ const EditorSection: React.FC<EditorSectionProps> = ( EditorSectionProps ) => {
 	const [showEditor, setShowEditor ] = useState(false);
 	
 
-
 	return <div className={ ( showEditor ? "show-editor" : "" ) + " editor-section ion-padding"}>
 
 				{title && <p className="font-weight-700 editor-section-title">{ title }</p> }
@@ -43,8 +42,7 @@ const EditorSection: React.FC<EditorSectionProps> = ( EditorSectionProps ) => {
 						<div className="save" onClick={ () => { saveContent(); setShowEditor(false);} }>Save</div> 
 					</div>     
 				</div>  
-
-				
+	
 			</div>
 
 }

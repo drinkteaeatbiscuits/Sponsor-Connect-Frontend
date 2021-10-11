@@ -49,6 +49,7 @@ interface UploadImageProps {
 	imageCropAspectRatio?: any,
 	circularCrop?: boolean,
 	showCroppedPreview?: boolean,
+	label?: any,
 }
 
 
@@ -141,7 +142,7 @@ const NewImageUpload3: React.FC<UploadImageProps> = (UploadImageProps) => {
 	const [file, setFile] = useState<any>("");
 
 	// This function is called when the user taps the edit button, it opens the editor and returns the modified file when done
-const editImage = (image:any, done:any) => {
+	const editImage = (image:any, done:any) => {
     const imageFile = image.pintura ? image.pintura.file : image;
     const imageState = image.pintura ? image.pintura.data : {};
 
@@ -149,7 +150,7 @@ const editImage = (image:any, done:any) => {
     const editor = UploadImageProps.circularCrop ? openEditor({
         src: imageFile,
         imageState,
-		imageCropAspectRatio: UploadImageProps.circularCrop ? 1 : UploadImageProps.imageCropAspectRatio || 16 / 9,
+		imageCropAspectRatio: UploadImageProps.circularCrop ? 1 : UploadImageProps.imageCropAspectRatio || undefined,
 		// Let's draw a circle on top of the editor preview when in the crop util
 		
 		willRenderCanvas: (shapes, state) => {
@@ -197,7 +198,7 @@ const editImage = (image:any, done:any) => {
     }) : openEditor({
         src: imageFile,
         imageState,
-		imageCropAspectRatio: UploadImageProps.circularCrop ? 1 : UploadImageProps.imageCropAspectRatio || 16 / 9,
+		imageCropAspectRatio: UploadImageProps.circularCrop ? 1 : UploadImageProps.imageCropAspectRatio || undefined,
 		locale: myLocale,
 		imageReader: createDefaultImageReader(),
 		...plugin_filter_defaults,
@@ -297,36 +298,50 @@ useEffect(
 		setCroppedImageUrl(null);
 	}
 
-	
-	
 
-	return <div className="upload-image-wrap">
+	const [ showImageUpload, setShowImageUpload ] = useState(false);
 
 	
+	
 
+	return <div className="editor-section upload-image-wrap">
 
-			{ UploadImageProps.currentImage ? 
-			<div className="current-image">
+					<div className="editor-section-top">
 
-				<img onClick={ () => removeImage() } className={ UploadImageProps.circularCrop ? "circle-crop" : "" } alt="current thumbnail" src={  process.env.REACT_APP_S3_URL + "/cover_sm_" +  UploadImageProps.currentImage?.hash + UploadImageProps.currentImage?.ext } />
-				<IonButtons slot="end" className="buttons-end">
-				
-					<IonButton buttonType="link" className="link" onClick={ () => removeImage() } >Remove Image</IonButton>
-				</IonButtons>
-			
-			</div> : 
-			<div className="upload-image">
-				<div {...getRootProps({ className: 'dropzone' })}>
-					<input {...getInputProps()} />
-					<p>Drag 'n' drop some files here, or click to select files</p>
-				</div>
+						<label className="editor-section-title">{ UploadImageProps.label }</label>
+						
+						<div className="editor-section-top-buttons">
+
+							{ UploadImageProps.currentImage ? 
+							<div className="editor-section-button" onClick={() => removeImage()}>Remove Image</div> : 
+							!showImageUpload ? <div className="editor-section-button" onClick={() => setShowImageUpload(true)}>Add Image</div> : 
+							<div className="editor-section-button secondary" onClick={() => setShowImageUpload(false)}>Cancel</div> }
+						
+
+						</div>	
+
+					</div>
+
+					<div className="editor-section-bottom">
+
+						{ UploadImageProps.currentImage ? 
+							<div className="current-image">
+
+								<img className={ UploadImageProps.circularCrop ? "circle-crop" : "" } alt="current thumbnail" src={  process.env.REACT_APP_S3_URL + "/cover_sm_" +  UploadImageProps.currentImage?.hash + UploadImageProps.currentImage?.ext } />
+							
+							</div> : showImageUpload &&
+							<div className="upload-image">
+								<div {...getRootProps({ className: 'dropzone' })}>
+									<input {...getInputProps()} />
+									<p>Drag 'n' drop some files here, or click to select files</p>
+								</div>
+							</div>
+						}
+						
+					</div>
+					
 			</div>
-			}
-            
 
-
-		
-	</div>
 
 }
 

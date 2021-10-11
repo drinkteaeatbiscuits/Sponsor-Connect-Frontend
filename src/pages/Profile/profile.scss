@@ -92,7 +92,7 @@
 	@media screen and (min-width: 768px) {
 		display: flex;
 	}
-	max-width: 980px;
+	max-width: 1100px;
 	margin : 0 auto;
 	
 }
@@ -196,9 +196,12 @@
 
 .profile-tabs {
 	background-color: #fff;
-	padding: 0 15px;
+	padding: 0px;
 	flex-basis: 100%;
 	margin-bottom: 60px;
+	@media screen and ( min-width: 576px ) {
+		padding: 0 15px;
+	}
 	.profile-tab-navigation {
 		display: flex;
 		flex-wrap: wrap;

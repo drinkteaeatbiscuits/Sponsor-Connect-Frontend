@@ -24,46 +24,39 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 
 		
 	
-			{ data?.length > 0 && data?.map(( p:any )=>{
-				return <IonCard className="opportunity" key={p.id} button={true} onClick={ ()=> history.push("/opportunity/" + p.id) }>
+			{ data?.length > 0 && data?.map(( opportunity:any )=>{
+				return <div className="opportunity" key={opportunity.id} onClick={ ()=> history.push("/opportunity/" + opportunity.id) }>
 
 					
-			
-					
+					<div className=" opportunity-details">
 
-						{ p.images && 
-         
-
-		 <picture>
-		   <source type="image/webp" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xs_" +  p.images?.hash + ".webp" } />
-		   <source type="image/webp" media="(max-width: 768px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_sm_" +  p.images?.hash + ".webp" } />
-		   <source type="image/webp" media="(max-width: 992px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_md_" +  p.images?.hash + ".webp" } />
-		   <source type="image/webp" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_lg_" +  p.images?.hash + ".webp" } />
-		   <source type="image/webp" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xl_" +  p.images?.hash + ".webp" } />
-
-		   <source type="image/jpeg" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xs_" +  p.images?.hash + ".jpg" } />
-		   <source type="image/jpeg" media="(max-width: 768px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_sm_" +  p.images?.hash + ".jpg" } />
-		   <source type="image/jpeg" media="(max-width: 992px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_md_" +  p.images?.hash + ".jpg" } />
-		   <source type="image/jpeg" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_lg_" +  p.images?.hash + ".jpg" } />
-		   <source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xl_" +  p.images?.hash + ".jpg" } />
-
-		   <img className="opportunity-image" src={  process.env.REACT_APP_S3_URL + "/cover_xl_" + p.images?.hash + ".jpg" } alt={p.title} />
-		 </picture>  
-		 
-		 }
-					
-
-						<IonCardHeader>
-							{p.price && <p className="price">£{p.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>}
+						
+							{opportunity.price && <p className="price">£{opportunity.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>}
 							
-							{p.title && <IonCardTitle className="title">{p.title}</IonCardTitle> }
-						</IonCardHeader>
+							{opportunity.title && <p className="title">{opportunity.title}</p> }
+					
 			
-						{p.title && <IonCardContent className="description">
-							{p.description} 
-						</IonCardContent> }
+						{opportunity.description && <p className="description">
+							{opportunity.description} 
+						</p> }
 
-				  	</IonCard>
+
+					</div>
+
+			{ opportunity.images && 
+         
+						<div className="opportunity-image-thumb">
+							{/* <img className="opportunity-image" src={  process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" + p.images?.hash + ".jpg" } alt={p.title} /> */}
+							<picture>
+								<source type="image/webp" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  opportunity.images?.hash + ".webp" } />
+								<source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  opportunity.images?.hash + ".jpg" } />
+								<img className="opportunity-image" src={  process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" + opportunity.images?.hash + ".jpg" } alt={opportunity.title} /> 
+							</picture> 
+						</div>
+		 			 }
+						
+
+				  	</div>
 				})}
 
 		
