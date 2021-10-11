@@ -21,15 +21,17 @@ const useEditOpportunity = ( opportunityId: any ) => {
           opportunityDescription?: any;
         
         }) => {
+
+          console.log(data);
   
-      const opportunityResponse = await fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/opportunities/" + opportunityId, {
+        const opportunityResponse = await fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/opportunities/" + opportunityId, {
           headers: {
               "Content-Type": "application/json"
           },
           credentials: "include",
           method: "PUT",
           body: JSON.stringify(data), 
-    });
+        });
   
         return await opportunityResponse.json();
   

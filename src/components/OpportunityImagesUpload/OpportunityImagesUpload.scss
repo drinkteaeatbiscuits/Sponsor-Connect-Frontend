@@ -13,3 +13,136 @@
 		animation: fadedown 0.25s ease-in-out;
 	}
 }
+
+.profile-images-content {
+	max-width: 1200px;
+}
+
+.gallery-images {
+	display: flex;
+	flex-wrap: wrap;
+	background-color: var(--ion-color-light);
+	justify-content: flex-start;
+	padding: 15px;
+	margin: 15px 0;
+	.gallery-image {
+		max-width: 50%;
+		padding: 3px;
+		@media screen and (min-width: 450px) {
+			max-width: 33.333%;
+			padding: 3px;
+		}
+		@media screen and (min-width: 620px) {
+			max-width: 25%;
+			padding: 4px;
+		}
+		@media screen and (min-width: 768px) {
+			max-width: 20%;
+			padding: 5px;
+		}
+		@media screen and (min-width: 992px) {
+			max-width: 16.6666667%;
+			padding: 6px;
+		}
+	}
+	.gallery-image-inner {
+		position: relative;
+		width: 100%;
+		
+		// border: 1px solid #333;
+		
+		box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.1), 
+					inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+
+
+		aspect-ratio: 1/1;
+		border: 1px #ccc solid;
+		
+		// fallback
+		@supports not (aspect-ratio: auto) { 
+			padding-top: 15%;
+			height: 0;
+			position: relative;
+			overflow: hidden;	
+		}
+
+		.is-deleting-overlay {
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.5);
+			position: absolute;
+			z-index: 9;
+			top: 0;
+			left: 0;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+		}
+
+		.hovering-overlay {
+			width: 100%;
+			height: 100%;
+			background-color: rgba(0, 0, 0, 0.5);
+			position: absolute;
+			z-index: 9;
+			top: 0;
+			left: 0;
+			opacity: 0;
+			transition: 0.25s ease-out;
+		}
+
+		.image-controls {
+			position: absolute;
+			bottom: 0;
+			right: 0;
+			
+			// font-size: 0.8em;
+			color: white;
+			z-index: 9;
+
+			opacity: 0;
+			transition: 0.25s ease-out;
+			display: flex;
+			align-items: center;
+			ion-icon {
+				cursor: pointer;
+				transition: 0.25s ease-out;
+				padding: 8px 8px 10px 3px;
+				&:hover {
+					opacity: 0.7;
+				}
+			}
+		}
+
+		.delete-image {
+			font-size: 0.8em;
+			padding: 0 3px;
+			display: none;
+			line-height: 1;
+			cursor: pointer;
+			transition: 0.25s ease-out;
+			&:hover {
+				opacity: 0.7;
+			}
+			&.active {
+				display: block;
+			}
+		}
+
+		&:hover {
+			.hovering-overlay,
+			.image-controls {
+				opacity: 1;
+			}
+		}
+
+		
+
+	}
+	.gallery-image-thumb {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		display: block;
+	}
+}

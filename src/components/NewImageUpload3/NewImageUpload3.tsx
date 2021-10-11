@@ -315,7 +315,7 @@ useEffect(
 							{ UploadImageProps.currentImage ? 
 							<div className="editor-section-button" onClick={() => removeImage()}>Remove Image</div> : 
 							!showImageUpload ? <div className="editor-section-button" onClick={() => setShowImageUpload(true)}>Add Image</div> : 
-							<div className="editor-section-button" onClick={() => setShowImageUpload(false)}>Cancel</div> }
+							<div className="editor-section-button secondary" onClick={() => setShowImageUpload(false)}>Cancel</div> }
 						
 
 						</div>	

@@ -1,6 +1,7 @@
 .editor-wrap {
 	background-color: #fff;
 	padding: 16px 8px;
+	border-radius: 5px;
 
 	@media screen and (min-width: 576px) {
 		padding: 16px;
@@ -10,6 +11,7 @@
 .editor-content {
 	.content {
 		padding-top: 40px;
+		padding-bottom: 120px;
 	}
 }
 
@@ -24,11 +26,18 @@
 		align-items: center;
 	}
 
+
 	.editor-section-title {
 		font-weight: 700;
 		font-size: 1.2em;
 		letter-spacing: -0.02em;
 		color: var(--ion-color-dark);
+	}
+
+	.editor-section-top-buttons {
+		display: flex;
+		gap: 12px;
+		align-items: flex-end;
 	}
 
 	.editor-section-button {
@@ -39,10 +48,25 @@
 		&:hover {
 			color: var(--ion-color-primary-hover);
 		}
+
+		&.secondary {
+			color: var(--ion-color-tertiary);
+			font-size: 0.9em;
+			font-weight: 400;
+			&:hover {
+				color: var(--ion-color-tertiary-tint);
+			}
+		}
 	}
 
 	.editor-section-bottom {
 		padding: 15px 0 0;
+		.text-editor-wrap {
+			display: none;
+		}
+		&.show-editor .text-editor-wrap {
+			display: block;
+		}
 	}
 
 	.current-image img {
@@ -53,4 +77,22 @@
 		border: 1px solid #dddddd;
 	}
 
+}
+
+
+.price .editor-section-bottom  {
+	position: relative;
+    padding-left: 25px;
+}
+
+.currency-display {
+	display: inline-block;
+    position: absolute;
+    left: 5px;
+    font-size: 1.2em;
+    top: 50%;
+    margin-bottom: 0px;
+    color: var(--ion-color-medium);
+    transform: translate(0, -50%);
+    margin-top: 7px;
 }

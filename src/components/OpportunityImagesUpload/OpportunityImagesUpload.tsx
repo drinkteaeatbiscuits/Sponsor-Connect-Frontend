@@ -85,17 +85,17 @@ const OpportunityImagesUpload: React.FC<OpportunityImagesUploadProps> = (Opportu
 	
 		</div>
 
-		<div className="profile-images">
+		<div className="gallery-images">
 			{ opportunityData?.opportunityImages.length > 0 && opportunityData?.opportunityImages.map((image: any) => {
 				
-				return <div key={image.id} className="profile-image" onMouseLeave={(e) => {(e.currentTarget.querySelector('.active')  as HTMLElement)?.classList.remove("active")}}>
-						<div className="profile-image-inner">
+				return <div key={image.id} className="gallery-image" onMouseLeave={(e) => {(e.currentTarget.querySelector('.active')  as HTMLElement)?.classList.remove("active")}}>
+						<div className="gallery-image-inner">
 
 						
 							<picture>
 								<source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  image?.hash + ".webp" } />
 								<source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  image?.hash + ".jpg" } />
-								<img className="profile-image-thumb" alt={ "Profile Image " + image.id } src={ process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  image?.hash + ".jpg" } /> 
+								<img className="gallery-image-thumb" alt={ "Profile Image " + image.id } src={ process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  image?.hash + ".jpg" } /> 
 							</picture>
 
 							<div className="hovering-overlay"></div>
