@@ -4,27 +4,19 @@ const useOpportunity = ( id:any ) => {
 
     const client = useQueryClient();
 
-	
-    
     return useQuery(
       "opportunity " + id,
       async () => {
 
 		if(id){
 
-			const opportunityResponse = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/opportunities/" + id, {
+			const opportunityResponse = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/opportunities/" + id + "?_publicationState=preview", {
 				credentials: 'include'
 			});
-	
-			// console.log(opportunityResponse);
-	
+
 			const opportunity = await opportunityResponse.json();
 
-			
-			
 			client.setQueryData([ "opportunity " + id ], opportunity);
-	
-		   
 	  
 			return opportunity;
 		}

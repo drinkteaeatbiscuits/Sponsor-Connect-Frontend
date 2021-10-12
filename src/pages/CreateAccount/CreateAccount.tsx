@@ -133,7 +133,8 @@ const CreateAccount: React.FC = () => {
           profileName: profileName,
           sport: yourSport,
           location: location,
-          latLong: latLong
+          latLong: latLong,
+          currency: selectedCurrency
           
         }),
         

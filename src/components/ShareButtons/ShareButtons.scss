@@ -1,0 +1,28 @@
+@keyframes fadeinicon {
+	from { opacity: 0; transform: translate(0, 8px); }
+    to { opacity: 1;  transform: translate(0, 0); }
+}
+
+.share-buttons {
+	padding-bottom: 8px;
+	button {
+		margin: 0 1px;
+		opacity: 0;
+		animation: fadeinicon 0.25s forwards ease;
+
+		@for $i from 1 through 10 {
+			&:nth-child(#{$i}) {
+				animation-delay: #{$i * .05}s;
+			}
+		  }
+		  svg {
+			  transition: 0.25s ease-out;
+		  }
+		&:hover {
+			svg {
+				opacity: 0.8;
+		  }
+		}
+		  
+	}
+}

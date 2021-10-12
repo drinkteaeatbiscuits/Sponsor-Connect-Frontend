@@ -7,7 +7,7 @@ const useEditOpportunity = ( opportunityId: any ) => {
     const client = useQueryClient();
     
     return useMutation(
-      "opportunity",
+      "opportunity " + opportunityId,
       async (data: { 
           id?: any;
           profile: string;
@@ -22,7 +22,7 @@ const useEditOpportunity = ( opportunityId: any ) => {
         
         }) => {
 
-          console.log(data);
+          // console.log(data);
   
         const opportunityResponse = await fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/opportunities/" + opportunityId, {
           headers: {
@@ -38,6 +38,8 @@ const useEditOpportunity = ( opportunityId: any ) => {
       },
       {
         onSuccess: (data) => {
+
+          client.setQueryData([ "opportunity " + data.id ], data);
             
           client.invalidateQueries("opportunity");
           client.invalidateQueries("opportunities");

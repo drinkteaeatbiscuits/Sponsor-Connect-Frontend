@@ -40,6 +40,10 @@
 		align-items: flex-end;
 	}
 
+	.error-message {
+		position: relative;
+	}
+
 	.editor-section-button {
 		color: var(--ion-color-primary);
 		font-weight: 500;
@@ -60,21 +64,30 @@
 	}
 
 	.editor-section-bottom {
-		padding: 15px 0 0;
+		padding: 0 0 0;
 		.text-editor-wrap {
 			display: none;
 		}
 		&.show-editor .text-editor-wrap {
 			display: block;
 		}
+		.upload-image, .current-image, ion-input {
+			margin-top: 15px;
+		}
 	}
 
 	.current-image img {
 		max-width: 500px;
+		width: 100%;
+    	height: auto;
 	}
 
 	ion-input {
 		border: 1px solid #dddddd;
+	}
+
+	.text-editor-content {
+		padding: 0;
 	}
 
 }
@@ -95,4 +108,8 @@
     color: var(--ion-color-medium);
     transform: translate(0, -50%);
     margin-top: 7px;
+}
+
+ion-input.price {
+	--padding-end: 8px;
 }

@@ -107,7 +107,9 @@ const EditOpportunity: React.FC = () => {
   
           <div className="editor-wrap">
             
-          { opportunityId && <NewImageUpload3 
+            <EditorSection opportunityId={opportunityId.id} fieldRef="title" label={"Opportunity Name"} currentValue={title} />
+
+            { opportunityId && <NewImageUpload3 
                                     currentImage={ images } 
                                     setCurrentImage={ setImages } 
                                     field="images" 
@@ -119,9 +121,6 @@ const EditOpportunity: React.FC = () => {
                                     label="Opportunity Cover Image"
                                     /> 
              }
-
-            
-            <EditorSection opportunityId={opportunityId.id} fieldRef="title" label={"Opportunity Name"} currentValue={title} />
             
             <EditorSection opportunityId={opportunityId.id} fieldRef="price" className="price" label={"Price"} currentValue={price} fieldType="number" />
             
@@ -136,7 +135,10 @@ const EditOpportunity: React.FC = () => {
               currentValue={ editorContent && editorContent } />
               
 
-            {opportunitySuccess && <OpportunityImagesUpload opportunityData={ data } refetchOpportunityImages={ opportunityRefetch } />}
+            {opportunitySuccess && <OpportunityImagesUpload 
+            opportunityData={ data } 
+            refetchOpportunityImages={ opportunityRefetch }
+            label="Opportunity Images" />}
 
             {opportunitySuccess && <IonButton className="button-tertiary" expand="block" size="small" onClick={() => history.push('/opportunity/' + opportunityId.id)}>Back to Opportunity</IonButton>}
 

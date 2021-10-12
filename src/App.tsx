@@ -124,10 +124,7 @@ const checkIfAuthenticated = async () => {
     credentials: "include",
   });
 
-  
   const profileInfo = await loginResp.json();
-
-  // console.log(profileInfo);
 
   return profileInfo?.statusCode ? false : profileInfo;
 
@@ -146,9 +143,6 @@ const App: React.FC = () => {
 
   wasUserHere && (initialState.isAuthenticated = true);
   wasUserHere && (initialState.user = wasUserHere);
-
-  // console.log(initialState.user);
-
 
   const history = useHistory();
 

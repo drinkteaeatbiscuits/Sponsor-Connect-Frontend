@@ -5,6 +5,8 @@ import { useHistory } from "react-router";
 import { AuthContext } from "../../App";
 import useDeleteOpportunity from "../../hooks/useDeleteOpportunity";
 import useOpportunityValues from "../../hooks/useOpportunityValues";
+import ImageGallery from "../ImageGallery/ImageGallery";
+import ShareButtons from "../ShareButtons/ShareButtons";
 import TextEditorContent from "../TextEditorContent/TextEditorContent";
 
 import './OpportunityExpanded.scss';
@@ -13,37 +15,50 @@ interface OpportunityExpandedProps {
 	opportunityData?: any,
 }
 
+
+
 const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpandedProps) => {
 
 	const history = useHistory();
 	const { state: authState } = React.useContext(AuthContext);
-
 	const { opportunityData } = OpportunityExpandedProps;
-
 	const { isLoading: isDeletingOpportunity, error: deleteOpportunityError, isSuccess: hasDeletedOpportunity, mutateAsync: deleteOpportunityMutation } = useDeleteOpportunity(opportunityData.id);
-
 	const [showDelete, setShowDelete] = useState(false);
-
 	const [opportunityDeleted, setOpportunityDeleted] = useState(false);
 
+	const [isFavourite, setIsFavourite] = useState(false);
+	const [showShare, setShowShare] = useState(false);
+
 	const deleteOpportunity = async () => {
-
 		await deleteOpportunityMutation();
-
 	}
 
 	const setFavourite = async () => {
-		console.log('favourite opportunity');
-	}
+		// console.log('favourite opportunity');
 
+		const favouriteOpportunityResp = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/favourite-opportunity", {
+			method: "POST",
+			credentials: "include",
+			body: JSON.stringify({
+				opportunityId: opportunityData.id
+			})
+		});
+		
+		const favouriteOpportunityInfo = await favouriteOpportunityResp.json();
+
+		favouriteOpportunityInfo.favouriteOpportunities.includes(opportunityData?.id) ? setIsFavourite(true) : setIsFavourite(false);
+
+		return favouriteOpportunityInfo?.statusCode ? false : favouriteOpportunityInfo;  
+
+	}
 
 	useEffect(() => {
 
 		hasDeletedOpportunity && setOpportunityDeleted(true);
 
-		
+		authState?.user.favouriteOpportunities.includes(opportunityData?.id) ? setIsFavourite(true) : setIsFavourite(false);
 
-	}, [hasDeletedOpportunity])
+	}, [hasDeletedOpportunity, authState])
 
 
 
@@ -56,7 +71,8 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 				<div className="opportunity-back">
 					<p onClick={() => history.push("/opportunities/" + opportunityData.profile.id)}>{"< Back to all opportunities"}</p>
 				</div>
-				{authState?.user.profile === parseInt(opportunityData?.profile.id) && <div className="opportunity-owner-actions">
+
+				{ authState?.user.profile === parseInt(opportunityData?.profile.id) && <div className="opportunity-owner-actions">
 
 					{!showDelete && <div className="edit" onClick={() => history.push("/edit-opportunity/" + opportunityData.id)}>Edit</div>}
 
@@ -97,16 +113,21 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 			<div className="opportunity-content">
 
+				{ showShare && <ShareButtons url={ window.location.href } /> }
+
 				<div className="opportunity-content-top">
 
 					{opportunityData?.price && <div className="price">£{opportunityData?.price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>}
 
 					<div className="opportunity-call-to-actions">
-						<div className="favourite">
-							<IonIcon className="" onClick={() => setFavourite()} icon={authState?.user.profile === parseInt(opportunityData?.profile.id) ? star : starOutline}></IonIcon>
+
+						<div className="favourite" onClick={() => setFavourite()}>
+
+							<IonIcon className="" icon={ isFavourite ? star : starOutline}></IonIcon>
+
 						</div>
-						<div className="share">
-							<IonIcon className="" onClick={() => setShowDelete(false)} icon={shareSocialOutline}></IonIcon>
+						<div className="share" onClick={() => setShowShare( showShare ? false : true )}>
+							<IonIcon className=""  icon={shareSocialOutline}></IonIcon>
 						</div>
 						<div className="contact">
 							<IonButton className="contact-button" size="small" >Contact Now</IonButton>
@@ -121,15 +142,15 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 					{opportunityData?.opportunityDescription && <TextEditorContent editorContent={opportunityData?.opportunityDescription} />}
 
+					{opportunityData?.opportunityImages.length > 0 && <ImageGallery images={opportunityData?.opportunityImages} galleryId="Opportunity Images" />}
+			
+
 					<IonButton expand="block" className="interest-button" size="large" >Show an interest in this opportunity</IonButton>
 
 				</div>
 
 
 			</div>
-
-
-
 
 
 		</div> : <div className="opportunity-deleted"><p style={{fontWeight: 700, fontSize: '24px', letterSpacing: "-0.02em"}}>Opportunity Deleted</p> <p style={{cursor: "pointer"}} onClick={() => history.push("/opportunities/" + opportunityData.profile.id)}>{"< Back to all opportunities"}</p> </div> }

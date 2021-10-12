@@ -22,6 +22,9 @@ import SocialMediaTotals from '../../components/SocialMediaTotals/SocialMediaTot
 import ImageSlider from '../../components/ImageSlider/ImageSlider';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
 import TextEditorContent from '../../components/TextEditorContent/TextEditorContent';
+import OpportunityExpanded from '../../components/OpportunityExpanded/OpportunityExpanded';
+import useOpportunity from '../../hooks/useOpportunity';
+import ContactProfile from '../../components/ContactProfile/ContactProfile';
 
 export interface props {}
 
@@ -42,6 +45,8 @@ const Profile: React.FC = () => {
 
   const [profileTabNumber, setProfileTabNumber] = useState(1);
 
+  const [opportunityData, setOpportunityData] = useState();
+
   error && console.log(error);
 
   useEffect(() => {
@@ -53,6 +58,8 @@ const Profile: React.FC = () => {
   }, [data?.fullDescriptionText, isSuccess])
 
   // fullDescriptionText && console.log( fullDescriptionText );
+
+
 
 
   Fancybox.bind("[data-fancybox]", {
@@ -220,7 +227,8 @@ const Profile: React.FC = () => {
                {profileTabNumber === 1 && 
                 <div className="profile-opportunities">
                     <h2 className="ion-color-dark line-height-12 tab-title">Sponsorship Opportunities</h2>
-            
+          
+                    
                     <OpportunitiesList profileId={ profileId.id } />
 
                     <div className="other-sponsorship-ideas ion-padding">
@@ -229,6 +237,8 @@ const Profile: React.FC = () => {
                     </div>
                   </div>
                 }
+
+                
 
 
                 { profileTabNumber === 2 && <div className="profile-description">
@@ -289,6 +299,7 @@ const Profile: React.FC = () => {
 
                 { profileTabNumber === 4 && <div className="contact">
                   
+                  <ContactProfile profileId={profileId.id} label="Contact" />
                 </div> }
           
           </div>

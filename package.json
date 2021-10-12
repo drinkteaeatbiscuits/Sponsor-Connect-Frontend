@@ -45,6 +45,8 @@
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
+    "react-select": "^4.3.1",
+    "react-share": "^4.4.0",
     "react-transition-group": "^4.4.2",
     "redraft": "^0.10.2",
     "typescript": "^4.1.3",

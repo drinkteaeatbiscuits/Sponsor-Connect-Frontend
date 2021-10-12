@@ -76,9 +76,11 @@ const ProfileImages: React.FC = () => {
 		<TabBar activeTab="profile"/>
 		<IonContent fullscreen>
 			<div className="content profile-images-content">
-				<p>Profile Images</p>
+			<div className="editor-wrap">
+			
+
 				<div className="upload-image">
-					{showImageUpload && <NewImageUpload3 
+					<NewImageUpload3 
 						currentImage={ uploadedImage} 
 						setCurrentImage={ setUploadedImage } 
 						field="images" 
@@ -87,8 +89,9 @@ const ProfileImages: React.FC = () => {
 						imageCropAspectRatio={null} 
 						circularCrop={false}
 						// showCroppedPreview={ false }  
-						/> }
-					{!showImageUpload && <IonButton onClick={() => { setHasRefetched(false); setShowImageUpload(true); resetDeletingImage(); }}>Add New</IonButton>}
+						label="Profile Images"
+						/> 
+	
 						
 				</div>
 				<div className="profile-images">
@@ -115,8 +118,7 @@ const ProfileImages: React.FC = () => {
 										
 									</div>
 
-									
-							
+
 								{isDeletingImage && <div className="is-deleting-overlay"><IonSpinner name="dots" color="light" /></div>}
 							</div>
 						</div>
@@ -124,13 +126,12 @@ const ProfileImages: React.FC = () => {
 					})
 					}
 				</div>
-
-
 				
+				<IonButton className="button-tertiary" expand="block" size="small" onClick={() => history.push('/profile/' + authState?.user.profile )} >Back to Profile</IonButton>
 
 			</div>
 			
-
+			</div>
 
 		</IonContent>
 		</IonPage>
