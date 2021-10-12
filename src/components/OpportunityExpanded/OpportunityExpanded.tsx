@@ -56,7 +56,7 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 		hasDeletedOpportunity && setOpportunityDeleted(true);
 
-		authState?.user.favouriteOpportunities.includes(opportunityData?.id) ? setIsFavourite(true) : setIsFavourite(false);
+		authState?.user?.favouriteOpportunities?.length > 0 && authState?.user.favouriteOpportunities.includes(opportunityData?.id) ? setIsFavourite(true) : setIsFavourite(false);
 
 	}, [hasDeletedOpportunity, authState])
 
