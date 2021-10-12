@@ -50,6 +50,7 @@ interface UploadImageProps {
 	circularCrop?: boolean,
 	showCroppedPreview?: boolean,
 	label?: any,
+	showUploadArea?: boolean,
 }
 
 
@@ -119,8 +120,9 @@ const NewImageUpload3: React.FC<UploadImageProps> = (UploadImageProps) => {
 				request.onload = () => {
 					if (request.status >= 200 && request.status < 300) {
 
-
 						UploadImageProps.setCurrentImage(JSON.parse(request.response)[0]);
+
+						setShowImageUpload(false);
 
 						// store request in state so it can be accessed by other processes
 						state.store = request;
@@ -219,11 +221,7 @@ const NewImageUpload3: React.FC<UploadImageProps> = (UploadImageProps) => {
     });
 };
 
-
-
 const onDrop = (acceptedFiles:any) => editImage(acceptedFiles[0], () => {});
-
-
 
 const {getRootProps, getInputProps, isDragActive} = useDropzone({accept: 'image/*', onDrop});
 
@@ -256,7 +254,7 @@ const thumbs = <div key={file?.name}>
 
 
 useEffect(
-	() => () => {
+	() => {
 		// Make sure to revoke the data uris to avoid memory leaks
 		URL.revokeObjectURL(file.preview);
 	},

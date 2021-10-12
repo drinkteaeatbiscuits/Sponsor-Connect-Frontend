@@ -15,11 +15,12 @@ import './OpportunityImagesUpload.scss';
 interface OpportunityImagesUploadProps {
 	opportunityData?: any,
 	refetchOpportunityImages?: any,
+	label?: string,
 }
 
 const OpportunityImagesUpload: React.FC<OpportunityImagesUploadProps> = (OpportunityImagesUploadProps) => {
 
-	const {opportunityData, refetchOpportunityImages} = OpportunityImagesUploadProps;
+	const {opportunityData, refetchOpportunityImages, label} = OpportunityImagesUploadProps;
 
 	const history = useHistory();
 	const { state: authState } = React.useContext(AuthContext);
@@ -57,21 +58,21 @@ const OpportunityImagesUpload: React.FC<OpportunityImagesUploadProps> = (Opportu
 
 
 
-	return <div className="opportunity-images-upload editor-section">
+	return <div className="opportunity-images-upload">
 
-		<div className="editor-section-top">
-			<label className="editor-section-title">Opportunity Images</label>
+		{/* <div className="editor-section-top">
+			<label className="editor-section-title">{ label }</label>
 			<div className="editor-section-top-buttons">
 				{!showImageUpload ? <div className="editor-section-button" onClick={() => { setHasRefetched(false); setShowImageUpload(true); resetDeletingImage(); }}>Add New</div> : 
 				<div className="editor-section-button" onClick={() => { setShowImageUpload(false); }}>Cancel</div> }
 			</div>	
-		</div>
+		</div> */}
 
 		
 
 		<div className="upload-image">
 
-			{showImageUpload && <NewImageUpload3 
+			<NewImageUpload3 
 				currentImage={ uploadedImage } 
 				setCurrentImage={ setUploadedImage } 
 				field="opportunityImages" 
@@ -79,8 +80,10 @@ const OpportunityImagesUpload: React.FC<OpportunityImagesUploadProps> = (Opportu
 				refId={ opportunityData.id }
 				imageCropAspectRatio={null} 
 				circularCrop={false}
+				label={ label }
 				// showCroppedPreview={ false }  
-				/> }
+				showUploadArea={showImageUpload}
+				/>
 
 	
 		</div>

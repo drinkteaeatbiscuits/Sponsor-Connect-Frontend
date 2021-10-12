@@ -1,0 +1,21 @@
+.contact-form {
+	// background-color: var(--ion-color-light);
+	// border-radius: 20px;
+	padding: 0 32px;
+	margin: 0 auto;
+	max-width: 500px;
+	.contact-form-group {
+		ion-input {
+			border: 1px var(--ion-color-tertiary-tint) solid;
+			border-radius: 4px;
+			margin: 0.25em 0 1em;
+			--padding-start: 12px;
+			--padding-top: 12px;
+			--padding-bottom: 12px;
+		}
+		ion-label {
+			font-size: 0.9em;
+			font-weight: 700;
+		}
+	}
+}
