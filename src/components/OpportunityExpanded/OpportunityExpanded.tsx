@@ -46,7 +46,7 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 		
 		const favouriteOpportunityInfo = await favouriteOpportunityResp.json();
 
-		favouriteOpportunityInfo.favouriteOpportunities.includes(opportunityData?.id) ? setIsFavourite(true) : setIsFavourite(false);
+		favouriteOpportunityInfo?.favouriteOpportunities?.length > 0 && favouriteOpportunityInfo.favouriteOpportunities.includes(opportunityData?.id) ? setIsFavourite(true) : setIsFavourite(false);
 
 		return favouriteOpportunityInfo?.statusCode ? false : favouriteOpportunityInfo;  
 
