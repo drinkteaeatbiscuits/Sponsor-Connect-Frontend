@@ -299,7 +299,7 @@ const Profile: React.FC = () => {
 
                 { profileTabNumber === 4 && <div className="contact">
                   
-                  <ContactProfile profileId={profileId.id} label="Contact" />
+                  <ContactProfile profileId={profileId.id} label="Contact" profileData={data} />
                 </div> }
           
           </div>
