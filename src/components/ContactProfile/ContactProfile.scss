@@ -13,6 +13,9 @@
 			--padding-top: 12px;
 			--padding-bottom: 12px;
 		}
+		ion-textarea {
+			min-height: 70px;
+		}
 		ion-label {
 			font-size: 0.9em;
 			font-weight: 700;

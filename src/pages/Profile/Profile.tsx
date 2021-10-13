@@ -171,7 +171,7 @@ const Profile: React.FC = () => {
               
               } 
               <div className="contact-button ion-padding-top">
-                <IonButton expand="block" className="contact-now ">Contact Now</IonButton>
+                <IonButton expand="block" onClick={() => setProfileTabNumber(4)} className="contact-now ">Contact Now</IonButton>
               </div>
               
 
@@ -213,9 +213,9 @@ const Profile: React.FC = () => {
           
           </div>
 
+          {/* {console.log(data)} */}
 
-
-            <div className= "profile-tabs">
+            <div className={ "profile-tabs active-tab-" + profileTabNumber } >
               <div className="profile-tab-navigation">
                 <p className={profileTabNumber === 1 ? "active" : ""} onClick={() => setProfileTabNumber(1)}>Sponsorship</p>
                 <p className={profileTabNumber === 2 ? "active" : ""} onClick={() => setProfileTabNumber(2)}>Description</p>
@@ -224,8 +224,8 @@ const Profile: React.FC = () => {
               </div>
 
 
-               {profileTabNumber === 1 && 
-                <div className="profile-opportunities">
+                
+                <div className="profile-tab profile-opportunities">
                     <h2 className="ion-color-dark line-height-12 tab-title">Sponsorship Opportunities</h2>
           
                     
@@ -236,14 +236,18 @@ const Profile: React.FC = () => {
                       Please get in touch <a href="/">here.</a></p>
                     </div>
                   </div>
-                }
+               
 
                 
 
 
-                { profileTabNumber === 2 && <div className="profile-description">
+                <div className="profile-tab profile-description">
+
+                  
 
                     { authState?.user.profile === parseInt(profileId.id) && <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/edit-profile-description') } >Edit Description</IonButton> }
+
+                    
 
                     {data?.informationAboutYou && <div className="profile-description-section">
                     <p className="ion-color-dark" style={{paddingLeft: "16px", fontWeight: 700, fontSize: "1.3em"}}>About</p>
@@ -267,17 +271,18 @@ const Profile: React.FC = () => {
                   
                   </div>
 
-                   }
+                   
 
 
 
-                { profileTabNumber === 3 && <div className="photos">
+              <div className="profile-tab photos">
+
                   { authState?.user.profile === parseInt(profileId.id) && <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/manage-profile-images') } >Add/Edit Photos</IonButton> }
 
-                  <div className="profile-images">
-                  { profileImages && profileImages.map((profileImage: any) => {
+                  { profileImages.length > 0 && <div className="profile-images">
+                  { profileImages.map((profileImage: any) => {
 						
-                  return <div key={profileImage.id} className="profile-image" onMouseLeave={(e) => {(e.currentTarget.querySelector('.active')  as HTMLElement)?.classList.remove("active")}}>
+                    return <div key={profileImage.id} className="profile-image" onMouseLeave={(e) => {(e.currentTarget.querySelector('.active')  as HTMLElement)?.classList.remove("active")}}>
                           <div className="profile-image-inner">
                           <a
                               href={profileImage?.url}
@@ -292,15 +297,16 @@ const Profile: React.FC = () => {
                         </div>
                       </div>
                   
-                })
-                }
-                  </div>  
-                </div> }
+                    })
+                  }
+                  </div> }
 
-                { profileTabNumber === 4 && <div className="contact">
+                </div> 
+
+                <div className="profile-tab contact">
                   
                   <ContactProfile profileId={profileId.id} label="Contact" profileData={data} />
-                </div> }
+                </div> 
           
           </div>
           

@@ -46,7 +46,7 @@ const Login: React.FC<props> = () => {
 
       // console.log(loginInfo);
 
-      loginInfo.user.accountType !== "Business" && ( loginInfo.user.profile = loginInfo.user.profile.id )
+      loginInfo.user.role.id !== 3 && ( loginInfo.user.profile = loginInfo.user.profile.id )
 
       dispatch && dispatch({
         type: "setUser",
@@ -78,11 +78,11 @@ const Login: React.FC<props> = () => {
               <div className="login-form">
                 <IonItem className="ion-no-padding">
                   <IonLabel position="stacked">Username</IonLabel>
-                  <IonInput type="email" onKeyUp={(e: any) => keyUp(e)} onIonChange={(e: any) => setUsername(e.detail.value)} />
+                  <IonInput type="email" onKeyUp={(e: any) => keyUp(e)} onIonInput={(e: any) => setUsername(e.target.value)} onIonChange={(e: any) => setUsername(e.detail.value)} />
                 </IonItem>
                 <IonItem className="ion-no-padding">
                   <IonLabel position="stacked">Password</IonLabel>
-                  <IonInput type="password" onKeyUp={(e: any) => keyUp(e)} onIonChange={(e: any) => setPassword(e.detail.value)} />
+                  <IonInput type="password" onKeyUp={(e: any) => keyUp(e)} onIonInput={(e: any) => setPassword(e.target.value)} onIonChange={(e: any) => setPassword(e.detail.value)} />
                   
                 </IonItem>
                 
