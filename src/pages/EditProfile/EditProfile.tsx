@@ -29,6 +29,10 @@ import UploadImage from '../../components/UploadImage/UploadImage';
 import { constructOutline, closeCircleOutline, happy, close } from 'ionicons/icons';
 import NewImageUpload3 from '../../components/NewImageUpload3/NewImageUpload3';
 import TextEditor from '../../components/TextEditor/TextEditor';
+import TabBar from '../../components/TabBar';
+import EditorSection from '../../components/EditorSection/EditorSection';
+import EditorSectionProfile from '../../components/EditorSection/EditorSectionProfile';
+import useEditProfileField from '../../hooks/useEditProfileField';
 
 export interface props {}
 
@@ -40,6 +44,8 @@ const EditProfile: React.FC = () => {
   const { state: authState } = React.useContext(AuthContext);
 
   const {isLoading, error, mutateAsync: addProfileMutation} = useUpdateProfile();
+  const {isLoading: isEditingOpportunity, error: editOpportunityError, isSuccess, mutateAsync: editProfileMutation} = useEditProfileField( authState?.user.profile.id );
+
   const profileData = useMyProfile();
   
   const [profileName, setProfileName] = useState("");
@@ -53,6 +59,7 @@ const EditProfile: React.FC = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [latLong, setLatLong] = useState<any>("");
   const [searchText, setSearchText] = useState<string>("");
+  const [showLocation, setShowLocation] = useState<boolean>(false);
 
   const [filteredSports, setFilteredSports] = useState<any>(sports);
   
@@ -96,6 +103,17 @@ const EditProfile: React.FC = () => {
     });
     
     history.goBack();
+  }
+
+
+  const saveField = async (fieldName: string, fieldData: any) => {
+
+    let newEditorContent;
+		newEditorContent = {};
+		newEditorContent[fieldName] = fieldData;
+
+    await editProfileMutation( newEditorContent );
+
   }
 
   error && console.log(error);
@@ -271,83 +289,89 @@ const EditProfile: React.FC = () => {
 
   return (
     <IonPage>
-      <IonToolbar color="light" className="toolbar">
-        <IonButtons slot="start">
-          
-          <IonButton onClick={()=> updateProfile()}>CANCEL</IonButton>
-      
-        </IonButtons>
-        <IonTitle className="ion-text-center" >Edit Profile</IonTitle>
-        <IonButtons slot="end">
-          
-          <IonButton onClick={()=> updateProfile()}>&nbsp;&nbsp;SAVE</IonButton>
-        
-          
-        </IonButtons>
-			</IonToolbar>
-      <IonContent className="edit-profile" fullscreen>
-        
-          <IonLoading isOpen={isLoading} message="Updating Profile" />
-          <IonLoading isOpen={profileData.isLoading} message="Loading Profile" />
-            
-          {/* <IonButton fill="clear" expand="full" onClick={()=> history.push( "/opportunities/" )}>Opportunities</IonButton>
-          <IonButton fill="clear" expand="full" onClick={()=> history.push( "/dashboard/" )}>Back to Dashboard</IonButton> */}
-          <div className="content">
-          {  !profileData.isLoading && profileData.data?.map((p: any) => { 
-            return (
-              <div className="ion-text-center" key={p.id}>
-
-                  <IonItem className="">
-                    <IonLabel position="stacked">Cover Image</IonLabel>
-
-                    <NewImageUpload3 
-                    currentImage={ coverImage } 
-                    setCurrentImage={ setCoverImage } 
-                    field="coverImage" 
-                    theref="profile" 
-                    refId={ authState?.user.profile }
-                    imageCropAspectRatio={3 / 1} 
-                    circularCrop={false}
-                    // showCroppedPreview={ false }  
-                    />
       
 
-                    {/* <UploadImage currentImage={ coverImage } setCurrentImage={ setCoverImage } field="coverImage" theref="profile" crop={{ aspect: 3 / 1 }} circularCrop={ false } showCroppedPreview={ false } /> */}
-                  </IonItem> 
+      <TabBar activeTab="profile" />
+      <IonContent className="editor-content" fullscreen>
+        <div className="content">
+          <div className="edit-profile">
+            <h1 style={{color: "var(--ion-color-dark)", lineHeight: 0.8, fontSize: "4em", padding: "15px"}}>EDIT <br/><span style={{color: "var(--ion-color-primary)"}}>PROFILE</span></h1>
+            <div className="editor-wrap">
+
+              <EditorSectionProfile profileId={authState?.user.profile} fieldRef="profileName" label={"Profile Name"} currentValue={profileName} />
+
+              <NewImageUpload3 
+                currentImage={ coverImage } 
+                setCurrentImage={ setCoverImage } 
+                field="coverImage" 
+                theref="profile" 
+                refId={ authState?.user.profile }
+                imageCropAspectRatio={3 / 1} 
+                circularCrop={false}
+                // showCroppedPreview={ false }
+                label="Cover Image"  
+                />
+
+              <NewImageUpload3 
+                className="profile-picture-upload"
+                currentImage={ currentProfilePicture } 
+                setCurrentImage={ setCurrentProfilePicture } 
+                field="profilePicture" 
+                theref="profile" 
+                refId={ authState?.user.profile }
+                imageCropAspectRatio={1} 
+                circularCrop={true}
+                // showCroppedPreview={ false }
+                label="Profile Picture"  
+                />
+
+
+              <div className="editor-section">
+
+                <div className="editor-section-top">
+
+                  <label className="editor-section-title">Your Sport</label>
+
+                  <div className="editor-section-top-buttons">
+
+                    { profileData.isSuccess && yourSport === profileData?.data[0]?.sport && <div className="editor-section-button" onClick={() => { setShowModal(true); focusOnSport(); }}>{ yourSport ? "Edit" : "Add"}</div> }
+
+                    { profileData.isSuccess && yourSport !== profileData?.data[0]?.sport && <div className="editor-section-button" onClick={() => { saveField("sport", yourSport ) }}>Save</div> }
+ 
+                  </div>	
+
+                </div>
+
+                <div className="editor-section-bottom">
                 
+                  <div className="">{ yourSport }</div>
+                  {/* <IonInput placeholder="Please select your sport" value= readonly={true} type="text"  />  */}
 
-                  <IonItem className="profile-picture-upload">
-                    <IonLabel position="stacked">Profile Picture</IonLabel>
-                    <NewImageUpload3 
-                    currentImage={ currentProfilePicture } 
-                    setCurrentImage={ setCurrentProfilePicture } 
-                    field="profilePicture" 
-                    theref="profile" 
-                    refId={ authState?.user.profile }
-                    imageCropAspectRatio={1} 
-                    circularCrop={true}
-                    // showCroppedPreview={ false }  
-                    />
-                    {/* <UploadImage currentImage={ currentProfilePicture } setCurrentImage={ setCurrentProfilePicture } field="profilePicture" theref="profile" crop={{ aspect: 1 / 1 }} circularCrop={ true } showCroppedPreview={ false } /> */}
-                  </IonItem> 
+                </div>
 
-
-                  <IonItem>
-                    <IonLabel position="stacked">Profile Name</IonLabel>
-                    <IonInput type="text" value={ profileName ? profileName : p.profileName } onIonChange={ (e:any) => setProfileName(e.detail.value) } />
-                  </IonItem>
-
-                      <IonItem>
-                        <IonLabel position="stacked">Your Sport</IonLabel>
-                        <IonInput placeholder="Please select your sport" value={ yourSport ? yourSport : p.sport } readonly={true} type="text" onClick={() => { setShowModal(true); focusOnSport(); }} onFocus={() => {setShowModal(true); focusOnSport(); }} />
-                      </IonItem>
-
-                      <IonItem className="location-item">
-
-                        <IonLabel className="location-label" position="stacked" >Location</IonLabel>
-                        
+              </div>
               
-                        <GooglePlacesAutocomplete
+              <div className="editor-section">
+
+                <div className="editor-section-top">
+
+                  <label className="editor-section-title">Location</label>
+
+                  <div className="editor-section-top-buttons">
+
+                    { profileData.isSuccess && location.label === profileData?.data[0]?.location.label && (!showLocation && <div className="editor-section-button" onClick={() => { setShowLocation(true); }}>{ location ? "Edit" : "Add"}</div>) }
+
+                    { showLocation && <div className="editor-section-button" onClick={() => { saveField("location", location ); setShowLocation(false); }}>Save</div> }
+ 
+                  </div>	
+
+                </div>
+                
+                <div className={"editor-section-bottom " + (location.label ? "" : "")}>
+                      
+                      { !showLocation && (location ? location.label : "Add a location...")}
+
+                      {showLocation && <GooglePlacesAutocomplete
                           apiKey="AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q"
                           selectProps={{
                             location: location,
@@ -361,7 +385,41 @@ const EditProfile: React.FC = () => {
                               country: ['uk', 'ie'],
                             }
                           }}
-                        />
+                        /> }
+                  {/* <IonInput placeholder="Please select your sport" value= readonly={true} type="text"  />  */}
+
+                </div> 
+
+              </div>
+
+
+              <EditorSectionProfile profileId={authState?.user.profile} fieldRef="website" label={"Website"} currentValue={website} />
+
+
+            </div>
+
+          </div>
+        </div>
+      
+     
+        
+          <IonLoading isOpen={isLoading} message="Updating Profile" />
+          <IonLoading isOpen={profileData.isLoading} message="Loading Profile" />
+            
+          {/* <IonButton fill="clear" expand="full" onClick={()=> history.push( "/opportunities/" )}>Opportunities</IonButton>
+          <IonButton fill="clear" expand="full" onClick={()=> history.push( "/dashboard/" )}>Back to Dashboard</IonButton> */}
+          <div className="content">
+          {  !profileData.isLoading && profileData.data?.map((p: any) => { 
+            return (
+              <div className="ion-text-center" key={p.id}>
+
+
+                      <IonItem className="location-item">
+
+                        <IonLabel className="location-label" position="stacked" >Location</IonLabel>
+                        
+              
+                      
 
                       </IonItem>
 

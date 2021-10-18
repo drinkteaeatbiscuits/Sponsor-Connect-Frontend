@@ -1,3 +1,7 @@
+.edit-profile {
+	padding-top: 60px;
+}
+
 .location-item {
 	position: relative;
 	z-index: 99;
@@ -37,18 +41,14 @@ ion-buttons.buttons-end {
 	cursor: pointer;
 }
 
-.edit-profile {
-	padding-bottom: 40px;
-	--offset-bottom: 40px;
-	--padding-bottom: 40px;
-}
+
 
 .upload-image-wrap .circle-crop {
 	border-radius: 100%;
 	
 }
 
-.profile-picture-upload .upload-image-wrap .circle-crop {
+.profile-picture-upload.upload-image-wrap .circle-crop {
 	display: inline-block;
 	width: 124px;
 	height: 124px;

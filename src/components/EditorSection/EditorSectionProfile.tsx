@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { AuthContext } from "../../App";
 import useEditOpportunity from "../../hooks/useEditOpportunity";
 import useEditOpportunityField from "../../hooks/useEditOpportunityField";
+import useEditProfileField from "../../hooks/useEditProfileField";
 import TextEditor from "../TextEditor/TextEditor";
 import TextEditorContent from "../TextEditorContent/TextEditorContent";
 
@@ -12,13 +13,13 @@ interface EditorSectionProps {
 	currentValue?: any;
 	fieldType?: any;
 	className?: string;
-	opportunityId?: any;
+	profileId?: any;
 	fieldRef?: any;
 }
  
-const EditorSection: React.FC<EditorSectionProps> = (EditorSectionProps) => {
+const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) => {
 
-	const { label, currentValue, fieldType, className, opportunityId, fieldRef } = EditorSectionProps;
+	const { label, currentValue, fieldType, className, profileId, fieldRef } = EditorSectionProps;
 	const { state: authState } = React.useContext(AuthContext);
 
 	const [ showEdit, setShowEdit ] = useState(false);
@@ -27,9 +28,10 @@ const EditorSection: React.FC<EditorSectionProps> = (EditorSectionProps) => {
 
 	const [editorContent, setEditorContent] = useState(null);
 
-	const {isLoading: isEditingOpportunity, error: editOpportunityError, isSuccess, mutateAsync: editOpportunityMutation} = useEditOpportunityField( opportunityId );
+	const {isLoading: isEditingOpportunity, error: editOpportunityError, isSuccess, mutateAsync: editProfileMutation} = useEditProfileField( profileId );
 
 
+	// console.log(sectionData);
 
 	useEffect(() => {
 
@@ -46,10 +48,11 @@ const EditorSection: React.FC<EditorSectionProps> = (EditorSectionProps) => {
 
 	}, [currentValue, isSuccess]);
 
+	
 
 	const saveField = async ( sectionData ) => {
 
-		await editOpportunityMutation( sectionData.sectionData );
+		await editProfileMutation( sectionData.sectionData );
 
 	}
 
@@ -59,7 +62,7 @@ const EditorSection: React.FC<EditorSectionProps> = (EditorSectionProps) => {
 		newEditorContent = {};
 		newEditorContent[fieldRef] = editorContent.editorContent && convertToRaw(editorContent.editorContent);
 
-		await editOpportunityMutation( newEditorContent );
+		await editProfileMutation( newEditorContent );
 
 	}
 
@@ -119,4 +122,4 @@ const EditorSection: React.FC<EditorSectionProps> = (EditorSectionProps) => {
 
 }
  
-export default EditorSection;
+export default EditorSectionProfile;

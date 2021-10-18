@@ -5,7 +5,7 @@ const useEditOpportunityField = ( opportunityId: any ) => {
     const client = useQueryClient();
     
     return useMutation(
-      "opportunity",
+      "opportunity-" + opportunityId,
       async ( data ) => {
   
       const opportunityResponse = await fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/opportunities/" + opportunityId, {
@@ -23,7 +23,7 @@ const useEditOpportunityField = ( opportunityId: any ) => {
       {
         onSuccess: (data) => {
             
-          client.invalidateQueries("opportunity " + opportunityId);
+          client.invalidateQueries("opportunity-" + opportunityId);
           client.invalidateQueries("opportunities");
           
         }

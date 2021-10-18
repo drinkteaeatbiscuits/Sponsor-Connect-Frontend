@@ -51,6 +51,7 @@ interface UploadImageProps {
 	showCroppedPreview?: boolean,
 	label?: any,
 	showUploadArea?: boolean,
+	className?: string,
 }
 
 
@@ -302,7 +303,7 @@ useEffect(
 	
 	
 
-	return <div className="editor-section upload-image-wrap">
+	return <div className={"editor-section upload-image-wrap " + ( UploadImageProps.className && UploadImageProps.className )  }>
 
 					<div className="editor-section-top">
 

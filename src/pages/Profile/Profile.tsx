@@ -1,6 +1,6 @@
-import { IonButton, IonButtons, IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonItem, IonLabel, IonList, IonLoading, IonPage, IonSkeletonText, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonItem, IonLabel, IonList, IonLoading, IonPage, IonSkeletonText, IonTitle, IonToolbar, useIonViewDidEnter, useIonViewWillEnter } from '@ionic/react';
 import Header from '../../components/Header';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams, useLocation } from 'react-router';
 import Cookies from 'js-cookie';
 import { AuthContext } from "../../App";
 import React, { useEffect, useState } from 'react';
@@ -34,6 +34,8 @@ interface ParamTypes {
 
 const Profile: React.FC = () => {
 
+  const thelocation = useLocation<any>();
+
   const profileId = useParams<ParamTypes>();
 	const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
@@ -54,12 +56,10 @@ const Profile: React.FC = () => {
     isSuccess && setFullDescriptionText(  data?.fullDescriptionText  );
 
     isSuccess && setProfileImages( data?.images );
+
+    thelocation && thelocation?.state?.tab === "contact" ? setProfileTabNumber(4) : setProfileTabNumber(1);
     
-  }, [data?.fullDescriptionText, isSuccess])
-
-  // fullDescriptionText && console.log( fullDescriptionText );
-
-
+  }, [data?.fullDescriptionText, isSuccess, thelocation])
 
 
   Fancybox.bind("[data-fancybox]", {
@@ -171,7 +171,7 @@ const Profile: React.FC = () => {
               
               } 
               <div className="contact-button ion-padding-top">
-                <IonButton expand="block" className="contact-now ">Contact Now</IonButton>
+                <IonButton expand="block" className="contact-now " onClick={() => setProfileTabNumber(4)}>Contact Now</IonButton>
               </div>
               
 
@@ -316,3 +316,7 @@ const Profile: React.FC = () => {
 };
 
 export default Profile;
+
+function ionViewWillEnter(arg0: () => void) {
+  throw new Error('Function not implemented.');
+}

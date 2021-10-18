@@ -5,7 +5,7 @@ const useOpportunity = ( id:any ) => {
     const client = useQueryClient();
 
     return useQuery(
-      "opportunity " + id,
+      "opportunity-" + id,
       async () => {
 
 		if(id){
@@ -16,7 +16,7 @@ const useOpportunity = ( id:any ) => {
 
 			const opportunity = await opportunityResponse.json();
 
-			client.setQueryData([ "opportunity " + id ], opportunity);
+			client.setQueryData([ "opportunity-" + id ], opportunity);
 	  
 			return opportunity;
 		}

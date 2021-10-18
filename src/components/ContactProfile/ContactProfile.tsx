@@ -27,7 +27,7 @@ const ContactProfile: React.FC<ContactProfileProps> = (ContactProfileProps) => {
 
 	const [sendingMail, setSendingMail] = useState(false);
 
-	const options = data.map((opportunity:any) => (
+	const options = data?.map((opportunity:any) => (
 		{ 
 		value: opportunity.id, 
 		label: opportunity.title + " - " + (opportunity.profile.currency === "GBP" ? String.fromCharCode(163) : opportunity.profile.currency === "EUR" ? String.fromCharCode(8364) : String.fromCharCode(163))  + opportunity.price }
