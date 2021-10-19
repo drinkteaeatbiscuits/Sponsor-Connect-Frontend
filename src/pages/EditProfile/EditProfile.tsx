@@ -26,13 +26,14 @@ import sports from '../CreateAccount/sports.json';
 import { env } from 'process';
 import useUploadImage from '../../hooks/useUploadImage';
 import UploadImage from '../../components/UploadImage/UploadImage';
-import { constructOutline, closeCircleOutline, happy, close } from 'ionicons/icons';
+import { constructOutline, closeCircleOutline, happy, close, logoFacebook, logoInstagram, logoTwitter, logoYoutube } from 'ionicons/icons';
 import NewImageUpload3 from '../../components/NewImageUpload3/NewImageUpload3';
 import TextEditor from '../../components/TextEditor/TextEditor';
 import TabBar from '../../components/TabBar';
 import EditorSection from '../../components/EditorSection/EditorSection';
 import EditorSectionProfile from '../../components/EditorSection/EditorSectionProfile';
 import useEditProfileField from '../../hooks/useEditProfileField';
+import SocialMediaTotals from '../../components/SocialMediaTotals/SocialMediaTotals';
 
 export interface props {}
 
@@ -60,6 +61,8 @@ const EditProfile: React.FC = () => {
   const [latLong, setLatLong] = useState<any>("");
   const [searchText, setSearchText] = useState<string>("");
   const [showLocation, setShowLocation] = useState<boolean>(false);
+  const [showSocials, setShowSocials] = useState<boolean>(false);
+  const [showEditAccolades, setShowEditAccolades] = useState<boolean>(false);
 
   const [filteredSports, setFilteredSports] = useState<any>(sports);
   
@@ -285,6 +288,17 @@ const EditProfile: React.FC = () => {
     
   }
 
+
+  const socialMediaIcon = (socialMediaName:any) => {
+		
+		let socialMediaIconName = "";
+		socialMediaName === 'facebook' && (socialMediaIconName = logoFacebook);
+		socialMediaName === 'instagram' && (socialMediaIconName = logoInstagram);
+		socialMediaName === 'twitter' && (socialMediaIconName = logoTwitter);
+		socialMediaName === 'youTube' && (socialMediaIconName = logoYoutube);
+
+		return socialMediaIconName;
+	}
  
 
   return (
@@ -371,7 +385,7 @@ const EditProfile: React.FC = () => {
                       
                       { !showLocation && (location ? location.label : "Add a location...")}
 
-                      {showLocation && <GooglePlacesAutocomplete
+                      { showLocation && <GooglePlacesAutocomplete
                           apiKey="AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q"
                           selectProps={{
                             location: location,
@@ -394,7 +408,179 @@ const EditProfile: React.FC = () => {
 
 
               <EditorSectionProfile profileId={authState?.user.profile} fieldRef="website" label={"Website"} currentValue={website} />
+              
 
+              <div className="editor-section">
+
+                <div className="editor-section-top">
+
+                  <label className="editor-section-title">Social Media</label>
+
+                  <div className="editor-section-top-buttons">
+
+                    { profileData.isSuccess && !showSocials && <div className="editor-section-button" onClick={() => { setShowSocials(true); }}>{ socialMedia ? "Edit" : "Add"}</div> }
+
+                    { showSocials && <div className="editor-section-button" onClick={() => { saveField("socialMedia", socialMediaObject ); setShowSocials(false); }}>Save</div> }
+ 
+                  </div>	
+
+                </div>
+                
+                <div className="editor-section-bottom">
+
+                  {  profileData.isSuccess && !showSocials && <SocialMediaTotals socialMediaData={profileData?.data[0]?.socialMedia} showEmpty={true} /> }
+
+
+                  {  profileData.isSuccess && showSocials && <div className="social-media-fields">
+
+                        <div className="social-media-field">
+
+                          <IonIcon color={ facebookTotal || facebookUrl ? "primary" : "tertiary" } size="large" icon={ socialMediaIcon("facebook") } />
+                          <div className="total">
+                            <div className="label">
+                              <label>Total</label>
+                            </div>
+                            
+                            <IonInput type="number" value={ facebookTotal && facebookTotal } onIonChange={ (e:any) => setFacebookTotal(e.detail.value) } />
+                          </div>
+                          <div className="url">
+                            <div className="label">
+                              <label>URL</label>
+                            </div>
+                            <IonInput type="text" value={ facebookUrl && facebookUrl } onIonChange={ (e:any) => setFacebookUrl(e.detail.value) } />
+                          </div>
+                          
+                        </div>
+                        <div className="social-media-field">
+
+                          <IonIcon color={ instagramTotal || instagramUrl ? "primary" : "tertiary" } size="large" icon={ socialMediaIcon("instagram") } />
+                          <div className="total">
+                            <div className="label">
+                              <label>Total</label>
+                            </div>
+                            
+                            <IonInput type="number" value={ instagramTotal && instagramTotal  } onIonChange={ (e:any) => setInstagramTotal(e.detail.value) } />
+                          </div>
+                          <div className="url">
+                            <div className="label">
+                              <label>URL</label>
+                            </div>
+                            <IonInput type="text" value={ instagramUrl && instagramUrl } onIonChange={ (e:any) => setInstagramUrl(e.detail.value) } />
+                          </div>
+                          
+                        </div>
+                        <div className="social-media-field">
+
+                          <IonIcon color={ twitterTotal || twitterUrl ? "primary" : "tertiary" } size="large" icon={ socialMediaIcon("twitter") } />
+                          <div className="total">
+                            <div className="label">
+                              <label>Total</label>
+                            </div>
+                            
+                            <IonInput type="number" value={ twitterTotal && twitterTotal  } onIonChange={ (e:any) => setTwitterTotal(e.detail.value) } />
+                          </div>
+                          <div className="url">
+                            <div className="label">
+                              <label>URL</label>
+                            </div>
+                            <IonInput type="text" value={ twitterUrl && twitterUrl } onIonChange={ (e:any) => setTwitterUrl(e.detail.value) } />
+                          </div>
+                          
+                        </div>
+                        <div className="social-media-field">
+
+                          <IonIcon color={ youTubeTotal || youTubeUrl ? "primary" : "tertiary" } size="large" icon={ socialMediaIcon("youTube") } />
+                          <div className="total">
+                            <div className="label">
+                              <label>Total</label>
+                            </div>
+                            
+                            <IonInput type="number" value={ youTubeTotal && youTubeTotal  } onIonChange={ (e:any) => setYouTubeTotal(e.detail.value) } />
+                          </div>
+                          <div className="url">
+                            <div className="label">
+                              <label>URL</label>
+                            </div>
+                            <IonInput type="text" value={ youTubeUrl && youTubeUrl } onIonChange={ (e:any) => setYouTubeUrl(e.detail.value) } />
+                          </div>
+                          
+                        </div>
+ 
+
+                      </div>
+                      
+                      }
+                
+                
+                </div>
+              </div>
+
+
+              <EditorSectionProfile fieldType="IonTextarea" profileId={authState?.user.profile} fieldRef="shortDescription" label={"Short Description"} currentValue={shortDescription} />
+              
+              
+              <div className="editor-section">
+
+                <div className="editor-section-top">
+
+                  <label className="editor-section-title">Achievements</label>
+
+                  <div className="editor-section-top-buttons">
+
+                    { profileData.isSuccess && (!showEditAccolades && <div className="editor-section-button" onClick={() => { setShowEditAccolades(true); }}>{ accolades?.length > 0  ? "Edit" : "Add"}</div>) }
+
+                    { showEditAccolades && <div className="editor-section-button" onClick={() => { saveField("accolades", accolades?.filter(Boolean) ); setShowEditAccolades(false); }}>Save</div> }
+   
+                  </div>	
+
+                </div>
+
+                <div className={"editor-section-bottom " + (location.label ? "" : "")}>
+                      
+                      { !showEditAccolades && (accolades?.length < 0 ? "Add an Achievement..." : 
+                      
+                      accolades?.length > 0 && accolades.map((accolade: string, index: any) => {
+
+                          return <div className="accolade" key={index}>
+                                  { accolade && accolade }
+                                </div>
+
+                        })
+
+                      )} 
+
+                      
+
+                      { showEditAccolades && <div className="">
+
+                        <div className="accolade-list">
+
+                          { accolades?.length > 0 ? accolades.map((accolade: string, index: any) => {
+
+                            return <div className="accolade-field" key={index}>
+                                    <IonInput placeholder="Your Achievement" value={accolade && accolade} id={"accolade-" + index} onIonChange={ (e:any) => createAccolades(e) } />
+                                    <IonIcon icon={close} onClick={ (e) => { removeAccolade(e); } } />
+                                  </div>
+
+                                }) : <div className="accolade-field">
+                                      <IonInput value={""} placeholder="Your Achievement" onIonChange={ (e:any) => createAccolades(e) } /> 
+                                      <IonIcon icon={close} />
+                                    </div>
+
+                          } </div>
+
+                            <IonButton expand="block" size="small" className="button-tertiary" onClick={ () => addAccolade() } >Add Accolade</IonButton>
+
+                      </div>  }
+
+                 
+
+                </div>
+
+              </div>
+
+
+              {profileData.isSuccess && <IonButton className="button-tertiary" expand="block" size="small" onClick={() => history.push('/profile/' + profileData.data[0].id)}>Back to Profile</IonButton>}
 
             </div>
 
@@ -403,137 +589,7 @@ const EditProfile: React.FC = () => {
       
      
         
-          <IonLoading isOpen={isLoading} message="Updating Profile" />
-          <IonLoading isOpen={profileData.isLoading} message="Loading Profile" />
-            
-          {/* <IonButton fill="clear" expand="full" onClick={()=> history.push( "/opportunities/" )}>Opportunities</IonButton>
-          <IonButton fill="clear" expand="full" onClick={()=> history.push( "/dashboard/" )}>Back to Dashboard</IonButton> */}
-          <div className="content">
-          {  !profileData.isLoading && profileData.data?.map((p: any) => { 
-            return (
-              <div className="ion-text-center" key={p.id}>
-
-
-                      <IonItem className="location-item">
-
-                        <IonLabel className="location-label" position="stacked" >Location</IonLabel>
-                        
-              
-                      
-
-                      </IonItem>
-
-                  {/* <IonItem>
-                    <IonLabel position="stacked">Price Range</IonLabel>
-                    <IonInput type="text" value={ priceRange ? priceRange : p.priceRange } onIonChange={ (e:any) => setPriceRange(e.detail.value) } />
-                  </IonItem> */}
-
-                  <IonItem>
-                    <IonLabel position="stacked">Website</IonLabel>
-                    <IonInput type="text" value={ website ? website : p.website } onIonChange={ (e:any) => setWebsite(e.detail.value) } />
-                  </IonItem>
-
-                  <IonItem>
-                    <IonLabel position="stacked">Facebook Total</IonLabel>
-                    <IonInput type="number" value={ facebookTotal && facebookTotal } onIonChange={ (e:any) => setFacebookTotal(e.detail.value) } />
-                  </IonItem>
-
-                  <IonItem>
-                    <IonLabel position="stacked">Facebook URL</IonLabel>
-                    <IonInput type="text" value={ facebookUrl && facebookUrl } onIonChange={ (e:any) => setFacebookUrl(e.detail.value) } />
-                  </IonItem>
-
-                  <IonItem>
-                    <IonLabel position="stacked">Instagram Total</IonLabel>
-                    <IonInput type="number" value={ instagramTotal && instagramTotal  } onIonChange={ (e:any) => setInstagramTotal(e.detail.value) } />
-                  </IonItem>
-
-                  <IonItem>
-                    <IonLabel position="stacked">Instagram URL</IonLabel>
-                    <IonInput type="text" value={ instagramUrl && instagramUrl } onIonChange={ (e:any) => setInstagramUrl(e.detail.value) } />
-                  </IonItem>
-
-                  <IonItem>
-                    <IonLabel position="stacked">Twitter Total</IonLabel>
-                    <IonInput type="number" value={ twitterTotal && twitterTotal  } onIonChange={ (e:any) => setTwitterTotal(e.detail.value) } />
-                  </IonItem>
-
-                  <IonItem>
-                    <IonLabel position="stacked">Twitter URL</IonLabel>
-                    <IonInput type="text" value={ twitterUrl && twitterUrl } onIonChange={ (e:any) => setTwitterUrl(e.detail.value) } />
-                  </IonItem>
-
-                  <IonItem>
-                    <IonLabel position="stacked">YouTube Total</IonLabel>
-                    <IonInput type="number" value={ youTubeTotal && youTubeTotal  } onIonChange={ (e:any) => setYouTubeTotal(e.detail.value) } />
-                  </IonItem>
-
-                  <IonItem>
-                    <IonLabel position="stacked">YouTube URL</IonLabel>
-                    <IonInput type="text" value={ youTubeUrl && youTubeUrl } onIonChange={ (e:any) => setYouTubeUrl(e.detail.value) } />
-                  </IonItem>
-
-                  <IonItem>
-                    <IonLabel position="stacked">Short Description</IonLabel>
-                    <IonTextarea value={ shortDescription ? shortDescription : p.shortDescription } onIonChange={ (e:any) => setShortDescription(e.detail.value) } />
-                  </IonItem>
-
-
-
-
-
-                  <IonItem>
-                    <IonLabel position="stacked">Full Description</IonLabel>
-                    {/* <IonTextarea value={ fullDescription ? fullDescription : p.description } onIonChange={ (e:any) => setFullDescription(e.detail.value) } />
-                   */}
-                  
-                      <TextEditor 
-                      placeholder="Enter your description here." 
-                      initialText={profileData.data[0]?.fullDescriptionText && convertFromRaw( profileData.data[0]?.fullDescriptionText )} 
-                      textEditorText={fullDescriptionText} 
-                      setTextEditorText={setFullDescriptionText} />
-                   
-                  </IonItem>
-
- 
-                  <IonItem>
-                    <IonLabel position="stacked">Accolades</IonLabel>
-
-                    {/* {console.log(accolades)} */}
-                    <IonList className="accolade-list">
-
-                      {accolades?.length > 0 ? accolades.map((accolade: string, index: any) => {
-
-                        return <IonItem className="accolade-field" key={index}>
-                                <IonInput placeholder="Your Accolade" value={accolade && accolade} id={"accolade-" + index} onIonChange={ (e:any) => createAccolades(e) } />
-                                <IonIcon icon={close} onClick={ (e) => { removeAccolade(e); } } />
-                              </IonItem>
-
-                      })
-
-                      : <IonItem className="accolade-field" >
-                          <IonInput value={""} placeholder="Your Accolade" onIonChange={ (e:any) => createAccolades(e) } /> 
-                          <IonIcon icon={close} />
-                        </IonItem>
-                     
-                     }</IonList>
-
-                    <IonButton buttonType="link"  className="link ion-align-self-end" onClick={ () => addAccolade() } >Add Accolade</IonButton>
-                  </IonItem>
-
-                
-
-              </div>
-            )
-          }) 
-         } 
-        
-
-          <div style={{paddingTop: 8}}><IonButton onClick={()=> updateProfile()} expand="block">SAVE</IonButton></div>
-
-
-          
-          </div>
+         
           
           
           <IonModal isOpen={showModal} animated={true} cssClass='select-sport-modal' backdropDismiss={false} >
@@ -550,7 +606,6 @@ const EditProfile: React.FC = () => {
             <IonList className="sports-list">
 
               { showSports }
-
 
             </IonList>
 

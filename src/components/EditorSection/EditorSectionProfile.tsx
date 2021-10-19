@@ -1,4 +1,4 @@
-import { IonInput, IonLabel } from "@ionic/react";
+import { IonInput, IonLabel, IonTextarea } from "@ionic/react";
 import { convertFromRaw, convertToRaw } from "draft-js";
 import React, { useEffect, useState } from "react";
 import { AuthContext } from "../../App";
@@ -92,7 +92,7 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 				{ label === "Price" && <div className="currency-display">{authState && authState.user.currency === "GBP" ? String.fromCharCode(163) : authState.user.currency === "EUR" ? String.fromCharCode(8364) : String.fromCharCode(163) }</div> }
 		
 				{ fieldType !== 'TextEditor' && !showEdit ? value && value : 
-				 fieldType !== 'TextEditor' && <IonInput autocomplete="off" 
+				 fieldType !== 'TextEditor' && fieldType !== 'IonTextarea' ? <IonInput autocomplete="off" 
 					autocapitalize="on" 
 					type={fieldType ? fieldType : "text"} 
 					value={ value } 
@@ -102,8 +102,16 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 						newSectionData[ fieldRef ] = e.detail.value;
 						setSectionData( newSectionData );  
 
-					} } />
-				}
+					} } /> : fieldType === 'IonTextarea' && 
+					<IonTextarea value={ value } onIonChange={ (e:any) => {
+						setValue( e.detail.value ); 
+						let newSectionData = {};
+						newSectionData[ fieldRef ] = e.detail.value;
+						setSectionData( newSectionData );  
+
+					}} />
+            
+					  }
 
 
 				{ fieldType === 'TextEditor' && !showEdit && <TextEditorContent editorContent={ currentValue && convertToRaw(currentValue) } /> }

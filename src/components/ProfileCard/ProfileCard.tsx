@@ -31,7 +31,8 @@ const ProfileCard: React.FC<ProfileProps> = ( ProfileProps ) => {
 
 	return <IonCard className="profile-card" button={true} onClick={ ()=> history.push("/profile/" + ProfileProps.profileData?.id) } >
 
-				{ ProfileProps.profileData.coverImage && <img className="" alt={ "Cover Photo " + ProfileProps.profileData?.coverImage?.id } src={ (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : '') + ProfileProps.profileData?.coverImage?.url } /> }
+				{ ProfileProps.profileData.coverImage && <img className="" alt={ "Cover Photo " + ProfileProps.profileData?.coverImage?.id } 
+				src={ ProfileProps.profileData?.coverImage?.url } /> }
 				
 				<IonCardHeader>
 					<h2 className="">{ProfileProps.profileData?.profileName}</h2>
