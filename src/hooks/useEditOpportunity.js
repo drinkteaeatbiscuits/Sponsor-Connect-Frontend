@@ -7,7 +7,7 @@ const useEditOpportunity = ( opportunityId: any ) => {
     const client = useQueryClient();
     
     return useMutation(
-      "opportunity " + opportunityId,
+      "opportunity-" + opportunityId,
       async (data: { 
           id?: any;
           profile: string;
@@ -39,7 +39,7 @@ const useEditOpportunity = ( opportunityId: any ) => {
       {
         onSuccess: (data) => {
 
-          client.setQueryData([ "opportunity " + data.id ], data);
+          client.setQueryData([ "opportunity-" + data.id ], data);
             
           client.invalidateQueries("opportunity");
           client.invalidateQueries("opportunities");

@@ -145,7 +145,10 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 					{opportunityData?.opportunityImages.length > 0 && <ImageGallery images={opportunityData?.opportunityImages} galleryId="Opportunity Images" />}
 			
 
-					<IonButton expand="block" className="interest-button" size="large" >Show an interest in this opportunity</IonButton>
+					<IonButton expand="block" className="interest-button" size="large" 
+						onClick={() => { 
+							history.push('/profile/' + opportunityData.profile.id, {tab: "contact"})} } 
+					>Show an interest in this opportunity</IonButton>
 
 				</div>
 

@@ -32,7 +32,7 @@ const Dashboard: React.FC = () => {
   }
 
 
-
+// console.log(authState.user?.role.id);
 
 
   return (
@@ -44,7 +44,7 @@ const Dashboard: React.FC = () => {
             <p className="hello ion-no-margin"><strong>Hello{authState.user?.yourName && (" " + authState.user?.yourName?.split(" ")[0])},</strong></p>
             <p className="greeting ion-no-margin">{greeting()}</p>
           </div>
-        {authState.user?.accountType !== "Business" ?
+        {authState.user?.role.type !== "business_user" ?
           <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
           
             <div className="menu-list-option ion-margin-top"
@@ -76,7 +76,7 @@ const Dashboard: React.FC = () => {
               </div>
               <div className="text">
                 <p className="main-text">Settings</p>
-                <p className="sub-text">Update account, billing &amp; notifications</p>
+                <p className="sub-text">Update account &amp; notifications</p>
               </div>
             </div>
 
