@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonRow, IonSearchbar, IonTitle, IonToolbar, useIonAlert, useIonViewDidEnter } from '@ionic/react';
+import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonRow, IonSearchbar, IonTitle, IonToolbar, useIonAlert, useIonViewDidEnter } from '@ionic/react';
 import { useEffect, useState } from 'react';
 import useAddImagePost from '../../hooks/useAddImagePost';
 import PasswordStrengthBar from 'react-password-strength-bar';
@@ -23,6 +23,8 @@ import VenueSVG from './images/VenueSVG';
 import TeamSVG from './images/TeamSVG';
 import OtherSVG from './images/OtherSVG';
 import EyeSVG from './images/EyeSVG';
+import { logoEuro } from 'ionicons/icons';
+import Pound from './images/Pound';
 
 
 const CreateAccount: React.FC = () => {
@@ -49,6 +51,8 @@ const CreateAccount: React.FC = () => {
   const [passwordStrongEnough, setPasswordStrongEnough] = useState<boolean>(false);
   const [selectedOption, setSelectedOption] = useState<string>("Individual");
   const [profileName, setProfileName] = useState<string>("");
+  
+  const [selectedCurrency, setSelectedCurrency] = useState<string>("GBP");
 
   const [searchText, setSearchText] = useState<string>("");
 
@@ -85,7 +89,8 @@ const CreateAccount: React.FC = () => {
         username: username,
         email: username,
         password: password,
-        yourName: yourName
+        yourName: yourName,
+        currency: selectedCurrency
       }),
       credentials: "include",
     });
@@ -95,9 +100,6 @@ const CreateAccount: React.FC = () => {
 
     if (createAccountInfo?.statusCode) {
 
-      // alert( "Error: " + createAccountInfo.data[0].messages[0].message );
-
-      // console.log(createAccountInfo);
 
       present({
         cssClass: 'account-error',
@@ -109,6 +111,8 @@ const CreateAccount: React.FC = () => {
         ],
         onDidDismiss: () => console.log('did dismiss'),
       })
+
+
     } else {
 
       // dispatch && dispatch({
@@ -129,8 +133,9 @@ const CreateAccount: React.FC = () => {
           profileName: profileName,
           sport: yourSport,
           location: location,
-          latLong: latLong
-
+          latLong: latLong,
+          currency: selectedCurrency
+          
         }),
         
       });
@@ -213,7 +218,7 @@ const CreateAccount: React.FC = () => {
   }
 
 
-  let showSports = null;
+  let showSports;
 
   if (filteredSports.length > 0) {
 
@@ -393,6 +398,33 @@ const CreateAccount: React.FC = () => {
                 }
 
                 {stepNumber === 2 &&
+                  <div className="create-account-step select-currency">
+                    <h1 className="ion-text-center" style={{textTransform: "uppercase"}}>Please Select <span className="ion-color-primary">A Currency</span></h1>
+                    <div className="step-details account-for-options">
+                      <div className={"option account-for-option" + (selectedCurrency === "GBP" ? " active" : "") }
+                      onClick={() => setSelectedCurrency("GBP")}>
+                        <div className="icon">
+                          <Pound className="pound-icon" />
+                        </div>
+                        <div className="text">
+                          <p>Pound Sterling</p>
+                        </div>
+                      </div>
+                      <div className={"option account-for-option" + (selectedCurrency === "EUR" ? " active" : "") }
+                      onClick={() => setSelectedCurrency("EUR")}>
+                        <div className="icon">
+                          <IonIcon color="primary" icon={logoEuro} style={{marginLeft: "-1px"}} />
+                        </div>
+                        <div className="text">
+                          <p>Euro</p>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                }
+
+                {stepNumber === 3 &&
                   <div className="create-account-step who-is-this-account-for">
                     <h1 className="ion-text-center">WHO IS THIS <span className="ion-color-primary">ACCOUNT FOR?</span></h1>
 
@@ -434,7 +466,7 @@ const CreateAccount: React.FC = () => {
                   </div>
                 }
 
-                {stepNumber === 3 &&
+                {stepNumber === 4 &&
 
                   <div className="create-account-step">
                     <h1 className="ion-text-center">PROFILE<br /> <span className="ion-color-primary">INFORMATION</span></h1>
@@ -479,7 +511,7 @@ const CreateAccount: React.FC = () => {
               </div>
               <div className="create-account-buttons">
 
-                {stepNumber < 3 ?
+                {stepNumber < 4 ?
 
                   <div className="prev-next-buttons">
 

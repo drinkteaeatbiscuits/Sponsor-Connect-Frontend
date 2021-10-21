@@ -45,7 +45,7 @@ import Billing from './pages/Billing';
 import Account from './pages/Account';
 import Notifications from './pages/Notifications';
 // import MainMenu from './components/MainMenu';
-import Subscription from './pages/Subscription';
+import Subscription from './pages/Subscription/Subscription';
 import Landing from './pages/Landing/Landing';
 import Opportunity from './pages/Opportunity/Opportunity';
 import OnBoardingSport from './pages/OnBoardingSport/OnBoardingSport';
@@ -56,6 +56,13 @@ import CreateAccountBusiness from './pages/CreateAccountBusiness/CreateAccountBu
 import SearchOpportunities from './pages/SearchOpportunities/SearchOpportunities';
 import ResetPassword from './pages/ResetPassword/ResetPassword';
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
+import NewUpload from './pages/NewUpload';
+import ErrorPage from './pages/ErrorPage/ErrorPage';
+import Subscribe from './pages/Subscribe/Subscribe';
+import TextEditor from './components/TextEditor/TextEditor';
+import NewTextEditor from './pages/NewTextEditor/NewTextEditor';
+import ProfileImages from './pages/ProfileImages/ProfileImages';
+import EditProfileDescription from './pages/EditProfile/EditProfileDescription';
 
 
 const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
@@ -97,10 +104,16 @@ const reducer = (state: any, action: any) => {
         user: action.payload.user,
       }
     }
+    case "setSubscription": {
+      return {
+        ...state,
+        selectedSubscription: action.payload
+      }
+    }
 
     default:
 
-      return state;
+    return state;
   }
 };
 
@@ -111,10 +124,7 @@ const checkIfAuthenticated = async () => {
     credentials: "include",
   });
 
-  
   const profileInfo = await loginResp.json();
-
-  // console.log(profileInfo);
 
   return profileInfo?.statusCode ? false : profileInfo;
 
@@ -134,9 +144,6 @@ const App: React.FC = () => {
   wasUserHere && (initialState.isAuthenticated = true);
   wasUserHere && (initialState.user = wasUserHere);
 
-  // console.log(initialState.user);
-
-
   const history = useHistory();
 
 
@@ -155,7 +162,7 @@ const App: React.FC = () => {
           {/* {!state.isAuthenticated ? <p>logged out</p> : <p>logged in</p>} */}
         
           <IonReactRouter>
-            <IonRouterOutlet animated={false}>
+            <IonRouterOutlet animated={true}>
 
               <Route exact path="/">
                 {state.isAuthenticated ? <Redirect to="dashboard" /> : <Landing />}
@@ -196,6 +203,14 @@ const App: React.FC = () => {
                <Route exact path="/profile/:id/edit">
                 {state.isAuthenticated ? <EditProfile /> : <Login />}
               </Route>
+
+               <Route exact path="/manage-profile-images">
+                {state.isAuthenticated ? <ProfileImages /> : <Login />}
+              </Route>
+
+               <Route exact path="/edit-profile-description">
+                {state.isAuthenticated ? <EditProfileDescription /> : <Login />}
+              </Route>
               
               
                <Route exact path="/opportunities/:id">
@@ -219,11 +234,12 @@ const App: React.FC = () => {
                 {state.isAuthenticated ? <SearchOpportunities /> : <Login />}
               </Route>
 
-              <Route exact path="/settings">
-                {state.isAuthenticated ? <Settings /> : <Login />}
-              </Route>
+              
               <Route exact path="/settings/billing">
                 {state.isAuthenticated ? <Billing /> : <Login />}
+              </Route>
+              <Route exact path="/subscribe">
+                {state.isAuthenticated ? <Subscribe /> : <Login />}
               </Route>
               <Route exact path="/settings/subscription">
                 {state.isAuthenticated ? <Subscription /> : <Login />}
@@ -234,11 +250,16 @@ const App: React.FC = () => {
               <Route exact path="/settings/notifications">
                 {state.isAuthenticated ? <Notifications /> : <Login />}
               </Route>
+              
+              <Route exact path="/settings">
+                {state.isAuthenticated ? <Settings /> : <Login />}
+              </Route>
+
               <Route exact path="/reset-password">
                 <ResetPassword />
               </Route>
               <Route exact path="/forgot-password">
-                <ForgotPassword />
+                <ForgotPassword /> 
               </Route>
               <Route exact path="/menu">
                 <Menu />
@@ -255,8 +276,19 @@ const App: React.FC = () => {
                 <Landing />
               </Route>
 
-              
 
+              <Route exact path="/new-upload">
+                <NewUpload />
+              </Route>
+
+              <Route exact path="/text-editor">
+                <NewTextEditor />
+              </Route>
+
+              
+              <Route>
+                <ErrorPage />
+              </Route>
 
 
             </IonRouterOutlet>

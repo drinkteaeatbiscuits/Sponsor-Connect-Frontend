@@ -8,34 +8,38 @@ import useProfiles from '../../hooks/useProflies';
 import Masonry from 'react-masonry-css';
 
 import './Profiles.scss';
+import Sidebar from './Sidebar/Sidebar';
+import { useEffect, useState } from 'react';
 
 export interface props {}
 
 const Profiles: React.FC = () => {
 
-  const {isLoading, data, error} = useProfiles();
+  const {isLoading, data, isSuccess, error} = useProfiles();
   error && console.log(error);
 
-  const breakpointColumnsObj = {
-    default: 3,
-    1060: 2,
-    680: 1
-  };
+  const [profileData, setProfileData] = useState([]);
+
+  useEffect(() => {
+    
+    isSuccess && setProfileData(data);
+
+  }, [ data ])
 
   return (
     <IonPage>
       <TabBar/>
       <IonContent className="profiles-content" fullscreen>
         <IonLoading isOpen={isLoading} message="Loading..." />
+          
+          <Sidebar allProfileData={data} profileData={profileData} setData={setProfileData} />
+
           <div className="content">
-            <Masonry
-              breakpointCols={breakpointColumnsObj}
-              className="my-masonry-grid"
-              columnClassName="my-masonry-grid_column">
-                { data?.length > 0 && data?.map(( p:any )=>{
-                  return <ProfileCard key={p.id} profileData={p} />
+              { profileData?.length > 0 && profileData?.map(( profile:any )=>{
+                  return <ProfileCard key={profile.id} profileData={profile} />
                 }) }
-            </Masonry>
+
+
           </div>
       </IonContent>
     </IonPage>

@@ -43,18 +43,22 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
 
 	  }
 
+      const isBusinessAccount = () => {
+        return authState.user?.role.type === "business_user" ? true : false;
+      }
+
 	return <div className="tab-bar">
         
                 <div className="logo-header">
                     <div className="" onClick={()=> history.push("/dashboard")}><SvgScLogoHorizontal /></div>
                 </div>
-                <div className={ ( activeTab === 'dashboard' && "active " ) + " tab-button"} onClick={()=> history.push("/dashboard")}>
-                    <IonIcon icon={speedometer} />
-                    <IonLabel>Dashboard</IonLabel>
+                {/* <div className={ ( activeTab === 'dashboard' && "active " ) + " tab-button"} onClick={()=> history.push("/dashboard")}> */}
+                    {/* <IonIcon icon={speedometer} /> */}
+                    {/* <IonLabel>Dashboard</IonLabel> */}
                     {/* <IonBadge>2</IonBadge> */}
-                </div>
+                {/* </div> */}
 
-                {authState.user?.accountType === "Business" ? 
+                {isBusinessAccount() ? 
                 <div className={ ( activeTab === 'profile' && "active " ) + " tab-button"} onClick={()=> history.push("/profiles")}>
                     <IonIcon icon={personCircle} />
                     <IonLabel>Profiles</IonLabel>
@@ -67,7 +71,7 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
                 }
 
 
-                {authState.user?.accountType === "Business" ? 
+                {isBusinessAccount() ? 
                 <div className={ ( activeTab === 'opportunities' && "active " ) + " tab-button"} onClick={()=> history.push("/search-opportunities/")}>
                     <IonIcon icon={trailSign} />
                     <IonLabel>Opportunities</IonLabel>

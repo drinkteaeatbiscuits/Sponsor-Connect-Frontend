@@ -3,15 +3,19 @@ import Header from '../../components/Header';
 import { useHistory, useParams } from 'react-router';
 import Cookies from 'js-cookie';
 import { AuthContext } from "../../App";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LogoutButton from '../../components/LogoutButton';
 import TabBar from '../../components/TabBar';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
 import useOpportunity from '../../hooks/useOpportunity';
 import useAddOpportunity from '../../hooks/useAddOpportunity';
 import UploadImage from '../../components/UploadImage/UploadImage';
-
-
+import urlSlug from 'url-slug';
+import useEditOpportunity from '../../hooks/useEditOpportunity';
+import NewImageUpload3 from '../../components/NewImageUpload3/NewImageUpload3';
+import TextEditor from '../../components/TextEditor/TextEditor';
+import { convertFromRaw, convertToRaw } from 'draft-js';
+import OpportunityImagesUpload from '../../components/OpportunityImagesUpload/OpportunityImagesUpload';
 
 export interface props { }
 
@@ -29,28 +33,78 @@ const AddOpportunity: React.FC = () => {
 // console.log(profileId);
 // const { isLoading, data, error } = useOpportunity(profileId.id);
 
-  const {isLoading: isAddingOpportunity, error: addOpportunityError, mutateAsync: addOpportunityMutation} = useAddOpportunity();
-
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [fullDescription, setFullDescription] = useState<string>("");
-  const [images, setImages] = useState<Array<any>>([]);
+  const [images, setImages] = useState<any>("");
   const [price, setPrice] = useState<string>("");
   const [opportunityError, setOpportunityError] = useState<string>("");
+  const [publishedAt, setPublishedAt] = useState<any>(null);
+  const [opportunityId, setOpportunityId] = useState<any>("");
+  const [opportunitySlug, setOpportunitySlug] = useState<any>("");
 
+  const [newOpportunityData, setNewOpportunityData] = useState<any>("");
+
+  const { isLoading: isAddingOpportunity, data: opportunityData, error: addOpportunityError, isSuccess: opportunitySuccess, mutateAsync: addOpportunityMutation } = useAddOpportunity();
+  const { isLoading: isEditingOpportunity, error: editOpportunityError, mutateAsync: editOpportunityMutation } = useEditOpportunity( opportunityId );
   
-  const addOpportunity = async () => {
+  const { isLoading, isSuccess, refetch: opportunityRefetch, data, error } = useOpportunity( opportunityId );
+
+  useEffect(() => {
+
+    !opportunityId && !opportunitySuccess && createOpportunity();
+
+    opportunitySuccess && setOpportunityId(opportunityData.id);
+
+    opportunitySuccess && setNewOpportunityData(opportunityData);
+    
+    setOpportunitySlug( urlSlug(profileId.id + '-' + opportunityId + '-' + title));
+
+    opportunityId && !publishedAt && setPublishedAt(new Date().toISOString());
+
+    // isSuccess && setNewOpportunityData(opportunityData);
+
+  }, [title, opportunityId, publishedAt, opportunitySuccess])
+  
+
+  const [editorContent, setEditorContent] = useState(null);
+
+ 
+
+  const refetchOpportunityImages = () => {
+    
+    console.log(opportunityData);
+
+  }
+
+  // console.log(opportunityData);
+  // console.log(opportunityId);
+  // console.log(opportunityId);
+  // console.log(opportunitySlug);
+
+  const createOpportunity = async () => {
     
     await addOpportunityMutation({
+      profile: profileId.id,
+      published_at: publishedAt 
+    });
+
+  }
+
+  const saveOpportunity = async () => {
+    
+    await editOpportunityMutation({
       profile: profileId.id,
       title,
       description,
       fullDescription,
-      images,
+      // images,
+      opportunityDescription: editorContent && convertToRaw(editorContent),
       price,
+      published_at: publishedAt 
     });
     
-    history.goBack();
+    history.push("/opportunity/" + opportunityId);
 
   }
 
@@ -68,67 +122,102 @@ const AddOpportunity: React.FC = () => {
 
       
       <TabBar activeTab="opportunities" />
-      <IonContent className="opportunity-content" fullscreen>
+        <IonContent className="editor-content" fullscreen>
 
-<div className="content">
-      {/* { authState?.user.profile === parseInt(profileId.id) && <div className="contact-button ion-padding-top">
-                <IonButton expand="block" className="add-opportunity" onClick={() => history.push("/add-opportunity/" + profileId.id )}>Add New Opportunity</IonButton>
-              </div> } */}
+        <div className="content">
+        
+            <div className="opportunity">
 
-       
+              <h1 style={{color: "var(--ion-color-dark)", lineHeight: 0.8, fontSize: "4em", padding: "15px"}}>ADD <br/><span style={{color: "var(--ion-color-primary)"}}>OPPORTUNITY</span></h1>
+    
+              <div className="editor-wrap">
 
-          <div className="opportunity">
+                <div className="editor-section">
+                  <div className="editor-section-top">
+                    <label className="editor-section-title">Opportunity Name</label>
+                    <div className="editor-section-top-buttons">
+                      {/* <div className="editor-section-button secondary">?</div> */}
+                      { opportunityError && <p className="error-message ion-no-margin"><small>{opportunityError}</small></p> }
+                    </div>
+                  </div>
+
+                  <div className="editor-section-bottom">
+                  <IonInput autocomplete="off" autocapitalize="on" id="opportunity-title" type="text" value={ title } onIonChange={ (e:any) => setTitle(e.detail.value) } />
+                  </div>
+                </div>
+
+                <NewImageUpload3 
+                  currentImage={ images } 
+                  setCurrentImage={ setImages } 
+                  field="images" 
+                  theref="opportunity" 
+                  refId={ opportunityId }
+                  imageCropAspectRatio={3 / 1} 
+                  circularCrop={false}
+                  // showCroppedPreview={ false }  
+                  label="Cover Image"
+                  /> 
 
 
-          
-            <div className="ion-padding">
-              <IonList>
+                <div className="editor-section price">
+                  <div className="editor-section-top">
+                    <label className="editor-section-title">Price</label>
+                    <div className="editor-section-top-buttons">
+                      {/* <div className="editor-section-button secondary">?</div> */}
+                    </div>
+                  </div>
 
-                  <IonItem className="">
-                    <IonLabel position="stacked">Opportunity Image</IonLabel>
-                    <UploadImage setCurrentImage={ setImages } field="images" theref="" crop={{ aspect: 2 / 1 }} circularCrop={ false } showCroppedPreview={ false } />
-                  </IonItem> 
+                  <div className="editor-section-bottom">
+                    <div className="currency-display">{authState && authState.user.currency === "GBP" ? String.fromCharCode(163) : authState.user.currency === "EUR" ? String.fromCharCode(8364) : String.fromCharCode(163) }</div>
+                    <IonInput className="price" autocomplete="off" id="opportunity-price" type="number" value={ price } onIonChange={ (e:any) => setPrice(e.detail.value) } />
+                  </div>
+                </div>
 
 
-                  <IonItem>
-                    <IonLabel position="stacked">Title</IonLabel>
-                    <IonInput autocomplete="off" autocapitalize="on" id="opportunity-title" type="text" value={ title } onIonChange={ (e:any) => setTitle(e.detail.value) } />
-                   { opportunityError && <p className="error-message ion-no-margin"><small>{opportunityError}</small></p> }
-                  </IonItem>
-                  
-                  <IonItem>
-                    <IonLabel position="stacked">Price</IonLabel>
-                    <IonInput autocomplete="off" id="opportunity-price" type="number" value={ price } onIonChange={ (e:any) => setPrice(e.detail.value) } />
-                  </IonItem>
+                <div className="editor-section">
+                  <div className="editor-section-top">
+                    <label className="editor-section-title">Short Description</label>
+                    <div className="editor-section-top-buttons">
+                      {/* <div className="editor-section-button secondary">?</div> */}
+                    </div>
+                  </div>
 
-                  <IonItem>
-                    <IonLabel position="stacked">Description</IonLabel>
+                  <div className="editor-section-bottom">
                     <IonInput autocomplete="off" autocapitalize="on" id="opportunity-description" type="text" value={ description } onIonChange={ (e:any) => setDescription(e.detail.value) } />
-                  </IonItem>
+                  </div>
+                </div>
 
-                  <IonItem>
-                    <IonLabel position="stacked">Full Description</IonLabel>
-                    <IonInput autocomplete="off" autocapitalize="on" id="opportunity-full-description" type="text" value={ fullDescription } onIonChange={ (e:any) => setFullDescription(e.detail.value) } />
-                  </IonItem>
 
-                  
-              </IonList>
+                <div className="editor-section">
+                  <div className="editor-section-top">
+                    <label className="editor-section-title">Full Description</label>
+                    <div className="editor-section-top-buttons">
+                      {/* <div className="editor-section-button secondary">?</div> */}
+                    </div>
+                  </div>
+
+                  <div className="editor-section-bottom show-editor">
+                    <TextEditor 
+                      placeholder="Enter your description here." 
+                      initialText={ null } 
+                      textEditorText={ editorContent } 
+                      setTextEditorText={ setEditorContent } />  
+                  </div>
+                </div>
+
+
+                { opportunitySuccess && isSuccess && data && <OpportunityImagesUpload opportunityData={ data } refetchOpportunityImages={ opportunityRefetch } label="Opportunity Images" /> }
+
+
+                { opportunitySuccess && <IonButton expand="block" className="add-opportunity" onClick={title ? () => saveOpportunity() : () => setOpportunityError('Please enter a title')}>Save Opportunity</IonButton> }
+                
+              </div>
               
-
+              
+              
             </div>
 
-            
-            <IonButton expand="block" className="add-opportunity" onClick={title ? () => addOpportunity() : () => setOpportunityError('Please enter a title')}>Add New Opportunity</IonButton>
-
-            
-          </div>
-
-
-
-        
-
-
-</div>
+        </div>
 
 
 

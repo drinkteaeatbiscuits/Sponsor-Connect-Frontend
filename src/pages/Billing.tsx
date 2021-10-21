@@ -14,6 +14,8 @@ import useMySubscription from '../hooks/useMySubscription';
 import { AnyARecord } from 'dns';
 import useCancelMySubscription from '../hooks/useCancelMySubscription';
 import { useQueryClient, useMutation } from 'react-query';
+import usePrices from '../hooks/usePrices';
+import getSymbolFromCurrency from 'currency-symbol-map';
 
 
 export interface props {}
@@ -35,22 +37,40 @@ const Billing: React.FC = () => {
   const [clientSecret, setClientSecret] = useState('');
   const [subscriptionId, setSubscriptionId] = useState('');
   const [subscriptionStatus, setSubscriptionStatus] = useState('');
+  const [selectedSubscription, setSelectedSubscription] = useState('');
   // const [customerId, setCustomerId] = useState('');
+
+
+  const [selectedPrice, setSelectedPrice] = useState();
+
 
   const stripe = useStripe();
   const elements = useElements();
 
+  
+  
+  const {isLoading: isLoadingPrices, data: dataPrices, isSuccess: isSuccessPrices, error: errorPrices} = usePrices();
+
+  // console.log(selectedSubscription)
+
+  // console.log();
+
   useEffect(() => {
 
+    setSelectedSubscription(authState.selectedSubscription);
     
-
    if (mySubscription.status === "success") {
       
       setSubscriptionStatus(mySubscription.data[0]?.subscriptionStatus);
-    
-      if( mySubscription.data[0]?.subscriptionStatus !== 'active' ){
+
+      // if user has an active subscription, hide payment
+      if(mySubscription.data[0]?.subscriptionStatus !== 'active'){
+
+    // if user doesn't yet have a subscription, create one
+      if( !mySubscription.data[0]?.subscriptionId ){
 
         // Create PaymentIntent as soon as the page loads
+
         window
           .fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/subscriptions/create-customer", {
             method: "POST",
@@ -77,7 +97,7 @@ const Billing: React.FC = () => {
               },
               body: JSON.stringify({
                 customerId: data.customer?.id,
-                priceId: "price_1JFxqWBwWs8b52mUO0mJqChD"
+                priceId: selectedPrice
               })
             })
             .then(res => {
@@ -87,16 +107,15 @@ const Billing: React.FC = () => {
             })
             .then(data => {
               
-              
               if(data.subscription?.status === "succeeded"){
-
                 
                 setSucceeded(true);
-
               
               }else{
+
+                console.log('test');
               
-                setClientSecret(data.subscription?.latest_invoice.payment_intent.client_secret);
+                setClientSecret(data.subscription.latest_invoice.payment_intent.client_secret);
 
               }
 
@@ -106,16 +125,50 @@ const Billing: React.FC = () => {
 
       } else {
 
-        console.log('subscription active');
+        if(mySubscription.data[0] !== 'active' || mySubscription.data[0] !== 'trialing'){
+
+          window
+          .fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/subscriptions/retrieve-subscription", {
+            method: "POST",
+            credentials: "include",
+          }).then(res => {
+            
+            return res.json();
+
+          }).then(data => {
+            
+            if(data.subscription?.status === "succeeded"){
+                
+              setSucceeded(true);
+            
+            }else{
+
+              // console.log(data.latest_invoice.payment_intent.client_secret);
+            
+              setClientSecret(data.latest_invoice?.payment_intent?.client_secret);
+
+            }
+
+          });
+
+
+        }
+
+        console.log('user has a subscription already - ' + mySubscription.data[0].subscriptionId );
 
       }
 
     }
 
-  }, [authState.user.email, mySubscription.data, mySubscription.status ]);
+    }else{
 
-  
- 
+      console.log('user has an active subscription already' );
+
+    }
+
+  }, [authState.selectedSubscription, authState.user.email, mySubscription.data, mySubscription.status, selectedSubscription]);
+
+
   
   const CARD_OPTIONS = {
     // iconStyle: "solid",
@@ -170,14 +223,18 @@ const Billing: React.FC = () => {
         }
       }).then((result) => { 
         if(result.error) {
+
           setError(`Payment failed ${result.error.message}`);
           setProcessing(false);
+
         } else {
+
           setError(null);
           setProcessing(false);
           setSucceeded(true);
 
           setSubscriptionStatus('active');
+
         }
       });
     }
@@ -207,13 +264,45 @@ const Billing: React.FC = () => {
       }
 
 
+        const getPrice = (price:any, currency:any) => {
+
+          return getSymbolFromCurrency(currency) + (Math.round(price) / 100).toFixed(2);
+        }
+
   return (
     <IonPage>
       <Header headerTitle="Billing"/>
       <TabBar activeTab="settings"/>
       <IonContent className="ion-padding" fullscreen >
+        <div className="content"> 
 
-        { subscriptionStatus !== 'active' ?
+        {isSuccessPrices &&
+
+        <div className="select-plan ion-padding-bottom">
+
+          {dataPrices?.data.map((element:any) => {
+
+            return <div className={ selectedPrice === element.id ? "plan active" : "plan" } key={element.id} onClick={() => setSelectedPrice(element.id)}>
+              
+              <p><strong>Pay {element.recurring.interval === 'year' ? 'Annually' : 'Monthly'}</strong></p>
+              
+              <p>{getPrice(element.unit_amount, element.currency )} per {element.recurring.interval}</p>
+            
+              {element.metadata?.discount && <div className="discount"><small>{ element.metadata?.discount }</small></div>}
+
+            </div>
+
+          })}
+
+        </div>
+
+        }
+
+
+        { selectedPrice &&  
+
+         mySubscription.status === "success" && subscriptionStatus !== 'active' ?
+
         <form id="payment-form" onSubmit={handleSubmit}>
 
           <CardElement id="card-element" options={CARD_OPTIONS} onChange={handleChange} />
@@ -230,6 +319,7 @@ const Billing: React.FC = () => {
               )}
             </span>
           </button>
+
           {/* Show any error that happens when processing the payment */}
           {error && (
             <div className="card-error" role="alert">
@@ -237,7 +327,8 @@ const Billing: React.FC = () => {
             </div>
           )}
           {/* Show a success message upon completion */}
-          <p className={succeeded ? "result-message" : "result-message hidden"}>
+          
+          {succeeded && <p className={succeeded ? "result-message" : "result-message hidden"}>
             Payment succeeded, see the result in your
             <a
               href={`https://dashboard.stripe.com/test/payments`}
@@ -245,7 +336,7 @@ const Billing: React.FC = () => {
               {" "}
               Stripe dashboard.
             </a> Refresh the page to pay again.
-          </p>
+          </p> }
 
           
         </form>
@@ -258,7 +349,7 @@ const Billing: React.FC = () => {
 
         </div>
         }
-        
+        </div>
 
       </IonContent>
     </IonPage>

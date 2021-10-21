@@ -15,9 +15,10 @@ const useUploadImage = ( profileId:any, setTheImage:Function, setUploadProgress:
       var formdata = new FormData();
       formdata.append( "files", data[0].data, data[0].data.path );
       formdata.append( "ref", data[0].theref );
-      formdata.append( "refId", profileId );
-      formdata.append( "field", data[0].field );
+      formdata.append( "refId", data[0].refId );
+      formdata.append( "field", data[0].field ); 
     
+      setUploadProgress(0);
       // console.log(formdata);
 
       await axios.post(
@@ -32,6 +33,9 @@ const useUploadImage = ( profileId:any, setTheImage:Function, setUploadProgress:
           
           client.invalidateQueries("uploadedImages");
           // setImageRef(response.data[0]);
+
+          
+
           setTheImage(response.data[0]);
           
         })

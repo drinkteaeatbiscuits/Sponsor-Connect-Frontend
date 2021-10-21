@@ -2,17 +2,20 @@
 	
 	background-color: var(--ion-color-medium);
 	width: 100%;
-	aspect-ratio: 2/1;
+	aspect-ratio: 12 / 5;
 	position: relative;
-
-	max-height: 400px;
+	overflow: hidden;
+	max-height: 70vh;
     min-width: 100%;
-	
 
+	@media screen and (min-width: 576px) {
+		aspect-ratio: 3 / 1;
+	}
+	
 
 	// aspect ratio fallback
 	@supports not (aspect-ratio: auto) { 
-		padding-top: 50%;
+		padding-top: 33.333%;
 		height: 0;
 		position: relative;
 		overflow: hidden;
@@ -32,11 +35,16 @@
 	}
 
 	@media screen and (min-width: 576px) {
+		
 		margin-left: -16px;
 		margin-right: -16px;
 		padding: 0 16px;
 		width: calc(100% + 32px);
 		min-width: calc(100% + 32px);
+	}
+
+	@media screen and (min-width: 768px) {
+		margin-top: 80px;
 	}
 
 		
@@ -84,7 +92,7 @@
 	@media screen and (min-width: 768px) {
 		display: flex;
 	}
-	max-width: 980px;
+	max-width: 1100px;
 	margin : 0 auto;
 	
 }
@@ -183,5 +191,130 @@
 	@media screen and ( min-width: 768px ) {
 		position: fixed;
     	top: 80px;
+	}
+}
+
+.profile-tabs {
+	background-color: #fff;
+	padding: 40px 0px;
+	flex-basis: 100%;
+	margin-bottom: 140px;
+	@media screen and ( min-width: 576px ) {
+		padding: 40px 15px;
+	}
+	@media screen and ( min-width: 768px ) {
+		margin-bottom: 80px;
+		padding: 0 15px;
+	}
+	.profile-tab {
+		display: block;
+		@media screen and ( min-width: 768px ) {
+			display: none;
+		}
+		.profile-tab-title {
+			display: block;
+			@media screen and ( min-width: 768px ) {
+				display: none;
+			}
+		}
+	}
+	&.active-tab-1 {
+		> div:nth-of-type(2) {
+			display: block;
+		}
+	}
+	&.active-tab-2 {
+		> div:nth-of-type(3) {
+			display: block;
+		}
+	}
+	&.active-tab-3 {
+		> div:nth-of-type(4) {
+			display: block;
+		}
+	}
+	&.active-tab-4 {
+		> div:nth-of-type(5) {
+			display: block;
+		}
+	}
+	.profile-tab-navigation {
+		display: none;
+		flex-wrap: wrap;
+		padding: 15px 0;
+		@media screen and ( min-width: 768px ) {
+			display: flex;
+		}
+		p {
+			padding: 5px 15px;
+			margin: 0;
+			font-weight: 700;
+			color: var(--ion-color-dark);
+			cursor: pointer;
+			transition: 0.25s ease-out;
+			position: relative;
+			&:hover {
+				color: var(--ion-color-primary);
+			}
+			&.active {
+				color: var(--ion-color-primary);
+				cursor: default;
+				// &:before {
+				// 	content: "";
+				// 	position: absolute;
+				// 	width: 6px;
+				// 	height: 6px;
+				// 	border-radius: 4px;
+				// 	background-color: var(--ion-color-primary);
+				// 	left: calc(50% - 4px);
+				// 	top: calc(100% + 2px);
+				// }
+				&:hover {
+					opacity: 1;
+				}
+			}
+			
+		}
+	}
+}
+
+.tab-title {
+	font-family: 'neue-haas-unica', sans-serif;
+	font-weight: 700;
+	letter-spacing: -0.01em;
+	font-size: 1.8em;
+	padding: 0 18px 18px;
+}
+
+.profile-tabs .photos {
+	.profile-images {
+		padding: 15px 5px;
+		margin: 15px 0 80px;
+		background-color: #fff;
+		.profile-image {
+			max-width: 50%;
+			padding: 3px;
+			cursor: pointer;
+			transition: 0.25s ease-out;
+			@media screen and (min-width: 450px) {
+				max-width: 50%;
+				padding: 1px;
+			}
+			@media screen and (min-width: 620px) {
+				max-width: 25%;
+				padding: 2px;
+			}
+			@media screen and (min-width: 768px) {
+				max-width: 33.333%;
+				padding: 2px;
+			}
+			@media screen and (min-width: 992px) {
+				max-width: 25%;
+				padding: 2px;
+			}
+			&:hover {
+				opacity: 0.6;
+			}
+		}
 	}
 }

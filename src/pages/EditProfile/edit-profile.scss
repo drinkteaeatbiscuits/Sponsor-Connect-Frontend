@@ -1,3 +1,7 @@
+.edit-profile {
+	padding-top: 60px;
+}
+
 .location-item {
 	position: relative;
 	z-index: 99;
@@ -23,10 +27,10 @@ ion-buttons.buttons-end {
 	}
 }
 
-.upload-image-wrap {
-	width: 100%;
-	padding: 15px 0;
-}
+// .upload-image-wrap {
+// 	width: 100%;
+// 	padding: 15px 0;
+// }
 
 .upload-image .dropzone {
 	display: block;
@@ -37,18 +41,14 @@ ion-buttons.buttons-end {
 	cursor: pointer;
 }
 
-.edit-profile {
-	padding-bottom: 40px;
-	--offset-bottom: 40px;
-	--padding-bottom: 40px;
-}
+
 
 .upload-image-wrap .circle-crop {
 	border-radius: 100%;
 	
 }
 
-.profile-picture-upload .upload-image-wrap .circle-crop {
+.profile-picture-upload.upload-image-wrap .circle-crop {
 	display: inline-block;
 	width: 124px;
 	height: 124px;
@@ -63,4 +63,90 @@ ion-buttons.buttons-end {
 	flex-basis: 100%;
 	padding: 10px 0;
 	margin: 0;
+}
+
+.social-media-totals {
+	position: relative;
+	.social-media-url {
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		transform: translate(-50%, 0);
+		background-color: #f7f7f7;
+		padding: 5px 10px;
+		border-radius: 3px;
+		display: none;
+	
+	}
+
+	ion-icon.has-url {
+		cursor: pointer;
+	}
+	.social-media-total.show-url .social-media-url {
+		display: block;
+	}
+}
+
+.social-media-fields {
+	padding: 12px 0 0;
+}
+
+.editor-section .google-places {
+	margin: 12px 0 0;
+}
+
+.editor-section .editor-section-bottom .social-media-field {
+	position: relative;
+	display: flex;
+	align-items: center;
+	margin-bottom: 12px;
+	> div {
+		margin: 0 0 0 10px;
+		&.url {
+			flex-grow: 1;
+		}
+	}
+	.label {
+		border-radius: 30px 0 0 30px;
+		background-color: var(--ion-color-light);
+		padding: 0 10px 0 15px;
+		min-width: 60px;
+		text-align: center;
+		margin: 0;
+		position: absolute;
+		top: 0;
+		height: 100%;
+		border-right: 1px solid #dddddd;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		label {
+			font-size: 0.8em;
+			font-weight: 700;
+		}
+
+	}
+	ion-input {
+		margin: 0;
+		margin-top: 0;
+		border-radius: 30px;
+		--padding-start: 70px;
+		--padding-end: 15px;
+	}
+}
+
+.editor-section .editor-section-bottom .accolade-field {
+	position: relative;
+	ion-input {
+		margin-top: 8px;
+	}
+	ion-icon {
+		position: absolute;
+		right: 12px;
+		top: 50%;
+		transform: translate(0, -50%);
+		font-size: 24px;
+		z-index: 99;
+		cursor: pointer;
+	}
 }
