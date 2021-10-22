@@ -51,6 +51,7 @@ const ProfileCard: React.FC<ProfileProps> = ( ProfileProps ) => {
 							<IonIcon color="tertiary" icon={shareSocial} /><p>{totalSocialFollowing(ProfileProps.profileData?.socialMedia)}</p>
 						</div>
 						}
+						{isSuccess && Object.keys(ProfileProps.profileData?.latLong).length > 0 ? "true" : "false"}
 					</div>
 					<IonButton size="small" expand="full" className="link profile-link" onClick={ ()=> history.push("/profile/" + ProfileProps.profileData?.id) } >View Profile</IonButton>
 				</IonCardContent>

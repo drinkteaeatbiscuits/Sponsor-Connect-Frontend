@@ -14,9 +14,13 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
+	const filters = {
+		sports: [],
+		distance: null
+	};
+
 	const getLocationPlaceName = (lat, long) => {
 
-		
 		Geocode.fromLatLng(lat, long).then(
 			(response) => {
 			const address = response.results[0].formatted_address;
@@ -50,15 +54,20 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	const { allProfileData, profileData, setData } = SidebarProps;
 	const [showMoreSports, setShowMoreSports] = useState(false);
-	const [activeFilters, setActiveFilters] = useState<any[]>([]);
+	const [activeFilters, setActiveFilters] = useState<any>(filters);
+	
+	// const [activeFilters2, setActiveFilters2] = useState<any[]>([]);
+
+	const [updatingProfiles, setUpdatingProfiles] = useState(true);
 
 	const [currentLocation, setCurrentLocation] = useState<any[]>([]);
 	const [fromLocation, setFromLocation] = useState<any>({});
 	const [locationRange, setLocationRange] = useState(distanceGroups.length);
 
+	const [distanceGroupCounts, setDistanceGroupCounts] = useState<object>({});
+
 	let result;
 	const numberOfSportsVisible = 8;
-
 
 	result = allProfileData?.map(a => a.sport);
 	result = result?.filter(function( element ) {
@@ -81,57 +90,9 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	const hiddenSports = Object.keys(sportsCounts).slice(numberOfSportsVisible).reduce((result, key) => {
 		result[key] = sportsCounts[key];
-
 		return result;
 	}, {});
-
-
-	useEffect(() => {
-
-		// console.log('test');
-		allProfileData && activeFilters.length > 0 && setData( allProfileData.filter(profile => {
-
-			let showProfile;
-
-			activeFilters.forEach((activeFilter) => {
-
-				if(profile.sport === activeFilter){ showProfile = true; }
-				
-			});
-
-			return showProfile;
-		
-		}));
-
-		activeFilters.length <= 0 && setData( allProfileData );
-
-		currentLocation.length <= 0 && navigator.geolocation.getCurrentPosition(function(position) {
-
-			setCurrentLocation([
-				{"lat": position.coords.latitude, "long": position.coords.longitude}
-			]);
-
-			setFromLocation( { lat: position.coords.latitude, long: position.coords.longitude } );
 	
-		  });
-
-
-		  Object.keys(fromLocation).length > 0 && !fromLocation.city && getLocationPlaceName(fromLocation.lat, fromLocation.long);
-		
-		
-	}, [activeFilters, currentLocation, fromLocation]);
-
-	// console.log(currentLocation);
-	// console.log(fromLocation);
-	
-	const filterSports = (e: any, sport: any) => {
-
-		!activeFilters.includes(sport) ? setActiveFilters([...activeFilters, sport])
-										: setActiveFilters(activeFilters => (activeFilters.filter((value) => value !== sport)));
-	}
-
-	// console.log(activeFilters);
-
 	function distance(lat1, lon1, lat2, lon2, unit) {
 		if ((lat1 == lat2) && (lon1 == lon2)) {
 			return 0;
@@ -154,45 +115,131 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		}
 	}
 
-	
+	const updateProfileDistances = () => {
 
-	const distanceGroupCounts = new Object();
+		let updatedObject = {};
 
-
-	const profileDistances = () => {
-
-		allProfileData && Object.keys(fromLocation).length > 0 && allProfileData.map((profile) => {
-
-			// distance( fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M" )
+		profileData && Object.keys(fromLocation).length > 0 && profileData.map((profile) => {
 
 			distance( fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M" );
 
 			let distanceAway;
 
-			Object.keys(profile.latLong).length > 0 && (distanceAway = distance( fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M" ));
-			
+			Object.keys(profile.latLong).length > 0 && (
+				distanceAway = distance( fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M" ));
 
 			distanceGroups.forEach((distance, i) => {
-				distanceAway > distance && distanceAway <= distanceGroups[i + 1] && (distanceGroupCounts[distance] = distanceGroupCounts[distance] ? distanceGroupCounts[distance] + 1 : 1);
+
+				distanceAway > distance && distanceAway <= distanceGroups[i + 1] && 
+					
+					( updatedObject[distance] = updatedObject[distance] ? updatedObject[distance] + 1 : 1 );
+
 			});
-	
-		})
+
+		});
+
+		setDistanceGroupCounts(updatedObject);
+		// console.log(updatedObject);
 	};
 
-	profileDistances();
+
+	const updateProfiles = async () => {
+
+		console.log('update profiles');
+
+		await setData( allProfileData.filter(profile => {
+			let showProfile;
+
+			// check if any sports filters are selected
+			activeFilters?.sports.length === 0 && (showProfile = true); 
+			
+			activeFilters?.sports.length > 0 && activeFilters.sports.forEach((activeFilter) => {
+				if(profile.sport === activeFilter){ showProfile = true; }else{ return }
+			});
+
+			// check if a distance filter is selected
+			activeFilters?.distance === 0 && (showProfile = true); 
+
+			// if there is a distance filter selected then hide profiles without location
+
+			console.log(distance(fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M"));
+
+			if( activeFilters?.distance > 0 && Object.keys(profile.latLong).length === 0 ){
+				showProfile = false;
+			} else if ( distance(fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M") <= activeFilters?.distance ) {
+				showProfile = true;
+			} else {
+				return
+			}
+			
+
+
+			// distance( fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M" ))
+
+			return showProfile;
+
+		}));
+
+		setUpdatingProfiles(false);
+
+	}
+
+	
+	// console.log(activeFilters?.sports.length);
+	console.log(activeFilters?.distance);
+
+	useEffect(() => {
+
+
+		allProfileData && Object.keys(profileData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setData(allProfileData);
+
+		profileData && updateProfileDistances();
+
+		if( activeFilters?.sports.length > 0 || activeFilters?.distance ){
+
+			updatingProfiles && updateProfiles();
+
+		}
+
+		currentLocation.length <= 0 && navigator.geolocation.getCurrentPosition(function(position) {
+			setCurrentLocation([
+				{"lat": position.coords.latitude, "long": position.coords.longitude}
+			]);
+			setFromLocation( { lat: position.coords.latitude, long: position.coords.longitude } );
+		  });
+
+
+		  Object.keys(fromLocation).length > 0 && !fromLocation.city && getLocationPlaceName(fromLocation.lat, fromLocation.long);
+
+		
+	}, [activeFilters, currentLocation, fromLocation, profileData]);
 
 
 	
+	const filterSports = (e: any, sport: any) => {
+
+		setUpdatingProfiles(true);
+
+		!activeFilters?.sports.includes(sport) ? setActiveFilters(prevState => ({ ...prevState, sports: [...activeFilters?.sports,...[sport]]})) 
+		: setActiveFilters( prevState => ({ ...prevState, sports: activeFilters?.sports.filter(e => e !== sport)}));
+
+	}
+
+	const setDistance = (e) => {
+		
+		setUpdatingProfiles(true);
+
+		setActiveFilters( prevState => ({ ...prevState, distance: distanceGroups[e - 1] }));
+		
+	}
 
 	const getGraphHeight = (total) => {
 
 		let highestTotal = Math.max(...Object.values(distanceGroupCounts));
-		
+
 		return (100 / highestTotal) * total;
 
 	}
-
-	// console.log(distanceGroupCounts);
 	
 
 	return <aside className="sidebar">
@@ -216,7 +263,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 						{ Object.keys(visibleSports).map((sport) => {
 							let profileCount = visibleSports[sport];
 							return <div key={sport} className="sport">
-									<IonCheckbox checked={ activeFilters.includes(sport) ? true : false } 
+									<IonCheckbox checked={ activeFilters?.sports.includes(sport) ? true : false } 
 									onIonChange={(e) => { 
 										filterSports(e, sport);
 									}} />
@@ -234,7 +281,8 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 							{ Object.keys(hiddenSports).map((sport) => {
 							let profileCount = hiddenSports[sport];
 							return <div key={sport} className="sport">
-									<IonCheckbox checked={ activeFilters.includes(sport) ? true : false } onIonChange={e => filterSports(e, sport)} />
+									<IonCheckbox checked={ activeFilters?.sports.includes(sport) ? true : false } 
+									onIonChange={e => filterSports(e, sport)} />
 									<div className="checkbox-label">{sport}</div>
 									<div className="checkbox-count">{profileCount}</div>
 								</div>	
@@ -261,20 +309,30 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 						</div>
 
 						<div className="range-graph">
-							
-							{ distanceGroups.map((distanceGroup, i) => {	
-								// console.log(distanceGroup);
-								
-								distanceGroupCounts[distanceGroup] && console.log(getGraphHeight(distanceGroupCounts[distanceGroup]));
 
-								return <div key={distanceGroup} className={"distance-group " + (locationRange - 1 >= i ? "active" : "")} data-distance={distanceGroup}
+						
+							{ distanceGroups.map((distanceGroup, i) => {	
+								
+								return <div key={distanceGroupCounts[distanceGroup] + "-" + distanceGroup} 
+								className={"distance-group " + (locationRange >= i + 1 ? "active" : "")}
 								style={{
-									height: getGraphHeight(distanceGroupCounts[distanceGroup]) + "%",
+									height: getGraphHeight(distanceGroupCounts[distanceGroups[i - 1]]) + "%",
 								}}></div>
-							}) }
+
+							}) 
+							
+							}
 
 						</div>
-						<IonRange value={locationRange} onIonChange={(e) => setLocationRange(e.detail.value as number)} min={0} max={distanceGroups.length} step={1} ticks={true} snaps={true} color="primary" />
+						
+
+						<IonRange value={locationRange} 
+						onIonChange={(e) => {setDistance(e.detail.value as number); setLocationRange(e.detail.value as number)}} 
+						min={0} 
+						max={distanceGroups.length} 
+						step={1} 
+						ticks={true} 
+						snaps={true} color="primary" />
 						
 						{ distanceGroups[locationRange - 1] !== undefined && <p className="location-distance">{ distanceGroups[locationRange - 1] === 0 ? "All Locations" : "Within " + distanceGroups[locationRange - 1] + " Miles" }</p>}
 
