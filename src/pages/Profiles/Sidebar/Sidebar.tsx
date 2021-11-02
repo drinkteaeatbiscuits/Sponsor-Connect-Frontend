@@ -81,33 +81,67 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const [lowerBudget, setLowerBudget] = useState(0);
 	const [upperBudget, setUpperBudget] = useState(budgetGroups.length);
 
+	const [sportsData, setSportsData] = useState<any[]>([]);
+	// const [visibleSports, setVisibleSports] = useState();
+
 	let result;
 	const numberOfSportsVisible = 8;
 
-	result = allProfileData?.map(a => a.sport);
+	result = sportsData?.map(a => a.sport);
+	
+	// console.log(activeFilters.sports);
+	// console.log(result);
+
+	
+
 	result = result?.filter(function( element ) {
 		return element.length > 0;
 	 });
 
+	//  console.log(result);
+
+	 
+	 
 
 	const sportsCounts = {};
 
 	if(result?.length > 0){
 		for (let sport of result.values()){
+			
 			sportsCounts[sport] = sportsCounts[sport] ? sportsCounts[sport] + 1 : 1;
+			
 		}
 	}
 
-	const visibleSports = Object.keys(sportsCounts).slice(0, numberOfSportsVisible).reduce((result, key) => {
+	let visibleSports = Object.keys(sportsCounts).slice(0, numberOfSportsVisible).reduce((result, key) => {
 		result[key] = sportsCounts[key];
 		return result;
 	}, {});
 
-	const hiddenSports = Object.keys(sportsCounts).slice(numberOfSportsVisible).reduce((result, key) => {
+	let hiddenSports = Object.keys(sportsCounts).slice(numberOfSportsVisible).reduce((result, key) => {
 		result[key] = sportsCounts[key];
 		return result;
 	}, {});
+
+
+	activeFilters.sports.length > 0 && activeFilters.sports.forEach((sport) => {
+		
+		
+		!visibleSports[sport] && (visibleSports = {[sport]: 0, ...visibleSports});
+
+		
+	});
+
+	console.log(visibleSports);
 	
+
+	// const updateSportsList = () => {
+
+	// 	setVisibleSports()
+
+	// }
+
+
 	function distance(lat1, lon1, lat2, lon2, unit) {
 		if ((lat1 == lat2) && (lon1 == lon2)) {
 			return 0;
@@ -161,7 +195,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	const updateProfiles = async () => {
 
-		console.log('update profiles');
+		// console.log('update profiles');
 
 		allProfileData && await setData( allProfileData.filter(profile => {
 			let showProfile = false;
@@ -211,6 +245,33 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		}));
 
+
+
+		allProfileData && await setSportsData( allProfileData.filter(profile => {
+
+
+			let showProfileDistance = false;
+
+			activeFilters?.distance === 0 && ( showProfileDistance = true ); 
+			activeFilters?.distance === null && ( showProfileDistance = true ); 
+			
+			if( activeFilters?.distance > 0 && Object.keys(profile.latLong).length === 0 ){
+				showProfileDistance = false;
+			}  
+			
+			if ( Number(distance(fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M")) < Number(activeFilters?.distance) ) {
+				showProfileDistance = true;
+			}
+
+
+			if(showProfileDistance) {
+				return true;
+			}else{
+				return;
+			}
+
+		}));
+
 		setUpdatingProfiles(false);
 
 	}
@@ -219,14 +280,16 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	// console.log(activeFilters?.sports.length);
 	// console.log(activeFilters?.distance);
 
-	console.log(updatingProfiles);
-	console.log(activeFilters);
-	console.log(budgetRange);
+	// console.log(updatingProfiles);
+	// console.log(activeFilters);
+	// console.log(budgetRange);
 
 	useEffect(() => {
 
 
 		allProfileData && Object.keys(profileData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setData(allProfileData);
+
+		allProfileData && Object.keys(sportsData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setSportsData(allProfileData)
 
 		profileData && updateProfileDistances();
 
@@ -323,8 +386,11 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 					</div>
 					<div className="filter-section-bottom">
+
+
 	
 						{ Object.keys(visibleSports).map((sport) => {
+
 							let profileCount = visibleSports[sport];
 							return <div key={sport} className="sport">
 									<IonCheckbox checked={ activeFilters?.sports.includes(sport) ? true : false } 
