@@ -39,6 +39,8 @@ const LogoutButton: React.FC<LogoutProps> = ( props: LogoutProps ) => {
 				type: "LOGOUT"
 			  });
 
+			
+
 			  
 		  }
 

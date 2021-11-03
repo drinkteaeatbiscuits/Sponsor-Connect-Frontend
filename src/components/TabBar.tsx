@@ -38,7 +38,7 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
 				type: "LOGOUT"
 			  });
 
-			  
+			  history.push('/');
 		  }
 
 	  }
@@ -57,6 +57,12 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
                     {/* <IonLabel>Dashboard</IonLabel> */}
                     {/* <IonBadge>2</IonBadge> */}
                 {/* </div> */}
+
+                <div className={ ( activeTab === 'profiles' && "active " ) + " tab-button"} onClick={()=> history.push("/profiles")}>
+                    <IonIcon icon={personCircle} />
+                    <IonLabel>Profiles</IonLabel>
+                </div>
+
 
                 {isBusinessAccount() ? 
                 <div className={ ( activeTab === 'profile' && "active " ) + " tab-button"} onClick={()=> history.push("/profiles")}>

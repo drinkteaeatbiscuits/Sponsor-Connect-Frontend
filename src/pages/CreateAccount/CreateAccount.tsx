@@ -376,19 +376,19 @@ const CreateAccount: React.FC = () => {
                     <div className="login-form">
                       <IonItem className="ion-no-padding">
                         <IonLabel position="stacked">Your Name</IonLabel>
-                        <IonInput id="your-name" placeholder="Your Name" value={yourName} autocomplete="name" required={true} autofocus={true} enterkeyhint="next" type="text" autocapitalize="words" onIonChange={(e: any) => { setYourName(e.detail.value); validateYourName(e.detail.value); }} />
+                        <IonInput id="your-name" placeholder="Your Name" value={yourName} autocomplete="name" required={true} autofocus={true} enterkeyhint="next" type="text" autocapitalize="words" onIonInput={(e: any) => { setYourName(e.target.value); validateYourName(e.target.value); }} onIonChange={(e: any) => { setYourName(e.detail.value); validateYourName(e.detail.value); }} />
                         {errorMessages.yourName && <p className="error-message ion-no-margin"><small>{errorMessages.yourName}</small></p>}
                       </IonItem>
 
                       <IonItem className="ion-no-padding">
                         <IonLabel position="stacked">Email Address</IonLabel>
-                        <IonInput id="your-email" placeholder="your@email.com" value={username} autocomplete="email" required={true} pattern="email" type="email" enterkeyhint="next" inputmode="email" onIonChange={(e: any) => { setUsername(e.detail.value); validateUsername(e.detail.value); }} />
+                        <IonInput id="your-email" placeholder="your@email.com" value={username} autocomplete="email" required={true} pattern="email" type="email" enterkeyhint="next" inputmode="email" onIonInput={(e: any) => { setUsername(e.target.value); validateUsername(e.target.value); }} onIonChange={(e: any) => { setUsername(e.detail.value); validateUsername(e.detail.value); }} />
                         {errorMessages.username && <p className="error-message ion-no-margin"><small>{errorMessages.username}</small></p> }
                       </IonItem>
                       <IonItem className="ion-no-padding password-item">
                         <IonLabel position="stacked">Password</IonLabel>
                         <EyeSVG className={ showPassword ? "password-show active" : "password-show"}  onClick={() => { showPassword ? setShowPassword(false) : setShowPassword(true) } } />
-                        <IonInput id="your-password" className="password-input" value={password} enterkeyhint="go" type={ showPassword ? "text" : "password" } autocomplete="off" required={true} minlength={6} onIonChange={(e: any) => { setPassword(e.detail.value); validatePassword(e.detail.value); }} />
+                        <IonInput id="your-password" className="password-input" value={password} enterkeyhint="go" type={ showPassword ? "text" : "password" } autocomplete="off" required={true} minlength={6} onIonInput={(e: any) => { setPassword(e.target.value); validatePassword(e.target.value); }} onIonChange={(e: any) => { setPassword(e.detail.value); validatePassword(e.detail.value); }} />
                         <PasswordStrengthBar className="password-strength" onChangeScore={(score) => { score >= 3 ? setPasswordStrongEnough(true) : setPasswordStrongEnough(false) }} password={password} barColors={['#ddd', '#ef4836', '#ff5722', '#0eb567', '#0EB59A']} />
                         {errorMessages.password && <p className="error-message ion-no-margin"><small>{errorMessages.password}</small></p> }
                       </IonItem>
