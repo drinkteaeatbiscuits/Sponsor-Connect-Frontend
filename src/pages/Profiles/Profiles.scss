@@ -7,13 +7,14 @@
 
 .sidebar {
 	position: fixed;
+	overflow: scroll;
 	left: 0;
 	top: 0;
 	height: 100%;
 	background-color: #fff;
 	color: var(--ion-color-dark);
 	z-index: 999;
-	padding: 40px 16px 0;
+	padding: 40px 16px 40px;
 	max-width: 320px;
 	width: 90%;
 	box-shadow: 0 3px 10px 0px rgba(0, 0, 0, 0.16);
@@ -110,10 +111,82 @@
 	}
 }
 
-.checkbox ion-checkbox {
+.filter-section ion-checkbox {
 	--size: 21px;
 	--border-width: 1px;
+	--border-radius: 5px;
+	--border-color: #D6D6D6;
+	background-color: #ffffff;
+	
+	&.checkbox-checked {
+		--border-width: 3px;
+	}
+	
 	.checkbox-icon {
 		display: none;
+		
 	}
 }  
+
+.filter-section-bottom {
+	padding: 8px 0;
+}
+
+.sports .sport {
+	display: flex;
+	align-items: center;
+	padding: 0 0 8px;
+	.checkbox-label {
+		flex-grow: 1;
+		padding: 0 8px;
+		cursor: pointer;
+	}
+	.checkbox-count {
+		color: var(--ion-color-medium);
+		font-size: 0.9em;
+		padding: 0 8px;
+	}
+}
+
+.view-more-sports {
+	font-size: 0.8em;
+	color: #C1C1C1;
+	font-weight: 600;
+	padding: 0 0 4px;
+	cursor: pointer;
+	transition: 0.25s ease-out;
+	&:hover {
+		color: var(--ion-color-medium);	
+	}
+}
+
+.range-graph {
+	// padding: 0 14px;
+	margin-top: 16px;
+	display: flex;
+	height: 40px;
+	align-items: flex-end;
+	margin-bottom: -28px;
+	.distance-group {
+		flex-grow: 1;
+		background-color: #f3f3f3;
+		margin: 0 2px;
+		border-radius: 4px 4px 0 0;
+		&.active {
+			background-color: #c6f8ea;
+		}
+	}
+}
+
+ion-range {
+	padding-inline: 0px;
+}
+
+.location-distance {
+	margin: 0;
+	padding: 0 0px;
+	font-weight: 600;
+	font-size: 0.95em;
+	color: var(--ion-color-primary);
+	margin-top: -15px;
+}

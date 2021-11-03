@@ -18,13 +18,17 @@ const Profiles: React.FC = () => {
   const {isLoading, data, isSuccess, error} = useProfiles();
   error && console.log(error);
 
-  const [profileData, setProfileData] = useState([]);
+  const [profileData, setProfileData] = useState<any[]>([]);
+
+  
 
   useEffect(() => {
     
-    isSuccess && setProfileData(data);
+    isSuccess && !profileData && setProfileData(data);
 
-  }, [ data ])
+  }, [ data ]);
+
+ 
 
   return (
     <IonPage>
