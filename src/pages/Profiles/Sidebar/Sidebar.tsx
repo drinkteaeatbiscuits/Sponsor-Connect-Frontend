@@ -2,6 +2,7 @@ import { IonCheckbox, IonIcon, IonRange } from "@ionic/react";
 import { constructOutline, location } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import Geocode from "react-geocode";
+import { AuthContext } from "../../../App";
 
 Geocode.setApiKey("AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q");
 
@@ -19,6 +20,10 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		distance: null,
 		budget: null
 	};
+
+	const { state: authState } = React.useContext(AuthContext);
+
+	
 
 	const getLocationPlaceName = (lat, long) => {
 
@@ -65,6 +70,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const [updatingProfiles, setUpdatingProfiles] = useState(true);
 
 	const [currentLocation, setCurrentLocation] = useState<any[]>([]);
+
 	const [fromLocation, setFromLocation] = useState<any>({});
 	const [locationRange, setLocationRange] = useState(distanceGroups.length);
 	// const [budgetRange, setBudgetRange] = useState(budgetGroups.length);
@@ -132,7 +138,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		
 	});
 
-	console.log(visibleSports);
+	// console.log(visibleSports);
 	
 
 	// const updateSportsList = () => {
@@ -299,20 +305,29 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		}
 
-		currentLocation.length <= 0 && navigator.geolocation.getCurrentPosition(function(position) {
-			setCurrentLocation([
-				{"lat": position.coords.latitude, "long": position.coords.longitude}
-			]);
-			setFromLocation( { lat: position.coords.latitude, long: position.coords.longitude } );
-		  });
+		 if( authState?.currentLocation && !currentLocation && !fromLocation ) {
+			
+			setFromLocation(authState?.currentLocation);
+			setCurrentLocation([authState?.currentLocation]);
 
+		} else {
 
-		  Object.keys(fromLocation).length > 0 && !fromLocation.city && getLocationPlaceName(fromLocation.lat, fromLocation.long);
-
+			currentLocation.length <= 0 && navigator.geolocation.getCurrentPosition(function(position) {
+				setCurrentLocation([
+					{"lat": position.coords.latitude, "long": position.coords.longitude}
+				]);
+				
+				setFromLocation( { lat: position.coords.latitude, long: position.coords.longitude } );
+			  });
+	
+	
+			  Object.keys(fromLocation).length > 0 && !fromLocation.city && getLocationPlaceName(fromLocation.lat, fromLocation.long);
+	
+		}
 		
-	}, [activeFilters, currentLocation, fromLocation, profileData, updatingProfiles]);
+	}, [activeFilters, currentLocation, fromLocation, profileData, updatingProfiles, authState]);
 
-
+	// console.log(authState?.currentLocation.city);
 	
 	const filterSports = (e: any, sport: any) => {
 

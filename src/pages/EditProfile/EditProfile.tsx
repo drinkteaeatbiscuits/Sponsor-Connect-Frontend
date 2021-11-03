@@ -375,7 +375,7 @@ const EditProfile: React.FC = () => {
 
                     { profileData.isSuccess && location.label === profileData?.data[0]?.location.label && (!showLocation && <div className="editor-section-button" onClick={() => { setShowLocation(true); }}>{ location ? "Edit" : "Add"}</div>) }
 
-                    { showLocation && <div className="editor-section-button" onClick={() => { saveField("location", location ); setShowLocation(false); }}>Save</div> }
+                    { showLocation && <div className="editor-section-button" onClick={() => { saveField("location", location ); saveField("latLong", latLong ); setShowLocation(false); }}>Save</div> }
  
                   </div>	
 
@@ -400,8 +400,7 @@ const EditProfile: React.FC = () => {
                             }
                           }}
                         /> }
-                  {/* <IonInput placeholder="Please select your sport" value= readonly={true} type="text"  />  */}
-
+              
                 </div> 
 
               </div>

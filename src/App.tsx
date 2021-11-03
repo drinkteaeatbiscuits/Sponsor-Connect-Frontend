@@ -14,6 +14,8 @@ import CreateAccount from './pages/CreateAccount/CreateAccount';
 import Menu from './pages/Menu';
 
 
+
+
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -64,6 +66,10 @@ import NewTextEditor from './pages/NewTextEditor/NewTextEditor';
 import ProfileImages from './pages/ProfileImages/ProfileImages';
 import EditProfileDescription from './pages/EditProfile/EditProfileDescription';
 
+import Geocode from "react-geocode";
+
+Geocode.setApiKey("AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q");
+
 
 const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
 
@@ -75,6 +81,7 @@ export const AuthContext = React.createContext<{
 const initialState = {
   isAuthenticated: false,
   user: null,
+  currentLocation: null
 };
 
 const reducer = (state: any, action: any) => {
@@ -132,20 +139,67 @@ const checkIfAuthenticated = async () => {
 
 const App: React.FC = () => {
 
+  const getLocationPlaceName = (lat, long) => {
+
+		Geocode.fromLatLng(lat, long).then(
+			(response) => {
+			const address = response.results[0].formatted_address;
+			let city, state, country;
+			for (let i = 0; i < response.results[0].address_components.length; i++) {
+				for (let j = 0; j < response.results[0].address_components[i].types.length; j++) {
+				switch (response.results[0].address_components[i].types[j]) {
+					case "locality":
+					city = response.results[0].address_components[i].long_name;
+					break;
+					case "administrative_area_level_1":
+					state = response.results[0].address_components[i].long_name;
+					break;
+					case "country":
+					country = response.results[0].address_components[i].long_name;
+					break;
+				}
+				}
+			}
+
+			setFromLocation({ ...fromLocation, "city": city});
+			
+			},
+			(error) => {
+				console.error(error);
+			}
+		);
+	}
+	
+
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const [wasUserHere, setWasUserHere] = useState<any>("");
+  const [currentLocation, setCurrentLocation] = useState<any>("");
+  const [fromLocation, setFromLocation] = useState<any>({});
 
   useEffect(() => {
 
     checkIfAuthenticated().then(data => setWasUserHere(data));
 
-  }, []);
+    currentLocation.length <= 0 && navigator.geolocation.getCurrentPosition(function(position) {
+    
+      setCurrentLocation([
+        {"lat": position.coords.latitude, "long": position.coords.longitude}
+      ]);
+    
+      setFromLocation( { lat: position.coords.latitude, long: position.coords.longitude } );
+
+    });
+
+    Object.keys(fromLocation).length > 0 && !fromLocation.city && getLocationPlaceName(fromLocation.lat, fromLocation.long);
+
+    Object.keys(fromLocation).length > 0 && fromLocation.city && (initialState.currentLocation = fromLocation);
+
+  }, [currentLocation, fromLocation]);
 
   wasUserHere && (initialState.isAuthenticated = true);
   wasUserHere && (initialState.user = wasUserHere);
 
   const history = useHistory();
-
 
   return (
 
