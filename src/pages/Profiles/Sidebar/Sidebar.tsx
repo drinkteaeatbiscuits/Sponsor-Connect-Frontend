@@ -174,7 +174,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		let updatedObject = {};
 	
-
 		profileData && Object.keys(fromLocation).length > 0 && profileData.map((profile) => {
 
 			distance( fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M" );
@@ -201,7 +200,8 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	const updateProfiles = async () => {
 
-		// console.log('update profiles');
+		console.log('updating profiles');
+		
 
 		allProfileData && await setData( allProfileData.filter(profile => {
 			let showProfile = false;
@@ -255,7 +255,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		allProfileData && await setSportsData( allProfileData.filter(profile => {
 
-
 			let showProfileDistance = false;
 
 			activeFilters?.distance === 0 && ( showProfileDistance = true ); 
@@ -282,52 +281,118 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	}
 
-	
-	// console.log(activeFilters?.sports.length);
-	// console.log(activeFilters?.distance);
 
-	// console.log(updatingProfiles);
-	// console.log(activeFilters);
-	// console.log(budgetRange);
+
+	// useEffect(() => {
+
+
+	// 	allProfileData && Object.keys(profileData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setData(allProfileData);
+
+	// 	allProfileData && Object.keys(sportsData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setSportsData(allProfileData)
+
+	// 	profileData && updateProfileDistances();
+
+
+	// 	if( updatingProfiles ){
+
+	// 		updatingProfiles && updateProfiles();
+
+	// 	}
+
+	// 	if( authState?.currentLocation && currentLocation.length <= 0 ) {
+
+	// 		console.log('already got location');
+			
+	// 		setCurrentLocation([authState?.currentLocation]);
+	// 		setFromLocation(authState?.currentLocation);
+			
+	// 		setUpdatingProfiles(true);
+	// 		updateProfiles();
+	
+	// 	}
+		
+	// 	if ( !authState?.currentLocation && currentLocation.length <= 0 ) {
+	
+	// 		console.log('getting location');
+	
+	// 		navigator.geolocation.getCurrentPosition(function(position) {
+	// 			setCurrentLocation([
+	// 				{"lat": position.coords.latitude, "long": position.coords.longitude}
+	// 			]);
+				
+	// 			setFromLocation( { lat: position.coords.latitude, long: position.coords.longitude } );
+	// 		});
+	
+	// 		Object.keys(fromLocation).length > 0 && !fromLocation.city && getLocationPlaceName(fromLocation.lat, fromLocation.long);
+	
+	// 		setUpdatingProfiles(true);
+	// 		updateProfiles();
+	
+	// 	}
+
+
+	// 	if( allProfileData && profileData.length <= 0 ) { setUpdatingProfiles(true); updateProfiles(); }
+		
+		 
+		
+	// }, [ activeFilters, currentLocation, fromLocation, profileData, updatingProfiles, authState ]);
+
+	const [gettingLocation, setGettingLocation] = useState(false);
 
 	useEffect(() => {
+		
 
+		if( allProfileData && authState?.currentLocation && currentLocation.length <= 0 ) {
 
-		allProfileData && Object.keys(profileData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setData(allProfileData);
-
-		allProfileData && Object.keys(sportsData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setSportsData(allProfileData)
-
-		profileData && updateProfileDistances();
-
-		if( updatingProfiles ){
-
-			updatingProfiles && updateProfiles();
-
-		}
-
-		 if( authState?.currentLocation && !currentLocation && !fromLocation ) {
+			console.log('already got location');
 			
-			setFromLocation(authState?.currentLocation);
 			setCurrentLocation([authState?.currentLocation]);
+			setFromLocation(authState?.currentLocation);
+			
+			setUpdatingProfiles(true);
+			// updateProfiles();
+	
+		}
+		
+		if ( allProfileData && !authState?.currentLocation && currentLocation.length <= 0 && !gettingLocation ) {
 
-		} else {
-
-			currentLocation.length <= 0 && navigator.geolocation.getCurrentPosition(function(position) {
+			setGettingLocation(true);
+	
+			console.log('getting location');
+	
+			navigator.geolocation.getCurrentPosition(function(position) {
 				setCurrentLocation([
 					{"lat": position.coords.latitude, "long": position.coords.longitude}
 				]);
 				
 				setFromLocation( { lat: position.coords.latitude, long: position.coords.longitude } );
-			  });
+			});
 	
+			Object.keys(fromLocation).length > 0 && !fromLocation.city && getLocationPlaceName(fromLocation.lat, fromLocation.long);
 	
-			  Object.keys(fromLocation).length > 0 && !fromLocation.city && getLocationPlaceName(fromLocation.lat, fromLocation.long);
+			setUpdatingProfiles(true);
+			// updateProfiles();
 	
 		}
-		
-	}, [activeFilters, currentLocation, fromLocation, profileData, updatingProfiles, authState]);
 
-	// console.log(authState?.currentLocation.city);
+		currentLocation.length > 0 && setGettingLocation(false);
+
+		if( updatingProfiles ){
+
+			updateProfiles();
+
+		}
+
+		allProfileData && Object.keys(profileData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setData(allProfileData);
+		allProfileData && Object.keys(sportsData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setSportsData(allProfileData)
+
+
+		profileData && updateProfileDistances();
+
+
+	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters ])
+	
+ 
 	
 	const filterSports = (e: any, sport: any) => {
 
@@ -346,7 +411,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const setDistance = (e) => {
 		
 		setUpdatingProfiles(true);
-
 		setActiveFilters( prevState => ({ ...prevState, distance: distanceGroups[e - 1] }));
 		
 	}
@@ -378,7 +442,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const getGraphHeight = (total) => {
 
 		let highestTotal = Math.max(...Object.values(distanceGroupCounts));
-
 		return (100 / highestTotal) * total;
 
 	}
