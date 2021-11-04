@@ -3,6 +3,7 @@ import { constructOutline, location } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import Geocode from "react-geocode";
 import { AuthContext } from "../../../App";
+import useOpportunityValues from "../../../hooks/useOpportunityValues";
 
 Geocode.setApiKey("AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q");
 
@@ -75,7 +76,10 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const [locationRange, setLocationRange] = useState(distanceGroups.length);
 	// const [budgetRange, setBudgetRange] = useState(budgetGroups.length);
 
-	// const [budget, setBudget] = useState("");
+	const [budget, setBudget] = useState<any>({ lower: 1, upper: 8 });
+	
+	const [budgetGroupCounts, setBudgetGroupCounts] = useState<object>({});
+	
 	const [distanceGroupCounts, setDistanceGroupCounts] = useState<object>({});
 
 	const [budgetRange, setBudgetRange] = useState<{
@@ -88,25 +92,22 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const [upperBudget, setUpperBudget] = useState(budgetGroups.length);
 
 	const [sportsData, setSportsData] = useState<any[]>([]);
+	const [distanceData, setDistanceData] = useState<any[]>([]);
+	const [budgetData, setBudgetData] = useState<any[]>([]);
+
 	// const [visibleSports, setVisibleSports] = useState();
 
+	// console.log(activeFilters);
+	
 	let result;
 	const numberOfSportsVisible = 8;
 
 	result = sportsData?.map(a => a.sport);
-	
-	// console.log(activeFilters.sports);
-	// console.log(result);
-
-	
 
 	result = result?.filter(function( element ) {
 		return element.length > 0;
 	 });
 
-	//  console.log(result);
-
-	 
 	 
 
 	const sportsCounts = {};
@@ -132,9 +133,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	activeFilters.sports.length > 0 && activeFilters.sports.forEach((sport) => {
 		
-		
 		!visibleSports[sport] && (visibleSports = {[sport]: 0, ...visibleSports});
-
 		
 	});
 
@@ -174,9 +173,9 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		let updatedObject = {};
 	
-		profileData && Object.keys(fromLocation).length > 0 && profileData.map((profile) => {
+		distanceData && Object.keys(fromLocation).length > 0 && distanceData.map((profile) => {
 
-			distance( fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M" );
+			// distance( fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M" );
 
 			let distanceAway;
 
@@ -198,12 +197,50 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	};
 
 
+
+	const updateBudgetGroups = () => {
+
+		let updatedObject = {};
+
+		budgetData && Object.keys(budget).length > 0 && budgetData.map((profile) => {
+
+
+			const maxValue = Math.max(...profile.opportunities.map(o => o.price), 0);
+			const minValue = Math.min(...profile.opportunities.map(o => o.price));
+
+			// console.log(maxValue, minValue);
+
+
+			budgetGroups.forEach((budget, i) => {
+
+				// console.log(budget, minValue, maxValue);
+
+				let addtogroup = false;
+
+				( minValue >= budget && minValue <= budgetGroups[i + 1] ) && ( addtogroup = true );
+
+				( maxValue <= budget && maxValue >= budgetGroups[i - 1] ) && ( addtogroup = true );
+				
+				addtogroup && ( updatedObject[budget] = updatedObject[budget] ? updatedObject[budget] + 1 : 1 );
+
+			});
+			
+
+		});
+
+		setBudgetGroupCounts(updatedObject);
+
+	}
+
+	// console.log(budgetGroupCounts);
+
 	const updateProfiles = async () => {
 
 		console.log('updating profiles');
 		
 
 		allProfileData && await setData( allProfileData.filter(profile => {
+
 			let showProfile = false;
 
 			// check if any sports filters are selected
@@ -236,13 +273,44 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 			if ( Number(distance(fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M")) < Number(activeFilters?.distance) ) {
 				showProfileDistance = true;
 			}
+
+
+
+			let showProfileBudget = false;
+			// check if a distance filter is selected
+			// activeFilters?.budget === 0 && ( showProfileBudget = true ); 
+			// activeFilters?.budget === null && ( showProfileBudget = true );
+
+			console.log(activeFilters?.budget);
 			
+
+			let maxValue = Math.max(...profile.opportunities.map(o => o.price), 0);
+			let minValue = Math.min(...profile.opportunities.map(o => o.price));
+			
+			if(activeFilters?.budget){
+				console.log(maxValue);
+				console.log(minValue);
+				console.log(budgetGroups[activeFilters?.budget.lower - 1]);
+
+				// if minimum value is greater than lower filter and less than upper filter
+				((minValue >= budgetGroups[activeFilters?.budget.lower - 1]) && ( minValue <= budgetGroups[activeFilters?.budget.upper - 1] )) && ( showProfileBudget = true );
+
+				// or
+				
+				// if maximum value is less than upper filter and greater than lower filter 
+
+				// ((minValue >= budgetGroups[activeFilters?.budget.lower - 1]) && (minValue <= budgetGroups[activeFilters?.budget.upper - 1]) 
+				// || (maxValue >= budgetGroups[activeFilters?.budget.lower - 1]) && (maxValue <= budgetGroups[activeFilters?.budget.upper - 1]))  && ( showProfileBudget = true );
+				
+
+
+			}
 
 			// console.log(showProfileDistance);
 
 			// distance( fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M" ))
 
-			if(showProfileDistance && showProfile) {
+			if(showProfileDistance && showProfile && showProfileBudget) {
 				return true;
 			}else{
 				return;
@@ -277,65 +345,61 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		}));
 
+
+		allProfileData && await setDistanceData( allProfileData.filter(profile => {
+
+			let showDistanceProfile = false;
+
+			// check if any sports filters are selected
+			activeFilters?.sports.length === 0 && (showDistanceProfile = true); 
+			
+			activeFilters?.sports.length > 0 && activeFilters.sports.forEach((activeFilter) => {
+				// console.log(activeFilter);
+				// console.log(profile.sport);
+				if( profile.sport === activeFilter ){ showDistanceProfile = true; }
+			});
+
+
+			if(showDistanceProfile) {
+				return true;
+			}else{
+				return;
+			}
+
+		}));
+
+		
+
+		allProfileData && await setBudgetData( allProfileData.filter(profile => {
+
+			let showBudgetProfile = false;
+
+			// check if any sports filters are selected
+			activeFilters?.sports.length === 0 && (showBudgetProfile = true); 
+			
+			activeFilters?.sports.length > 0 && activeFilters.sports.forEach((activeFilter) => {
+				// console.log(activeFilter);
+				// console.log(profile.sport);
+				if( profile.sport === activeFilter ){ showBudgetProfile = true; }
+			});
+
+
+			if(showBudgetProfile) {
+				return true;
+			}else{
+				return;
+			}
+
+		}));
+
+
 		setUpdatingProfiles(false);
 
 	}
 
-
-
-	// useEffect(() => {
-
-
-	// 	allProfileData && Object.keys(profileData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setData(allProfileData);
-
-	// 	allProfileData && Object.keys(sportsData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setSportsData(allProfileData)
-
-	// 	profileData && updateProfileDistances();
-
-
-	// 	if( updatingProfiles ){
-
-	// 		updatingProfiles && updateProfiles();
-
-	// 	}
-
-	// 	if( authState?.currentLocation && currentLocation.length <= 0 ) {
-
-	// 		console.log('already got location');
-			
-	// 		setCurrentLocation([authState?.currentLocation]);
-	// 		setFromLocation(authState?.currentLocation);
-			
-	// 		setUpdatingProfiles(true);
-	// 		updateProfiles();
 	
-	// 	}
-		
-	// 	if ( !authState?.currentLocation && currentLocation.length <= 0 ) {
-	
-	// 		console.log('getting location');
-	
-	// 		navigator.geolocation.getCurrentPosition(function(position) {
-	// 			setCurrentLocation([
-	// 				{"lat": position.coords.latitude, "long": position.coords.longitude}
-	// 			]);
-				
-	// 			setFromLocation( { lat: position.coords.latitude, long: position.coords.longitude } );
-	// 		});
-	
-	// 		Object.keys(fromLocation).length > 0 && !fromLocation.city && getLocationPlaceName(fromLocation.lat, fromLocation.long);
-	
-	// 		setUpdatingProfiles(true);
-	// 		updateProfiles();
-	
-	// 	}
 
-
-	// 	if( allProfileData && profileData.length <= 0 ) { setUpdatingProfiles(true); updateProfiles(); }
-		
-		 
-		
-	// }, [ activeFilters, currentLocation, fromLocation, profileData, updatingProfiles, authState ]);
+	
 
 	const [gettingLocation, setGettingLocation] = useState(false);
 
@@ -387,18 +451,22 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		allProfileData && Object.keys(sportsData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setSportsData(allProfileData)
 
 
-		profileData && updateProfileDistances();
+		sportsData && updateProfileDistances();
+
+		sportsData && updateBudgetGroups();
+
+		
 
 
-	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters ])
+	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters, sportsData ])
 	
- 
+	
+	
 	
 	const filterSports = (e: any, sport: any) => {
 
 		setUpdatingProfiles(true);
 
-		
 		e.detail.checked && !activeFilters?.sports.includes(sport) ? setActiveFilters(prevState => ({ ...prevState, sports: [...activeFilters?.sports,...[sport]]})) 
 		: setActiveFilters( prevState => ({ ...prevState, sports: activeFilters?.sports.filter(e => e !== sport)})) 
 
@@ -415,33 +483,30 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		
 	}
 
+	
 
-	const setBudget = (e) => {
-		// setUpdatingProfiles(true);
+	const updateBudget = (e) => {
 
-		console.log(e);
+		console.log('update budget');
 
-		//  setActiveFilters( prevState => ({ ...prevState, budget: budgetGroups[e - 1] }));
+		setUpdatingProfiles(true);
+		setActiveFilters( prevState => ({ ...prevState, budget: e }));
 
-		
 	}
 
-	const budgetChange = (e) => {
-
-		// let lb = e.detail.value.lower;
-		// let ub = e.detail.value.upper;
-
-		setLowerBudget(e.detail.value.lower);
-		setUpperBudget(e.detail.value.upper);
-
-		setActiveFilters( prevState => ({ ...prevState, budget: {lower: lowerBudget, upper: upperBudget} }));
-	}
 
 
 
 	const getGraphHeight = (total) => {
 
 		let highestTotal = Math.max(...Object.values(distanceGroupCounts));
+		return (100 / highestTotal) * total;
+
+	}
+
+	const getBudgetGraphHeight = (total) => {
+
+		let highestTotal = Math.max(...Object.values(budgetGroupCounts));
 		return (100 / highestTotal) * total;
 
 	}
@@ -532,7 +597,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 								if(i + 1 >= distanceGroups.length ) { return } else {
 								
 									return <div key={distanceGroupCounts[distanceGroup] + "-" + distanceGroup} 
-									className={"distance-group " + (locationRange >= i + 1 ? "active" : "")}
+									className={"distance-group " + (locationRange >= i + 2 ? "active" : "")}
 									style={{
 										height: getGraphHeight(distanceGroupCounts[distanceGroup]) + "%",
 									}}></div>
@@ -545,7 +610,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 						
 
 						<IonRange value={locationRange} 
-						onIonChange={(e) => {setDistance(e.detail.value as number); setLocationRange(e.detail.value as number)}} 
+						onIonChange={(e) => { setDistance(e.detail.value as number); setLocationRange(e.detail.value as number) }} 
 						min={0} 
 						max={distanceGroups.length} 
 						step={1} 
@@ -572,21 +637,50 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 				{	// console.log(lowerBudget);
 	// console.log(upperBudget); 
-}
+						}
+						<div className="range-graph">
+
+
+						{ budgetGroups.map((group, i) => {
+
+							if(i + 1 >= budgetGroups.length ) { return } else {
+							return <div key={budgetGroupCounts[group] + "-" + group} className={"distance-group " + (budget.upper >= i + 2 ? "active" : "")}
+							style={{
+								height: getBudgetGraphHeight(budgetGroupCounts[group]) + "%",
+									}}></div>
+							}
+						}) 
+
+						}
+
+						</div>
 
 						<IonRange 
-							onIonChange={(e) => { budgetChange(e); setBudgetSet(true) }} 
+							
+							onIonChange={(e) => { setBudget(e.detail.value); updateBudget( e.detail.value ); }}
+							debounce={1000} 
 							dualKnobs={true}
-							min={0}  
+							min={1}  
 							max={budgetGroups.length} 
 							step={1} 
 							ticks={true} 
 							snaps={true} color="primary" />
+						
+
+						{ budgetGroups[budget.lower - 1] === 0 && budgetGroups[budget.upper - 1] === -1 && <p className="location-distance">All Budgets</p> }
+
+						{ ( budgetGroups[budget.lower - 1] !== 0 || budgetGroups[budget.upper - 1] !== -1 ) &&
+						<p className="location-distance">{ "From £" + budgetGroups[budget.lower - 1] + ( budgetGroups[budget.upper - 1] === -1 ? " up to any " : (" to £" + budgetGroups[budget.upper - 1]) )  }</p> }
+						
+						
+
 					</div>
 
 				</div>
 
 		</aside>
 }
+
+
  
 export default Sidebar;
