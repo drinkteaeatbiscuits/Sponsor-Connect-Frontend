@@ -11,7 +11,7 @@ const useOpportunityValues = ( profileId:any ) => {
 		  credentials: "include",
 		});
 
-		let priceRange = null;
+		let priceRange : any = null;
 		
 		const opportunities = await response.json();
   
