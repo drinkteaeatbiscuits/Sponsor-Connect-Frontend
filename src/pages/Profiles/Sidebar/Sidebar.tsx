@@ -95,9 +95,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const [distanceData, setDistanceData] = useState<any[]>([]);
 	const [budgetData, setBudgetData] = useState<any[]>([]);
 
-	// const [visibleSports, setVisibleSports] = useState();
-
-	// console.log(activeFilters);
+	
 	
 	let result;
 	const numberOfSportsVisible = 8;
@@ -458,7 +456,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		
 
 
-	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters, sportsData ])
+	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters ])
 	
 	
 	
@@ -484,7 +482,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	}
 
 	
-
 	const updateBudget = (e) => {
 
 		console.log('update budget');
@@ -493,8 +490,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		setActiveFilters( prevState => ({ ...prevState, budget: e }));
 
 	}
-
-
 
 
 	const getGraphHeight = (total) => {
@@ -609,7 +604,8 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 						</div>
 						
 
-						<IonRange value={locationRange} 
+						<IonRange 
+						value={locationRange} 
 						onIonChange={(e) => { setDistance(e.detail.value as number); setLocationRange(e.detail.value as number) }} 
 						min={0} 
 						max={distanceGroups.length} 
@@ -641,24 +637,24 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 						<div className="range-graph">
 
 
-						{ budgetGroups.map((group, i) => {
+							{ budgetGroups.map((group, i) => {
 
-							if(i + 1 >= budgetGroups.length ) { return } else {
-							return <div key={budgetGroupCounts[group] + "-" + group} className={"distance-group " + (budget.upper >= i + 2 ? "active" : "")}
-							style={{
-								height: getBudgetGraphHeight(budgetGroupCounts[group]) + "%",
-									}}></div>
+								if(i + 1 >= budgetGroups.length ) { return } else {
+								return <div key={budgetGroupCounts[group] + "-" + group} className={"distance-group " + (budget.upper >= i + 2 ? "active" : "")}
+								style={{
+									height: getBudgetGraphHeight(budgetGroupCounts[group]) + "%",
+										}}></div>
+								}
+							}) 
+
 							}
-						}) 
-
-						}
 
 						</div>
 
 						<IonRange 
 							
 							onIonChange={(e) => { setBudget(e.detail.value); updateBudget( e.detail.value ); }}
-							debounce={1000} 
+							debounce={20} 
 							dualKnobs={true}
 							min={1}  
 							max={budgetGroups.length} 
@@ -675,6 +671,9 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 						
 
 					</div>
+
+
+					
 
 				</div>
 

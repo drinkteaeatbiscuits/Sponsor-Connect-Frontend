@@ -67,6 +67,7 @@ import ProfileImages from './pages/ProfileImages/ProfileImages';
 import EditProfileDescription from './pages/EditProfile/EditProfileDescription';
 
 import Geocode from "react-geocode";
+import RangeTest from './pages/RangeTest';
 
 Geocode.setApiKey("AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q");
 
@@ -337,6 +338,10 @@ const App: React.FC = () => {
 
               <Route exact path="/text-editor">
                 <NewTextEditor />
+              </Route>
+
+              <Route exact path="/range-test">
+                <RangeTest />
               </Route>
 
               
