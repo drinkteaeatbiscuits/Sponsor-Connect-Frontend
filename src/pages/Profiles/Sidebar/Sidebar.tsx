@@ -121,12 +121,18 @@ const {className} = SidebarProps;
 		}
 	}
 
-	let visibleSports = Object.keys(sportsCounts).slice(0, numberOfSportsVisible).reduce((result, key) => {
+	console.log(sportsCounts);
+
+	const sortable = Object.fromEntries( Object.entries(sportsCounts).sort(([,a]:any,[,b]:any) => b-a) );
+
+	console.log(sortable);
+
+	let visibleSports = Object.keys(sortable).slice(0, numberOfSportsVisible).reduce((result, key) => {
 		result[key] = sportsCounts[key];
 		return result;
 	}, {});
 
-	let hiddenSports = Object.keys(sportsCounts).slice(numberOfSportsVisible).reduce((result, key) => {
+	let hiddenSports = Object.keys(sortable).slice(numberOfSportsVisible).reduce((result, key) => {
 		result[key] = sportsCounts[key];
 		return result;
 	}, {});
@@ -525,7 +531,7 @@ const {className} = SidebarProps;
 							<p className="filter-section-title">Sports</p>
 						</div>
 
-						{ activeFilters?.sports.length > 0 && <div className="clear" onClick={()=>{setActiveFilters( prevState => ({ ...prevState, sports: []}))}}>Clear</div> }
+						{ activeFilters?.sports.length > 0 && <div className="clear" onClick={()=>{ setActiveFilters( prevState => ({ ...prevState, sports: []}))}}>Clear</div> }
 
 					</div>
 					<div className="filter-section-bottom">

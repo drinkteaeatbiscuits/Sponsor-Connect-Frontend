@@ -231,7 +231,7 @@ const Profile: React.FC = () => {
                     
                     <OpportunitiesList profileId={ profileId.id } />
 
-                  {console.log(profileId.id)}
+                 
 
 
                     <div className="other-sponsorship-ideas ion-padding">
