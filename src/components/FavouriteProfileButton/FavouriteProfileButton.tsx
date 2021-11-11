@@ -22,7 +22,7 @@ const FavouriteProfileButton: React.FC<FavouriteProfileProps> = ( FavouriteProfi
 
 	useEffect(() => {
 		authState?.user?.favouriteProfiles?.includes(profileId) ? setIsFavourite(true) : setIsFavourite(false); 
-	}, [authState.user.favouriteProfiles])
+	}, [authState?.user?.favouriteProfiles])
 
 	const setFavourite = async () => {
 
