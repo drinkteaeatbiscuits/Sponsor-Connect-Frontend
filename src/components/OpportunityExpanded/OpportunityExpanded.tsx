@@ -94,19 +94,19 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 			{opportunityData?.images &&
 
 				<picture>
-					<source type="image/webp" media="(max-width: 576px)" srcSet={process.env.REACT_APP_S3_URL + "/cover_xs_" + opportunityData?.images?.hash + ".webp"} />
-					<source type="image/webp" media="(max-width: 768px)" srcSet={process.env.REACT_APP_S3_URL + "/cover_sm_" + opportunityData?.images?.hash + ".webp"} />
-					<source type="image/webp" media="(max-width: 992px)" srcSet={process.env.REACT_APP_S3_URL + "/cover_md_" + opportunityData?.images?.hash + ".webp"} />
-					<source type="image/webp" media="(max-width: 1440px)" srcSet={process.env.REACT_APP_S3_URL + "/cover_lg_" + opportunityData?.images?.hash + ".webp"} />
-					<source type="image/webp" media="(min-width: 1441px)" srcSet={process.env.REACT_APP_S3_URL + "/cover_xl_" + opportunityData?.images?.hash + ".webp"} />
+					<source type="image/webp" media="(max-width: 576px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_xs/" + opportunityData?.images?.hash + ".webp"} />
+					<source type="image/webp" media="(max-width: 768px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_sm/" + opportunityData?.images?.hash + ".webp"} />
+					<source type="image/webp" media="(max-width: 992px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_md/" + opportunityData?.images?.hash + ".webp"} />
+					<source type="image/webp" media="(max-width: 1440px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_lg/" + opportunityData?.images?.hash + ".webp"} />
+					<source type="image/webp" media="(min-width: 1441px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_xl/" + opportunityData?.images?.hash + ".webp"} />
 
-					<source type="image/jpeg" media="(max-width: 576px)" srcSet={process.env.REACT_APP_S3_URL + "/cover_xs_" + opportunityData?.images?.hash + ".jpg"} />
-					<source type="image/jpeg" media="(max-width: 768px)" srcSet={process.env.REACT_APP_S3_URL + "/cover_sm_" + opportunityData?.images?.hash + ".jpg"} />
-					<source type="image/jpeg" media="(max-width: 992px)" srcSet={process.env.REACT_APP_S3_URL + "/cover_md_" + opportunityData?.images?.hash + ".jpg"} />
-					<source type="image/jpeg" media="(max-width: 1440px)" srcSet={process.env.REACT_APP_S3_URL + "/cover_lg_" + opportunityData?.images?.hash + ".jpg"} />
-					<source type="image/jpeg" media="(min-width: 1441px)" srcSet={process.env.REACT_APP_S3_URL + "/cover_xl_" + opportunityData?.images?.hash + ".jpg"} />
+					<source type="image/jpeg" media="(max-width: 576px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_xs/" + opportunityData?.images?.hash + ".jpg"} />
+					<source type="image/jpeg" media="(max-width: 768px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_sm/" + opportunityData?.images?.hash + ".jpg"} />
+					<source type="image/jpeg" media="(max-width: 992px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_md/" + opportunityData?.images?.hash + ".jpg"} />
+					<source type="image/jpeg" media="(max-width: 1440px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_lg/" + opportunityData?.images?.hash + ".jpg"} />
+					<source type="image/jpeg" media="(min-width: 1441px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_xl/" + opportunityData?.images?.hash + ".jpg"} />
 
-					<img className="cover-image" src={process.env.REACT_APP_S3_URL + "/cover_xl_" + opportunityData?.images?.hash + ".jpg"} alt="Opportunity Cover" />
+					<img className="cover-image" src={process.env.REACT_APP_S3_URL + "/images/cover_xl/" + opportunityData?.images?.hash + ".jpg"} alt="Opportunity Cover" />
 				</picture>
 
 			}

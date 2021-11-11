@@ -2,20 +2,23 @@ import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, Ion
 import { logoFacebook, logoInstagram, logoTwitter, logoYoutube, location, barChart, shareSocial } from "ionicons/icons";
 import React from "react";
 import { useHistory } from "react-router";
+import { showCurrency } from "../../functions/showCurrency";
 import useOpportunityValues from "../../hooks/useOpportunityValues";
+import FavouriteProfileButton from "../FavouriteProfileButton/FavouriteProfileButton";
 
 import './ProfileCard.scss';
-
+ 
 interface ProfileProps {
 	profileData?: any,
 }
 
 const ProfileCard: React.FC<ProfileProps> = ( ProfileProps ) => {
 
+	const { profileData } = ProfileProps;
+
 	const history = useHistory();
 
-	const { isSuccess, data: opportunityValueRange } = useOpportunityValues(ProfileProps.profileData?.id)
-
+	
 	const totalSocialFollowing = ( socialMediaArray: any ) => {
 		
 		let socialMediaTotal:number = 0;
@@ -29,34 +32,64 @@ const ProfileCard: React.FC<ProfileProps> = ( ProfileProps ) => {
 		return socialMediaTotal;
 	}
 
-	return <IonCard className="profile-card" button={true} onClick={ ()=> history.push("/profile/" + ProfileProps.profileData?.id) } >
+	// console.log(profileData);
 
-				{ ProfileProps.profileData.coverImage && <img className="" alt={ "Cover Photo " + ProfileProps.profileData?.coverImage?.id } 
-				src={ ProfileProps.profileData?.coverImage?.url } /> }
-				
-				<IonCardHeader>
-					<h2 className="">{ProfileProps.profileData?.profileName}</h2>
-					<h3 className="">{ProfileProps.profileData?.sport}</h3>
-				</IonCardHeader>
-				<IonCardContent>
-					<div className="profile-information">
-						<div className="profile-information-row">
-							<IonIcon color="tertiary" icon={location} /><p>{ProfileProps.profileData?.location?.label}</p>
+	return <div className="profile-card" onClick={ ()=> history.push("/profile/" + profileData?.id) } >
+
+				<div className="profile-image" >
+
+					{ profileData?.coverImage && 
+						<picture>
+						
+							<source type="image/webp" media="(max-width: 1024px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_sm/" +  profileData?.coverImage?.hash + ".webp" } />
+							<source type="image/jpeg" media="(max-width: 1024px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_sm/" +  profileData?.coverImage?.hash + ".jpg" } />
+							
+							
+							<source type="image/webp" media="(max-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_md/" +  profileData?.coverImage?.hash + ".webp" } />
+							<source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_md/" +  profileData?.coverImage?.hash + ".jpg" } />
+							
+							
+							<img className="profile-image" src={  process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" + profileData?.coverImage?.hash + ".jpg" } alt={profileData.title} /> 
+						</picture> 
+					}
+
+				</div>
+
+				<div className="profile-information">
+					<p className="name">{profileData?.profileName}</p>
+					<p className="sport">{profileData?.sport}</p>
+					<div className="description">{ profileData?.shortDescription }</div>
+
+					<div className="profile-facts">
+						<div className="">
+							<IonIcon color="tertiary" icon={location} /><p>{ profileData?.location?.label }</p>
 						</div>
-						{ isSuccess && opportunityValueRange && <div className="profile-information-row">
-							 <IonIcon color="tertiary" icon={barChart} /><p> { opportunityValueRange } </p> 
-						</div> }
-						{totalSocialFollowing(ProfileProps.profileData?.socialMedia) > 0 && 
-						<div className="profile-information-row">
-							<IonIcon color="tertiary" icon={shareSocial} /><p>{totalSocialFollowing(ProfileProps.profileData?.socialMedia)}</p>
+
+						{profileData.opportunities.length > 0 &&
+						<div className="">
+		
+							<IonIcon color="tertiary" icon={barChart} /><p> {showCurrency(profileData)}{ Math.min(...profileData.opportunities.map(o => o.price)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") } - {showCurrency(profileData)}{ Math.max(...profileData.opportunities.map(o => o.price), 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") } </p> 
 						</div>
+						
 						}
-						{/* {console.log(ProfileProps.profileData)} */}
-						{isSuccess && Object.keys(ProfileProps.profileData?.latLong).length > 0 ? "true" : "false"}
+
+						{ totalSocialFollowing(profileData?.socialMedia) > 0 && 
+							<div className="profile-information-row">
+								<IonIcon color="tertiary" icon={shareSocial} /><p>{totalSocialFollowing(profileData?.socialMedia)}</p>
+							</div>
+						}
+					
+
 					</div>
-					<IonButton size="small" expand="full" className="link profile-link" onClick={ ()=> history.push("/profile/" + ProfileProps.profileData?.id) } >View Profile</IonButton>
-				</IonCardContent>
-			</IonCard>;
+				</div>
+
+				
+					<FavouriteProfileButton profileId={profileData?.id} />
+				
+				
+
+
+			</div>
 
 }
 

@@ -39,7 +39,8 @@ export interface props {}
 
 
 const EditProfile: React.FC = () => {
-  
+ 
+  const client = useQueryClient(); 
  
 	const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
@@ -47,7 +48,7 @@ const EditProfile: React.FC = () => {
   const {isLoading, error, mutateAsync: addProfileMutation} = useUpdateProfile();
   const {isLoading: isEditingOpportunity, error: editOpportunityError, isSuccess, mutateAsync: editProfileMutation} = useEditProfileField( authState?.user.profile.id );
 
-  const profileData = useMyProfile();
+  const profileData = useMyProfile(authState?.user.profile.id);
   
   const [profileName, setProfileName] = useState("");
   const [sport, setSport] = useState("");
@@ -579,7 +580,7 @@ const EditProfile: React.FC = () => {
               </div>
 
 
-              {profileData.isSuccess && <IonButton className="button-tertiary" expand="block" size="small" onClick={() => history.push('/profile/' + profileData.data[0].id)}>Back to Profile</IonButton>}
+              {profileData.isSuccess && <IonButton className="button-tertiary" expand="block" size="small" onClick={() => { client.invalidateQueries("profile-" + profileData.data[0].id); history.push('/profile/' + profileData.data[0].id)}}>Back to Profile</IonButton>}
 
             </div>
 

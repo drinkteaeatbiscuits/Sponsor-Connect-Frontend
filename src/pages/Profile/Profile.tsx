@@ -93,19 +93,19 @@ const Profile: React.FC = () => {
          
 
           <picture>
-            <source type="image/webp" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xs_" +  data?.coverImage?.hash + ".webp" } />
-            <source type="image/webp" media="(max-width: 768px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_sm_" +  data?.coverImage?.hash + ".webp" } />
-            <source type="image/webp" media="(max-width: 992px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_md_" +  data?.coverImage?.hash + ".webp" } />
-            <source type="image/webp" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_lg_" +  data?.coverImage?.hash + ".webp" } />
-            <source type="image/webp" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xl_" +  data?.coverImage?.hash + ".webp" } />
+            <source type="image/webp" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_xs/" +  data?.coverImage?.hash + ".webp" } />
+            <source type="image/webp" media="(max-width: 768px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_sm/" +  data?.coverImage?.hash + ".webp" } />
+            <source type="image/webp" media="(max-width: 992px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_md/" +  data?.coverImage?.hash + ".webp" } />
+            <source type="image/webp" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_lg/" +  data?.coverImage?.hash + ".webp" } />
+            <source type="image/webp" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_xl/" +  data?.coverImage?.hash + ".webp" } />
 
-            <source type="image/jpeg" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xs_" +  data?.coverImage?.hash + ".jpg" } />
-            <source type="image/jpeg" media="(max-width: 768px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_sm_" +  data?.coverImage?.hash + ".jpg" } />
-            <source type="image/jpeg" media="(max-width: 992px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_md_" +  data?.coverImage?.hash + ".jpg" } />
-            <source type="image/jpeg" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_lg_" +  data?.coverImage?.hash + ".jpg" } />
-            <source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xl_" +  data?.coverImage?.hash + ".jpg" } />
+            <source type="image/jpeg" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_xs/" +  data?.coverImage?.hash + ".jpg" } />
+            <source type="image/jpeg" media="(max-width: 768px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_sm/" +  data?.coverImage?.hash + ".jpg" } />
+            <source type="image/jpeg" media="(max-width: 992px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_md/" +  data?.coverImage?.hash + ".jpg" } />
+            <source type="image/jpeg" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_lg/" +  data?.coverImage?.hash + ".jpg" } />
+            <source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_xl/" +  data?.coverImage?.hash + ".jpg" } />
 
-            <img className="cover-image" src={  process.env.REACT_APP_S3_URL + "/cover_xl_" + data?.coverImage?.hash + ".jpg" } alt="Profile Cover" />
+            <img className="cover-image" src={  process.env.REACT_APP_S3_URL + "/images/cover_xl/" + data?.coverImage?.hash + ".jpg" } alt="Profile Cover" />
           </picture>  
           
           }
@@ -122,9 +122,9 @@ const Profile: React.FC = () => {
             { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.profilePicture ? 
             
               <picture>
-                  <source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/profile_" +  data?.profilePicture?.hash + ".webp" } />
-                  <source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/profile_" +  data?.profilePicture?.hash + ".jpg" } />
-                  <img className="profile-picture" alt={ "Profile Image " + data?.profilePicture.id } src={ process.env.REACT_APP_S3_URL + "/profile_" +  data?.profilePicture?.hash + ".jpg" } /> 
+                  <source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile/" +  data?.profilePicture?.hash + ".webp" } />
+                  <source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile/" +  data?.profilePicture?.hash + ".jpg" } />
+                  <img className="profile-picture" alt={ "Profile Image " + data?.profilePicture.id } src={ process.env.REACT_APP_S3_URL + "/images/profile/" +  data?.profilePicture?.hash + ".jpg" } /> 
               </picture>
             
             : <IonIcon color="medium" icon={personCircle} /> }
@@ -231,6 +231,9 @@ const Profile: React.FC = () => {
                     
                     <OpportunitiesList profileId={ profileId.id } />
 
+                  {console.log(profileId.id)}
+
+
                     <div className="other-sponsorship-ideas ion-padding">
                       <p>Have any other sponsorship ideas? <br/>
                       Please get in touch <a href="/">here.</a></p>
@@ -289,9 +292,9 @@ const Profile: React.FC = () => {
                               data-fancybox="profile-gallery"
                             >
                             <picture>
-                              <source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  profileImage?.hash + ".webp" } />
-                              <source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  profileImage?.hash + ".jpg" } />
-                              <img className="profile-image-thumb" alt={ "Profile Image " + profileImage.id } src={ process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  profileImage?.hash + ".jpg" } /> 
+                              <source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + ".webp" } />
+                              <source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + ".jpg" } />
+                              <img className="profile-image-thumb" alt={ "Profile Image " + profileImage.id } src={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + ".jpg" } /> 
                             </picture>
                             </a>
                         </div>
@@ -322,7 +325,3 @@ const Profile: React.FC = () => {
 };
 
 export default Profile;
-
-function ionViewWillEnter(arg0: () => void) {
-  throw new Error('Function not implemented.');
-}
