@@ -1,4 +1,4 @@
-import { IonCheckbox, IonIcon, IonRange } from "@ionic/react";
+import { IonCheckbox, IonIcon, IonRange, useIonViewDidEnter } from "@ionic/react";
 import { constructOutline, location } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import Geocode from "react-geocode";
@@ -11,6 +11,7 @@ interface SidebarProps {
 	allProfileData?: any;
 	profileData?: any;
 	setData?: any;
+	className?: string;
 }
 
 
@@ -21,6 +22,8 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		distance: null,
 		budget: null
 	};
+
+const {className} = SidebarProps;
 
 	const { state: authState } = React.useContext(AuthContext);
 
@@ -234,7 +237,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	const updateProfiles = async () => {
 
-		console.log('updating profiles');
+		// console.log('updating profiles');
 		
 
 		allProfileData && await setData( allProfileData.filter(profile => {
@@ -276,19 +279,19 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 			let showProfileBudget = false;
 			// check if a distance filter is selected
-			// activeFilters?.budget === 0 && ( showProfileBudget = true ); 
-			// activeFilters?.budget === null && ( showProfileBudget = true );
+			activeFilters?.budget === 0 && ( showProfileBudget = true ); 
+			activeFilters?.budget === null && ( showProfileBudget = true );
 
-			console.log(activeFilters?.budget);
+			// console.log(activeFilters?.budget);
 			
 
 			let maxValue = Math.max(...profile.opportunities.map(o => o.price), 0);
 			let minValue = Math.min(...profile.opportunities.map(o => o.price));
 			
 			if(activeFilters?.budget){
-				console.log(maxValue);
-				console.log(minValue);
-				console.log(budgetGroups[activeFilters?.budget.lower - 1]);
+				// console.log(maxValue);
+				// console.log(minValue);
+				// console.log(budgetGroups[activeFilters?.budget.lower - 1]);
 
 				// if minimum value is greater than lower filter and less than upper filter
 				((minValue >= budgetGroups[activeFilters?.budget.lower - 1]) && ( minValue <= budgetGroups[activeFilters?.budget.upper - 1] )) && ( showProfileBudget = true );
@@ -299,10 +302,10 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 				// ((minValue >= budgetGroups[activeFilters?.budget.lower - 1]) && (minValue <= budgetGroups[activeFilters?.budget.upper - 1]) 
 				// || (maxValue >= budgetGroups[activeFilters?.budget.lower - 1]) && (maxValue <= budgetGroups[activeFilters?.budget.upper - 1]))  && ( showProfileBudget = true );
-				
-
 
 			}
+
+			activeFilters?.budget?.lower === 1 && activeFilters?.budget?.upper === 8 && (showProfileBudget = true);
 
 			// console.log(showProfileDistance);
 
@@ -406,7 +409,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		if( allProfileData && authState?.currentLocation && currentLocation.length <= 0 ) {
 
-			console.log('already got location');
+			// console.log('already got location');
 			
 			setCurrentLocation([authState?.currentLocation]);
 			setFromLocation(authState?.currentLocation);
@@ -458,7 +461,11 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters ])
 	
-	
+
+	useIonViewDidEnter(() => {
+		const dualRange = document.querySelector('#dual-range') as any;
+    	dualRange && (dualRange.value = { lower: 0, upper: 8 });
+	})
 	
 	
 	const filterSports = (e: any, sport: any) => {
@@ -484,8 +491,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	
 	const updateBudget = (e) => {
 
-		console.log('update budget');
-
 		setUpdatingProfiles(true);
 		setActiveFilters( prevState => ({ ...prevState, budget: e }));
 
@@ -507,7 +512,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	}
 	
 
-	return <aside className="sidebar">
+	return <aside className={"sidebar " + className }>
 				<h1>Search <span className="ion-color-primary">Profiles</span></h1>
 
 				<p className="results">{ profileData?.length > 0 ? "Showing " + profileData?.length + " results" : "No results found." }</p>
@@ -576,7 +581,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 						<div className="selected-location" style={{display: "flex", alignItems: "center"}}>
 							<IonIcon icon={location} color="primary" style={{fontSize: "24px", marginRight: "5px"}} />
-							{fromLocation.city}
+							{ fromLocation.city }
 						</div>
 
 						<div className="range-graph">
@@ -610,7 +615,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 						min={0} 
 						max={distanceGroups.length} 
 						step={1} 
-						ticks={true} 
 						snaps={true} color="primary" />
 						
 						{ distanceGroups[locationRange - 1] !== undefined && <p className="location-distance">{ distanceGroups[locationRange - 1] === 0 ? "All Locations" : "Within " + distanceGroups[locationRange - 1] + " Miles" }</p>}
@@ -652,14 +656,13 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 						</div>
 
 						<IonRange 
-							
+							id="dual-range"
 							onIonChange={(e) => { setBudget(e.detail.value); updateBudget( e.detail.value ); }}
 							debounce={20} 
 							dualKnobs={true}
 							min={1}  
 							max={budgetGroups.length} 
-							step={1} 
-							ticks={true} 
+							step={1}  
 							snaps={true} color="primary" />
 						
 
@@ -683,3 +686,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
  
 export default Sidebar;
+function ionViewDidEnter(arg0: () => void) {
+	throw new Error("Function not implemented.");
+}
+

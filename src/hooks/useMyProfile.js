@@ -1,10 +1,10 @@
 import { useQuery, useQueryClient } from 'react-query';
 
 
-const useMyProfile = () => {
+const useMyProfile = (profileId) => {
 	const client = useQueryClient();
 	return useQuery(
-	  "profiles",
+	  "profile-" + profileId,
 	  async() => {
 		console.log("in query");
 
@@ -17,7 +17,7 @@ const useMyProfile = () => {
 		// pre load the cache
 		posts.forEach((p: any) => {
 
-		  client.setQueryData(["profiles", p.id], p);
+		  client.setQueryData(["profile-" + p.id], p);
 		  
 		});
   

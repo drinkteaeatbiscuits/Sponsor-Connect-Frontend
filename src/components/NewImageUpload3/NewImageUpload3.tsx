@@ -82,6 +82,13 @@ const NewImageUpload3: React.FC<UploadImageProps> = (UploadImageProps) => {
 	const imageWriter = createDefaultImageWriter({
 		// Generate Unique File Name
 		renameFile: (file) => getFileName(file),
+
+		// targetSize: {
+		// 	width: 1920,
+		// 	height: 1200,
+		// 	fit: 'cover',
+		// 	upscale: true,
+		// },
 	
 		// Fix image orientation
 		orientImage: true,
@@ -325,8 +332,8 @@ useEffect(
 
 						{ UploadImageProps.currentImage ? 
 							<div className="current-image">
-
-								<img className={ UploadImageProps.circularCrop ? "circle-crop" : "" } alt="current thumbnail" src={  process.env.REACT_APP_S3_URL + "/cover_sm_" +  UploadImageProps.currentImage?.hash + UploadImageProps.currentImage?.ext } />
+								
+								<img onError={(e) => {let image = e.target as HTMLImageElement; image.src = process.env.REACT_APP_S3_URL + "/images/cover_sm/" +  UploadImageProps.currentImage?.hash + UploadImageProps.currentImage?.ext }} className={ UploadImageProps.circularCrop ? "circle-crop" : "" } alt="current thumbnail" src={  process.env.REACT_APP_S3_URL + "/images/cover_sm/" +  UploadImageProps.currentImage?.hash + UploadImageProps.currentImage?.ext } />
 							
 							</div> : showImageUpload &&
 							<div className="upload-image">

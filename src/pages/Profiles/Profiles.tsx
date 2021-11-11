@@ -1,4 +1,4 @@
-import { IonContent, IonItem, IonList, IonLoading, IonPage } from '@ionic/react';
+import { IonButton, IonContent, IonItem, IonList, IonLoading, IonPage } from '@ionic/react';
 // import useImagePosts from '../hooks/useImagePosts';
 import Header from '../../components/Header';
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
@@ -20,7 +20,7 @@ const Profiles: React.FC = () => {
 
   const [profileData, setProfileData] = useState<any[]>([]);
 
-  
+  const [showSidebar, setShowSidebar] = useState(false);
 
   useEffect(() => {
     
@@ -36,7 +36,16 @@ const Profiles: React.FC = () => {
       <IonContent className="profiles-content" fullscreen>
         <IonLoading isOpen={isLoading} message="Loading..." />
           
-          <Sidebar allProfileData={data} profileData={profileData} setData={setProfileData} />
+          <Sidebar className={showSidebar ? 'show-sidebar' : ''} allProfileData={data} profileData={profileData} setData={setProfileData}  />
+
+          <div className="toggle-sidebar-button" >
+           
+           {!showSidebar ? <IonButton onClick={() => setShowSidebar(true)} size="small" color="tertiary" expand="block">
+            Filter Results</IonButton>
+
+            : <IonButton onClick={() => setShowSidebar(false)} size="small" color="primary" expand="block">
+            Done</IonButton> }
+          </div>
 
           <div className="content">
               { profileData?.length > 0 && profileData?.map(( profile:any )=>{
