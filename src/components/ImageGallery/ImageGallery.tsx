@@ -24,8 +24,8 @@ const ImageGallery: React.FC<ImageGalleryProps> = (ImageGalleryProps) => {
 				>
 					<picture>
 						<source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  profileImage?.hash + ".webp" } />
-						<source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  profileImage?.hash + ".jpg" } />
-						<img className="image-thumb" alt={ "Image " + profileImage.id } src={ process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  profileImage?.hash + ".jpg" } /> 
+						<source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  profileImage?.hash + profileImage?.ext } />
+						<img className="image-thumb" alt={ "Image " + profileImage.id } src={ process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  profileImage?.hash + profileImage?.ext } /> 
 					</picture>
 				</a>
 			</div>

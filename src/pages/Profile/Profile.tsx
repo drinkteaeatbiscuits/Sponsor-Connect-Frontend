@@ -99,13 +99,13 @@ const Profile: React.FC = () => {
             <source type="image/webp" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_lg/" +  data?.coverImage?.hash + ".webp" } />
             <source type="image/webp" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_xl/" +  data?.coverImage?.hash + ".webp" } />
 
-            <source type="image/jpeg" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_xs/" +  data?.coverImage?.hash + ".jpg" } />
-            <source type="image/jpeg" media="(max-width: 768px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_sm/" +  data?.coverImage?.hash + ".jpg" } />
-            <source type="image/jpeg" media="(max-width: 992px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_md/" +  data?.coverImage?.hash + ".jpg" } />
-            <source type="image/jpeg" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_lg/" +  data?.coverImage?.hash + ".jpg" } />
-            <source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_xl/" +  data?.coverImage?.hash + ".jpg" } />
+            <source type="image/jpeg" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_xs/" +  data?.coverImage?.hash + data?.coverImage?.ext } />
+            <source type="image/jpeg" media="(max-width: 768px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_sm/" +  data?.coverImage?.hash + data?.coverImage?.ext } />
+            <source type="image/jpeg" media="(max-width: 992px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_md/" +  data?.coverImage?.hash + data?.coverImage?.ext } />
+            <source type="image/jpeg" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_lg/" +  data?.coverImage?.hash + data?.coverImage?.ext } />
+            <source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_xl/" +  data?.coverImage?.hash + data?.coverImage?.ext } />
 
-            <img className="cover-image" src={  process.env.REACT_APP_S3_URL + "/images/cover_xl/" + data?.coverImage?.hash + ".jpg" } alt="Profile Cover" />
+            <img className="cover-image" src={  process.env.REACT_APP_S3_URL + "/images/cover_xl/" + data?.coverImage?.hash + data?.coverImage?.ext } alt="Profile Cover" />
           </picture>  
           
           }
@@ -123,8 +123,8 @@ const Profile: React.FC = () => {
             
               <picture>
                   <source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile/" +  data?.profilePicture?.hash + ".webp" } />
-                  <source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile/" +  data?.profilePicture?.hash + ".jpg" } />
-                  <img className="profile-picture" alt={ "Profile Image " + data?.profilePicture.id } src={ process.env.REACT_APP_S3_URL + "/images/profile/" +  data?.profilePicture?.hash + ".jpg" } /> 
+                  <source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile/" +  data?.profilePicture?.hash + data?.profilePicture?.ext } />
+                  <img className="profile-picture" alt={ "Profile Image " + data?.profilePicture.id } src={ process.env.REACT_APP_S3_URL + "/images/profile/" +  data?.profilePicture?.hash + data?.profilePicture?.ext } /> 
               </picture>
             
             : <IonIcon color="medium" icon={personCircle} /> }
@@ -293,8 +293,8 @@ const Profile: React.FC = () => {
                             >
                             <picture>
                               <source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + ".webp" } />
-                              <source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + ".jpg" } />
-                              <img className="profile-image-thumb" alt={ "Profile Image " + profileImage.id } src={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + ".jpg" } /> 
+                              <source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + profileImage?.ext } />
+                              <img className="profile-image-thumb" alt={ "Profile Image " + profileImage.id } src={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + profileImage?.ext } /> 
                             </picture>
                             </a>
                         </div>
