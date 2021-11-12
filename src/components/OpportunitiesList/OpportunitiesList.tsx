@@ -46,11 +46,13 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 			{ opportunity.images && 
          
 						<div className="opportunity-image-thumb">
+
+							{console.log(opportunity.images)}
 							{/* <img className="opportunity-image" src={  process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" + p.images?.hash + ".jpg" } alt={p.title} /> */}
 							<picture>
 								<source type="image/webp" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  opportunity.images?.hash + ".webp" } />
-								<source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  opportunity.images?.hash + ".jpg" } />
-								<img className="opportunity-image" src={  process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" + opportunity.images?.hash + ".jpg" } alt={opportunity.title} /> 
+								<source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  opportunity.images?.hash + opportunity.images?.ext } />
+								<img className="opportunity-image" src={  process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" + opportunity.images?.hash + opportunity.images?.ext } alt={opportunity.title} /> 
 							</picture> 
 						</div>
 		 			 }

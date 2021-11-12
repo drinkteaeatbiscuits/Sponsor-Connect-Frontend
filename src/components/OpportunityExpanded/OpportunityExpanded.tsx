@@ -100,13 +100,13 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 					<source type="image/webp" media="(max-width: 1440px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_lg/" + opportunityData?.images?.hash + ".webp"} />
 					<source type="image/webp" media="(min-width: 1441px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_xl/" + opportunityData?.images?.hash + ".webp"} />
 
-					<source type="image/jpeg" media="(max-width: 576px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_xs/" + opportunityData?.images?.hash + ".jpg"} />
-					<source type="image/jpeg" media="(max-width: 768px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_sm/" + opportunityData?.images?.hash + ".jpg"} />
-					<source type="image/jpeg" media="(max-width: 992px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_md/" + opportunityData?.images?.hash + ".jpg"} />
-					<source type="image/jpeg" media="(max-width: 1440px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_lg/" + opportunityData?.images?.hash + ".jpg"} />
-					<source type="image/jpeg" media="(min-width: 1441px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_xl/" + opportunityData?.images?.hash + ".jpg"} />
+					<source type="image/jpeg" media="(max-width: 576px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_xs/" + opportunityData?.images?.hash + opportunityData?.images?.ext} />
+					<source type="image/jpeg" media="(max-width: 768px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_sm/" + opportunityData?.images?.hash + opportunityData?.images?.ext} />
+					<source type="image/jpeg" media="(max-width: 992px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_md/" + opportunityData?.images?.hash + opportunityData?.images?.ext} />
+					<source type="image/jpeg" media="(max-width: 1440px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_lg/" + opportunityData?.images?.hash + opportunityData?.images?.ext} />
+					<source type="image/jpeg" media="(min-width: 1441px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_xl/" + opportunityData?.images?.hash + opportunityData?.images?.ext} />
 
-					<img className="cover-image" src={process.env.REACT_APP_S3_URL + "/images/cover_xl/" + opportunityData?.images?.hash + ".jpg"} alt="Opportunity Cover" />
+					<img className="cover-image" src={process.env.REACT_APP_S3_URL + "/images/cover_xl/" + opportunityData?.images?.hash + opportunityData?.images?.ext} alt="Opportunity Cover" />
 				</picture>
 
 			}

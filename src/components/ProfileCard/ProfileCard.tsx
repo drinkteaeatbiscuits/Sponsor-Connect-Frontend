@@ -42,14 +42,14 @@ const ProfileCard: React.FC<ProfileProps> = ( ProfileProps ) => {
 						<picture>
 						
 							<source type="image/webp" media="(max-width: 1024px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_sm/" +  profileData?.coverImage?.hash + ".webp" } />
-							<source type="image/jpeg" media="(max-width: 1024px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_sm/" +  profileData?.coverImage?.hash + ".jpg" } />
+							<source type="image/jpeg" media="(max-width: 1024px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_sm/" +  profileData?.coverImage?.hash + profileData?.coverImage?.ext } />
 							
 							
 							<source type="image/webp" media="(max-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_md/" +  profileData?.coverImage?.hash + ".webp" } />
-							<source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_md/" +  profileData?.coverImage?.hash + ".jpg" } />
+							<source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_md/" +  profileData?.coverImage?.hash + profileData?.coverImage?.ext } />
 							
 							
-							<img className="profile-image" src={  process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" + profileData?.coverImage?.hash + ".jpg" } alt={profileData.title} /> 
+							<img className="profile-image" src={  process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" + profileData?.coverImage?.hash + profileData?.coverImage?.ext } alt={profileData.title} /> 
 						</picture> 
 					}
 

@@ -103,8 +103,8 @@ const ProfileImages: React.FC = () => {
 								
 									<picture>
 										<source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + ".webp" } />
-										<source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + ".jpg" } />
-										<img className="profile-image-thumb" alt={ "Profile Image " + profileImage.id } src={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + ".jpg" } /> 
+										<source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + profileImage?.ext } />
+										<img className="profile-image-thumb" alt={ "Profile Image " + profileImage.id } src={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + profileImage?.ext } /> 
 									</picture>
 
 									<div className="hovering-overlay"></div>
