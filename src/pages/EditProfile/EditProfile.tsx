@@ -45,8 +45,8 @@ const EditProfile: React.FC = () => {
 	const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
 
-  const {isLoading, error, mutateAsync: addProfileMutation} = useUpdateProfile();
-  const {isLoading: isEditingOpportunity, error: editOpportunityError, isSuccess, mutateAsync: editProfileMutation} = useEditProfileField( authState?.user.profile.id );
+  const { isLoading, error, mutateAsync: addProfileMutation } = useUpdateProfile();
+  const { isLoading: isEditingOpportunity, error: editOpportunityError, isSuccess, mutateAsync: editProfileMutation } = useEditProfileField( authState?.user.profile.id );
 
   const profileData = useMyProfile(authState?.user.profile.id);
   
@@ -124,42 +124,45 @@ const EditProfile: React.FC = () => {
   profileData.error && console.log(profileData);
 
   useEffect(() => {
+
     if (profileData.status === "success") {
-      setProfileName(profileData.data[0]?.profileName);
-      setYourSport(profileData.data[0]?.sport);
-      setLocation(profileData.data[0]?.location);
-      setPriceRange(profileData.data[0]?.priceRange);
-      setWebsite(profileData.data[0]?.website);
-      
-      setSocialMedia(profileData.data[0]?.socialMedia);
 
-      setFacebookTotal(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'facebook'; })[0]?.socialMediaTotal);
-      setFacebookUrl(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'facebook'; })[0]?.socialMediaUrl);
+      setProfileName(profileData.data?.profileName);
+      setYourSport(profileData.data?.sport);
+      setLocation(profileData.data?.location);
+      setPriceRange(profileData.data?.priceRange);
+      setWebsite(profileData.data?.website);
       
-      setInstagramTotal(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'instagram'; })[0]?.socialMediaTotal);
-      setInstagramUrl(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'instagram'; })[0]?.socialMediaUrl);
-      
-      setTwitterTotal(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'twitter'; })[0]?.socialMediaTotal);
-      setTwitterUrl(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'twitter'; })[0]?.socialMediaUrl);
-      
-      setYouTubeTotal(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'youTube'; })[0]?.socialMediaTotal);
-      setYouTubeUrl(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'youTube'; })[0]?.socialMediaUrl);
+      setSocialMedia(profileData.data?.socialMedia);
 
-      setShortDescription(profileData.data[0]?.shortDescription);
-      setFullDescription(profileData.data[0]?.description);
+      setFacebookTotal(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'facebook'; })?.socialMediaTotal);
+      setFacebookUrl(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'facebook'; })?.socialMediaUrl);
       
-      setFullDescriptionText( profileData.data[0]?.fullDescriptionText && convertFromRaw( profileData.data[0]?.fullDescriptionText ) );
+      setInstagramTotal(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'instagram'; })?.socialMediaTotal);
+      setInstagramUrl(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'instagram'; })?.socialMediaUrl);
       
-      setAccolades(profileData.data[0]?.accolades);
+      setTwitterTotal(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'twitter'; })?.socialMediaTotal);
+      setTwitterUrl(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'twitter'; })?.socialMediaUrl);
       
-      setCurrentProfilePicture(profileData.data[0]?.profilePicture);
-      setCoverImage(profileData.data[0]?.coverImage);
+      setYouTubeTotal(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'youTube'; })?.socialMediaTotal);
+      setYouTubeUrl(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'youTube'; })?.socialMediaUrl);
+
+      setShortDescription(profileData.data?.shortDescription);
+      setFullDescription(profileData.data?.description);
+      
+      setFullDescriptionText( profileData.data?.fullDescriptionText && convertFromRaw( profileData.data?.fullDescriptionText ) );
+      
+      setAccolades(profileData.data?.accolades);
+      
+      setCurrentProfilePicture(profileData.data?.profilePicture);
+      setCoverImage(profileData.data?.coverImage);
+
     }
 
     
-  }, [profileData.status, profileData.data]);
+  }, [profileData]);
 
-
+  // console.log(authState.user.id);
   
   const focusOnSport = () => {
     
@@ -324,7 +327,8 @@ const EditProfile: React.FC = () => {
                 imageCropAspectRatio={3 / 1} 
                 circularCrop={false}
                 // showCroppedPreview={ false }
-                label="Cover Image"  
+                label="Cover Image" 
+                required={true} 
                 />
 
               <NewImageUpload3 
@@ -337,7 +341,8 @@ const EditProfile: React.FC = () => {
                 imageCropAspectRatio={1} 
                 circularCrop={true}
                 // showCroppedPreview={ false }
-                label="Profile Picture"  
+                label="Profile Picture"
+                required={true}
                 />
 
 

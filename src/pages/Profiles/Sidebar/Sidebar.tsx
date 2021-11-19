@@ -121,11 +121,11 @@ const {className} = SidebarProps;
 		}
 	}
 
-	console.log(sportsCounts);
+	// console.log(sportsCounts);
 
 	const sortable = Object.fromEntries( Object.entries(sportsCounts).sort(([,a]:any,[,b]:any) => b-a) );
 
-	console.log(sortable);
+	// console.log(sortable);
 
 	let visibleSports = Object.keys(sortable).slice(0, numberOfSportsVisible).reduce((result, key) => {
 		result[key] = sportsCounts[key];
