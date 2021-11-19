@@ -1,0 +1,91 @@
+.notifications {
+	position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 9;
+	@media screen and (min-width: 768px) {
+        top: 80px;
+    }
+}
+
+@keyframes fadein {
+	from {
+		transform: translate(0, -10px);
+		opacity: 0;
+	}
+	to {
+		transform: translate(0, 0);
+		opacity: 1;
+	}
+}
+
+.notification {
+	cursor: pointer;
+	animation: fadein 0.5s;
+	max-width: 420px;
+	margin: 8px;
+	background-color: #fff;
+	border-radius: 64px 15px 15px 64px;
+	border: #EDEDED solid 1px;
+	display: flex;
+	align-items: center;
+	padding: 4px 8px;
+	box-shadow: 0 0 5px rgba(0,0,0,0.1);
+	@media screen and (min-width: 768px) {
+        margin: 12px;
+    }
+	.notification-title {
+		font-weight: 700;
+		font-size: 1.15em;
+		color: var(--ion-color-dark);
+		margin: 0 0 3px;
+		padding: 0;
+	}
+	.notification-description {
+		font-weight: 400;
+		font-size: 0.8em;
+		color: var(--ion-color-medium);
+		letter-spacing: -0.01em;
+		margin: 0;
+		padding: 0;
+		line-height: 1.4;
+	}
+	.notification-text {
+		padding: 4px 8px 4px 12px;
+	}
+	.notification-badge {
+		padding: 0 2px 0 4px;
+		position: relative;
+	}
+	.completion-percentage {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		margin: 0;
+		padding: 0;
+		font-weight: 700;
+		letter-spacing: -0.02em;
+		font-size: 1.2em;
+		color: var(--ion-color-dark);
+	}
+	ion-icon {
+		transition: 0.15s ease-out;
+		&:hover {
+			opacity: 0.6;
+		}
+	}
+	&.dark {
+		border-color: #4D4D4D;
+		background-color: rgba(29, 29, 29, 0.9);
+		color: #fff;
+		transition: 0.2s ease-out;
+		.notification-title, 
+		.completion-percentage {
+			color: #fff;
+		}
+		&:hover {
+			background-color: rgba(49, 49, 49, 0.9);
+		}
+	}
+}

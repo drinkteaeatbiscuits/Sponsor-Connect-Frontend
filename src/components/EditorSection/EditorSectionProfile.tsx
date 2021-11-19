@@ -26,12 +26,10 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 	const [ value, setValue ] = useState("");
 	const [ sectionData, setSectionData ] = useState<object>([]);
 
-	const [editorContent, setEditorContent] = useState(null);
+	const [ editorContent, setEditorContent ] = useState(null);
 
 	const {isLoading: isEditingOpportunity, error: editOpportunityError, isSuccess, mutateAsync: editProfileMutation} = useEditProfileField( profileId );
 
-
-	// console.log(sectionData);
 
 	useEffect(() => {
 
@@ -46,7 +44,7 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 		
 		isSuccess && setShowEdit(false);
 
-	}, [currentValue, isSuccess]);
+	}, [ currentValue, isSuccess ]);
 
 	
 

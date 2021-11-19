@@ -10,6 +10,8 @@ import TabBar from '../../components/TabBar';
 
 import './dashboard.scss';
 import { personCircle, trailSign, settings } from 'ionicons/icons';
+import Notifications from '../../components/Notifications/Notifications';
+
 
 export interface props { }
 
@@ -36,9 +38,11 @@ const Dashboard: React.FC = () => {
 
 
   return (
-    <IonPage>
+    <IonPage> 
       <TabBar activeTab="dashboard" />
+      
       <IonContent fullscreen className="ion-padding dashboard">
+      
         <div className="content">
           <div className="hello-message ion-padding-top ion-padding-bottom ion-margin-bottom">
             <p className="hello ion-no-margin"><strong>Hello{authState.user?.yourName && (" " + authState.user?.yourName?.split(" ")[0])},</strong></p>
@@ -127,6 +131,7 @@ const Dashboard: React.FC = () => {
 
         </div>
       </IonContent>
+      
     </IonPage>
   );
 };

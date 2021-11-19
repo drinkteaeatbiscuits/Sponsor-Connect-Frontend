@@ -7,7 +7,7 @@ const useDeleteImage = () => {
     const client = useQueryClient();
     
     return useMutation(
-      "profileImages",
+      "my-profile",
       async (data: any) => {
     
       axios.delete(
@@ -18,8 +18,20 @@ const useDeleteImage = () => {
         .then(function (response) {
 
           // console.log(response);
-          client.invalidateQueries("profileImages");
+          
           // response.json();
+
+          console.log('deleted image');
+
+            fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/update-profile-completion", {
+							method: "POST",
+							credentials: "include",
+						}).then(() => {
+              client.invalidateQueries("my-profile");
+            });
+
+            
+
         })
         .catch(function (error) {
           console.log(error);

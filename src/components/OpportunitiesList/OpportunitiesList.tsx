@@ -47,7 +47,7 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
          
 						<div className="opportunity-image-thumb">
 
-							{console.log(opportunity.images)}
+							{/* {console.log(opportunity.images)} */}
 							{/* <img className="opportunity-image" src={  process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" + p.images?.hash + ".jpg" } alt={p.title} /> */}
 							<picture>
 								<source type="image/webp" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  opportunity.images?.hash + ".webp" } />

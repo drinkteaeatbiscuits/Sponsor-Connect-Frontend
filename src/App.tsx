@@ -14,8 +14,6 @@ import CreateAccount from './pages/CreateAccount/CreateAccount';
 import Menu from './pages/Menu';
 
 
-
-
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
 
@@ -45,7 +43,7 @@ import Settings from './pages/Settings';
 import EditProfile from './pages/EditProfile/EditProfile';
 import Billing from './pages/Billing';
 import Account from './pages/Account';
-import Notifications from './pages/Notifications';
+// import Notifications from './pages/Notifications';
 // import MainMenu from './components/MainMenu';
 import Subscription from './pages/Subscription/Subscription';
 import Landing from './pages/Landing/Landing';
@@ -68,6 +66,8 @@ import EditProfileDescription from './pages/EditProfile/EditProfileDescription';
 
 import Geocode from "react-geocode";
 import RangeTest from './pages/RangeTest';
+import NotificationSettings from './pages/NotificationSettings/NotificationSettings';
+import Notifications from './components/Notifications/Notifications';
 
 Geocode.setApiKey("AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q");
 
@@ -82,7 +82,8 @@ export const AuthContext = React.createContext<{
 const initialState = {
   isAuthenticated: false,
   user: null,
-  currentLocation: null
+  currentLocation: null,
+  profile: null
 };
 
 const reducer = (state: any, action: any) => {
@@ -179,7 +180,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
 
-    checkIfAuthenticated().then(data => setWasUserHere(data));
+    !wasUserHere && checkIfAuthenticated().then( data => setWasUserHere(data) );
 
     currentLocation.length <= 0 && navigator.geolocation.getCurrentPosition(function(position) {
     
@@ -200,6 +201,8 @@ const App: React.FC = () => {
   wasUserHere && (initialState.isAuthenticated = true);
   wasUserHere && (initialState.user = wasUserHere);
 
+
+  
   const history = useHistory();
 
   return (
@@ -215,9 +218,13 @@ const App: React.FC = () => {
         >
           
           {/* {!state.isAuthenticated ? <p>logged out</p> : <p>logged in</p>} */}
-        
+          
           <IonReactRouter>
+            <Notifications /> 
+
             <IonRouterOutlet animated={true}>
+
+            
 
               <Route exact path="/">
                 {state.isAuthenticated ? <Redirect to="dashboard" /> : <Landing />}
@@ -303,7 +310,7 @@ const App: React.FC = () => {
                 {state.isAuthenticated ? <Account /> : <Login />}
               </Route>
               <Route exact path="/settings/notifications">
-                {state.isAuthenticated ? <Notifications /> : <Login />}
+                {state.isAuthenticated ? <NotificationSettings /> : <Login />}
               </Route>
               
               <Route exact path="/settings">
@@ -348,12 +355,13 @@ const App: React.FC = () => {
               <Route>
                 <ErrorPage />
               </Route>
-
+              
 
             </IonRouterOutlet>
           </IonReactRouter>
 
         </AuthContext.Provider>
+        
       </Elements>
     </IonApp>
   )

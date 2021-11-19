@@ -34,6 +34,7 @@ import {
 	createDefaultImageWriter
 
 } from 'pintura';
+import { useQueryClient } from "react-query";
 
 
 
@@ -52,6 +53,7 @@ interface UploadImageProps {
 	label?: any,
 	showUploadArea?: boolean,
 	className?: string,
+	required?: boolean,
 }
 
 
@@ -75,9 +77,12 @@ const getFileName = (file: any) => {
 	return newFileName;
 }
 
+
+
  
 const NewImageUpload3: React.FC<UploadImageProps> = (UploadImageProps) => {
 
+	const client = useQueryClient();
 
 	const imageWriter = createDefaultImageWriter({
 		// Generate Unique File Name
@@ -135,6 +140,16 @@ const NewImageUpload3: React.FC<UploadImageProps> = (UploadImageProps) => {
 						// store request in state so it can be accessed by other processes
 						state.store = request;
 						resolve(state);
+
+						
+						UploadImageProps.required && fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/update-profile-completion", {
+							method: "POST",
+							credentials: "include",
+						}).then(() => {
+							client.invalidateQueries("my-profile");
+						})
+
+
 					} else {
 						reject('oh no something went wrong!');
 					}
