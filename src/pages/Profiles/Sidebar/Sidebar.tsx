@@ -1,4 +1,4 @@
-import { IonCheckbox, IonIcon, IonRange, useIonViewDidEnter } from "@ionic/react";
+import { IonButton, IonCheckbox, IonIcon, IonRange, useIonViewDidEnter } from "@ionic/react";
 import { constructOutline, location } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import Geocode from "react-geocode";
@@ -23,11 +23,9 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		budget: null
 	};
 
-const {className} = SidebarProps;
+	const {className} = SidebarProps;
 
 	const { state: authState } = React.useContext(AuthContext);
-
-	
 
 	const getLocationPlaceName = (lat, long) => {
 
@@ -125,17 +123,17 @@ const {className} = SidebarProps;
 
 	const sortable = Object.fromEntries( Object.entries(sportsCounts).sort(([,a]:any,[,b]:any) => b-a) );
 
-	// console.log(sortable);
+	
 
-	let visibleSports = Object.keys(sortable).slice(0, numberOfSportsVisible).reduce((result, key) => {
+	let visibleSports = Object.keys(sortable).reduce((result, key) => {
 		result[key] = sportsCounts[key];
 		return result;
 	}, {});
 
-	let hiddenSports = Object.keys(sortable).slice(numberOfSportsVisible).reduce((result, key) => {
-		result[key] = sportsCounts[key];
-		return result;
-	}, {});
+	// let hiddenSports = Object.keys(sortable).slice(numberOfSportsVisible).reduce((result, key) => {
+	// 	result[key] = sportsCounts[key];
+	// 	return result;
+	// }, {});
 
 
 	activeFilters.sports.length > 0 && activeFilters.sports.forEach((sport) => {
@@ -518,12 +516,16 @@ const {className} = SidebarProps;
 	}
 	
 
+	const saveSearch = () => {
+		console.log("search saved!");
+	}
+
 	return <aside className={"sidebar " + className }>
 				<h1>Search <span className="ion-color-primary">Profiles</span></h1>
 
 				<p className="results">{ profileData?.length > 0 ? "Showing " + profileData?.length + " results" : "No results found." }</p>
 
-				<p className="filter-by">Filter by</p>
+				{/* <p className="filter-by">Filter by</p> */}
 
 				<div className="filter-section sports">
 					<div className="filter-section-top">
@@ -536,7 +538,7 @@ const {className} = SidebarProps;
 					</div>
 					<div className="filter-section-bottom">
 
-
+						<div className="sports">
 	
 						{ Object.keys(visibleSports).map((sport) => {
 
@@ -553,7 +555,7 @@ const {className} = SidebarProps;
 								</div>	
 							}) }
 						
-						{ Object.keys(hiddenSports).length > 0 &&	<div className="view-more-sports" onClick={() => setShowMoreSports( showMoreSports ? false : true )}>
+						{/* { Object.keys(hiddenSports).length > 0 &&	<div className="view-more-sports" onClick={() => setShowMoreSports( showMoreSports ? false : true )}>
 								{showMoreSports ? "Less" : "More" }
 							</div> }
 
@@ -569,7 +571,9 @@ const {className} = SidebarProps;
 									<div className="checkbox-count">{profileCount}</div>
 								</div>	
 							}) }
-							</div> }
+							</div> } */}
+
+						</div>
 					</div>
 				</div>
 
@@ -684,6 +688,10 @@ const {className} = SidebarProps;
 
 					
 
+				</div>
+				<div className="save-search">
+
+                	<IonButton expand="block" className="" size="small" onClick={() => saveSearch()}>Save Search</IonButton>
 				</div>
 
 		</aside>

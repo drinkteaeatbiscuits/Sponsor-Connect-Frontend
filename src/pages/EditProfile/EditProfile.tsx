@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonSearchbar, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonSearchbar, IonTextarea, IonTitle, IonToolbar, useIonViewWillEnter } from '@ionic/react';
 import Header from '../../components/Header';
 import { useHistory } from 'react-router';
 import Cookies from 'js-cookie';
@@ -123,9 +123,11 @@ const EditProfile: React.FC = () => {
   error && console.log(error);
   profileData.error && console.log(profileData);
 
+  const [initialProfileData, setInitialProfileData] = useState(false);
+
   useEffect(() => {
 
-    if (profileData.status === "success") {
+    if (profileData.status === "success" ) {
 
       setProfileName(profileData.data?.profileName);
       setYourSport(profileData.data?.sport);
@@ -152,17 +154,30 @@ const EditProfile: React.FC = () => {
       
       setFullDescriptionText( profileData.data?.fullDescriptionText && convertFromRaw( profileData.data?.fullDescriptionText ) );
       
-      setAccolades(profileData.data?.accolades);
+      // setAccolades(profileData.data?.accolades);
       
       setCurrentProfilePicture(profileData.data?.profilePicture);
       setCoverImage(profileData.data?.coverImage);
+
 
     }
 
     
   }, [profileData]);
 
-  // console.log(authState.user.id);
+  useIonViewWillEnter(() => {
+
+    if (profileData.status === "success" ) {
+
+      
+      setAccolades(profileData.data?.accolades);
+      
+
+    }
+
+  });
+
+  console.log(profileData?.data?.accolades);
   
   const focusOnSport = () => {
     
@@ -257,7 +272,8 @@ const EditProfile: React.FC = () => {
     "socialMediaUrl": youTubeUrl
   });
 
-  // console.log(socialMediaObject);
+  
+  console.log(accolades);
 
   const createAccolades = (e:any) => {
 
@@ -266,7 +282,8 @@ const EditProfile: React.FC = () => {
     let accoladeIndex = Array.prototype.indexOf.call(e.target.parentElement.parentElement.children, e.target.parentElement);
     let newAccolades: Array<any> = [];
     newAccolades = newAccolades.concat(accolades);
-    newAccolades[accoladeIndex] = e.detail.value;
+    newAccolades[accoladeIndex] = e.target.value;
+
     setAccolades(newAccolades);
 
   }
@@ -379,7 +396,7 @@ const EditProfile: React.FC = () => {
 
                   <div className="editor-section-top-buttons">
 
-                    { profileData.isSuccess && location.label === profileData?.data[0]?.location.label && (!showLocation && <div className="editor-section-button" onClick={() => { setShowLocation(true); }}>{ location ? "Edit" : "Add"}</div>) }
+                    { profileData.isSuccess && location?.label === profileData?.data[0]?.location?.label && (!showLocation && <div className="editor-section-button" onClick={() => { setShowLocation(true); }}>{ location ? "Edit" : "Add"}</div>) }
 
                     { showLocation && <div className="editor-section-button" onClick={() => { saveField("location", location ); saveField("latLong", latLong ); setShowLocation(false); }}>Save</div> }
  
@@ -387,16 +404,16 @@ const EditProfile: React.FC = () => {
 
                 </div>
                 
-                <div className={"editor-section-bottom " + (location.label ? "" : "")}>
+                <div className={"editor-section-bottom " + (location?.label ? "" : "")}>
                       
-                      { !showLocation && (location ? location.label : "Add a location...")}
+                      { !showLocation && (location ? location?.label : "Add a location...")}
 
                       { showLocation && <GooglePlacesAutocomplete
                           apiKey="AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q"
                           selectProps={{
                             location: location,
                             onChange: doLocationSelected,
-                            placeholder: location ? location.label : "Start typing to select location",
+                            placeholder: location ? location?.label : "Start typing to select location",
                             menuPlacement: "auto",
                             className: "google-places"
                           }}
@@ -540,11 +557,13 @@ const EditProfile: React.FC = () => {
 
                 </div>
 
-                <div className={"editor-section-bottom " + (location.label ? "" : "")}>
+                <div className={"editor-section-bottom " + (location?.label ? "" : "")}>
                       
                       { !showEditAccolades && (accolades?.length < 0 ? "Add an Achievement..." : 
                       
                       accolades?.length > 0 && accolades.map((accolade: string, index: any) => {
+
+                        
 
                           return <div className="accolade" key={index}>
                                   { accolade && accolade }
@@ -560,17 +579,16 @@ const EditProfile: React.FC = () => {
 
                         <div className="accolade-list">
 
-                          { accolades?.length > 0 ? accolades.map((accolade: string, index: any) => {
+                          { accolades?.length > 0 && accolades.map((accolade: string, index: any) => {
+
+                           
 
                             return <div className="accolade-field" key={index}>
                                     <IonInput placeholder="Your Achievement" value={accolade && accolade} id={"accolade-" + index} onIonChange={ (e:any) => createAccolades(e) } />
                                     <IonIcon icon={close} onClick={ (e) => { removeAccolade(e); } } />
                                   </div>
 
-                                }) : <div className="accolade-field">
-                                      <IonInput value={""} placeholder="Your Achievement" onIonChange={ (e:any) => createAccolades(e) } /> 
-                                      <IonIcon icon={close} />
-                                    </div>
+                                })
 
                           } </div>
 
@@ -585,7 +603,7 @@ const EditProfile: React.FC = () => {
               </div>
 
 
-              {profileData.isSuccess && <IonButton className="button-tertiary" expand="block" size="small" onClick={() => { client.invalidateQueries("profile-" + profileData.data[0].id); history.push('/profile/' + profileData.data[0].id)}}>Back to Profile</IonButton>}
+              {profileData.isSuccess && <IonButton className="button-tertiary" expand="block" size="small" onClick={() => { client.invalidateQueries("profile-" + profileData.data.id); history.push('/profile/' + profileData.data.id)}}>Back to Profile</IonButton>}
 
             </div>
 

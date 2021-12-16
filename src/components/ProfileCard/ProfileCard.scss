@@ -72,6 +72,8 @@
 			
 		}
 	}
+
+	
 	.profile-information {
 		padding: 18px 8px 8px 8px;
 		flex-shrink: 1;
@@ -128,6 +130,41 @@
 				margin: 0;
 				color: #616161;
 			}
+		}
+	}
+	&.narrow {
+		flex-wrap: wrap;
+		.profile-image {
+			width: 100%;
+			flex-basis: 100%;
+			aspect-ratio: 3 / 1;
+			
+			
+			// aspect ratio fallback
+			@supports not (aspect-ratio: auto) { 
+				padding-top: 33.333%;
+				
+			}
+		}
+		.profile-information {
+			padding: 8px 8px 0px 8px;
+		}
+		.favourite-button {
+			margin-top: 12px;
+		}
+		.description {
+			font-size: 0.95em;
+			
+		}
+		.profile-facts {
+			padding: 8px 0 0;
+			font-size: 0.9em;
+		}
+	}
+
+	.dashboard-content-column-1 & {
+		.favourite-button {
+			display: none;
 		}
 	}
 	

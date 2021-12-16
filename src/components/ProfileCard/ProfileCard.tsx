@@ -10,11 +10,12 @@ import './ProfileCard.scss';
  
 interface ProfileProps {
 	profileData?: any,
+	className?: string
 }
 
 const ProfileCard: React.FC<ProfileProps> = ( ProfileProps ) => {
 
-	const { profileData } = ProfileProps;
+	const { profileData, className } = ProfileProps;
 
 	const history = useHistory();
 
@@ -34,7 +35,7 @@ const ProfileCard: React.FC<ProfileProps> = ( ProfileProps ) => {
 
 	// console.log(profileData);
 
-	return <div className="profile-card" onClick={ ()=> history.push("/profile/" + profileData?.id) } >
+	return <div className={"profile-card " + className} onClick={ ()=> history.push("/profile/" + profileData?.id) } >
 
 				<div className="profile-image" >
 
