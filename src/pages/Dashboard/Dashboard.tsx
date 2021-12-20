@@ -15,6 +15,7 @@ import useProfile from '../../hooks/useProfile';
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
 import useNewsFeed from '../../hooks/useNewsFeed';
+import { NewsFeed } from '../../components/NewsFeed/NewsFeed';
 
 
 export interface props {}
@@ -40,13 +41,15 @@ const Dashboard: React.FC = () => {
   const profileId = authState.user.profile;
 
   const {isLoading: isLoadingProfile, data: dataProfile, error: errorProfile, isSuccess: isSuccessProfile} = useProfile( profileId );
-  const {isLoading: isLoadingNews, data: dataNews, error: errorNews, isSuccess: isSuccessNews} = useNewsFeed();
   // console.log(authState.user.profile); 
   // console.log(dataProfile); 
 
   // { !authState.user && history.push('/'); }
-  console.log(dataNews);
+  // console.log(dataNews);
 
+  
+
+  
 
   return (
     <IonPage> 
@@ -174,16 +177,7 @@ const Dashboard: React.FC = () => {
 
             </div>
 
-            <div className="news-feed">
-              <p className="dashboard-section-title">Latest News</p>
-              { isSuccessNews && dataNews.map(( newsData:any )=>{
-           
-                <div key={newsData.id} className="news-article">
-                  { newsData.newsTitle }
-                </div>
-
-              })}
-            </div>
+            <NewsFeed articleCount={2} />
 
 
           </div>
