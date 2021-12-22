@@ -69,6 +69,7 @@ import RangeTest from './pages/RangeTest';
 import NotificationSettings from './pages/NotificationSettings/NotificationSettings';
 import Notifications from './components/Notifications/Notifications';
 import { colorWandOutline } from 'ionicons/icons';
+import NewsArticles from './pages/Admin/NewsArticles/NewsArticles';
 
 Geocode.setApiKey("AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q");
 
@@ -360,6 +361,10 @@ const App: React.FC = () => {
                 {state.isAuthenticated ? <Profiles /> : (checkUser && <Redirect to="/login" />)}
               </Route>
 
+
+              <Route exact path="/admin/news-articles">
+                <NewsArticles />
+              </Route>
 
               <Route exact path="/the-dugout">
                 <Landing />

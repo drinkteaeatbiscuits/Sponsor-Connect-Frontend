@@ -28,12 +28,7 @@
 	}
 
 
-	.editor-section-title {
-		font-weight: 700;
-		font-size: 1.2em;
-		letter-spacing: -0.02em;
-		color: var(--ion-color-dark);
-	}
+	
 
 	.editor-section-top-buttons {
 		display: flex;
@@ -93,6 +88,16 @@
 
 }
 
+.editor-section-title {
+	font-weight: 700;
+	font-size: 1.2em;
+	letter-spacing: -0.02em;
+	color: var(--ion-color-dark);
+}
+
+.new-news-article ion-input, .new-news-article ion-textarea {
+	border: 1px solid #dddddd;
+}
 
 .price .editor-section-bottom  {
 	position: relative;

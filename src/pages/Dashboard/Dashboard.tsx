@@ -177,7 +177,7 @@ const Dashboard: React.FC = () => {
 
             </div>
 
-            <NewsFeed articleCount={2} />
+            <NewsFeed articleCount={6} />
 
 
           </div>
