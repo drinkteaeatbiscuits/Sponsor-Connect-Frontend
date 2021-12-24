@@ -362,7 +362,7 @@ const App: React.FC = () => {
               </Route>
 
 
-              <Route exact path="/admin/news-articles">
+              <Route exact path="/admin/news-feed">
                 <NewsArticles />
               </Route>
 
