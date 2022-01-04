@@ -60,8 +60,8 @@ const NewNewsArticle = () =>  {
 
     const [date, setDate] = useState(new Date());
 
-    console.log(date);
-    console.log(newsDate);
+    // console.log(date);
+    console.log(newsId);
       
 
 
@@ -111,15 +111,17 @@ const NewNewsArticle = () =>  {
 
                 <div className="">
                     
-                            <Calendar date={date} onChange={e => setDate(e)} />
+                    <Calendar date={date} onChange={e => setDate(e)} />
                     {/* <IonDatetime  value={newsDate} first-day-of-week="1" onIonChange={e => setNewsDate(e.detail.value!)}></IonDatetime> */}
 
-                    
-                
-
                     <div className="">
-                        <NewImageUpload3 setCurrentImage={setCurrentImage} field="newsImage" theref="newsArticle" refId={newsId} label="Image"    />        
-                        
+                        <NewImageUpload3 
+                            setCurrentImage={setCurrentImage} 
+                            field="newsImage" 
+                            theref="news-article" 
+                            refId={newsId} 
+                            label="Image" 
+                            /> 
                     </div>
 
                 </div>
@@ -134,19 +136,15 @@ const NewNewsArticle = () =>  {
 
 export default NewNewsArticle
 
-
-/*
-
-currentImage?: any,
-	setCurrentImage: Function,
-	field?: any,
-	theref?: any,
-	refId?: any,
-	imageCropAspectRatio?: any,
-	circularCrop?: boolean,
-	showCroppedPreview?: boolean,
-	label?: any,
-	showUploadArea?: boolean,
-	className?: string,
-	required?: boolean,
-    */
+// currentImage?: any,
+// 	setCurrentImage: Function,
+// 	field?: any,
+// 	theref?: any,
+// 	refId?: any,
+// 	imageCropAspectRatio?: any,
+// 	circularCrop?: boolean,
+// 	showCroppedPreview?: boolean,
+// 	label?: any,
+// 	showUploadArea?: boolean,
+// 	className?: string,
+// 	required?: boolean,

@@ -11,7 +11,8 @@ export const NewsFeed = (props) => {
     const sortedArticles = () => {
         const theSortedArticles = dataNews.sort((firstEl, secondEl) => { 
           
-         return +new Date(firstEl.newsDate) - +new Date(secondEl.newsDate)
+         return  +new Date(secondEl.newsDate) - +new Date(firstEl.newsDate)
+         
         } );
    
         const theFilteredArticles = theSortedArticles.filter((article) => +new Date(article.newsDate) < +new Date());
