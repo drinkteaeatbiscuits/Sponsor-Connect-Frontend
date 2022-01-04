@@ -42,7 +42,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
 
 	return <div className="notifications">
 		
-			{ authState.user?.profile && showCompleteProfileNotification && profileComplete < 100 && <div className="notification dark" onClick={() => {history.push( "/profile/" + authState.user?.profile +"/edit" )} }>
+			{ authState.user?.profile && showCompleteProfileNotification && profileComplete < 100 && <div className="notification dark" onClick={(e) => {e.preventDefault(); history.push( "/profile/" + authState.user?.profile +"/edit" )} }>
 					<div className="notification-badge">
 						<div className="progress-circle" style={{ 
 							width: 75, 
@@ -74,7 +74,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
 						<p className="notification-title">Complete your profile</p>
 						<p className="notification-description">In order to begin to show up in searches by potential sponsors, you must have all essential parts of your profile completed.</p>
 					</div>
-					<IonIcon style={{position: "absolute", cursor: "pointer", top: "20px", right: "20px", fontSize: "20px" }} onClick={() => setShowCompleteProfileNotification(false) } icon={closeOutline}></IonIcon>
+					<IonIcon style={{position: "absolute", cursor: "pointer", top: "20px", right: "20px", fontSize: "20px" }} onClick={(e) => { e.stopPropagation(); setShowCompleteProfileNotification(false); } } icon={closeOutline}></IonIcon>
 					
 				</div> 
 				}

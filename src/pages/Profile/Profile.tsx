@@ -70,7 +70,7 @@ const Profile: React.FC = () => {
   return (
     <IonPage className="profile">
 
-      { authState?.user.profile === parseInt(profileId.id) && 
+      { authState?.user?.profile === parseInt(profileId.id) && 
         <IonToolbar>
           <IonButtons className="ion-justify-content-center ion-padding-start ion-padding-end">
             <IonButton className="" size="small" onClick={()=> history.push( "/profile/" + profileId.id +"/edit" )}>Edit Profile</IonButton>
@@ -192,7 +192,7 @@ const Profile: React.FC = () => {
               
               <div className="profile-detail-about ion-text-left ion-padding-top accolades">
                 <h4>Achievements</h4>
-                { data?.accolades.map((item: any) => { return <p className="accolade" key={ item }>{ item }</p>; } ) } 
+                { data?.accolades.map((item: any, index: any) => { return <p className="accolade" key={ item + index }>{ item }</p>; } ) } 
               </div>
             
             } 

@@ -22,7 +22,6 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 
 	return <div className="opportunities">
 
-		
 	
 			{ data?.length > 0 && data?.map(( opportunity:any )=>{
 				return <div className="opportunity" key={opportunity.id} onClick={ ()=> history.push("/opportunity/" + opportunity.id) }>
