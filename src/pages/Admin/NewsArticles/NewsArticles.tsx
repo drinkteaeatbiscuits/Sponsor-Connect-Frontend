@@ -20,7 +20,14 @@ const NewsArticles: React.FC = () => {
                 <div className="" style={{margin: "0 auto", padding: "80px 16px", maxWidth: "720px"}}>
                     <NewNewsArticle />
 
-                    <NewsFeed articleCount={0} />
+                    <div className="" style={{
+                        backgroundColor: "#fff", 
+                        padding: "16px", 
+                        margin: "16px auto", 
+                        borderRadius: "5px"}}>
+                        <NewsFeed articleCount={0} />
+                    </div>
+                    
                 </div>
             </div>
         </IonContent>

@@ -5,7 +5,7 @@ const useAddPost = () => {
     const client = useQueryClient();
     
     return useMutation(
-      "posts",
+      "news-feed",
       async (data: { 
           newsTitle: string;
           newsDescription?: string;
@@ -23,7 +23,7 @@ const useAddPost = () => {
           method: "POST",
           body: JSON.stringify(data), 
       });
-  
+   
         return await response.json();
   
       },
@@ -32,7 +32,7 @@ const useAddPost = () => {
             // console.log(client);
         
 
-          client.invalidateQueries("posts");
+          client.invalidateQueries("news-feed");
           
           return data;
 

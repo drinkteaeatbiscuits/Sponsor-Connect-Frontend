@@ -70,6 +70,7 @@ import NotificationSettings from './pages/NotificationSettings/NotificationSetti
 import Notifications from './components/Notifications/Notifications';
 import { colorWandOutline } from 'ionicons/icons';
 import NewsArticles from './pages/Admin/NewsArticles/NewsArticles';
+import BookConsultation from './pages/BookConsultation/BookConsultation';
 
 Geocode.setApiKey("AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q");
 
@@ -359,6 +360,10 @@ const App: React.FC = () => {
               </Route>
               <Route exact path="/profiles">
                 {state.isAuthenticated ? <Profiles /> : (checkUser && <Redirect to="/login" />)}
+              </Route>
+
+              <Route exact path="/book-consultation">
+                {state.isAuthenticated ? <BookConsultation /> : (checkUser && <Redirect to="/login" />)}
               </Route>
 
 

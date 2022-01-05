@@ -61,7 +61,7 @@ const NewNewsArticle = () =>  {
     const [date, setDate] = useState(new Date());
 
     // console.log(date);
-    console.log(newsId);
+    // console.log(newsId);
       
 
 
