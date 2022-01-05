@@ -7,7 +7,7 @@ const useEditPost = ( postId: any ) => {
     const client = useQueryClient();
     
     return useMutation(
-      "post-" + postId,
+      "news-feed",
       async (data: { 
         id?: any;
         newsTitle: string;
@@ -35,10 +35,10 @@ const useEditPost = ( postId: any ) => {
       {
         onSuccess: (data) => {
 
-          client.setQueryData([ "post-" + data.id ], data);
+          // client.setQueryData([ "news-feed" ], data);
             
-          client.invalidateQueries("post");
-          client.invalidateQueries("posts");
+          client.invalidateQueries("news-feed");
+          // client.invalidateQueries("posts");
           
         }
       }

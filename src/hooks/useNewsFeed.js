@@ -14,10 +14,11 @@ const useNewsFeed = () => {
 
         const newsArticles = await newsResponse.json();
   
-        newsArticles.forEach((p:any) => {
-          client.setQueryData(["news-feed", p.id], p);
-        });
+        // newsArticles.forEach((p:any) => {
+        //   client.setQueryData(["news-feed", p.id], p);
+        // });
 
+        client.setQueryData(["news-feed"], newsArticles);
 		    // console.log(profiles);
   
         return newsArticles;

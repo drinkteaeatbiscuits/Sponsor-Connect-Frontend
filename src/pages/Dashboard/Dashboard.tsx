@@ -3,9 +3,10 @@ import Header from '../../components/Header';
 import { useHistory, useParams } from 'react-router';
 import Cookies from 'js-cookie';
 import { AuthContext } from "../../App";
-import React from 'react';
+import React, { useState } from 'react';
 import LogoutButton from '../../components/LogoutButton';
 import TabBar from '../../components/TabBar';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 
 import './dashboard.scss';
@@ -24,6 +25,7 @@ const Dashboard: React.FC = () => {
 
   const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
+  const [copied, setCopied] = useState(false);
 
   const greeting = () => {
     const today = new Date()
@@ -62,7 +64,7 @@ const Dashboard: React.FC = () => {
               <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
                 
                 <div className="menu-list-option"
-                  onClick={() => history.push("/profile/" + authState?.user?.profile)}>
+                  onClick={() => history.push("/profile/" + authState?.user?.profile + "/edit")}>
                   <div className="icon">
                     <IonIcon color="primary" icon={personCircle} />
                   </div>
@@ -72,19 +74,23 @@ const Dashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <div className='menu-list-option'
-                  onClick={() => history.push("/opportunities/" + authState?.user?.profile)}>
-                  <div className="icon">
-                    <IonIcon color="primary" icon={link} />
+                <CopyToClipboard text={"app.sponsor-connect.com/profile/" + authState?.user?.profile}
+                  onCopy={() => setCopied(true)}>
+                  <div className='menu-list-option'>
+                    <div className="icon">
+                      <IonIcon color="primary" icon={link} />
+                    </div>
+                    <div className="text">
+                      <p className="main-text">Your Unique Link</p>
+                      <p className="sub-text">{ "app.sponsor-connect.com/profile/" + authState?.user?.profile }</p>
+                    </div>
                   </div>
-                  <div className="text">
-                    <p className="main-text">Your Unique Link</p>
-                    <p className="sub-text">app.sponsor-connect.com/test-profile</p>
-                  </div>
-                </div>
+                </CopyToClipboard>
+
+                
 
                 <div className='menu-list-option'
-                  onClick={() => history.push("/settings/")}>
+                  onClick={() => history.push("/book-consultation/")}>
                   <div className="icon">
                     <IonIcon color="primary" icon={chatbubbles} />
                   </div>
