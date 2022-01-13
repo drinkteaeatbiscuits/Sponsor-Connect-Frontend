@@ -453,12 +453,12 @@ const CreateAccount: React.FC = () => {
                           <p>Where sports take place</p>
                         </div>
                       </div>
-                      <div className={selectedOption === 'Other' ? 'active account-for-option' : 'account-for-option'}
-                        onClick={() => setSelectedOption('Other')}>
+                      <div className={selectedOption === 'Associations' ? 'active account-for-option' : 'account-for-option'}
+                        onClick={() => setSelectedOption('Associations')}>
                         <div className="icon"><OtherSVG /></div>
                         <div className="text">
-                          <p>Other</p>
-                          <p>None of the above</p>
+                          <p>Associations</p>
+                          <p>Governing body or sports organization</p>
                         </div>
                       </div>
 

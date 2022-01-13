@@ -130,12 +130,14 @@ const EditProfile: React.FC = () => {
     if (profileData.status === "success" ) {
 
       setProfileName(profileData.data?.profileName);
-      setYourSport(profileData.data?.sport);
+
+      !yourSport && setYourSport(profileData.data?.sport);
+
       setLocation(profileData.data?.location);
       setPriceRange(profileData.data?.priceRange);
       setWebsite(profileData.data?.website);
       
-      setSocialMedia(profileData.data?.socialMedia);
+      setSocialMedia(profileData.data?.socialMedia); 
 
       setFacebookTotal(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'facebook'; })?.socialMediaTotal);
       setFacebookUrl(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'facebook'; })?.socialMediaUrl);
@@ -177,7 +179,7 @@ const EditProfile: React.FC = () => {
 
   });
 
-  console.log(profileData?.data?.accolades);
+  // console.log(profileData?.data?.accolades);
   
   const focusOnSport = () => {
     
@@ -273,11 +275,11 @@ const EditProfile: React.FC = () => {
   });
 
   
-  console.log(accolades);
+  // console.log(accolades);
 
   const createAccolades = (e:any) => {
 
-    console.log(e);
+    // console.log(e);
     
     let accoladeIndex = Array.prototype.indexOf.call(e.target.parentElement.parentElement.children, e.target.parentElement);
     let newAccolades: Array<any> = [];
@@ -371,9 +373,12 @@ const EditProfile: React.FC = () => {
 
                   <div className="editor-section-top-buttons">
 
-                    { profileData.isSuccess && yourSport === profileData?.data[0]?.sport && <div className="editor-section-button" onClick={() => { setShowModal(true); focusOnSport(); }}>{ yourSport ? "Edit" : "Add"}</div> }
+                    { console.log(profileData.data?.sport) }
+                    { console.log(yourSport) }
 
-                    { profileData.isSuccess && yourSport !== profileData?.data[0]?.sport && <div className="editor-section-button" onClick={() => { saveField("sport", yourSport ) }}>Save</div> }
+                    { profileData.isSuccess && yourSport === profileData.data?.sport && <div className="editor-section-button" onClick={() => { setShowModal(true); focusOnSport(); }}>{ yourSport ? "Edit" : "Add"}</div> }
+
+                    { profileData.isSuccess && yourSport !== profileData.data?.sport && <div className="editor-section-button" onClick={() => { saveField("sport", yourSport ) }}>Save</div> }
  
                   </div>	
 
