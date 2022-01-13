@@ -10,7 +10,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 
 import './dashboard.scss';
-import { personCircle, trailSign, settings, linkOutline, link, chatbubbles } from 'ionicons/icons';
+import { personCircle, trailSign, settings, linkOutline, link, chatbubbles, home } from 'ionicons/icons';
 import Notifications from '../../components/Notifications/Notifications';
 import useProfile from '../../hooks/useProfile';
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
@@ -58,6 +58,32 @@ const Dashboard: React.FC = () => {
         <div className="dashboard-content">
 
           <div className="dashboard-content-column-1">
+
+          <div className="hello-user mobile">
+              <div className="avatar">
+                <div className="avatar-image">
+                  
+                { dataProfile?.profilePicture ? 
+                  
+                    <picture>
+                        <source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile/" +  dataProfile?.profilePicture?.hash + ".webp" } />
+                        <source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile/" +  dataProfile?.profilePicture?.hash + dataProfile?.profilePicture?.ext } />
+                        <img className="profile-picture" alt={ "Profile Image " + dataProfile?.profilePicture.id } src={ process.env.REACT_APP_S3_URL + "/images/profile/" +  dataProfile?.profilePicture?.hash + dataProfile?.profilePicture?.ext } /> 
+                    </picture>
+                  
+                  : <IonIcon color="medium" icon={personCircle} /> }
+                  
+                </div>
+              </div>
+
+              <div className="hello-message">
+                <p className="hello ion-no-margin"><strong>Hello{authState.user?.yourName && (" " + authState.user?.yourName?.split(" ")[0])},</strong></p>
+                <p className="greeting ion-no-margin">{greeting()}</p>
+              </div>
+
+            </div>
+
+
             {isSuccessProfile && <ProfileCard profileData={dataProfile} className="narrow" />}
 
             <div className="dashboard-actions">
@@ -99,8 +125,20 @@ const Dashboard: React.FC = () => {
                     <p className="sub-text">Get advice about sponsorship</p>
                   </div>
                 </div>
+                
+                <a href="https://sponsor-connect.com">
+                  <div className='menu-list-option'>
+                    <div className="icon">
+                      <IonIcon color="primary" icon={home} />
+                    </div>
+                    <div className="text">
+                      <p className="main-text">Home</p>
+                      <p className="sub-text">Go to our homepage</p>
+                    </div>
+                  </div>
+                </a>
 
-                <LogoutButton className="logout-button button-tertiary ion-margin-bottom" expand="block" size="small" />
+                {/* <LogoutButton className="logout-button button-tertiary ion-margin-bottom" expand="block" size="small" /> */}
 
               </div>
             </div>
