@@ -4,7 +4,7 @@ import NewNewsArticle from '../../components/NewNewsArticle/NewNewsArticle';
 import { NewsFeed } from '../../components/NewsFeed/NewsFeed';
 import TabBar from '../../components/TabBar';
 import { InlineWidget } from "react-calendly";
-
+// import 'https://assets.calendly.com/assets/external/widget.js';
 
 import './BookConsultation.scss'
 
@@ -24,7 +24,12 @@ const BookConsultation: React.FC = () => {
                 primaryColor: '0EB59A',
                 textColor: '3A3939'
                 }} 
-                url="https://calendly.com/sponsor-connect" />
+                url="https://calendly.com/sponsorconnect"
+                 />
+
+
+
+
 
             </div>
         </IonContent>
@@ -33,3 +38,5 @@ const BookConsultation: React.FC = () => {
 }
 
 export default BookConsultation;
+
+// eyJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2F1dGguY2FsZW5kbHkuY29tIiwiaWF0IjoxNjQyMDg4NjE2LCJqdGkiOiIxOWZlYzcwYy0wN2Q5LTQ3YjItODNhZC05ODAyYTljYWIwMDAiLCJ1c2VyX3V1aWQiOiJiMWI0N2FiYy1mMmQ5LTQ5ZDQtODdiMS03M2QwMzllZGZjMDgifQ.9tsASfRobopG_i8WAy7X4K9UjQ2iPCmhVjNxFgoCJDY
