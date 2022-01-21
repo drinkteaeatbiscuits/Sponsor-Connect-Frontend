@@ -23,8 +23,13 @@
     margin: 0;
 }
 
+.dashboard-content {
+	padding-bottom: 100px;
+}
+
 @media screen and ( min-width: 768px ) {
 	.dashboard-content {
+		padding-bottom: 0px;
 		padding-top: 70px;
 		margin: 0 auto;
 		display: flex;
@@ -37,9 +42,19 @@
 	flex-direction: column;
 	@media screen and ( min-width: 768px ) {
 		width: 29%;
+		padding-bottom: 0;
+		display: flex;
+		flex-direction: column;
+		height: calc(100vh - 102px);
+		padding: 10px 0 0;
 	}
 	.profile-card {
 		order: 3;
+		display: none;
+		@media screen and ( min-width: 768px ) {
+			display: block;
+			margin-top: 0;
+		}
 	}
 }
 
@@ -51,6 +66,11 @@
 	}
 	@media screen and ( min-width: 768px ) {
 		order: 3;
+		flex-grow: 1;
+		overflow: scroll;
+		.menu-list {
+			height: 100%;
+		}
 	}
 
 	a {
@@ -96,26 +116,36 @@
 
 
 
-
-
-
-
-
 .dashboard-content-column-2 {
 	width: 100%;
+	display: none;
 	@media screen and ( min-width: 768px ) {
+		// display: block;
 		width: 40%;
 		margin: 0 1%;
+
+		
+		padding-bottom: 0;
+		display: flex;
+		flex-direction: column;
+		height: calc(100vh - 102px);
 	}	
 	padding: 10px 0 0;
+
+	.hello-user {
+		order: 1;
+	}
 	
 
 	.user-opportunities {
-		margin-top: 12px;
+		order: 2;
 		background-color: #fff;
-		border-radius: 5px;
+		border-radius: 0 0 5px 5px;
 		padding: 12px;
 		background-color: #fff;
+		flex-grow: 1;
+		overflow: scroll;
+
 		.opportunities {
 			padding: 0;
 		}
@@ -169,15 +199,24 @@
 	width: 100%;
 	color: var(--ion-color-dark);
 	padding-bottom: 100px; 
+	padding: 10px 0 0;
 	@media screen and ( min-width: 768px ) {
 		width: 29%;
 		padding-bottom: 0;
+
+		display: flex;
+		flex-direction: column;
+		height: calc(100vh - 102px);
 	}
 	.dashboard-notifications {
+		display: none;
 		background-color: #fff;
 		border-radius: 5px;
 		padding: 12px;
-		margin: 10px 0;
+		margin: 0px 0 10px;
+		@media screen and ( min-width: 768px ) {
+			display: block;	
+		}
 	}
 	.dashboard-notification {
 		padding: 8px 0 0;
