@@ -42,7 +42,7 @@ import Opportunities from './pages/Opportunities/Opportunities';
 import Settings from './pages/Settings';
 import EditProfile from './pages/EditProfile/EditProfile';
 import Billing from './pages/Billing';
-import Account from './pages/Account';
+import Account from './pages/Account/Account';
 // import Notifications from './pages/Notifications';
 // import MainMenu from './components/MainMenu';
 import Subscription from './pages/Subscription/Subscription';

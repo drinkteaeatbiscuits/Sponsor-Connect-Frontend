@@ -8,6 +8,8 @@ import LogoutButton from '../../components/LogoutButton';
 import TabBar from '../../components/TabBar';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
+import Scrollbar from "react-scrollbars-custom";
+
 
 import './dashboard.scss';
 import { personCircle, trailSign, settings, linkOutline, link, chatbubbles, home } from 'ionicons/icons';
@@ -170,28 +172,30 @@ const Dashboard: React.FC = () => {
 
             </div>
 
-            <div className="user-opportunities">
+            <div className="" style={{order: 2, borderRadius: "5px 5px 0 0",
+                                      backgroundColor: "#fff", margin: "12px 0 0", padding: "12px"}}>
+            <p className="dashboard-section-title">Your Opportunities</p>
 
-              <p className="dashboard-section-title">Your Opportunities</p>
-
-              <div className="opportunity-counts">
-                <div className="active">
-                  <h2>10</h2>
-                  <p>Active</p>
-                </div>
-                <div className="drafts">
-                  <h2>03</h2>
-                  <p>Drafts</p>
-                </div>
-                <div className="expired">
-                  <h2>05</h2>
-                  <p>Expired</p>
-                </div>
-                <div className="successful">
-                  <h2>01</h2>
-                  <p>Successful</p>
-                </div>
+            <div className="opportunity-counts">
+              <div className="active">
+                <h2>10</h2>
+                <p>Active</p>
               </div>
+              <div className="drafts">
+                <h2>03</h2>
+                <p>Drafts</p>
+              </div>
+              <div className="expired">
+                <h2>05</h2>
+                <p>Expired</p>
+              </div>
+              <div className="successful">
+                <h2>01</h2>
+                <p>Successful</p>
+              </div>
+            </div>
+            </div>
+            <div className="user-opportunities">
 
               <OpportunitiesList profileId={ profileId } />
             
@@ -217,7 +221,40 @@ const Dashboard: React.FC = () => {
 
             </div>
 
-            <NewsFeed articleCount={6} />
+            <div className="" style={{borderRadius: "5px 5px 0 0",
+                                      backgroundColor: "#fff",}}>
+              <p className="dashboard-section-title" style={{padding: "12px",}}>Latest News</p>
+            </div>
+            <div className="" style={{ 
+                  flexGrow: 1,  
+                  backgroundColor: "#fff", 
+                  borderRadius: "0 0 5px 5px",
+                  overflow: "scroll"
+                  }}>
+                    <NewsFeed articleCount={6} style={{}} />
+
+                  </div>
+
+                {/* <div className="" style={{
+                  height: "100%", 
+                  flexGrow: 1, 
+                  display: "flex", 
+                  flexDirection: "column", 
+                  backgroundColor: "#fff", 
+                  borderRadius: "5px"
+                  }}>
+                  
+                 
+                    <div style={{flexShrink: 1, overflow: "scroll"}}>
+                      
+                    </div>
+                    
+                 
+                 
+                  
+                </div> */}
+            
+
 
           </div>
         

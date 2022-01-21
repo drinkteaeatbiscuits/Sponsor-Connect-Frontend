@@ -27,8 +27,7 @@ export const NewsFeed = (props) => {
      
     return (
         <div className="news-feed">
-              <p className="dashboard-section-title">Latest News</p>
-              
+
               { isSuccessNews && sortedArticles().map(( newsData:any )=>{
            
            const date = new Date(newsData.newsDate);
