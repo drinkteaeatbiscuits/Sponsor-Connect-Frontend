@@ -86,7 +86,7 @@ const Dashboard: React.FC = () => {
             </div>
 
 
-            {isSuccessProfile && <ProfileCard profileData={dataProfile} className="narrow" />}
+            { isSuccessProfile && <ProfileCard profileData={dataProfile} className="narrow" /> }
 
             <div className="dashboard-actions">
               <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
