@@ -70,7 +70,7 @@ const Profile: React.FC = () => {
   return (
     <IonPage className="profile">
 
-      { authState?.user.profile === parseInt(profileId.id) && 
+      { authState?.user?.profile === parseInt(profileId.id) && 
         <IonToolbar>
           <IonButtons className="ion-justify-content-center ion-padding-start ion-padding-end">
             <IonButton className="" size="small" onClick={()=> history.push( "/profile/" + profileId.id +"/edit" )}>Edit Profile</IonButton>
@@ -93,19 +93,19 @@ const Profile: React.FC = () => {
          
 
           <picture>
-            <source type="image/webp" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xs_" +  data?.coverImage?.hash + ".webp" } />
-            <source type="image/webp" media="(max-width: 768px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_sm_" +  data?.coverImage?.hash + ".webp" } />
-            <source type="image/webp" media="(max-width: 992px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_md_" +  data?.coverImage?.hash + ".webp" } />
-            <source type="image/webp" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_lg_" +  data?.coverImage?.hash + ".webp" } />
-            <source type="image/webp" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xl_" +  data?.coverImage?.hash + ".webp" } />
+            <source type="image/webp" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_xs/" +  data?.coverImage?.hash + ".webp" } />
+            <source type="image/webp" media="(max-width: 768px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_sm/" +  data?.coverImage?.hash + ".webp" } />
+            <source type="image/webp" media="(max-width: 992px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_md/" +  data?.coverImage?.hash + ".webp" } />
+            <source type="image/webp" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_lg/" +  data?.coverImage?.hash + ".webp" } />
+            <source type="image/webp" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_xl/" +  data?.coverImage?.hash + ".webp" } />
 
-            <source type="image/jpeg" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xs_" +  data?.coverImage?.hash + ".jpg" } />
-            <source type="image/jpeg" media="(max-width: 768px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_sm_" +  data?.coverImage?.hash + ".jpg" } />
-            <source type="image/jpeg" media="(max-width: 992px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_md_" +  data?.coverImage?.hash + ".jpg" } />
-            <source type="image/jpeg" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_lg_" +  data?.coverImage?.hash + ".jpg" } />
-            <source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/cover_xl_" +  data?.coverImage?.hash + ".jpg" } />
+            <source type="image/jpeg" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_xs/" +  data?.coverImage?.hash + data?.coverImage?.ext } />
+            <source type="image/jpeg" media="(max-width: 768px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_sm/" +  data?.coverImage?.hash + data?.coverImage?.ext } />
+            <source type="image/jpeg" media="(max-width: 992px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_md/" +  data?.coverImage?.hash + data?.coverImage?.ext } />
+            <source type="image/jpeg" media="(max-width: 1440px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_lg/" +  data?.coverImage?.hash + data?.coverImage?.ext } />
+            <source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_xl/" +  data?.coverImage?.hash + data?.coverImage?.ext } />
 
-            <img className="cover-image" src={  process.env.REACT_APP_S3_URL + "/cover_xl_" + data?.coverImage?.hash + ".jpg" } alt="Profile Cover" />
+            <img className="cover-image" src={  process.env.REACT_APP_S3_URL + "/images/cover_xl/" + data?.coverImage?.hash + data?.coverImage?.ext } alt="Profile Cover" />
           </picture>  
           
           }
@@ -122,9 +122,9 @@ const Profile: React.FC = () => {
             { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.profilePicture ? 
             
               <picture>
-                  <source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/profile_" +  data?.profilePicture?.hash + ".webp" } />
-                  <source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/profile_" +  data?.profilePicture?.hash + ".jpg" } />
-                  <img className="profile-picture" alt={ "Profile Image " + data?.profilePicture.id } src={ process.env.REACT_APP_S3_URL + "/profile_" +  data?.profilePicture?.hash + ".jpg" } /> 
+                  <source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile/" +  data?.profilePicture?.hash + ".webp" } />
+                  <source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile/" +  data?.profilePicture?.hash + data?.profilePicture?.ext } />
+                  <img className="profile-picture" alt={ "Profile Image " + data?.profilePicture.id } src={ process.env.REACT_APP_S3_URL + "/images/profile/" +  data?.profilePicture?.hash + data?.profilePicture?.ext } /> 
               </picture>
             
             : <IonIcon color="medium" icon={personCircle} /> }
@@ -192,7 +192,7 @@ const Profile: React.FC = () => {
               
               <div className="profile-detail-about ion-text-left ion-padding-top accolades">
                 <h4>Achievements</h4>
-                { data?.accolades.map((item: any) => { return <p className="accolade" key={ item }>{ item }</p>; } ) } 
+                { data?.accolades.map((item: any, index: any) => { return <p className="accolade" key={ item + index }>{ item }</p>; } ) } 
               </div>
             
             } 
@@ -230,6 +230,9 @@ const Profile: React.FC = () => {
           
                     
                     <OpportunitiesList profileId={ profileId.id } />
+
+                 
+
 
                     <div className="other-sponsorship-ideas ion-padding">
                       <p>Have any other sponsorship ideas? <br/>
@@ -289,9 +292,9 @@ const Profile: React.FC = () => {
                               data-fancybox="profile-gallery"
                             >
                             <picture>
-                              <source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  profileImage?.hash + ".webp" } />
-                              <source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  profileImage?.hash + ".jpg" } />
-                              <img className="profile-image-thumb" alt={ "Profile Image " + profileImage.id } src={ process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  profileImage?.hash + ".jpg" } /> 
+                              <source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + ".webp" } />
+                              <source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + profileImage?.ext } />
+                              <img className="profile-image-thumb" alt={ "Profile Image " + profileImage.id } src={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + profileImage?.ext } /> 
                             </picture>
                             </a>
                         </div>
@@ -322,7 +325,3 @@ const Profile: React.FC = () => {
 };
 
 export default Profile;
-
-function ionViewWillEnter(arg0: () => void) {
-  throw new Error('Function not implemented.');
-}

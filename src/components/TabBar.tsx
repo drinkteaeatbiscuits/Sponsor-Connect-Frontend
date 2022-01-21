@@ -1,7 +1,7 @@
 import React from 'react';
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonBadge, IonButton } from '@ionic/react';
 import { calendar, personCircle, map, informationCircle, settings, trailSign, speedometer, newspaper, logOut } from 'ionicons/icons';
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import { AuthContext } from '../App';
 import SvgScLogo from '../pages/OnBoardingSport/images/SvgScLogo';
 import SvgScLogoHorizontal from './SvgScLogoHorizontal';
@@ -16,8 +16,14 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
 
     const { state: authState, dispatch } = React.useContext(AuthContext);
 
+    const location = useLocation();
+  
+    // console.log(location.pathname);
+
 
 	const doLogout = async () => {
+
+        
 	
 		const logoutResp = await fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/logout", {
 			method: "POST",
@@ -34,11 +40,14 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
 			  
 			//   console.log(logoutInfo);
 
+                // history.push('/');
+
 			  dispatch && dispatch({
 				type: "LOGOUT"
 			  });
 
-			  history.push('/');
+			  window.location.reload();
+
 		  }
 
 	  }
@@ -52,16 +61,16 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
                 <div className="logo-header">
                     <div className="" onClick={()=> history.push("/dashboard")}><SvgScLogoHorizontal /></div>
                 </div>
-                {/* <div className={ ( activeTab === 'dashboard' && "active " ) + " tab-button"} onClick={()=> history.push("/dashboard")}> */}
-                    {/* <IonIcon icon={speedometer} /> */}
-                    {/* <IonLabel>Dashboard</IonLabel> */}
-                    {/* <IonBadge>2</IonBadge> */}
-                {/* </div> */}
+                <div className={ ( activeTab === 'dashboard' && "active " ) + " tab-button"} onClick={()=> history.push("/dashboard")}>
+                   <IonIcon icon={speedometer} /> 
+                    <IonLabel>Dashboard</IonLabel> 
+                    {/* <IonBadge>2</IonBadge>  */}
+                </div>
 
-                <div className={ ( activeTab === 'profiles' && "active " ) + " tab-button"} onClick={()=> history.push("/profiles")}>
+                {/* <div className={ ( activeTab === 'profiles' && "active " ) + " tab-button"} onClick={()=> history.push("/profiles")}>
                     <IonIcon icon={personCircle} />
                     <IonLabel>Profiles</IonLabel>
-                </div>
+                </div> */}
 
 
                 {isBusinessAccount() ? 

@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonSearchbar, IonTextarea, IonTitle, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonSearchbar, IonTextarea, IonTitle, IonToolbar, useIonViewWillEnter } from '@ionic/react';
 import Header from '../../components/Header';
 import { useHistory } from 'react-router';
 import Cookies from 'js-cookie';
@@ -39,15 +39,16 @@ export interface props {}
 
 
 const EditProfile: React.FC = () => {
-  
+ 
+  const client = useQueryClient(); 
  
 	const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
 
-  const {isLoading, error, mutateAsync: addProfileMutation} = useUpdateProfile();
-  const {isLoading: isEditingOpportunity, error: editOpportunityError, isSuccess, mutateAsync: editProfileMutation} = useEditProfileField( authState?.user.profile.id );
+  const { isLoading, error, mutateAsync: addProfileMutation } = useUpdateProfile();
+  const { isLoading: isEditingOpportunity, error: editOpportunityError, isSuccess, mutateAsync: editProfileMutation } = useEditProfileField( authState?.user.profile.id );
 
-  const profileData = useMyProfile();
+  const profileData = useMyProfile(authState?.user.profile.id);
   
   const [profileName, setProfileName] = useState("");
   const [sport, setSport] = useState("");
@@ -122,43 +123,63 @@ const EditProfile: React.FC = () => {
   error && console.log(error);
   profileData.error && console.log(profileData);
 
+  const [initialProfileData, setInitialProfileData] = useState(false);
+
   useEffect(() => {
-    if (profileData.status === "success") {
-      setProfileName(profileData.data[0]?.profileName);
-      setYourSport(profileData.data[0]?.sport);
-      setLocation(profileData.data[0]?.location);
-      setPriceRange(profileData.data[0]?.priceRange);
-      setWebsite(profileData.data[0]?.website);
-      
-      setSocialMedia(profileData.data[0]?.socialMedia);
 
-      setFacebookTotal(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'facebook'; })[0]?.socialMediaTotal);
-      setFacebookUrl(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'facebook'; })[0]?.socialMediaUrl);
-      
-      setInstagramTotal(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'instagram'; })[0]?.socialMediaTotal);
-      setInstagramUrl(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'instagram'; })[0]?.socialMediaUrl);
-      
-      setTwitterTotal(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'twitter'; })[0]?.socialMediaTotal);
-      setTwitterUrl(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'twitter'; })[0]?.socialMediaUrl);
-      
-      setYouTubeTotal(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'youTube'; })[0]?.socialMediaTotal);
-      setYouTubeUrl(profileData.data[0]?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'youTube'; })[0]?.socialMediaUrl);
+    if (profileData.status === "success" ) {
 
-      setShortDescription(profileData.data[0]?.shortDescription);
-      setFullDescription(profileData.data[0]?.description);
+      setProfileName(profileData.data?.profileName);
+
+      !yourSport && setYourSport(profileData.data?.sport);
+
+      setLocation(profileData.data?.location);
+      setPriceRange(profileData.data?.priceRange);
+      setWebsite(profileData.data?.website);
       
-      setFullDescriptionText( profileData.data[0]?.fullDescriptionText && convertFromRaw( profileData.data[0]?.fullDescriptionText ) );
+      setSocialMedia(profileData.data?.socialMedia); 
+
+      setFacebookTotal(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'facebook'; })?.socialMediaTotal);
+      setFacebookUrl(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'facebook'; })?.socialMediaUrl);
       
-      setAccolades(profileData.data[0]?.accolades);
+      setInstagramTotal(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'instagram'; })?.socialMediaTotal);
+      setInstagramUrl(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'instagram'; })?.socialMediaUrl);
       
-      setCurrentProfilePicture(profileData.data[0]?.profilePicture);
-      setCoverImage(profileData.data[0]?.coverImage);
+      setTwitterTotal(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'twitter'; })?.socialMediaTotal);
+      setTwitterUrl(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'twitter'; })?.socialMediaUrl);
+      
+      setYouTubeTotal(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'youTube'; })?.socialMediaTotal);
+      setYouTubeUrl(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'youTube'; })?.socialMediaUrl);
+
+      setShortDescription(profileData.data?.shortDescription);
+      setFullDescription(profileData.data?.description);
+      
+      setFullDescriptionText( profileData.data?.fullDescriptionText && convertFromRaw( profileData.data?.fullDescriptionText ) );
+      
+      // setAccolades(profileData.data?.accolades);
+      
+      setCurrentProfilePicture(profileData.data?.profilePicture);
+      setCoverImage(profileData.data?.coverImage);
+
+
     }
 
     
-  }, [profileData.status, profileData.data]);
+  }, [profileData]);
 
+  useIonViewWillEnter(() => {
 
+    if (profileData.status === "success" ) {
+
+      
+      setAccolades(profileData.data?.accolades);
+      
+
+    }
+
+  });
+
+  // console.log(profileData?.data?.accolades);
   
   const focusOnSport = () => {
     
@@ -253,16 +274,18 @@ const EditProfile: React.FC = () => {
     "socialMediaUrl": youTubeUrl
   });
 
-  // console.log(socialMediaObject);
+  
+  // console.log(accolades);
 
   const createAccolades = (e:any) => {
 
-    console.log(e);
+    // console.log(e);
     
     let accoladeIndex = Array.prototype.indexOf.call(e.target.parentElement.parentElement.children, e.target.parentElement);
     let newAccolades: Array<any> = [];
     newAccolades = newAccolades.concat(accolades);
-    newAccolades[accoladeIndex] = e.detail.value;
+    newAccolades[accoladeIndex] = e.target.value;
+
     setAccolades(newAccolades);
 
   }
@@ -323,7 +346,8 @@ const EditProfile: React.FC = () => {
                 imageCropAspectRatio={3 / 1} 
                 circularCrop={false}
                 // showCroppedPreview={ false }
-                label="Cover Image"  
+                label="Cover Image" 
+                required={true} 
                 />
 
               <NewImageUpload3 
@@ -336,7 +360,8 @@ const EditProfile: React.FC = () => {
                 imageCropAspectRatio={1} 
                 circularCrop={true}
                 // showCroppedPreview={ false }
-                label="Profile Picture"  
+                label="Profile Picture"
+                required={true}
                 />
 
 
@@ -348,9 +373,12 @@ const EditProfile: React.FC = () => {
 
                   <div className="editor-section-top-buttons">
 
-                    { profileData.isSuccess && yourSport === profileData?.data[0]?.sport && <div className="editor-section-button" onClick={() => { setShowModal(true); focusOnSport(); }}>{ yourSport ? "Edit" : "Add"}</div> }
+                    { console.log(profileData.data?.sport) }
+                    { console.log(yourSport) }
 
-                    { profileData.isSuccess && yourSport !== profileData?.data[0]?.sport && <div className="editor-section-button" onClick={() => { saveField("sport", yourSport ) }}>Save</div> }
+                    { profileData.isSuccess && yourSport === profileData.data?.sport && <div className="editor-section-button" onClick={() => { setShowModal(true); focusOnSport(); }}>{ yourSport ? "Edit" : "Add"}</div> }
+
+                    { profileData.isSuccess && yourSport !== profileData.data?.sport && <div className="editor-section-button" onClick={() => { saveField("sport", yourSport ) }}>Save</div> }
  
                   </div>	
 
@@ -373,7 +401,7 @@ const EditProfile: React.FC = () => {
 
                   <div className="editor-section-top-buttons">
 
-                    { profileData.isSuccess && location.label === profileData?.data[0]?.location.label && (!showLocation && <div className="editor-section-button" onClick={() => { setShowLocation(true); }}>{ location ? "Edit" : "Add"}</div>) }
+                    { profileData.isSuccess && location?.label === profileData?.data[0]?.location?.label && (!showLocation && <div className="editor-section-button" onClick={() => { setShowLocation(true); }}>{ location ? "Edit" : "Add"}</div>) }
 
                     { showLocation && <div className="editor-section-button" onClick={() => { saveField("location", location ); saveField("latLong", latLong ); setShowLocation(false); }}>Save</div> }
  
@@ -381,16 +409,16 @@ const EditProfile: React.FC = () => {
 
                 </div>
                 
-                <div className={"editor-section-bottom " + (location.label ? "" : "")}>
+                <div className={"editor-section-bottom " + (location?.label ? "" : "")}>
                       
-                      { !showLocation && (location ? location.label : "Add a location...")}
+                      { !showLocation && (location ? location?.label : "Add a location...")}
 
                       { showLocation && <GooglePlacesAutocomplete
                           apiKey="AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q"
                           selectProps={{
                             location: location,
                             onChange: doLocationSelected,
-                            placeholder: location ? location.label : "Start typing to select location",
+                            placeholder: location ? location?.label : "Start typing to select location",
                             menuPlacement: "auto",
                             className: "google-places"
                           }}
@@ -534,11 +562,13 @@ const EditProfile: React.FC = () => {
 
                 </div>
 
-                <div className={"editor-section-bottom " + (location.label ? "" : "")}>
+                <div className={"editor-section-bottom " + (location?.label ? "" : "")}>
                       
                       { !showEditAccolades && (accolades?.length < 0 ? "Add an Achievement..." : 
                       
                       accolades?.length > 0 && accolades.map((accolade: string, index: any) => {
+
+                        
 
                           return <div className="accolade" key={index}>
                                   { accolade && accolade }
@@ -554,17 +584,16 @@ const EditProfile: React.FC = () => {
 
                         <div className="accolade-list">
 
-                          { accolades?.length > 0 ? accolades.map((accolade: string, index: any) => {
+                          { accolades?.length > 0 && accolades.map((accolade: string, index: any) => {
+
+                           
 
                             return <div className="accolade-field" key={index}>
                                     <IonInput placeholder="Your Achievement" value={accolade && accolade} id={"accolade-" + index} onIonChange={ (e:any) => createAccolades(e) } />
                                     <IonIcon icon={close} onClick={ (e) => { removeAccolade(e); } } />
                                   </div>
 
-                                }) : <div className="accolade-field">
-                                      <IonInput value={""} placeholder="Your Achievement" onIonChange={ (e:any) => createAccolades(e) } /> 
-                                      <IonIcon icon={close} />
-                                    </div>
+                                })
 
                           } </div>
 
@@ -579,7 +608,7 @@ const EditProfile: React.FC = () => {
               </div>
 
 
-              {profileData.isSuccess && <IonButton className="button-tertiary" expand="block" size="small" onClick={() => history.push('/profile/' + profileData.data[0].id)}>Back to Profile</IonButton>}
+              {profileData.isSuccess && <IonButton className="button-tertiary" expand="block" size="small" onClick={() => { client.invalidateQueries("profile-" + profileData.data.id); history.push('/profile/' + profileData.data.id)}}>Back to Profile</IonButton>}
 
             </div>
 

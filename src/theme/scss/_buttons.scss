@@ -71,3 +71,22 @@ ion-button,
 	}
 
 }
+
+.favourite-button {
+	color: var(--ion-color-primary);
+	background-color: #F0F0F0;
+	width: 42px;
+	height: 42px;
+	border-radius: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 5px 3px;
+	cursor: pointer;
+	transition: 0.2s ease-out;
+	&:hover {
+		// color: #fff;
+		background-color: var(--ion-color-primary-tint);
+	}
+	
+}

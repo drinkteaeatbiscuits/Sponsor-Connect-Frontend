@@ -1,8 +1,9 @@
-import { IonCheckbox, IonIcon, IonRange } from "@ionic/react";
+import { IonButton, IonCheckbox, IonIcon, IonRange, useIonViewDidEnter } from "@ionic/react";
 import { constructOutline, location } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import Geocode from "react-geocode";
 import { AuthContext } from "../../../App";
+import useOpportunityValues from "../../../hooks/useOpportunityValues";
 
 Geocode.setApiKey("AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q");
 
@@ -10,6 +11,7 @@ interface SidebarProps {
 	allProfileData?: any;
 	profileData?: any;
 	setData?: any;
+	className?: string;
 }
 
 
@@ -21,9 +23,9 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		budget: null
 	};
 
-	const { state: authState } = React.useContext(AuthContext);
+	const {className} = SidebarProps;
 
-	
+	const { state: authState } = React.useContext(AuthContext);
 
 	const getLocationPlaceName = (lat, long) => {
 
@@ -75,7 +77,10 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const [locationRange, setLocationRange] = useState(distanceGroups.length);
 	// const [budgetRange, setBudgetRange] = useState(budgetGroups.length);
 
-	// const [budget, setBudget] = useState("");
+	const [budget, setBudget] = useState<any>({ lower: 1, upper: 8 });
+	
+	const [budgetGroupCounts, setBudgetGroupCounts] = useState<object>({});
+	
 	const [distanceGroupCounts, setDistanceGroupCounts] = useState<object>({});
 
 	const [budgetRange, setBudgetRange] = useState<{
@@ -88,25 +93,20 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const [upperBudget, setUpperBudget] = useState(budgetGroups.length);
 
 	const [sportsData, setSportsData] = useState<any[]>([]);
-	// const [visibleSports, setVisibleSports] = useState();
+	const [distanceData, setDistanceData] = useState<any[]>([]);
+	const [budgetData, setBudgetData] = useState<any[]>([]);
 
+	
+	
 	let result;
 	const numberOfSportsVisible = 8;
 
 	result = sportsData?.map(a => a.sport);
-	
-	// console.log(activeFilters.sports);
-	// console.log(result);
-
-	
 
 	result = result?.filter(function( element ) {
 		return element.length > 0;
 	 });
 
-	//  console.log(result);
-
-	 
 	 
 
 	const sportsCounts = {};
@@ -119,22 +119,26 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		}
 	}
 
-	let visibleSports = Object.keys(sportsCounts).slice(0, numberOfSportsVisible).reduce((result, key) => {
+	// console.log(sportsCounts);
+
+	const sortable = Object.fromEntries( Object.entries(sportsCounts).sort(([,a]:any,[,b]:any) => b-a) );
+
+	
+
+	let visibleSports = Object.keys(sortable).reduce((result, key) => {
 		result[key] = sportsCounts[key];
 		return result;
 	}, {});
 
-	let hiddenSports = Object.keys(sportsCounts).slice(numberOfSportsVisible).reduce((result, key) => {
-		result[key] = sportsCounts[key];
-		return result;
-	}, {});
+	// let hiddenSports = Object.keys(sortable).slice(numberOfSportsVisible).reduce((result, key) => {
+	// 	result[key] = sportsCounts[key];
+	// 	return result;
+	// }, {});
 
 
 	activeFilters.sports.length > 0 && activeFilters.sports.forEach((sport) => {
 		
-		
 		!visibleSports[sport] && (visibleSports = {[sport]: 0, ...visibleSports});
-
 		
 	});
 
@@ -174,10 +178,9 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		let updatedObject = {};
 	
+		distanceData && Object.keys(fromLocation).length > 0 && distanceData.map((profile) => {
 
-		profileData && Object.keys(fromLocation).length > 0 && profileData.map((profile) => {
-
-			distance( fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M" );
+			// distance( fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M" );
 
 			let distanceAway;
 
@@ -199,11 +202,50 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	};
 
 
+
+	const updateBudgetGroups = () => {
+
+		let updatedObject = {};
+
+		budgetData && Object.keys(budget).length > 0 && budgetData.map((profile) => {
+
+
+			const maxValue = Math.max(...profile.opportunities.map(o => o.price), 0);
+			const minValue = Math.min(...profile.opportunities.map(o => o.price));
+
+			// console.log(maxValue, minValue);
+
+
+			budgetGroups.forEach((budget, i) => {
+
+				// console.log(budget, minValue, maxValue);
+
+				let addtogroup = false;
+
+				( minValue >= budget && minValue <= budgetGroups[i + 1] ) && ( addtogroup = true );
+
+				( maxValue <= budget && maxValue >= budgetGroups[i - 1] ) && ( addtogroup = true );
+				
+				addtogroup && ( updatedObject[budget] = updatedObject[budget] ? updatedObject[budget] + 1 : 1 );
+
+			});
+			
+
+		});
+
+		setBudgetGroupCounts(updatedObject);
+
+	}
+
+	// console.log(budgetGroupCounts);
+
 	const updateProfiles = async () => {
 
-		// console.log('update profiles');
+		// console.log('updating profiles');
+		
 
 		allProfileData && await setData( allProfileData.filter(profile => {
+
 			let showProfile = false;
 
 			// check if any sports filters are selected
@@ -236,13 +278,44 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 			if ( Number(distance(fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M")) < Number(activeFilters?.distance) ) {
 				showProfileDistance = true;
 			}
+
+
+
+			let showProfileBudget = false;
+			// check if a distance filter is selected
+			activeFilters?.budget === 0 && ( showProfileBudget = true ); 
+			activeFilters?.budget === null && ( showProfileBudget = true );
+
+			// console.log(activeFilters?.budget);
 			
+
+			let maxValue = Math.max(...profile.opportunities.map(o => o.price), 0);
+			let minValue = Math.min(...profile.opportunities.map(o => o.price));
+			
+			if(activeFilters?.budget){
+				// console.log(maxValue);
+				// console.log(minValue);
+				// console.log(budgetGroups[activeFilters?.budget.lower - 1]);
+
+				// if minimum value is greater than lower filter and less than upper filter
+				((minValue >= budgetGroups[activeFilters?.budget.lower - 1]) && ( minValue <= budgetGroups[activeFilters?.budget.upper - 1] )) && ( showProfileBudget = true );
+
+				// or
+				
+				// if maximum value is less than upper filter and greater than lower filter 
+
+				// ((minValue >= budgetGroups[activeFilters?.budget.lower - 1]) && (minValue <= budgetGroups[activeFilters?.budget.upper - 1]) 
+				// || (maxValue >= budgetGroups[activeFilters?.budget.lower - 1]) && (maxValue <= budgetGroups[activeFilters?.budget.upper - 1]))  && ( showProfileBudget = true );
+
+			}
+
+			activeFilters?.budget?.lower === 1 && activeFilters?.budget?.upper === 8 && (showProfileBudget = true);
 
 			// console.log(showProfileDistance);
 
 			// distance( fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M" ))
 
-			if(showProfileDistance && showProfile) {
+			if(showProfileDistance && showProfile && showProfileBudget) {
 				return true;
 			}else{
 				return;
@@ -254,7 +327,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 
 		allProfileData && await setSportsData( allProfileData.filter(profile => {
-
 
 			let showProfileDistance = false;
 
@@ -278,62 +350,132 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		}));
 
+
+		allProfileData && await setDistanceData( allProfileData.filter(profile => {
+
+			let showDistanceProfile = false;
+
+			// check if any sports filters are selected
+			activeFilters?.sports.length === 0 && (showDistanceProfile = true); 
+			
+			activeFilters?.sports.length > 0 && activeFilters.sports.forEach((activeFilter) => {
+				// console.log(activeFilter);
+				// console.log(profile.sport);
+				if( profile.sport === activeFilter ){ showDistanceProfile = true; }
+			});
+
+
+			if(showDistanceProfile) {
+				return true;
+			}else{
+				return;
+			}
+
+		}));
+
+		
+
+		allProfileData && await setBudgetData( allProfileData.filter(profile => {
+
+			let showBudgetProfile = false;
+
+			// check if any sports filters are selected
+			activeFilters?.sports.length === 0 && (showBudgetProfile = true); 
+			
+			activeFilters?.sports.length > 0 && activeFilters.sports.forEach((activeFilter) => {
+				// console.log(activeFilter);
+				// console.log(profile.sport);
+				if( profile.sport === activeFilter ){ showBudgetProfile = true; }
+			});
+
+
+			if(showBudgetProfile) {
+				return true;
+			}else{
+				return;
+			}
+
+		}));
+
+
 		setUpdatingProfiles(false);
 
 	}
 
 	
-	// console.log(activeFilters?.sports.length);
-	// console.log(activeFilters?.distance);
 
-	// console.log(updatingProfiles);
-	// console.log(activeFilters);
-	// console.log(budgetRange);
+	
+
+	const [gettingLocation, setGettingLocation] = useState(false);
 
 	useEffect(() => {
+		
 
+		if( allProfileData && authState?.currentLocation && currentLocation.length <= 0 ) {
 
-		allProfileData && Object.keys(profileData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setData(allProfileData);
-
-		allProfileData && Object.keys(sportsData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setSportsData(allProfileData)
-
-		profileData && updateProfileDistances();
-
-		if( updatingProfiles ){
-
-			updatingProfiles && updateProfiles();
-
-		}
-
-		 if( authState?.currentLocation && !currentLocation && !fromLocation ) {
+			// console.log('already got location');
 			
-			setFromLocation(authState?.currentLocation);
 			setCurrentLocation([authState?.currentLocation]);
+			setFromLocation(authState?.currentLocation);
+			
+			setUpdatingProfiles(true);
+			// updateProfiles();
+	
+		}
+		
+		if ( allProfileData && !authState?.currentLocation && currentLocation.length <= 0 && !gettingLocation ) {
 
-		} else {
-
-			currentLocation.length <= 0 && navigator.geolocation.getCurrentPosition(function(position) {
+			setGettingLocation(true);
+	
+			console.log('getting location');
+	
+			navigator.geolocation.getCurrentPosition(function(position) {
 				setCurrentLocation([
 					{"lat": position.coords.latitude, "long": position.coords.longitude}
 				]);
 				
 				setFromLocation( { lat: position.coords.latitude, long: position.coords.longitude } );
-			  });
+			});
 	
+			Object.keys(fromLocation).length > 0 && !fromLocation.city && getLocationPlaceName(fromLocation.lat, fromLocation.long);
 	
-			  Object.keys(fromLocation).length > 0 && !fromLocation.city && getLocationPlaceName(fromLocation.lat, fromLocation.long);
+			setUpdatingProfiles(true);
+			// updateProfiles();
 	
 		}
-		
-	}, [activeFilters, currentLocation, fromLocation, profileData, updatingProfiles, authState]);
 
-	// console.log(authState?.currentLocation.city);
+		currentLocation.length > 0 && setGettingLocation(false);
+
+		if( updatingProfiles ){
+
+			updateProfiles();
+
+		}
+
+		allProfileData && Object.keys(profileData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setData(allProfileData);
+		allProfileData && Object.keys(sportsData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setSportsData(allProfileData)
+
+
+		sportsData && updateProfileDistances();
+
+		sportsData && updateBudgetGroups();
+
+		
+
+
+	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters ])
+	
+
+	useIonViewDidEnter(() => {
+		const dualRange = document.querySelector('#dual-range') as any;
+    	dualRange && (dualRange.value = { lower: 0, upper: 8 });
+	})
+	
 	
 	const filterSports = (e: any, sport: any) => {
 
 		setUpdatingProfiles(true);
 
-		
 		e.detail.checked && !activeFilters?.sports.includes(sport) ? setActiveFilters(prevState => ({ ...prevState, sports: [...activeFilters?.sports,...[sport]]})) 
 		: setActiveFilters( prevState => ({ ...prevState, sports: activeFilters?.sports.filter(e => e !== sport)})) 
 
@@ -346,50 +488,44 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const setDistance = (e) => {
 		
 		setUpdatingProfiles(true);
-
 		setActiveFilters( prevState => ({ ...prevState, distance: distanceGroups[e - 1] }));
 		
 	}
 
+	
+	const updateBudget = (e) => {
 
-	const setBudget = (e) => {
-		// setUpdatingProfiles(true);
+		setUpdatingProfiles(true);
+		setActiveFilters( prevState => ({ ...prevState, budget: e }));
 
-		console.log(e);
-
-		//  setActiveFilters( prevState => ({ ...prevState, budget: budgetGroups[e - 1] }));
-
-		
 	}
-
-	const budgetChange = (e) => {
-
-		// let lb = e.detail.value.lower;
-		// let ub = e.detail.value.upper;
-
-		setLowerBudget(e.detail.value.lower);
-		setUpperBudget(e.detail.value.upper);
-
-		setActiveFilters( prevState => ({ ...prevState, budget: {lower: lowerBudget, upper: upperBudget} }));
-	}
-
 
 
 	const getGraphHeight = (total) => {
 
 		let highestTotal = Math.max(...Object.values(distanceGroupCounts));
+		return (100 / highestTotal) * total;
 
+	}
+
+	const getBudgetGraphHeight = (total) => {
+
+		let highestTotal = Math.max(...Object.values(budgetGroupCounts));
 		return (100 / highestTotal) * total;
 
 	}
 	
 
-	return <aside className="sidebar">
+	const saveSearch = () => {
+		console.log("search saved!");
+	}
+
+	return <aside className={"sidebar " + className }>
 				<h1>Search <span className="ion-color-primary">Profiles</span></h1>
 
 				<p className="results">{ profileData?.length > 0 ? "Showing " + profileData?.length + " results" : "No results found." }</p>
 
-				<p className="filter-by">Filter by</p>
+				{/* <p className="filter-by">Filter by</p> */}
 
 				<div className="filter-section sports">
 					<div className="filter-section-top">
@@ -397,12 +533,12 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 							<p className="filter-section-title">Sports</p>
 						</div>
 
-						{ activeFilters?.sports.length > 0 && <div className="clear" onClick={()=>{setActiveFilters( prevState => ({ ...prevState, sports: []}))}}>Clear</div> }
+						{ activeFilters?.sports.length > 0 && <div className="clear" onClick={()=>{ setActiveFilters( prevState => ({ ...prevState, sports: []}))}}>Clear</div> }
 
 					</div>
 					<div className="filter-section-bottom">
 
-
+						<div className="sports">
 	
 						{ Object.keys(visibleSports).map((sport) => {
 
@@ -419,7 +555,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 								</div>	
 							}) }
 						
-						{ Object.keys(hiddenSports).length > 0 &&	<div className="view-more-sports" onClick={() => setShowMoreSports( showMoreSports ? false : true )}>
+						{/* { Object.keys(hiddenSports).length > 0 &&	<div className="view-more-sports" onClick={() => setShowMoreSports( showMoreSports ? false : true )}>
 								{showMoreSports ? "Less" : "More" }
 							</div> }
 
@@ -435,7 +571,9 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 									<div className="checkbox-count">{profileCount}</div>
 								</div>	
 							}) }
-							</div> }
+							</div> } */}
+
+						</div>
 					</div>
 				</div>
 
@@ -453,7 +591,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 						<div className="selected-location" style={{display: "flex", alignItems: "center"}}>
 							<IonIcon icon={location} color="primary" style={{fontSize: "24px", marginRight: "5px"}} />
-							{fromLocation.city}
+							{ fromLocation.city }
 						</div>
 
 						<div className="range-graph">
@@ -469,7 +607,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 								if(i + 1 >= distanceGroups.length ) { return } else {
 								
 									return <div key={distanceGroupCounts[distanceGroup] + "-" + distanceGroup} 
-									className={"distance-group " + (locationRange >= i + 1 ? "active" : "")}
+									className={"distance-group " + (locationRange >= i + 2 ? "active" : "")}
 									style={{
 										height: getGraphHeight(distanceGroupCounts[distanceGroup]) + "%",
 									}}></div>
@@ -481,12 +619,12 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 						</div>
 						
 
-						<IonRange value={locationRange} 
-						onIonChange={(e) => {setDistance(e.detail.value as number); setLocationRange(e.detail.value as number)}} 
+						<IonRange 
+						value={locationRange} 
+						onIonChange={(e) => { setDistance(e.detail.value as number); setLocationRange(e.detail.value as number) }} 
 						min={0} 
 						max={distanceGroups.length} 
 						step={1} 
-						ticks={true} 
 						snaps={true} color="primary" />
 						
 						{ distanceGroups[locationRange - 1] !== undefined && <p className="location-distance">{ distanceGroups[locationRange - 1] === 0 ? "All Locations" : "Within " + distanceGroups[locationRange - 1] + " Miles" }</p>}
@@ -509,21 +647,60 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 				{	// console.log(lowerBudget);
 	// console.log(upperBudget); 
-}
+						}
+						<div className="range-graph">
+
+
+							{ budgetGroups.map((group, i) => {
+
+								if(i + 1 >= budgetGroups.length ) { return } else {
+								return <div key={budgetGroupCounts[group] + "-" + group} className={"distance-group " + (budget.upper >= i + 2 ? "active" : "")}
+								style={{
+									height: getBudgetGraphHeight(budgetGroupCounts[group]) + "%",
+										}}></div>
+								}
+							}) 
+
+							}
+
+						</div>
 
 						<IonRange 
-							onIonChange={(e) => { budgetChange(e); setBudgetSet(true) }} 
+							id="dual-range"
+							onIonChange={(e) => { setBudget(e.detail.value); updateBudget( e.detail.value ); }}
+							debounce={20} 
 							dualKnobs={true}
-							min={0}  
+							min={1}  
 							max={budgetGroups.length} 
-							step={1} 
-							ticks={true} 
+							step={1}  
 							snaps={true} color="primary" />
+						
+
+						{ budgetGroups[budget.lower - 1] === 0 && budgetGroups[budget.upper - 1] === -1 && <p className="location-distance">All Budgets</p> }
+
+						{ ( budgetGroups[budget.lower - 1] !== 0 || budgetGroups[budget.upper - 1] !== -1 ) &&
+						<p className="location-distance">{ "From £" + budgetGroups[budget.lower - 1] + ( budgetGroups[budget.upper - 1] === -1 ? " up to any " : (" to £" + budgetGroups[budget.upper - 1]) )  }</p> }
+						
+						
+
 					</div>
 
+
+					
+
+				</div>
+				<div className="save-search">
+
+                	<IonButton expand="block" className="" size="small" onClick={() => saveSearch()}>Save Search</IonButton>
 				</div>
 
 		</aside>
 }
+
+
  
 export default Sidebar;
+function ionViewDidEnter(arg0: () => void) {
+	throw new Error("Function not implemented.");
+}
+

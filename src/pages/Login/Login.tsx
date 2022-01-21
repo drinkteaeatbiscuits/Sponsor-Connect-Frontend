@@ -17,7 +17,6 @@ const Login: React.FC<props> = () => {
   const [username, setUsername] = useState<any>("");
   const [password, setPassword] = useState<any>("");
 
-
   const { dispatch } = React.useContext(AuthContext);
 
   const doLogin = async () => {
@@ -37,6 +36,8 @@ const Login: React.FC<props> = () => {
     });
 
     const loginInfo = await loginResp.json();
+
+    
 
     if (loginInfo?.statusCode) {
 

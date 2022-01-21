@@ -1,27 +1,33 @@
 import { useQuery, useQueryClient } from 'react-query';
 
 
-const useMyProfile = () => {
+const useMyProfile = (profileId: any = false) => {
 	const client = useQueryClient();
+
 	return useQuery(
-	  "profiles",
+	
+	"my-profile",
+	  
 	  async() => {
+		  
 		console.log("in query");
 
 		const response = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + '/profiles/me', {
 		  credentials: "include",
 		});
 		
-		const posts = await response.json();
+		const profile = await response.json();
   
 		// pre load the cache
-		posts.forEach((p: any) => {
+		// posts.forEach((p: any) => {
 
-		  client.setQueryData(["profiles", p.id], p);
+		//   client.setQueryData(["profile-" + p.id], p);
 		  
-		});
+		// });
+
+		profileId && client.setQueryData(["my-profile"], profile);
   
-		return posts;
+		return profile;
 	  }
 	)
   }
