@@ -12,6 +12,7 @@
     "@stripe/react-stripe-js": "^1.7.0",
     "@stripe/stripe-js": "^1.22.0",
     "@svgr/core": "^6.1.2",
+    "@testing-library/dom": "^7.31.2",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^11.2.5",
     "@testing-library/user-event": "^12.6.3",
