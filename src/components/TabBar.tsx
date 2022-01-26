@@ -53,8 +53,10 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
 	  }
 
       const isBusinessAccount = () => {
-        return authState.user?.role.type === "business_user" ? true : false;
+        return authState.user?.accountType === "Business" ? true : false;
       }
+
+     
 
 	return <div className="tab-bar">
         

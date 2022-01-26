@@ -71,10 +71,9 @@ import Notifications from './components/Notifications/Notifications';
 import { colorWandOutline } from 'ionicons/icons';
 import NewsArticles from './pages/Admin/NewsArticles/NewsArticles';
 import BookConsultation from './pages/BookConsultation/BookConsultation';
+import DashboardBusiness from './pages/DashboardBusiness/DashboardBusiness';
 
 Geocode.setApiKey("AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q");
-
-
 const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
 
 export const AuthContext = React.createContext<{
@@ -186,8 +185,7 @@ const App: React.FC = () => {
 
   }
 
-  
-	
+
 
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const [wasUserHere, setWasUserHere] = useState<any>("");
@@ -199,7 +197,12 @@ const App: React.FC = () => {
 
   useEffect(() => {
 
-    !wasUserHere && checkIfAuthenticated().then( (data) => { setWasUserHere(data); setCheckUser(true); } );
+    !wasUserHere && checkIfAuthenticated().then( (data) => { 
+      
+      setWasUserHere(data); 
+      setCheckUser(true); 
+
+    } );
 
     !doesLocationCookieExist() && !checkingLocation && currentLocation.length <= 0 && navigator.geolocation.getCurrentPosition(function(position) {
     
@@ -225,7 +228,7 @@ const App: React.FC = () => {
 
   }, [currentLocation, fromLocation, state.isAuthenticated, doesLocationCookieExist()]);
 
-  // console.log(wasUserHere);
+  
   // console.log(state.isAuthenticated);
 
   wasUserHere && (initialState.isAuthenticated = true);
@@ -234,7 +237,7 @@ const App: React.FC = () => {
   
   const history = useHistory();
 
-  // console.log(checkUser);
+  // console.log(state?.user?.accountType);
 
   return (
 
@@ -251,7 +254,8 @@ const App: React.FC = () => {
           {/* {!state.isAuthenticated ? <p>logged out</p> : <p>logged in</p>} */}
           
           <IonReactRouter>
-            <Notifications /> 
+           
+            { state?.user?.profile && <Notifications /> }
 
             <IonRouterOutlet>
 
@@ -279,8 +283,10 @@ const App: React.FC = () => {
                 {state.isAuthenticated ? <Redirect to="/dashboard" /> : <CreateAccountBusiness />}
               </Route> 
 
-              <Route exact path="/dashboard">                
-                { state.isAuthenticated ? <Dashboard /> : ( checkUser && <Redirect to="/login" /> ) }
+              <Route exact path="/dashboard">
+
+                { state.isAuthenticated ? ( state.user.profile ? <Dashboard /> : <DashboardBusiness /> ) : ( checkUser && <Redirect to="/login" /> ) }
+
               </Route>
 
               <Route exact path="/login">
