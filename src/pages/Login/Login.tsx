@@ -47,7 +47,7 @@ const Login: React.FC<props> = () => {
 
       // console.log(loginInfo);
 
-      loginInfo.user.role.id !== 3 && ( loginInfo.user.profile = loginInfo.user.profile.id )
+      loginInfo.user.role.id !== 3 && loginInfo.user.profile && ( loginInfo.user.profile = loginInfo.user.profile.id )
 
       dispatch && dispatch({
         type: "setUser",

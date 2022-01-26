@@ -1,8 +1,18 @@
 import { useQuery, useQueryClient } from 'react-query';
+import React from 'react';
+import { AuthContext } from "../App";
 
 
 const useMyProfile = (profileId: any = false) => {
 	const client = useQueryClient();
+
+	const { state: authState } = React.useContext(AuthContext);
+
+	// console.log(authState?.user?.accountType);
+
+	// if( authState?.user?.accountType === "Business" ) {
+	// 	return 
+	// }
 
 	return useQuery(
 	

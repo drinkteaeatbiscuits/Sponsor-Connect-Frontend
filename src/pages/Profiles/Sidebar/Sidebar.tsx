@@ -12,6 +12,7 @@ interface SidebarProps {
 	profileData?: any;
 	setData?: any;
 	className?: string;
+	isDashboard?: boolean;
 }
 
 
@@ -23,7 +24,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		budget: null
 	};
 
-	const {className} = SidebarProps;
+	const {className, isDashboard} = SidebarProps;
 
 	const { state: authState } = React.useContext(AuthContext);
 
@@ -107,7 +108,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		return element.length > 0;
 	 });
 
-	 
+	 console.log(activeFilters);
 
 	const sportsCounts = {};
 
@@ -446,13 +447,13 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		currentLocation.length > 0 && setGettingLocation(false);
 
-		if( updatingProfiles ){
+		if( updatingProfiles && !isDashboard ){
 
 			updateProfiles();
 
 		}
 
-		allProfileData && Object.keys(profileData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setData(allProfileData);
+		allProfileData && profileData && Object.keys(profileData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setData(allProfileData);
 		allProfileData && Object.keys(sportsData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setSportsData(allProfileData)
 
 
@@ -520,10 +521,14 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		console.log("search saved!");
 	}
 
+	const searchNow = () => {
+		console.log("search now!");
+	}
+
 	return <aside className={"sidebar " + className }>
 				<h1>Search <span className="ion-color-primary">Profiles</span></h1>
 
-				<p className="results">{ profileData?.length > 0 ? "Showing " + profileData?.length + " results" : "No results found." }</p>
+				{ !isDashboard && <p className="results">{ profileData?.length > 0 ? "Showing " + profileData?.length + " results" : "No results found." }</p> }
 
 				{/* <p className="filter-by">Filter by</p> */}
 
@@ -691,7 +696,9 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 				</div>
 				<div className="save-search">
 
-                	<IonButton expand="block" className="" size="small" onClick={() => saveSearch()}>Save Search</IonButton>
+                	<IonButton expand="block" className="" size="small" onClick={() => { isDashboard ? searchNow() : saveSearch() }}>{ isDashboard ? "Search Now" : "Save Search" }</IonButton>
+
+
 				</div>
 
 		</aside>
@@ -700,7 +707,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
  
 export default Sidebar;
-function ionViewDidEnter(arg0: () => void) {
-	throw new Error("Function not implemented.");
-}
+
+
 
