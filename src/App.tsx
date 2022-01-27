@@ -72,6 +72,7 @@ import { colorWandOutline } from 'ionicons/icons';
 import NewsArticles from './pages/Admin/NewsArticles/NewsArticles';
 import BookConsultation from './pages/BookConsultation/BookConsultation';
 import DashboardBusiness from './pages/DashboardBusiness/DashboardBusiness';
+import Favourites from './pages/Favourites/Favourites';
 
 Geocode.setApiKey("AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q");
 const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
@@ -286,6 +287,12 @@ const App: React.FC = () => {
               <Route exact path="/dashboard">
 
                 { state.isAuthenticated ? ( state.user.profile ? <Dashboard /> : <DashboardBusiness /> ) : ( checkUser && <Redirect to="/login" /> ) }
+
+              </Route>
+
+              <Route exact path="/favourites">
+
+                { state.isAuthenticated ? <Favourites /> : ( checkUser && <Redirect to="/login" /> ) }
 
               </Route>
 

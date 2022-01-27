@@ -66,6 +66,10 @@ const Profile: React.FC = () => {
     // Your options go here
   });
 
+  const viewedProfiles = authState.user.viewedProfiles;
+
+  console.log(viewedProfiles);
+
 
   return (
     <IonPage className="profile">
@@ -87,10 +91,7 @@ const Profile: React.FC = () => {
 
          <div className="profile-header">
 
-          
-          
-          { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.coverImage && 
-         
+          { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.coverImage &&          
 
           <picture>
             <source type="image/webp" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_xs/" +  data?.coverImage?.hash + ".webp" } />
@@ -199,17 +200,6 @@ const Profile: React.FC = () => {
 
           </div>
 
-
-          {/* { isLoading ? <IonSkeletonText animated style={{ width: '90%', margin: '10px  auto' }} /> : data?.images?.length > 0 && 
-
-            <div className="profile-images ion-padding-top  ion-padding-bottom images ion-text-center">
-             
-              { data?.images?.length > 1 && <ImageSlider images={data?.images}/> }
-              { data?.images?.length === 1 && <img alt={ "Profile Image " + data?.images.id } src={ data?.images?.url } /> }
-              
-            </div>
-
-          }  */}
           
           </div>
 

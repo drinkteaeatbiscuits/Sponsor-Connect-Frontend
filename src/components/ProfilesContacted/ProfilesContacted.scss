@@ -1,0 +1,29 @@
+.profiles-contacted-list {
+	@media screen and (min-width: 768px) {
+		max-height: 25vh;
+	}
+	.avatar {
+		position: relative;
+		margin-top: 0;
+		margin-left: 0;
+		z-index: 99;
+		text-align: center;
+		left: auto;
+		top: auto;
+		.avatar-image {
+			display: block;
+			width: 57px;
+			height: 57px;
+			img {
+				display: block;
+			}
+			
+		}
+	}
+	.profile-contacted {
+		transition: 0.25s all ease;
+		&:hover {
+			opacity: 0.8;
+		}
+	}
+}

@@ -108,7 +108,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		return element.length > 0;
 	 });
 
-	 console.log(activeFilters);
+	//  console.log(activeFilters);
 
 	const sportsCounts = {};
 
