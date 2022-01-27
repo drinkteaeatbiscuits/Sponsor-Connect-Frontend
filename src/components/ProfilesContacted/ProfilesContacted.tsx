@@ -33,7 +33,7 @@ const ProfilesContacted: React.FC<ProfilesContactedProps> = () => {
 	return <div className="profiles-contacted-list" style={{padding: "0 16px 0 12px", overflow: "scroll"}}>	
 
 		{
-			contactedProfiles.map((contactedProfile) => {
+			contactedProfiles && contactedProfiles.map((contactedProfile) => {
 
 				const contactedProfileData = isSuccess && profileData.find(x => x.id === contactedProfile.profileId);
 				
