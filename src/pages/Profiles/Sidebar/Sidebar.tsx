@@ -13,6 +13,7 @@ interface SidebarProps {
 	setData?: any;
 	className?: string;
 	isDashboard?: boolean;
+
 }
 
 
@@ -131,27 +132,11 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		return result;
 	}, {});
 
-	// let hiddenSports = Object.keys(sortable).slice(numberOfSportsVisible).reduce((result, key) => {
-	// 	result[key] = sportsCounts[key];
-	// 	return result;
-	// }, {});
-
-
 	activeFilters.sports.length > 0 && activeFilters.sports.forEach((sport) => {
 		
 		!visibleSports[sport] && (visibleSports = {[sport]: 0, ...visibleSports});
 		
 	});
-
-	// console.log(visibleSports);
-	
-
-	// const updateSportsList = () => {
-
-	// 	setVisibleSports()
-
-	// }
-
 
 	function distance(lat1, lon1, lat2, lon2, unit) {
 		if ((lat1 == lat2) && (lon1 == lon2)) {
@@ -181,8 +166,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	
 		distanceData && Object.keys(fromLocation).length > 0 && distanceData.map((profile) => {
 
-			// distance( fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M" );
-
 			let distanceAway;
 
 			Object.keys(profile.latLong).length > 0 && (
@@ -199,7 +182,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		});
 
 		setDistanceGroupCounts(updatedObject);
-		// console.log(updatedObject);
+
 	};
 
 
@@ -210,16 +193,10 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		budgetData && Object.keys(budget).length > 0 && budgetData.map((profile) => {
 
-
 			const maxValue = Math.max(...profile.opportunities.map(o => o.price), 0);
 			const minValue = Math.min(...profile.opportunities.map(o => o.price));
 
-			// console.log(maxValue, minValue);
-
-
 			budgetGroups.forEach((budget, i) => {
-
-				// console.log(budget, minValue, maxValue);
 
 				let addtogroup = false;
 
@@ -231,19 +208,14 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 			});
 			
-
 		});
 
 		setBudgetGroupCounts(updatedObject);
 
 	}
 
-	// console.log(budgetGroupCounts);
 
-	const updateProfiles = async () => {
-
-		// console.log('updating profiles');
-		
+	const updateProfiles = async () => {		
 
 		allProfileData && await setData( allProfileData.filter(profile => {
 
@@ -405,8 +377,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	
 
-	
-
 	const [gettingLocation, setGettingLocation] = useState(false);
 
 	useEffect(() => {
@@ -460,9 +430,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		sportsData && updateProfileDistances();
 
 		sportsData && updateBudgetGroups();
-
-		
-
 
 	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters ])
 	
@@ -518,7 +485,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	
 
 	const saveSearch = () => {
-		console.log("search saved!");
+		console.log(activeFilters);
 	}
 
 	const searchNow = () => {
