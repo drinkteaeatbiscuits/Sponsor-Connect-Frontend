@@ -22,7 +22,7 @@ import ProfileMatches from '../../components/ProfileMatches/ProfileMatches';
 
 export interface props {}
 
-const DashboardBusiness: React.FC = () => {
+const Favourites: React.FC = () => {
 
   const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
@@ -54,7 +54,7 @@ const DashboardBusiness: React.FC = () => {
 
   return (
     <IonPage> 
-      <TabBar activeTab="dashboard" />
+      <TabBar activeTab="favourites" />
       
       <IonContent fullscreen className="ion-padding dashboard">
 
@@ -62,17 +62,11 @@ const DashboardBusiness: React.FC = () => {
 
         <div className="dashboard-content-column-1">
 
-          <Sidebar className="dashboard-search" isDashboard allProfileData={data} />
-
-        </div>
-
-        <div className="dashboard-content-column-2">
-          
-          <div className="" style={{borderRadius: "5px 5px 0 0",
+			<div className="" style={{borderRadius: "5px 5px 0 0",
                                       backgroundColor: "#fff",}}>
-              <p className="dashboard-section-title" style={{padding: "12px 12px 0",}}>Latest Profile Matches</p>
+              <p className="dashboard-section-title" style={{padding: "12px 12px 0",}}>Saved Profiles</p>
             </div>
-          <div className="profile-matches" style={{ 
+			<div className="" style={{ 
             backgroundColor: "#fff", 
             borderRadius: "0 0  5px 5px", 
             marginBottom: "8px",
@@ -80,30 +74,47 @@ const DashboardBusiness: React.FC = () => {
             flexShrink: 1,
             overflow: "scroll"  }}>
             
-            <ProfileMatches />
           </div>
+        </div>
 
+        <div className="dashboard-content-column-2">
+          
           <div className="" style={{borderRadius: "5px 5px 0 0",
                                       backgroundColor: "#fff",}}>
-              <p className="dashboard-section-title" style={{padding: "12px 12px 0",}}>Profile Matches</p>
-            </div>
-          <div className="profile-matches" style={{ 
+              <p className="dashboard-section-title" style={{padding: "12px 12px 0",}}>Saved Opportunities</p>
+        	</div>
+
+          <div className="" style={{ 
             backgroundColor: "#fff", 
             borderRadius: "0 0  5px 5px", 
+            marginBottom: "8px",
             flexGrow: 1,
             flexShrink: 1,
             overflow: "scroll"  }}>
             
-            <ProfileMatches />
           </div>
-          
-
 
 
         </div>
 
         <div className="dashboard-content-column-3">
+
+			<div className="saved-searches" style={{borderRadius: "5px 5px 0 0",
+                                      backgroundColor: "#fff",}}>
+              <p className="dashboard-section-title" style={{padding: "12px 12px 0",}}>Saved Searches</p>
+            </div>
+
+          <div className="" style={{ 
+            backgroundColor: "#fff", 
+            borderRadius: "0 0  5px 5px", 
+            flexGrow: 1,
+            flexShrink: 1,
+            overflow: "scroll",
+			margin: "0 0 8px"  }}>
+         
+          </div>
             
+
             <div className="profiles-contacted" style={{backgroundColor: "#fff", 
             borderRadius: "5px", 
             marginBottom: "8px",}}>
@@ -112,20 +123,8 @@ const DashboardBusiness: React.FC = () => {
             </div>
 
 
-            <div className="" style={{borderRadius: "5px 5px 0 0",
-                                      backgroundColor: "#fff",}}>
-              <p className="dashboard-section-title" style={{padding: "12px",}}>Latest News</p>
-            </div>
-            <div className="" style={{ 
-                  flexGrow: 1,  
-                  backgroundColor: "#fff", 
-                  borderRadius: "0 0 5px 5px",
-                  overflow: "scroll"
-                  }}>
-                    <NewsFeed articleCount={6} style={{}} />
-
-                  </div>
-        </div>
+           
+		   </div>
 
         </div>
 
@@ -135,4 +134,4 @@ const DashboardBusiness: React.FC = () => {
   );
 };
 
-export default DashboardBusiness;
+export default Favourites;

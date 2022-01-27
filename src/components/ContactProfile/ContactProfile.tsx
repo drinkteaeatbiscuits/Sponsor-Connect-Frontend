@@ -53,7 +53,8 @@ const ContactProfile: React.FC<ContactProfileProps> = (ContactProfileProps) => {
 					email: yourEmail,
 					yourName: yourName,
 					text: message,
-					sponsorshipOpportunities: sponsorshipOpportunities
+					sponsorshipOpportunities: sponsorshipOpportunities,
+					profileId: profileData.id
 				})
 			});
 			
