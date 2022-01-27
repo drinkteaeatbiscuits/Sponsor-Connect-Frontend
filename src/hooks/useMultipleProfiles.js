@@ -5,13 +5,18 @@ const useMultipleProfiles = (profileIds) => {
 
     let filterString = "";
 
-    for (let i = 0, len = profileIds.length; i < len; i++) {
+    if(profileIds){
+
+      for (let i = 0, len = profileIds.length; i < len; i++) {
   
-      if(i > 0){filterString += "&"}
-
-      filterString += "id_in=" + profileIds[i].profileId;
-
-      }
+        if(i > 0){filterString += "&"}
+  
+        filterString += "id_in=" + profileIds[i].profileId;
+  
+        }
+    }
+    
+    
     
     return useQuery(
       "contactedProfiles",
