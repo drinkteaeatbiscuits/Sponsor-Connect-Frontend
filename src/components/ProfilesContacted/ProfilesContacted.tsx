@@ -21,9 +21,7 @@ const ProfilesContacted: React.FC<ProfilesContactedProps> = () => {
 
 	const [contactedProfilesData, setContactedProfilesData] = useState();
 
-	const {isLoading, data: profileData, isSuccess, error} = useMultipleProfiles( contactedProfiles );
-
-	// console.log(profileData);
+	const {isLoading, data: profileData, isSuccess, error} = useMultipleProfiles( contactedProfiles, "contacted-profiles" );
 
 	useEffect(() => {
 		
@@ -46,8 +44,8 @@ const ProfilesContacted: React.FC<ProfilesContactedProps> = () => {
 				
 				const dateString = new Intl.DateTimeFormat('en-GB', options).format(date);
 
-				return <div className="profile-contacted" onClick={() =>  history.push( "/profile/" + contactedProfile.profileId ) } 
-				key={contactedProfile.date} 
+				return <div className="profile-contacted" onClick={() =>  history.push( "/profile/" + contactedProfile?.profileId ) } 
+				key={contactedProfile?.date} 
 				style={{display: "flex", 
 				alignItems: "center", 
 				padding: "8px 0", 
@@ -72,7 +70,7 @@ const ProfilesContacted: React.FC<ProfilesContactedProps> = () => {
 					</div>
 
 					<div className="" style={{flexGrow: 1, padding: "0 9px 2px", fontWeight: "500"}}>
-						{ isSuccess && contactedProfileData.profileName}
+						{ isSuccess && contactedProfileData?.profileName}
 					</div>
 
 					<div className="" style={{fontSize: "0.9em", color: "var(--ion-color-medium)"}}>

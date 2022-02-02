@@ -122,6 +122,24 @@ const reducer = (state: any, action: any) => {
         selectedSubscription: action.payload
       }
     }
+    case "setFavouriteProfiles": {
+      state.user.favouriteProfiles = action.payload
+      return {
+        ...state 
+      }
+    }
+    case "setFavouriteOpportunities": {
+      state.user.favouriteOpportunities = action.payload
+      return {
+        ...state 
+      }
+    }
+    case "setSavedSearches": {
+      state.user.savedSearches = action.payload
+      return {
+        ...state 
+      }
+    }
 
     default:
 

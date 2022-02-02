@@ -17,6 +17,9 @@ import Sidebar from '../Profiles/Sidebar/Sidebar';
 import useProfiles from '../../hooks/useProflies';
 import ProfilesContacted from '../../components/ProfilesContacted/ProfilesContacted';
 import ProfileMatches from '../../components/ProfileMatches/ProfileMatches';
+import SavedProfiles from '../../components/SavedProfiles/SavedProfiles';
+import SavedOpportunities from '../../components/SavedOpportunities/SavedOpportunities';
+import SavedSearches from '../../components/SavedSearches/SavedSearches';
 
 
 
@@ -45,12 +48,7 @@ const Favourites: React.FC = () => {
 
   const {isLoading, data, isSuccess, error} = useProfiles();
 
-  // const {isLoading: isLoadingProfile, data: dataProfile, error: errorProfile, isSuccess: isSuccessProfile} = useProfile( profileId );
-  // console.log(authState.user.profile); 
-  // console.log(dataProfile); 
-
-  // { !authState.user && history.push('/'); }
-  // console.log(dataNews);
+  // console.log(authState);
 
   return (
     <IonPage> 
@@ -73,7 +71,7 @@ const Favourites: React.FC = () => {
             flexGrow: 1,
             flexShrink: 1,
             overflow: "scroll"  }}>
-            
+            <SavedProfiles />
           </div>
         </div>
 
@@ -91,7 +89,7 @@ const Favourites: React.FC = () => {
             flexGrow: 1,
             flexShrink: 1,
             overflow: "scroll"  }}>
-            
+            <SavedOpportunities />
           </div>
 
 
@@ -111,7 +109,7 @@ const Favourites: React.FC = () => {
             flexShrink: 1,
             overflow: "scroll",
 			margin: "0 0 8px"  }}>
-         
+         <SavedSearches />
           </div>
             
 

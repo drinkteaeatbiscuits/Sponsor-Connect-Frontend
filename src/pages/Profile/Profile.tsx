@@ -68,9 +68,6 @@ const Profile: React.FC = () => {
 
   const viewedProfiles = authState.user.viewedProfiles;
 
-  console.log(viewedProfiles);
-
-
   return (
     <IonPage className="profile">
 

@@ -1,7 +1,8 @@
-import { IonButton, IonCheckbox, IonIcon, IonRange, useIonViewDidEnter } from "@ionic/react";
-import { constructOutline, location } from "ionicons/icons";
+import { IonButton, IonCheckbox, IonContent, IonIcon, IonInput, IonModal, IonRange, useIonViewDidEnter } from "@ionic/react";
+import { arrowForward, close, constructOutline, location } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import Geocode from "react-geocode";
+import { useHistory } from "react-router";
 import { AuthContext } from "../../../App";
 import useOpportunityValues from "../../../hooks/useOpportunityValues";
 
@@ -13,7 +14,7 @@ interface SidebarProps {
 	setData?: any;
 	className?: string;
 	isDashboard?: boolean;
-
+	savedActiveFilters?: any;
 }
 
 
@@ -25,9 +26,18 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		budget: null
 	};
 
-	const {className, isDashboard} = SidebarProps;
+	const {className, isDashboard, savedActiveFilters} = SidebarProps;
 
-	const { state: authState } = React.useContext(AuthContext);
+	const history = useHistory();
+
+	const { state: authState, dispatch } = React.useContext(AuthContext);
+
+	const [saveSearchNameOpen, setSaveSearchNameOpen] = useState(false);
+	const [saveSearchName, setSaveSearchName] = useState("");
+
+	// const [searchNowFilters, setSearchNowFilters] = useState(savedActiveFilters);
+
+	
 
 	const getLocationPlaceName = (lat, long) => {
 
@@ -99,7 +109,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const [budgetData, setBudgetData] = useState<any[]>([]);
 
 	
-	
 	let result;
 	const numberOfSportsVisible = 8;
 
@@ -124,8 +133,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	// console.log(sportsCounts);
 
 	const sortable = Object.fromEntries( Object.entries(sportsCounts).sort(([,a]:any,[,b]:any) => b-a) );
-
-	
 
 	let visibleSports = Object.keys(sortable).reduce((result, key) => {
 		result[key] = sportsCounts[key];
@@ -379,8 +386,17 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	const [gettingLocation, setGettingLocation] = useState(false);
 
+	
+	const [savedSearchSet, setSavedSearchSet ] = useState(false);
+	
+
 	useEffect(() => {
-		
+
+		if( savedActiveFilters ) { console.log(savedActiveFilters) }
+
+	
+		if( savedActiveFilters && !savedSearchSet ) { setActiveFilters(savedActiveFilters);  setSavedSearchSet(true); }  
+
 
 		if( allProfileData && authState?.currentLocation && currentLocation.length <= 0 ) {
 
@@ -431,7 +447,11 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		sportsData && updateBudgetGroups();
 
-	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters ])
+
+		
+
+
+	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters, savedActiveFilters ])
 	
 
 	useIonViewDidEnter(() => {
@@ -484,13 +504,53 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	}
 	
 
-	const saveSearch = () => {
-		console.log(activeFilters);
+
+
+	const saveSearch = async () => {
+		// console.log(activeFilters);
+
+		const response = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/save-search", {
+			method: "POST",
+			credentials: "include",
+			body: JSON.stringify({
+				savedSearchName: saveSearchName,
+				savedSearchId: Date.now(),
+				activeFilters: activeFilters
+			})
+		});
+		
+		const savedSearchInfo = await response.json();
+
+
+		dispatch && dispatch({
+			type: "setSavedSearches",
+			payload: savedSearchInfo
+		  });
+
+		setSaveSearchNameOpen(false)
+		setSaveSearchName( "" )
+
+		return savedSearchInfo?.statusCode ? false : savedSearchInfo;
 	}
+
+
 
 	const searchNow = () => {
 		console.log("search now!");
+
+		setActiveFilters(filters);
+		
+		history.push( {
+			pathname: '/profiles',
+			state: { activeFilters: activeFilters }
+	   } );
+
+	   
+
+	   
 	}
+
+
 
 	return <aside className={"sidebar " + className }>
 				<h1>Search <span className="ion-color-primary">Profiles</span></h1>
@@ -663,12 +723,22 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 				</div>
 				<div className="save-search">
 
-                	<IonButton expand="block" className="" size="small" onClick={() => { isDashboard ? searchNow() : saveSearch() }}>{ isDashboard ? "Search Now" : "Save Search" }</IonButton>
-
+				
+                {saveSearchNameOpen ? <div className="saved-search-name">
+						<IonInput type="text" autoCapitalize="on" value={saveSearchName} onIonInput={( e:any ) => setSaveSearchName( e.target.value )} onKeyDown={e => e.key === 'Enter' && saveSearch() } onIonChange={( e:any ) => setSaveSearchName( e.detail.value )} />	
+						<IonIcon className="close-save-search" color="tertiary" size="24px" onClick={() => setSaveSearchNameOpen(false)} icon={close} />
+						<IonButton className="save-search-button" size="small" onClick={() => saveSearch()}><IonIcon icon={arrowForward} /></IonButton>
+					</div>
+					:
+					<IonButton expand="block" className="" size="small" onClick={() => { isDashboard ? searchNow() : setSaveSearchNameOpen(true) }}>{ isDashboard ? "Search Now" : "Save Search" }</IonButton>
+				}
+					
 
 				</div>
 
 		</aside>
+
+
 }
 
 

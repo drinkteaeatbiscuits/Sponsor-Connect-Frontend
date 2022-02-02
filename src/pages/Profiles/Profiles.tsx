@@ -10,10 +10,16 @@ import Masonry from 'react-masonry-css';
 import './Profiles.scss';
 import Sidebar from './Sidebar/Sidebar';
 import { useEffect, useState } from 'react';
+import { useLocation, useParams } from 'react-router';
 
-export interface props {}
+export interface props {
+}
 
-const Profiles: React.FC = () => {
+
+const Profiles: React.FC<props> = (props) => {
+
+ 
+  const thelocation = useLocation<any>();
 
   const {isLoading, data, isSuccess, error} = useProfiles();
   error && console.log(error);
@@ -22,21 +28,24 @@ const Profiles: React.FC = () => {
 
   const [showSidebar, setShowSidebar] = useState(false);
 
+ 
+
+  // console.log(thelocation?.state?.activeFilters)
+
   useEffect(() => {
     
     isSuccess && !profileData && setProfileData(data);
 
   }, [ data ]);
 
- 
 
   return (
     <IonPage>
-      <TabBar/>
+      <TabBar activeTab='profiles' />
       <IonContent className="profiles-content" fullscreen>
         <IonLoading isOpen={isLoading} message="Loading..." />
           
-          <Sidebar className={showSidebar ? 'show-sidebar' : ''} allProfileData={data} profileData={profileData} setData={setProfileData}  />
+          <Sidebar className={showSidebar ? 'show-sidebar' : ''} savedActiveFilters={thelocation?.state?.activeFilters} allProfileData={data} profileData={profileData} setData={setProfileData}  />
 
           <div className="toggle-sidebar-button" >
            

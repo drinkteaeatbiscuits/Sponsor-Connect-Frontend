@@ -20,7 +20,7 @@ interface OpportunityExpandedProps {
 const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpandedProps) => {
 
 	const history = useHistory();
-	const { state: authState } = React.useContext(AuthContext);
+	const { state: authState, dispatch } = React.useContext(AuthContext);
 	const { opportunityData } = OpportunityExpandedProps;
 	const { isLoading: isDeletingOpportunity, error: deleteOpportunityError, isSuccess: hasDeletedOpportunity, mutateAsync: deleteOpportunityMutation } = useDeleteOpportunity(opportunityData.id);
 	const [showDelete, setShowDelete] = useState(false);
@@ -48,6 +48,11 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 		favouriteOpportunityInfo?.favouriteOpportunities?.length > 0 && favouriteOpportunityInfo.favouriteOpportunities.includes(opportunityData?.id) ? setIsFavourite(true) : setIsFavourite(false);
 
+		dispatch && dispatch({
+			type: "setFavouriteOpportunities",
+			payload: favouriteOpportunityInfo
+		  });
+		  
 		return favouriteOpportunityInfo?.statusCode ? false : favouriteOpportunityInfo;  
 
 	}
