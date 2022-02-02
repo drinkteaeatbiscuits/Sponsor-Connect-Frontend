@@ -37,8 +37,7 @@ const SavedProfiles: React.FC<props> = () => {
 	
 	return <div className="profiles-saved-list" style={{padding: "0 16px 0 12px", overflow: "scroll"}}>	
 
-		{
-			favouriteProfiles.length > 0 && favouriteProfiles.slice(0).reverse().map((contactedProfile, index) => {
+		{ favouriteProfiles && favouriteProfiles?.length > 0 && favouriteProfiles.slice(0).reverse().map((contactedProfile, index) => {
 
                 let contactedProfileId = contactedProfile.profileId ? contactedProfile.profileId : contactedProfile;
 

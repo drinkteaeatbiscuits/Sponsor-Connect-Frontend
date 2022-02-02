@@ -39,7 +39,7 @@ const SavedOpportunities: React.FC<props> = () => {
 	return <div className="opportunities-saved-list opportunities" style={{padding: "0 16px 0 12px", overflow: "scroll"}}>	
 	
 
-		{ favouriteOpportunities.length > 0 && favouriteOpportunities.slice(0).reverse().map((favouriteOpportunity, index) => {
+		{ favouriteOpportunities && favouriteOpportunities.length > 0 && favouriteOpportunities.slice(0).reverse().map((favouriteOpportunity, index) => {
 
                 	let favouriteOpportunityId = favouriteOpportunity;
 

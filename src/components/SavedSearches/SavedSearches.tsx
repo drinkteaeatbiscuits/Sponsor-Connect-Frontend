@@ -20,7 +20,7 @@ const SavedSearches: React.FC<props> = () => {
 
 	const savedSearches = authState?.user?.savedSearches;
 
-	console.log(authState);
+	// console.log(authState);
 
 	useEffect(() => {
 		
@@ -30,8 +30,7 @@ const SavedSearches: React.FC<props> = () => {
 	
 	return <div className="saved-searches-list" style={{padding: "0 16px 0 12px", overflow: "scroll"}}>	
 
-		{
-			savedSearches.length > 0 && savedSearches.slice(0).reverse().map((savedSearches, index) => {
+		{ savedSearches && savedSearches.length > 0 && savedSearches.slice(0).reverse().map((savedSearches, index) => {
 
 				const date = new Date(savedSearches.date);
 				const options: Intl.DateTimeFormatOptions = { month: "short", day: '2-digit' };
@@ -54,7 +53,11 @@ const SavedSearches: React.FC<props> = () => {
                         fontWeight: "500",
                         display: "flex",
                         alignItems: "center"}}>
-                        <div className="" onClick={() =>  history.push( "/profiles" ) } style={{
+                        <div className="" onClick={() =>  history.push( {
+								pathname: '/profiles',
+								state: { activeFilters: savedSearches.activeFilters }
+       					} ) } 
+					   style={{
                             flexGrow: 1
                         }}>
                             {savedSearches.savedSearchName}
