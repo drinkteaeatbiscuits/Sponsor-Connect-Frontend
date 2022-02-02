@@ -1,17 +1,23 @@
 import { useQuery, useQueryClient } from 'react-query';
 
-const useMultipleProfiles = (profileIds) => {
+const useMultipleProfiles = (profileIds, queryName) => {
     const client = useQueryClient();
 
     let filterString = "";
 
-    if(profileIds){
+    if( profileIds ){
 
       for (let i = 0, len = profileIds.length; i < len; i++) {
   
         if(i > 0){filterString += "&"}
+
+          if(profileIds[i].profileId){
+            filterString += "id_in=" + profileIds[i].profileId;
+          }else{
+            filterString += "id_in=" + profileIds[i];
+          }
   
-        filterString += "id_in=" + profileIds[i].profileId;
+          
   
         }
     }
@@ -19,7 +25,7 @@ const useMultipleProfiles = (profileIds) => {
     
     
     return useQuery(
-      "contactedProfiles",
+      queryName,
       async () => {
 
         const profilesResponse = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/profiles?" + filterString, {
@@ -27,7 +33,7 @@ const useMultipleProfiles = (profileIds) => {
         });
 
         const profiles = await profilesResponse.json();
-        client.setQueryData(["contactedProfiles", profiles.data]);
+        client.setQueryData([queryName, profiles.data]);
     
   
         return profiles;

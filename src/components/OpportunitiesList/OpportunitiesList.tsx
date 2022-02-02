@@ -9,7 +9,8 @@ import './OpportunitiesList.scss';
 
 interface OpportunitiesListProps {
 	images?: any,
-	profileId? : string
+	profileId? : string,
+	
 }
 
 

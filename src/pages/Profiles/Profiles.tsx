@@ -32,7 +32,7 @@ const Profiles: React.FC = () => {
 
   return (
     <IonPage>
-      <TabBar/>
+      <TabBar activeTab='profiles' />
       <IonContent className="profiles-content" fullscreen>
         <IonLoading isOpen={isLoading} message="Loading..." />
           

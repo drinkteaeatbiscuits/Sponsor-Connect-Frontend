@@ -27,7 +27,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	const {className, isDashboard} = SidebarProps;
 
-	const { state: authState } = React.useContext(AuthContext);
+	const { state: authState, dispatch } = React.useContext(AuthContext);
 
 	const getLocationPlaceName = (lat, long) => {
 
@@ -484,8 +484,30 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	}
 	
 
-	const saveSearch = () => {
-		console.log(activeFilters);
+
+
+	const saveSearch = async () => {
+		// console.log(activeFilters);
+
+		const response = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/save-search", {
+			method: "POST",
+			credentials: "include",
+			body: JSON.stringify({
+				savedSearchName: "Saved Search Name",
+				savedSearchId: Date.now(),
+				activeFilters: activeFilters
+			})
+		});
+		
+		const savedSearchInfo = await response.json();
+
+
+		dispatch && dispatch({
+			type: "setSavedSearches",
+			payload: savedSearchInfo
+		  });
+
+		return savedSearchInfo?.statusCode ? false : savedSearchInfo;
 	}
 
 	const searchNow = () => {
