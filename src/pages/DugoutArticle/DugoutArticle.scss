@@ -1,0 +1,224 @@
+$breakpoints: (
+  xs: 23.4em,
+  sm: 30em,
+  md: 48em,
+  lg: 62em,
+  xl: 75em
+);
+
+@mixin respond-to($media) {
+
+  @each $key,$val in $breakpoints {
+      $i: index($breakpoints, ($media $val));
+
+      @if $i {
+          
+          @if $media == #{$key} {
+              @media only screen and (min-width: #{$val}) { @content; }
+            } 
+
+      }
+  } 
+}
+
+ion-content.dugout-article {
+	--padding-start: 0;
+	--padding-end: 0;
+	--padding-top: 0;
+	--font-size-ratio: 1.67;
+	--base-font-size: 18px;
+    --base-line-height: 1.5;
+
+	font-size: 1.15em;
+
+	p {  
+		margin-top: 0;
+		margin-bottom: 1rem;
+	  }
+	  
+	h1, h2, h3, h4, h5, h6 {
+		margin: 3rem 0 1.38rem;
+		
+		line-height: calc(var(--base-line-height, '1.7') * 0.7);
+		font-weight: 700;
+		letter-spacing: -0.01em;
+	} 
+	
+	h1, .h1 {
+		margin-top: 0; 
+		font-size: calc(var(--font-size-ratio) * var(--font-size-ratio) * var(--font-size-ratio) * var(--font-size-ratio) * 1rem); 
+	}
+	
+	h2, .h2 {
+		font-size: calc(var(--font-size-ratio) * var(--font-size-ratio) * var(--font-size-ratio) * 1rem); 
+	}
+	
+	h3, .h3 {
+		font-size: calc(var(--font-size-ratio) * var(--font-size-ratio) * 1rem); 
+	}
+	
+	h4, .h4 {	
+		font-size: calc(var(--font-size-ratio) * 1rem); 	
+	} 
+}
+
+.post-header-image {
+	position: relative;
+	max-height: 60vh;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	.post-featured-image {
+		max-width: 100%;
+		display: block;
+		height: auto;
+		width: 100%;
+		
+	}
+	picture {
+		width: 100%;
+		max-width: 1500px;
+	}	
+}
+
+article.single-post {
+	padding: 80px 0 0;
+	color: var(--ion-color-dark);
+}
+
+
+ion-content.dugout-article .entry-header {
+	padding: 60px 16px 0;
+	@include respond-to('xs'){
+		padding: 70px 24px 0;
+	}
+	@include respond-to('md'){
+		padding: 80px 24px 0;
+	}
+	h1, h2, h3, h4, h5, h6 {
+		font-family: "neue-haas-unica", sans-serif;
+		font-weight: 500;
+		
+		overflow-wrap: break-word;
+		letter-spacing: -0.02em;
+	} 
+	h1.post-title {
+		margin-bottom: 0.5em;
+		font-size: 2.6em;
+		@include respond-to('xs'){
+			font-size: 2.9em;
+		}
+		@include respond-to('sm'){
+			font-size: 3.8em;
+		}
+		@include respond-to('md'){
+			font-size: 5em;	
+			padding-right: 1em;
+		}
+	}
+	.entry-header__meta {
+		font-size: 0.8em;
+		@include respond-to('sm'){
+			font-size: 0.9em;
+		}
+	}
+	a {
+		text-decoration: underline;
+		&:hover {
+			color: var(--color-green);
+		}
+	}
+	
+}
+
+
+.entry-footer {
+	
+	.entry-tags {
+		padding: 40px 24px 40px;
+		font-size: 0.75em;
+		font-weight: 500;
+		.tag {
+			padding: 16px;
+			text-decoration: underline;
+		}
+	}
+}
+
+
+
+
+
+.post-thumbnail,  
+.entry-content .wp-audio-shortcode, 
+.entry-content > *:not(.alignwide):not(.alignfull):not(.alignleft):not(.alignright):not(.wp-block-separator):not(.woocommerce), 
+*[class*=inner-container] > *:not(.entry-content):not(.alignwide):not(.alignfull):not(.alignleft):not(.alignright):not(.wp-block-separator):not(.woocommerce), 
+.default-max-width {
+	max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
+	
+	padding-left: 16px;
+	padding-right: 16px;
+	@include respond-to('xs'){
+		padding-left: 24px;
+		padding-right: 24px;
+	}
+}
+
+.alignwide {
+	max-width: 1080px;
+	margin-left: auto;
+    margin-right: auto; 
+}
+
+.alignfull {
+	max-width: none;
+}
+
+.entry-content {
+	padding: 60px 0 80px;
+	@include respond-to('sm'){
+		padding: 80px 0 80px;
+	}
+	@include respond-to('md'){
+		padding: 120px 0 80px;
+	}
+	h1, h2, h3, h4, h5, h6 {
+		font-family: "neue-haas-unica", sans-serif;
+		font-weight: 700;
+		&.alignwide {
+			padding: 0 24px;
+		}
+	}
+	p {
+		line-height: 1.8;
+	}
+	> ul:not(.alignwide):not(.alignfull):not(.alignleft):not(.alignright):not(.wp-block-separator):not(.woocommerce),
+	> ol:not(.alignwide):not(.alignfull):not(.alignleft):not(.alignright):not(.wp-block-separator):not(.woocommerce) {
+		padding: 24px 40px 24px 60px;
+		li {
+			padding: 0 0.2em 0.6em;
+			&::marker {
+				color: var(--color-green);
+			}
+		}
+	}
+	a {
+		text-decoration: underline;
+    	color: var(--color-green);
+		&:hover {
+			color: var(--color-bright-green);
+		}
+	}
+	.wp-block-columns {
+		padding: 0 24px;
+	}
+
+	img {
+		width: 100%;
+		height: auto;
+	}
+}
+
