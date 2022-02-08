@@ -2,6 +2,7 @@ import { IonButton, IonCheckbox, IonContent, IonIcon, IonInput, IonModal, IonRan
 import { arrowForward, close, constructOutline, location } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import Geocode from "react-geocode";
+import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
 import { useHistory } from "react-router";
 import { AuthContext } from "../../../App";
 import useOpportunityValues from "../../../hooks/useOpportunityValues";
@@ -35,8 +36,8 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const [saveSearchNameOpen, setSaveSearchNameOpen] = useState(false);
 	const [saveSearchName, setSaveSearchName] = useState("");
 
-	// const [searchNowFilters, setSearchNowFilters] = useState(savedActiveFilters);
-
+	const [selectedLocation, setSelectedLocation] = useState();
+	const [latLong, setLatLong] = useState<any>({});
 	
 
 	const getLocationPlaceName = (lat, long) => {
@@ -89,6 +90,10 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const [locationRange, setLocationRange] = useState(distanceGroups.length);
 	// const [budgetRange, setBudgetRange] = useState(budgetGroups.length);
 
+	// console.log(fromLocation);
+	// console.log(selectedLocation);
+	// console.log(latLong);
+
 	const [budget, setBudget] = useState<any>({ lower: 1, upper: 8 });
 	
 	const [budgetGroupCounts, setBudgetGroupCounts] = useState<object>({});
@@ -108,42 +113,53 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const [distanceData, setDistanceData] = useState<any[]>([]);
 	const [budgetData, setBudgetData] = useState<any[]>([]);
 
-	
-	let result;
-	const numberOfSportsVisible = 8;
+	const [visibleSports, setVisibleSports] = useState<{}>({});
 
-	result = sportsData?.map(a => a.sport);
+	// const [clearingSports, setClearingSports] = useState(false);
 
-	result = result?.filter(function( element ) {
-		return element.length > 0;
-	 });
 
-	//  console.log(activeFilters);
+	const getSportsCounts = () => {
+		let result;
 
-	const sportsCounts = {};
+		result = sportsData?.map(a => a.sport);
 
-	if(result?.length > 0){
-		for (let sport of result.values()){
+		result = result?.filter(function( element ) {
+			return element.length > 0;
+		});
+
+		const sportsCounts = {};
+		
+			if(result?.length > 0){
+				for (let sport of result.values()){
+					
+					sportsCounts[sport] = sportsCounts[sport] ? sportsCounts[sport] + 1 : 1;
+					
+				}
+			}
+		
+		const sortable = Object.fromEntries( Object.entries(sportsCounts).sort(([,a]:any,[,b]:any) => b-a) );
+
+		
+		let theVisibleSports = Object.keys(sortable).reduce((result, key) => {
+			result[key] = sportsCounts[key];
+			return result;
+		}, {});
+
+
+		activeFilters.sports.length > 0 && activeFilters.sports.forEach((sport) => {
 			
-			sportsCounts[sport] = sportsCounts[sport] ? sportsCounts[sport] + 1 : 1;
+			!theVisibleSports[sport] && ( theVisibleSports = {[sport]: 0, ...theVisibleSports} );
 			
-		}
+		});
+
+
+		setVisibleSports(theVisibleSports);
+
 	}
 
-	// console.log(sportsCounts);
+	
 
-	const sortable = Object.fromEntries( Object.entries(sportsCounts).sort(([,a]:any,[,b]:any) => b-a) );
 
-	let visibleSports = Object.keys(sortable).reduce((result, key) => {
-		result[key] = sportsCounts[key];
-		return result;
-	}, {});
-
-	activeFilters.sports.length > 0 && activeFilters.sports.forEach((sport) => {
-		
-		!visibleSports[sport] && (visibleSports = {[sport]: 0, ...visibleSports});
-		
-	});
 
 	function distance(lat1, lon1, lat2, lon2, unit) {
 		if ((lat1 == lat2) && (lon1 == lon2)) {
@@ -382,39 +398,52 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	}
 
-	
+	// console.log(locationRange);
+	// console.log(distanceGroupCounts);
 
 	const [gettingLocation, setGettingLocation] = useState(false);
-
 	
-	const [savedSearchSet, setSavedSearchSet ] = useState(false);
+
+	const [filtersLoaded, setFiltersLoaded] = useState(0);
+	const loadFilters = () => {
+
+		
+		activeFilters && setActiveFilters(authState.user.searchNow);
+		
+		authState.user.searchNow.distance && setLocationRange(distanceGroups.indexOf(authState.user.searchNow.distance) + 1 as number);
+
+		authState.user.searchNow.budget && setBudget(authState.user.searchNow.budget);
+
+		const dualRange = document.querySelectorAll('#dual-range') as any;
+
+		 if(authState.user.searchNow.budget) { for (let i = 0; i < dualRange.length; ++i) {
+			dualRange[i].value = authState.user.searchNow.budget;
+		  } }
+		
+		
+		setFiltersLoaded(filtersLoaded + 1);
+
+	}
 	
 
 	useEffect(() => {
 
-		if( savedActiveFilters ) { console.log(savedActiveFilters) }
 
-	
-		if( savedActiveFilters && !savedSearchSet ) { setActiveFilters(savedActiveFilters);  setSavedSearchSet(true); }  
+		Object.keys(visibleSports).length === 0 && getSportsCounts();
 
-
+		
 		if( allProfileData && authState?.currentLocation && currentLocation.length <= 0 ) {
-
-			// console.log('already got location');
 			
 			setCurrentLocation([authState?.currentLocation]);
 			setFromLocation(authState?.currentLocation);
 			
 			setUpdatingProfiles(true);
-			// updateProfiles();
 	
 		}
 		
 		if ( allProfileData && !authState?.currentLocation && currentLocation.length <= 0 && !gettingLocation ) {
 
 			setGettingLocation(true);
-	
-			console.log('getting location');
 	
 			navigator.geolocation.getCurrentPosition(function(position) {
 				setCurrentLocation([
@@ -444,20 +473,31 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 
 		sportsData && updateProfileDistances();
-
 		sportsData && updateBudgetGroups();
 
+		authState.user.searchNow && filtersLoaded < 2 && loadFilters();
 
 		
 
 
-	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters, savedActiveFilters ])
+	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters, visibleSports, filtersLoaded ])
 	
 
+
 	useIonViewDidEnter(() => {
-		const dualRange = document.querySelector('#dual-range') as any;
-    	dualRange && (dualRange.value = { lower: 0, upper: 8 });
+		const dualRange = document.querySelectorAll('#dual-range') as any;
+
+		for (let i = 0; i < dualRange.length; ++i) {
+			dualRange[i].value = { lower: 0, upper: 8 };
+		  }
+
+		setFiltersLoaded(0);
+
 	})
+
+	
+
+	// console.log(searchNowFilters);
 	
 	
 	const filterSports = (e: any, sport: any) => {
@@ -536,21 +576,78 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 
 	const searchNow = () => {
-		console.log("search now!");
-
-		setActiveFilters(filters);
+		// console.log("search now!");
+		
+	  dispatch && dispatch({
+		type: "setSearchNow",
+		payload: activeFilters
+	  });
 		
 		history.push( {
-			pathname: '/profiles',
-			state: { activeFilters: activeFilters }
+			pathname: '/profiles'
 	   } );
-
-	   
 
 	   
 	}
 
+	const clearSports = () => {
 
+
+		const sportsCheckboxes = document.querySelectorAll('.sports-checkbox') as any;
+
+		for (let i = 0; i < sportsCheckboxes.length; ++i) {
+			sportsCheckboxes[i].checked = false;
+		  }
+
+		
+		setActiveFilters( prevState => ({ ...prevState, sports: []}));
+
+		
+
+		// setClearingSports(true); 
+
+	}
+
+	const clearBudget = () => {
+		
+		const dualRange = document.querySelectorAll('#dual-range') as any;
+
+		for (let i = 0; i < dualRange.length; ++i) {
+			dualRange[i].value = { lower: 0, upper: 8 };
+		  }
+	}
+
+	const clearLocation = () => {
+
+		const locationRange = document.querySelectorAll('.location-range') as any;
+
+		for (let i = 0; i < locationRange.length; ++i) {
+			locationRange[i].value = distanceGroups.length;
+		  }
+	}
+
+	const changeLocation = () => {
+		console.log("change location");
+	}
+
+	const doLocationSelected = (event) => {
+		console.log('location selected');
+
+		setSelectedLocation(event);
+		geocodeByAddress(event.label)
+		.then(results => getLatLng(results[0]))
+		.then(({ lat, lng }) => {
+			// console.log('Successfully got latitude and longitude', { lat, lng });
+			setLatLong({ lat, lng });
+		}
+		);
+		
+		setFromLocation({lat: latLong.lat, long: latLong.lng, city: event.label });
+		setGettingLocation(true);
+		updateProfiles();
+	}
+
+	// console.log(activeFilters);
 
 	return <aside className={"sidebar " + className }>
 				<h1>Search <span className="ion-color-primary">Profiles</span></h1>
@@ -565,7 +662,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 							<p className="filter-section-title">Sports</p>
 						</div>
 
-						{ activeFilters?.sports.length > 0 && <div className="clear" onClick={()=>{ setActiveFilters( prevState => ({ ...prevState, sports: []}))}}>Clear</div> }
+						{ activeFilters?.sports.length > 0 && <div className="clear" onClick={()=>{ clearSports();  }}>Clear</div> }
 
 					</div>
 					<div className="filter-section-bottom">
@@ -576,34 +673,18 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 							let profileCount = visibleSports[sport];
 							return <div key={sport} className="sport">
-									<IonCheckbox checked={ activeFilters?.sports.includes(sport) ? true : false } 
+
+									<IonCheckbox className="sports-checkbox" checked={ activeFilters?.sports.includes(sport) ? true : false } 
 									onIonChange={(e) => { 
+
 										filterSports(e, sport);
-										
+			
 									}} />
 									
 									<div className="checkbox-label" onClick={(e) => filterSports(e, sport)}>{sport}</div>
 									<div className="checkbox-count">{ profileCount }</div>
 								</div>	
 							}) }
-						
-						{/* { Object.keys(hiddenSports).length > 0 &&	<div className="view-more-sports" onClick={() => setShowMoreSports( showMoreSports ? false : true )}>
-								{showMoreSports ? "Less" : "More" }
-							</div> }
-
-							{showMoreSports && <div className="hidden-sports">
-							{ Object.keys(hiddenSports).map((sport) => {
-							let profileCount = hiddenSports[sport];
-							return <div key={sport} className="sport">
-									<IonCheckbox checked={ activeFilters?.sports.includes(sport) ? true : false } 
-									onIonChange={e => {
-										filterSports(e, sport); 
-										}} />
-									<div className="checkbox-label">{sport}</div>
-									<div className="checkbox-count">{profileCount}</div>
-								</div>	
-							}) }
-							</div> } */}
 
 						</div>
 					</div>
@@ -616,7 +697,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 							<p className="filter-section-title">Location</p>
 						</div>
 
-						<div className="clear" onClick={() => console.log('change')}>Change Location</div>
+						<div className="clear" onClick={() => clearLocation()}>Clear</div>
 
 					</div>
 					<div className="filter-section-bottom">
@@ -624,6 +705,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 						<div className="selected-location" style={{display: "flex", alignItems: "center"}}>
 							<IonIcon icon={location} color="primary" style={{fontSize: "24px", marginRight: "5px"}} />
 							{ fromLocation.city }
+							<span onClick={ () => changeLocation() } style={{fontSize: "0.8em", color: "var(--ion-color-primary", padding: "2px 0 0 8px", cursor: "pointer"}}>Change Location</span>
 						</div>
 
 						<div className="range-graph">
@@ -652,6 +734,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 						
 
 						<IonRange 
+						className="location-range"
 						value={locationRange} 
 						onIonChange={(e) => { setDistance(e.detail.value as number); setLocationRange(e.detail.value as number) }} 
 						min={0} 
@@ -662,6 +745,24 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 						{ distanceGroups[locationRange - 1] !== undefined && <p className="location-distance">{ distanceGroups[locationRange - 1] === 0 ? "All Locations" : "Within " + distanceGroups[locationRange - 1] + " Miles" }</p>}
 
 
+
+					<div className="">
+						<GooglePlacesAutocomplete
+                          apiKey="AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q"
+
+                          selectProps={{
+                            location,
+                            onChange: doLocationSelected,
+                            placeholder: "Start typing to select location",
+                            menuPlacement: "auto",
+                            className: "google-places"
+                          }}
+                          autocompletionRequest={{
+                            componentRestrictions: {
+                              country: ['uk', 'ie'],
+                            }
+                          }}
+                        /></div>
 					</div>
 				</div>
 
@@ -672,7 +773,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 							<p className="filter-section-title">Budget</p>
 						</div>
 
-						<div className="clear" onClick={() => console.log('change')}>Clear</div>
+						<div className="clear" onClick={() => clearBudget()}>Clear</div>
 
 					</div>
 					<div className="filter-section-bottom">

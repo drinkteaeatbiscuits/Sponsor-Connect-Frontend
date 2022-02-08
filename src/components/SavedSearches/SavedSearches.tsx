@@ -16,7 +16,7 @@ interface props {
 const SavedSearches: React.FC<props> = () => {
 	
 	const history = useHistory();
-	const { state: authState } = React.useContext(AuthContext);
+	const { state: authState, dispatch } = React.useContext(AuthContext);
 
 	const savedSearches = authState?.user?.savedSearches;
 
@@ -26,6 +26,21 @@ const SavedSearches: React.FC<props> = () => {
 		
 	}, []);
 
+
+
+
+	const loadSavedSearch = (activeFilters) => {
+
+		dispatch && dispatch({
+			type: "setSearchNow",
+			payload: activeFilters
+		  });
+
+
+		history.push( {
+			pathname: '/profiles'
+	   } )
+	}
 	
 	
 	return <div className="saved-searches-list" style={{padding: "0 16px 0 12px", overflow: "scroll"}}>	
@@ -53,10 +68,7 @@ const SavedSearches: React.FC<props> = () => {
                         fontWeight: "500",
                         display: "flex",
                         alignItems: "center"}}>
-                        <div className="" onClick={() =>  history.push( {
-								pathname: '/profiles',
-								state: { activeFilters: savedSearches.activeFilters }
-       					} ) } 
+                        <div className="" onClick={() => loadSavedSearch(savedSearches.activeFilters ) } 
 					   style={{
                             flexGrow: 1
                         }}>

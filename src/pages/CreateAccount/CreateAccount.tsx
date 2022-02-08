@@ -556,8 +556,6 @@ const CreateAccount: React.FC = () => {
 
               {showSports}
 
-
-
             </IonList>
 
             <IonButton className="ion-padding-top ion-padding-bottom ion-margin-bottom" button-type="link" onClick={() => setShowModal(false)}>Close Search</IonButton>
