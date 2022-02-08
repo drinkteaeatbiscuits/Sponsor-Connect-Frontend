@@ -30,7 +30,6 @@ const Profiles: React.FC<props> = (props) => {
 
  
 
-  // console.log(thelocation?.state?.activeFilters)
 
   useEffect(() => {
     
@@ -45,7 +44,7 @@ const Profiles: React.FC<props> = (props) => {
       <IonContent className="profiles-content" fullscreen>
         <IonLoading isOpen={isLoading} message="Loading..." />
           
-          <Sidebar className={showSidebar ? 'show-sidebar' : ''} savedActiveFilters={thelocation?.state?.activeFilters} allProfileData={data} profileData={profileData} setData={setProfileData}  />
+          <Sidebar className={showSidebar ? 'show-sidebar' : ''} allProfileData={data} profileData={profileData} setData={setProfileData}  />
 
           <div className="toggle-sidebar-button" >
            

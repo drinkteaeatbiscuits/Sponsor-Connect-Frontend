@@ -142,6 +142,12 @@ const reducer = (state: any, action: any) => {
         ...state 
       }
     }
+    case "setSearchNow": {
+      state.user.searchNow = action.payload
+      return {
+        ...state 
+      }
+    }
 
     default:
 
