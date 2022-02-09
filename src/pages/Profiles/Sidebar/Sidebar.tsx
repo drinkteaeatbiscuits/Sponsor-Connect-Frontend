@@ -196,11 +196,19 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 			distanceGroups.forEach((distance, i) => {
 
-				distanceAway > distance && distanceAway <= distanceGroups[i + 1] && 
+				distanceAway >= distance && distanceAway <= distanceGroups[i + 1] && 
 					
 					( updatedObject[distance] = updatedObject[distance] ? updatedObject[distance] + 1 : 1 );
 
+				
+				
+
 			});
+
+			distanceAway === 0 && ( updatedObject[0] = updatedObject[0] ? updatedObject[0] + 1 : 1 );
+
+
+			
 
 		});
 
@@ -208,7 +216,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	};
 
-
+	// console.log(distanceGroupCounts);
 
 	const updateBudgetGroups = () => {
 
@@ -477,7 +485,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		authState.user.searchNow && filtersLoaded < 2 && loadFilters();
 
-		
+		// console.log(authState?.currentLocation);
 
 
 	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters, visibleSports, filtersLoaded ])
@@ -626,28 +634,44 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		  }
 	}
 
+	const [showChangeLocation, setShowChangeLocation] = useState(false);
+
 	const changeLocation = () => {
-		console.log("change location");
+		showChangeLocation ? setShowChangeLocation(false) : setShowChangeLocation(true);
 	}
 
-	const doLocationSelected = (event) => {
+	const doLocationSelected = async (event) => {
 		console.log('location selected');
 
+
 		setSelectedLocation(event);
-		geocodeByAddress(event.label)
+
+		await geocodeByAddress(event.label)
 		.then(results => getLatLng(results[0]))
 		.then(({ lat, lng }) => {
+			
 			// console.log('Successfully got latitude and longitude', { lat, lng });
+
+			
 			setLatLong({ lat, lng });
+
+			dispatch && dispatch({
+				type: "setCurrentLocation",
+				payload: {lat: lat, long: lng, city: event.label }
+			  });
+
+			  document.cookie = "user_location=" + JSON.stringify({lat: lat, long: lng, city: event.label }) + ";max-age=" + 60*60*24 ;
+	
+			  setCurrentLocation([{lat: lat, long: lng, city: event.label }]);
+			  setFromLocation({lat: lat, long: lng, city: event.label });
+			  setUpdatingProfiles(true);
+			  
 		}
-		);
+		).then( () => setShowChangeLocation(false) )
 		
-		setFromLocation({lat: latLong.lat, long: latLong.lng, city: event.label });
-		setGettingLocation(true);
-		updateProfiles();
+
 	}
 
-	// console.log(activeFilters);
 
 	return <aside className={"sidebar " + className }>
 				<h1>Search <span className="ion-color-primary">Profiles</span></h1>
@@ -703,25 +727,33 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 					<div className="filter-section-bottom">
 
 						<div className="selected-location" style={{display: "flex", alignItems: "center"}}>
-							<IonIcon icon={location} color="primary" style={{fontSize: "24px", marginRight: "5px"}} />
-							{ fromLocation.city }
-							<span onClick={ () => changeLocation() } style={{fontSize: "0.8em", color: "var(--ion-color-primary", padding: "2px 0 0 8px", cursor: "pointer"}}>Change Location</span>
+							<IonIcon icon={location} color="primary" style={{fontSize: "24px", marginRight: "5px", minWidth: "18px"}} />
+							<span className="" style={{fontSize: "0.9em", lineHeight: 1.2}}>{ fromLocation.city }</span>
+							<span onClick={ () => changeLocation() } 
+							style={{fontSize: "0.8em", 
+							color: "var(--ion-color-primary", 
+							padding: "2px 0 0 8px", 
+							cursor: "pointer", 
+							whiteSpace: "nowrap"}}>{ showChangeLocation ? "Cancel" : "Change Location" }</span>
 						</div>
 
-						<div className="range-graph">
-
-							<div className="distance-group"
+					{!showChangeLocation && <div className=""> 
+					
+					<div className="range-graph" style={{display: isDashboard ? "none" : "flex"}}>
+							
+						
+							<div className="distance-group active"
 								style={{
-									height: "0%",
+									height: getGraphHeight(distanceGroupCounts[0]) + "%",
 								}}></div>
 
-
+								
 							{ distanceGroups.map((distanceGroup, i) => {
 
 								if(i + 1 >= distanceGroups.length ) { return } else {
 								
 									return <div key={distanceGroupCounts[distanceGroup] + "-" + distanceGroup} 
-									className={"distance-group " + (locationRange >= i + 2 ? "active" : "")}
+									className={"distance-group " + distanceGroup + (locationRange >= i + 2 ? " active " : " ")}
 									style={{
 										height: getGraphHeight(distanceGroupCounts[distanceGroup]) + "%",
 									}}></div>
@@ -730,13 +762,22 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 							
 							}
 
-						</div>
+						</div> 
 						
 
 						<IonRange 
 						className="location-range"
 						value={locationRange} 
-						onIonChange={(e) => { setDistance(e.detail.value as number); setLocationRange(e.detail.value as number) }} 
+						onIonChange={(e) => { 
+							if(e.detail.value <= 1){  
+								setLocationRange(1); 
+								setDistance(1); 
+							} else {
+								setDistance(e.detail.value as number); 
+								setLocationRange(e.detail.value as number) 
+							}
+							
+						}} 
 						min={0} 
 						max={distanceGroups.length} 
 						step={1} 
@@ -744,9 +785,12 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 						
 						{ distanceGroups[locationRange - 1] !== undefined && <p className="location-distance">{ distanceGroups[locationRange - 1] === 0 ? "All Locations" : "Within " + distanceGroups[locationRange - 1] + " Miles" }</p>}
 
+					
+						</div>
+						
+						}
 
-
-					<div className="">
+					{showChangeLocation && <div className="" style={{padding: "16px 0 0"}}>
 						<GooglePlacesAutocomplete
                           apiKey="AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q"
 
@@ -763,6 +807,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
                             }
                           }}
                         /></div>
+					}
 					</div>
 				</div>
 

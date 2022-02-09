@@ -148,6 +148,12 @@ const reducer = (state: any, action: any) => {
         ...state 
       }
     }
+    case "setCurrentLocation": {
+      state.currentLocation = action.payload
+      return {
+        ...state 
+      }
+    }
 
     default:
 
