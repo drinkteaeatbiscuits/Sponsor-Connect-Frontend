@@ -11,7 +11,7 @@ const useDugoutArticles = ( enabled ) => {
       "articles",
       async () => {
         
-        const profilesResponse = await fetch("https://sponsor-connect.com/wp-json/wp/v2/dugout", {});
+        const profilesResponse = await fetch("https://sponsor-connect.com/wp-json/wp/v2/dugout?_embed", {});
 
         const articles = await profilesResponse.json();
   
