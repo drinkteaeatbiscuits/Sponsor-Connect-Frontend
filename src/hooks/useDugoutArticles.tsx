@@ -1,30 +1,38 @@
-import { useQuery, useQueryClient } from 'react-query';
+import { useInfiniteQuery, QueryClient, QueryClientProvider, useQuery, useQueryClient } from 'react-query';
 
 
 
-const useDugoutArticles = ( enabled ) => {
+const useDugoutArticles = ( page, setTotalPages, setTotalPosts ) => {
 
   
-    const client = useQueryClient();
+    const client = useQueryClient(); 
     
     return useQuery(
-      "articles",
-      async () => {
+      ["articles", page],
+      async ({ pageParam = page }) => {
         
-        const profilesResponse = await fetch("https://sponsor-connect.com/wp-json/wp/v2/dugout?_embed", {});
+        const response = await fetch('https://sponsor-connect.com/wp-json/wp/v2/dugout?_embed&page=' + (pageParam), {})
+          
+    
 
-        const articles = await profilesResponse.json();
-  
+        if(response){
+          setTotalPages( response.headers.get("X-WP-TotalPages") );
+          setTotalPosts( response.headers.get("X-WP-Total") );
+        }
         
-          client.setQueryData(["articles"], articles);
+       
+
+        const articles = await response.json();
+        
+        client.setQueryData(["articles", page], articles);
      
-
-		    // console.log(profiles);
+ 
+		    // console.log(articles);
   
         return articles;
   
-      },
-      enabled
+      }
+      
     )
   }
 

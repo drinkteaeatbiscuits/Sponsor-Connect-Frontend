@@ -22,7 +22,8 @@ $breakpoints: (
 }
 
 .dugout-articles {
-	padding: 80px 0 0;
+	// padding: 80px 0 0;
+	color: var(--ion-color-dark);
 }
 
 .posts-header {
@@ -79,11 +80,12 @@ $breakpoints: (
 		}
 		article.post {
 			background-color: #fff;
-			border-top: 2px solid var(--color-bright-green);
+			border-top: 2px solid var(--ion-color-primary);
 			padding: 16px 16px 16px 24px;
 			margin-bottom: 16px;
 			display: flex;
 			flex-wrap: wrap;
+			position: relative;
 			.post-info {
 				order: 2;
 				padding: 8px 24px 8px 0;
@@ -112,23 +114,15 @@ $breakpoints: (
 				}
 
 			}
-			// flex-basis: 100%;
 			
-			// @include respond-to('sm'){
-			// 	flex-basis: 60%;
-			// }
-			// @include respond-to('md'){
-			// 	flex-basis: 33.333%;
-			// 	padding-right: 12px;
-			// }
-			// @include respond-to('lg'){
-			// 	flex-basis: 33.333%;
-			// 	padding-right: 24px;
-			// }
 			h4 {
+				font-size: 1.8em;
 				font-weight: 500;
 				overflow-wrap: break-word;
 				line-height: 1.25;
+				&:hover {
+					color: var(--ion-color-primary);
+				}
 			}
 			img {
 				transition: 0.25s;
@@ -138,13 +132,25 @@ $breakpoints: (
 
 			}
 			a:hover {
-				color: var(--color-green);
+				color: var(--ion-color-primary);
 			}
 			
 			img:hover {
 				opacity: 0.7;
 			}
-				
+			
+			.post-category {
+				position: absolute;
+				top: 12px;
+				right: 12px;
+				padding: 2px 16px 3px;
+				background-color: var(--ion-color-primary);
+				color: #fff;
+				letter-spacing: 0.075em; 
+				font-size: 0.7em;
+				text-transform: uppercase;
+				border-radius: 10px;
+			}
 			
 		}
 	}
@@ -158,7 +164,7 @@ $breakpoints: (
 .navigation li a:hover,
 .navigation li.active a,
 .navigation li.disabled {
-    color: var(--color-black);
+    color: var(--ion-color-dark);
     text-decoration: none;
 }
  
@@ -180,5 +186,5 @@ $breakpoints: (
 .navigation li a:hover,
 .navigation li.active a {
     //background-color: $light-blue;
-    color: var(--color-green);
+    color: var(--ion-color-primary);
 }
