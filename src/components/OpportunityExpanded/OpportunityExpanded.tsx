@@ -170,3 +170,4 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 export default OpportunityExpanded;
 
+ 
