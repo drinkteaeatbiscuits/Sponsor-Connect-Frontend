@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonIcon, IonPage } from '@ionic/react';
+import { IonButton, IonContent, IonIcon, IonPage, IonSpinner } from '@ionic/react';
 
 import parse from 'html-react-parser';
 
@@ -10,7 +10,7 @@ import TabBar from '../../components/TabBar';
 import './DugoutArticles.scss';
 import useDugoutArticles from '../../hooks/useDugoutArticles';
 
-
+import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 
 
 export interface props {}
@@ -24,17 +24,16 @@ const DugoutArticles: React.FC = () => {
 
 	// const [allPosts, setAllPosts] = useState(null);
 	const [page, setPage] = useState(1);
+	const [totalPages, setTotalPages] = useState(0);
+	const [totalPosts, setTotalPosts] = useState(0);
+
+	const [allPosts, setAllPosts] = useState<any>([]);
+	
 	const {status,
 		data,
 		error,
 		isFetching,
-		isFetchingNextPage,
-		isFetchingPreviousPage,
-		fetchNextPage,
-		fetchPreviousPage,
-		hasNextPage,
-		hasPreviousPage,
-		isSuccess } = useDugoutArticles( true, page );
+		isSuccess } = useDugoutArticles( page, setTotalPages, setTotalPosts );
 
 
 	const updatedDate = (updated, published) => {
@@ -47,20 +46,50 @@ const DugoutArticles: React.FC = () => {
 			return
 		}
 	}
-	console.log(data);
 
-	const loadMoreButtonRef = React.useRef(null);
-	// const getMorePosts = () => {
-	// 	console.log('get more posts');
-	// 	setPage(page + 1);
-	// }
+	
+	// console.log(totalPages);
+	// console.log(totalPosts);
+
+
+	useEffect(() => {
+		
+		data && allPosts.length < totalPosts && data[0]?.id !== allPosts[0]?.id && setAllPosts( [...allPosts, ...data] );
+
+	}, [ data ]);
+
+
+	
+	const getNextPage = () => {
+
+		// console.log(totalPages);
+		// console.log(page);
+
+		totalPages > page && setPage( page + 1 );
+
+	}
+
+
+
+	const loadMoreButtonRef = React.useRef<any>();
+
+	useIntersectionObserver({
+		root: null,
+		rootMargin: "0px 0px 500px 0px",
+		target: loadMoreButtonRef,
+		threshold: 0,
+		onIntersect: () => { isSuccess && getNextPage(); isSuccess && console.log("intersecting")},
+		
+	  });
+
+	//   console.log(allPosts);
 
   return (
     <IonPage> 
       <TabBar activeTab="dugout" />
       
       <IonContent fullscreen className="ion-padding dugout" >
-		  <div className="dugout-articles">
+		  <div className="dugout-articles"> 
 		  	
 			<div className="posts-header">
 				<h1 className="posts-title">The Dugout</h1>
@@ -70,11 +99,13 @@ const DugoutArticles: React.FC = () => {
 			<div className="posts-container">
 
 			
-			{ isSuccess && data instanceof Object && data?.pages?.map((page) => {
+
+			
+			{/* { isSuccess && data instanceof Object && data?..map((page) => {
 				return <React.Fragment key={page[0].id}>
-				{console.log(page)}
-				{ page && page?.map((post) => {
-					{console.log(post)}
+				{console.log(page)} */}
+				{ allPosts && allPosts.length > 0 && allPosts?.map((post) => {
+					
 					return <article key={post.id} className="post">
 								<div className="post-info">
 
@@ -97,23 +128,17 @@ const DugoutArticles: React.FC = () => {
 									{post.categories.includes(66) ? "Template" : "Article" }
 								</div>
 							</article>
-				})
-								}
-				</ React.Fragment>
-			})}
+						})
+					}
+				{/* </ React.Fragment>
+			})} */}
 
 				
-			<IonButton
-              ref={loadMoreButtonRef}
-              onClick={() => fetchNextPage()}
-            //   disabled={!hasNextPage || isFetchingNextPage}
-            >
-              {/* {isFetchingNextPage
-                ? 'Loading more...'
-                : hasNextPage
-                ? 'Load Newer'
-                : 'Nothing more to load'} */}
-            </IonButton>
+				{totalPages > page && <IonButton ref={loadMoreButtonRef} onClick={() => { getNextPage();  }}>
+					Load More
+				</IonButton> }
+
+				{ isFetching && <IonSpinner style={{margin: "0 auto", display: "block"}} /> }
 
 				</div>
 			</div>

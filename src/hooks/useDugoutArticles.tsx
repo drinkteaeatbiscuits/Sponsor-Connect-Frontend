@@ -2,31 +2,35 @@ import { useInfiniteQuery, QueryClient, QueryClientProvider, useQuery, useQueryC
 
 
 
-const useDugoutArticles = ( enabled, page ) => {
+const useDugoutArticles = ( page, setTotalPages, setTotalPosts ) => {
 
   
     const client = useQueryClient(); 
     
-    return useInfiniteQuery(
-      "articles",
-      async ({ pageParam = 0 }) => {
+    return useQuery(
+      ["articles", page],
+      async ({ pageParam = page }) => {
         
-        const profilesResponse = await fetch('https://sponsor-connect.com/wp-json/wp/v2/dugout?_embed&page=' + (pageParam + 1), {});
+        const response = await fetch('https://sponsor-connect.com/wp-json/wp/v2/dugout?_embed&page=' + (pageParam), {})
+          
+    
 
-        const articles = await profilesResponse.json();
-  
+        if(response){
+          setTotalPages( response.headers.get("X-WP-TotalPages") );
+          setTotalPosts( response.headers.get("X-WP-Total") );
+        }
         
-          client.setQueryData(["articles"], articles);
+       
+
+        const articles = await response.json();
+        
+        client.setQueryData(["articles", page], articles);
      
-
-		    console.log(articles);
+ 
+		    // console.log(articles);
   
         return articles;
   
-      },
-      {
-        getPreviousPageParam: firstPage => firstPage.previousId ?? false,
-        getNextPageParam: lastPage => lastPage.nextId ?? false,
       }
       
     )
