@@ -36,6 +36,20 @@
 	}
 }
 
+.sidebar.dashboard-search {
+	display: none;
+}
+@media screen and ( min-width: 768px ) {
+	.sidebar.dashboard-search {
+		display: flex;
+	}
+}
+@media screen and ( min-width: 768px ) {
+	.dashboard-search-profiles-mobile {
+		display: none;
+	}
+}
+
 .dashboard-content-column-1 {
 	width: 100%;
 	display: flex;

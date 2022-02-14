@@ -26,10 +26,7 @@ const Profiles: React.FC<props> = (props) => {
 
   const [profileData, setProfileData] = useState<any[]>([]);
 
-  const [showSidebar, setShowSidebar] = useState(false);
-
- 
-
+  const [showSidebar, setShowSidebar] = useState( thelocation?.state?.sidebarOpenOnLoad );
 
   useEffect(() => {
     
