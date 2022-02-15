@@ -22,6 +22,7 @@ class ErrorBoundary extends React.Component {
 	
   
 	render() {
+
 		const reportError = () => {
 			this.setState({errorReported: true});
 
