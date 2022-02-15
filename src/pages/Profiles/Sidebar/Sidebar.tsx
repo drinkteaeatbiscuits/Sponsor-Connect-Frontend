@@ -488,7 +488,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		// console.log(authState?.currentLocation);
 
 
-	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters, visibleSports, filtersLoaded ])
+	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters, visibleSports ])
 	
 
 

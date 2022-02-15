@@ -11,7 +11,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 import Scrollbar from "react-scrollbars-custom";
 
 
-import '../Dashboard/dashboard.scss';
+import './DashboardBusiness.scss';
 import { NewsFeed } from '../../components/NewsFeed/NewsFeed';
 import Sidebar from '../Profiles/Sidebar/Sidebar';
 import useProfiles from '../../hooks/useProflies';
@@ -63,7 +63,13 @@ const DashboardBusiness: React.FC = () => {
         <div className="dashboard-content-column-1">
 
           <Sidebar className="dashboard-search" isDashboard allProfileData={data} />
+          
+          <div className="dashboard-search-profiles-mobile" 
+          style={{borderRadius: "5px", padding: "12px 12px 0", backgroundColor: "#fff"}}>
 
+            <p className="dashboard-section-title">Search Profiles</p>
+            <IonButton expand="block" className="" size="small" onClick={() => {history.push("/profiles", { sidebarOpenOnLoad: true })}} >Search Profiles</IonButton>
+          </div>
         </div>
 
         <div className="dashboard-content-column-2">
@@ -75,7 +81,7 @@ const DashboardBusiness: React.FC = () => {
           <div className="profile-matches" style={{ 
             backgroundColor: "#fff", 
             borderRadius: "0 0  5px 5px", 
-            marginBottom: "8px",
+            // marginBottom: "8px",
             flexGrow: 1,
             flexShrink: 1,
             overflow: "scroll"  }}>
@@ -83,7 +89,7 @@ const DashboardBusiness: React.FC = () => {
             <ProfileMatches />
           </div>
 
-          <div className="" style={{borderRadius: "5px 5px 0 0",
+          {/* <div className="" style={{borderRadius: "5px 5px 0 0",
                                       backgroundColor: "#fff",}}>
               <p className="dashboard-section-title" style={{padding: "12px 12px 0",}}>Profile Matches</p>
             </div>
@@ -95,7 +101,7 @@ const DashboardBusiness: React.FC = () => {
             overflow: "scroll"  }}>
             
             <ProfileMatches />
-          </div>
+          </div> */}
           
 
 

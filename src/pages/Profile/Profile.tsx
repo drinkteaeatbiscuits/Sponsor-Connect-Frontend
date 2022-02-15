@@ -38,10 +38,12 @@ const Profile: React.FC = () => {
 
   const profileId = useParams<ParamTypes>();
 	const history = useHistory();
-  const { state: authState } = React.useContext(AuthContext);
+  const { state: authState, dispatch } = React.useContext(AuthContext);
   const [showFullDescription, setShowFullDescription] = useState<boolean>(false) 
   const [fullDescriptionText, setFullDescriptionText] = useState<any>(""); 
   const {isLoading, data, error, isSuccess} = useProfile( profileId.id );
+
+  const [updatingViewedProfiles, setUpdatingViewedProfiles] = useState(false);
 
   const [profileImages, setProfileImages] = useState([]);
 
@@ -49,7 +51,11 @@ const Profile: React.FC = () => {
 
   const [opportunityData, setOpportunityData] = useState();
 
+  const [latestUpdateDate, setLatestUpdateDate] = useState("");
+
   error && console.log(error);
+
+  const viewedProfiles = authState.user.viewedProfiles;
 
   useEffect(() => {
 
@@ -58,15 +64,94 @@ const Profile: React.FC = () => {
     isSuccess && setProfileImages( data?.images );
 
     thelocation && thelocation?.state?.tab === "contact" ? setProfileTabNumber(4) : setProfileTabNumber(1);
+
     
-  }, [data?.fullDescriptionText, isSuccess, thelocation])
+
+    isSuccess && latestUpdateDate.length === 0 && profileLastUpdated();
+
+    !updatingViewedProfiles && viewedProfile();
+    
+  }, [data?.fullDescriptionText, isSuccess, thelocation, updatingViewedProfiles, viewedProfiles, profileId, latestUpdateDate ]);
 
 
   Fancybox.bind("[data-fancybox]", {
     // Your options go here
   });
 
-  const viewedProfiles = authState.user.viewedProfiles;
+  const profileLastUpdated = () => {
+
+    let lastUpdatedDate = "";
+
+    lastUpdatedDate = data.updated_at;
+
+    for (let i = 0; i < data.opportunities.length; i++) {
+
+      if(new Date(data.opportunities[i].updated_at) > new Date(lastUpdatedDate)  ) {
+
+        lastUpdatedDate = data.opportunities[i].updated_at;
+
+      }
+
+    }
+    setLatestUpdateDate(lastUpdatedDate);
+  }
+
+
+
+  const viewedProfile = async () => {
+
+    setUpdatingViewedProfiles(true);
+
+    // Get Previously Viewed Date
+    const previouslyViewed = viewedProfiles ? viewedProfiles?.filter(e => e.profileId === profileId.id) : null;
+
+    // Has Latest Profile Update Date Loaded
+    if(latestUpdateDate.length > 0 ){      
+
+
+      // console.log(previouslyViewed[0]?.date);
+      // console.log(latestUpdateDate);
+      // console.log(new Date(previouslyViewed[0]?.date) < new Date(latestUpdateDate));
+
+      // Has Viewed Profiles Loaded
+      // Has Profile Been Previously Viewed
+      // Is the previously viewed date older than the latest update date
+      if ( viewedProfiles && previouslyViewed?.length > 0 
+        && (new Date(previouslyViewed[0]?.date) > new Date(latestUpdateDate) === true ) ) {
+        
+        setUpdatingViewedProfiles(false);
+
+        return
+
+      } else {
+
+        const viewedProfilesResp = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/profile-viewed", {
+          method: "POST",
+          credentials: "include",
+          body: JSON.stringify({
+            profileId: profileId
+          })
+        });
+        
+        const viewedProfileInfo = await viewedProfilesResp.json();
+    
+        dispatch && await dispatch({
+          type: "viewedProfile",
+          payload: viewedProfileInfo
+          });
+
+        setUpdatingViewedProfiles(false);
+
+        return viewedProfileInfo?.statusCode ? false : viewedProfileInfo; 
+
+      }
+      
+    }
+
+      setUpdatingViewedProfiles(false);
+    
+  }
+
 
   return (
     <IonPage className="profile">

@@ -154,6 +154,12 @@ const reducer = (state: any, action: any) => {
         ...state 
       }
     }
+    case "viewedProfile": {
+      state.user.viewedProfiles = action.payload
+      return {
+        ...state 
+      }
+    }
 
     default:
 
