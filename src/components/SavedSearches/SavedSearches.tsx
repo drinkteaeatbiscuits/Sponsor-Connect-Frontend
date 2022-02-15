@@ -27,7 +27,7 @@ const SavedSearches: React.FC<props> = () => {
 	}, []);
 
 
-
+	const budgetGroups = [0, 100, 500, 1000, 2500, 5000, 10000, -1];
 
 	const loadSavedSearch = (activeFilters) => {
 
@@ -35,7 +35,6 @@ const SavedSearches: React.FC<props> = () => {
 			type: "setSearchNow",
 			payload: activeFilters
 		  });
-
 
 		history.push( {
 			pathname: '/profiles'
@@ -55,6 +54,7 @@ const SavedSearches: React.FC<props> = () => {
 				return <div className="saved-search" 
 				key={savedSearches.savedSearchId} 
 				style={{display: "flex", 
+				flexWrap: "wrap",
 				alignItems: "center", 
 				padding: "8px 0", 
 				borderBottom: "#EDEDED 1px solid",
@@ -64,11 +64,12 @@ const SavedSearches: React.FC<props> = () => {
 
 					<div className="" style={{
                         flexGrow: 1, 
-                        padding: "0 3px 2px 3px", 
+                        padding: "0 3px 0px 3px", 
+						lineHeight: 1.4,
                         fontWeight: "500",
                         display: "flex",
                         alignItems: "center"}}>
-                        <div className="" onClick={() => loadSavedSearch(savedSearches.activeFilters ) } 
+                        <div className="saved-search-name" onClick={() => loadSavedSearch(savedSearches.activeFilters ) } 
 					   style={{
                             flexGrow: 1
                         }}>
@@ -78,9 +79,41 @@ const SavedSearches: React.FC<props> = () => {
 						<div className="" style={{fontSize: "0.9em", color: "var(--ion-color-medium)"}}>
 							{dateString}
 						</div>
+
+						
                         
                     	
                     </div>
+
+					<div className="" style={{width: "100%", padding: "0 3px 2px 3px", color: "var(--ion-color-dark)"}}>
+						
+
+							{savedSearches.activeFilters.sports.length > 0 && 
+							<div className="sports">
+								{savedSearches.activeFilters.sports.map((sport) => {
+									return <span style={{display: "inline-block", padding: "0 6px 1px 0", fontSize: "0.85em", lineHeight: 1}}>{sport}</span>
+								})}
+							</div> }
+
+							{savedSearches.activeFilters.distance && <div className="distance">
+								<span style={{display: "inline-block", padding: "0 6px 1px 0", fontSize: "0.85em", lineHeight: 1}}>Within {savedSearches.activeFilters.distance} miles</span>
+							</div> }
+							
+							{savedSearches.activeFilters.budget && <div className="budget">
+								{/* <span style={{display: "inline-block", padding: "0 6px 1px 0", fontSize: "0.85em", lineHeight: 1}}>{savedSearches.activeFilters.budget.lower} - {savedSearches.activeFilters.budget.upper}</span> */}
+							
+								
+								{/* { budgetGroups[savedSearches.activeFilters.budget.lower - 1] === 0 && budgetGroups[savedSearches.activeFilters.budget.upper - 1] === -1 && <span style={{display: "inline-block", padding: "0 6px 1px 0", fontSize: "0.85em", lineHeight: 1}}>All Budgets</span> } */}
+
+								{ ( budgetGroups[savedSearches.activeFilters.budget.lower - 1] !== 0 || budgetGroups[savedSearches.activeFilters.budget.upper - 1] !== -1 ) &&
+								<span style={{display: "inline-block", padding: "0 6px 1px 0", fontSize: "0.85em", lineHeight: 1}}>{ "From £" + budgetGroups[savedSearches.activeFilters.budget.lower - 1] + ( budgetGroups[savedSearches.activeFilters.budget.upper - 1] === -1 ? " up to any " : (" to £" + budgetGroups[savedSearches.activeFilters.budget.upper - 1]) )  }</span> }
+
+							
+							
+							</div> }
+
+							{ console.log(savedSearches.activeFilters) }
+						</div>
  
 				
 					

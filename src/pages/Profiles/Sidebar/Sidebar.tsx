@@ -34,7 +34,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const { state: authState, dispatch } = React.useContext(AuthContext);
 
 	const [saveSearchNameOpen, setSaveSearchNameOpen] = useState(false);
-	const [saveSearchName, setSaveSearchName] = useState("");
+	const [saveSearchName, setSaveSearchName] = useState(new Date().toLocaleDateString() + " - ");
 
 	const [selectedLocation, setSelectedLocation] = useState();
 	const [latLong, setLatLong] = useState<any>({});
@@ -578,6 +578,12 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		setSaveSearchNameOpen(false)
 		setSaveSearchName( "" )
 
+		setOpacity(1);
+
+		setTimeout(function() {
+			setOpacity(0);
+		  }, 1000);
+
 		return savedSearchInfo?.statusCode ? false : savedSearchInfo;
 	}
 
@@ -671,6 +677,19 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		
 
 	}
+
+	const [opacity, setOpacity] = useState(0);
+
+
+	  
+	const nameSearch = () => {
+
+		setSaveSearchNameOpen(true);	
+		
+	}
+
+	
+
 
 
 	return <aside className={"sidebar " + className }>
@@ -867,17 +886,30 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 					
 
 				</div>
-				<div className="save-search">
+				<div className="save-search" style={{position: "relative"}}>
 
 				
                 {saveSearchNameOpen ? <div className="saved-search-name">
-						<IonInput type="text" autoCapitalize="on" value={saveSearchName} onIonInput={( e:any ) => setSaveSearchName( e.target.value )} onKeyDown={e => e.key === 'Enter' && saveSearch() } onIonChange={( e:any ) => setSaveSearchName( e.detail.value )} />	
+						<IonInput id="nameSearchField" autofocus={true} type="text" autoCapitalize="on" value={saveSearchName} onIonInput={( e:any ) => setSaveSearchName( e.target.value )} onKeyDown={e => e.key === 'Enter' && saveSearch() } onIonChange={( e:any ) => setSaveSearchName( e.detail.value )} />	
 						<IonIcon className="close-save-search" color="tertiary" size="24px" onClick={() => setSaveSearchNameOpen(false)} icon={close} />
 						<IonButton className="save-search-button" size="small" onClick={() => saveSearch()}><IonIcon icon={arrowForward} /></IonButton>
 					</div>
 					:
-					<IonButton expand="block" className="" size="small" onClick={() => { isDashboard ? searchNow() : setSaveSearchNameOpen(true) }}>{ isDashboard ? "Search Now" : "Save Search" }</IonButton>
+					<IonButton style={{transition: "0.5s opacity", opacity: opacity ? 0 : 1 }} expand="block" className="" size="small" onClick={() => { isDashboard ? searchNow() : ( nameSearch() ) }}>{ isDashboard ? "Search Now" : "Save Search" }</IonButton>
 				}
+
+				<div className="search-saved-message" style={{
+					pointerEvents: "none", 
+					position: "absolute",
+					top: "50%",
+					right: "16px",
+					zIndex: 99,
+					transform: "translate(0, -50%)",
+					margin: "-2px 0 0",
+					opacity: opacity,
+					fontWeight: "bold",
+					color: "var(--ion-color-primary)",
+					transition: "0.25s opacity"}}>Search Saved</div>
 					
 
 				</div>
