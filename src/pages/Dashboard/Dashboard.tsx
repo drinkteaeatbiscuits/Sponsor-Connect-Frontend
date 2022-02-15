@@ -51,6 +51,20 @@ const Dashboard: React.FC = () => {
   // { !authState.user && history.push('/'); }
   // console.log(dataNews);
 
+  const linkCopied = () => {
+
+    
+    setTimeout(function() {
+			setCopied(true);
+		  }, 200);
+
+		setTimeout(function() {
+			setCopied(false);
+		  }, 1500);
+
+  }
+  
+
   return (
     <IonPage> 
       <TabBar activeTab="dashboard" />
@@ -103,13 +117,13 @@ const Dashboard: React.FC = () => {
                 </div>
 
                 <CopyToClipboard text={"app.sponsor-connect.com/profile/" + authState?.user?.profile}
-                  onCopy={() => setCopied(true)}>
+                  onCopy={() => { linkCopied()}}>
                   <div className='menu-list-option'>
                     <div className="icon">
                       <IonIcon color="primary" icon={link} />
                     </div>
                     <div className="text">
-                      <p className="main-text">Your Unique Link</p>
+                      <p className={copied ? "main-text fade-in" : "main-text"}>{ copied ? <span style={{color: "var(--ion-color-primary)"}}>Link Copied</span> : "Your Unique Link" }</p>
                       <p className="sub-text">{ "app.sponsor-connect.com/profile/" + authState?.user?.profile }</p>
                     </div>
                   </div>

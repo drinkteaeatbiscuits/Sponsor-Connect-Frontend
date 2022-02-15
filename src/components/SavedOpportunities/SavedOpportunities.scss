@@ -23,4 +23,36 @@
 			opacity: 0.8;
 		}
 	}
+	
+}
+
+.opportunities-saved-list {
+	.opportunity {
+		flex-wrap: nowrap;
+		align-items: flex-start;
+		.opportunity-details {
+			padding: 8px 8px 16px 16px;
+		}
+	}
+	.profile-details {
+		
+		.avatar {
+			position: relative;
+			margin-top: 0;
+			margin-left: 0;
+			z-index: 99;
+			text-align: center;
+			left: auto;
+			top: auto;
+			.avatar-image {
+				display: block;
+				width: 52px;
+				height: 52px;
+				img {
+					display: block;
+				}
+				
+			}
+		}
+	}
 }
