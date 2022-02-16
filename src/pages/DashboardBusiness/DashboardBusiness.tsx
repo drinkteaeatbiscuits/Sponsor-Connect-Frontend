@@ -46,7 +46,7 @@ const DashboardBusiness: React.FC = () => {
 
   const {isLoading, data, isSuccess, error} = useProfiles();
 
-  console.log(authState.user.viewedProfiles);
+  // console.log(authState.user.viewedProfiles);
 
   // const {isLoading: isLoadingProfile, data: dataProfile, error: errorProfile, isSuccess: isSuccessProfile} = useProfile( profileId );
   // console.log(authState.user.profile); 
@@ -65,7 +65,7 @@ const DashboardBusiness: React.FC = () => {
 
         <div className="dashboard-content-column-1">
 
-          <Sidebar className="dashboard-search" isDashboard allProfileData={data} />
+        <ErrorBoundary><Sidebar className="dashboard-search" isDashboard allProfileData={data} /></ErrorBoundary>
           
           <div className="dashboard-search-profiles-mobile" 
           style={{borderRadius: "5px", padding: "12px 12px 0", backgroundColor: "#fff"}}>
@@ -89,24 +89,8 @@ const DashboardBusiness: React.FC = () => {
             flexShrink: 1,
             overflow: "scroll"  }}>
             
-            <ProfileMatches />
+            <ErrorBoundary><ProfileMatches /></ErrorBoundary>
           </div>
-
-          {/* <div className="" style={{borderRadius: "5px 5px 0 0",
-                                      backgroundColor: "#fff",}}>
-              <p className="dashboard-section-title" style={{padding: "12px 12px 0",}}>Profile Matches</p>
-            </div>
-          <div className="profile-matches" style={{ 
-            backgroundColor: "#fff", 
-            borderRadius: "0 0  5px 5px", 
-            flexGrow: 1,
-            flexShrink: 1,
-            overflow: "scroll"  }}>
-            
-            <ProfileMatches />
-          </div> */}
-          
-
 
 
         </div>
@@ -117,7 +101,7 @@ const DashboardBusiness: React.FC = () => {
             borderRadius: "5px", 
             marginBottom: "8px",}}>
               <p className="dashboard-section-title" style={{padding: "12px"}}>Profiles Contacted</p>
-              <ProfilesContacted />
+              <ErrorBoundary><ProfilesContacted /></ErrorBoundary>
             </div>
 
 
@@ -131,7 +115,7 @@ const DashboardBusiness: React.FC = () => {
                   borderRadius: "0 0 5px 5px",
                   overflow: "scroll"
                   }}>
-                    <ErrorBoundary><NewsFeed articleCount={6} style={{}} /></ErrorBoundary>
+                    <ErrorBoundary><NewsFeed articleCount={12} style={{}} /></ErrorBoundary>
 
                   </div>
         </div>
