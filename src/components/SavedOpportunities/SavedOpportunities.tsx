@@ -79,7 +79,7 @@ const SavedOpportunities: React.FC<props> = (props) => {
 					<div className="opportunity" style={{flexGrow: '1', transition: '0.2s all ease'}}  onClick={ () => { selectEnabled ? selectOpportunity(favouriteOpportunityData?.id) : history.push("/opportunity/" + favouriteOpportunityData?.id) }} >
 							
 
-							<div className="opportunity-details">
+							<div className="opportunity-details" style={{width: '100%'}}>
 
 
 								<div className="" style={{display: "flex"}}>
@@ -121,6 +121,7 @@ const SavedOpportunities: React.FC<props> = (props) => {
 													<img className="profile-picture" alt={ "Profile Image " + favouriteOpportunityData?.profile?.profilePicture.id } src={ process.env.REACT_APP_S3_URL + "/images/profile/" +  favouriteOpportunityData?.profile?.profilePicture?.hash + favouriteOpportunityData?.profile?.profilePicture?.ext } /> 
 												</picture>
 												
+												
 												: <IonIcon color="medium" icon={personCircle} /> }
 												
 											</div>
@@ -139,13 +140,13 @@ const SavedOpportunities: React.FC<props> = (props) => {
 
 							</div>
 	
-							{ favouriteOpportunityData?.images && <div className="opportunity-image-thumb">
+							{/* { favouriteOpportunityData?.images && <div className="opportunity-image-thumb">
 								<picture>
 									<source type="image/webp" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  favouriteOpportunityData?.images?.hash + ".webp" } />
 									<source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  favouriteOpportunityData?.images?.hash + favouriteOpportunityData?.images?.ext } />
 									<img className="opportunity-image" src={  process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" + favouriteOpportunityData?.images?.hash + favouriteOpportunityData?.images?.ext } alt={favouriteOpportunityData?.title} /> 
 								</picture> 
-							</div> }
+							</div> } */}
 
 							
 							

@@ -10,6 +10,7 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 import Scrollbar from "react-scrollbars-custom";
 
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 
 import './DashboardBusiness.scss';
 import { NewsFeed } from '../../components/NewsFeed/NewsFeed';
@@ -44,6 +45,8 @@ const DashboardBusiness: React.FC = () => {
   const profileId = authState.user.profile;
 
   const {isLoading, data, isSuccess, error} = useProfiles();
+
+  console.log(authState.user.viewedProfiles);
 
   // const {isLoading: isLoadingProfile, data: dataProfile, error: errorProfile, isSuccess: isSuccessProfile} = useProfile( profileId );
   // console.log(authState.user.profile); 
@@ -128,7 +131,7 @@ const DashboardBusiness: React.FC = () => {
                   borderRadius: "0 0 5px 5px",
                   overflow: "scroll"
                   }}>
-                    <NewsFeed articleCount={6} style={{}} />
+                    <ErrorBoundary><NewsFeed articleCount={6} style={{}} /></ErrorBoundary>
 
                   </div>
         </div>
