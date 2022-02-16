@@ -9,16 +9,15 @@ export const NewsFeed = (props) => {
     const {articleCount} = props;
      
     const sortedArticles = () => {
-        const theSortedArticles = dataNews.sort((firstEl, secondEl) => { 
+        const theSortedArticles = dataNews.length > 0 ? dataNews.sort((firstEl, secondEl) => { 
           
-         return  +new Date(secondEl.newsDate) - +new Date(firstEl.newsDate)
+         return +new Date(secondEl.newsDate) - +new Date(firstEl.newsDate)
          
-        } );
+        } ) : null;
    
-        const theFilteredArticles = theSortedArticles.filter((article) => +new Date(article.newsDate) < +new Date());
+        const theFilteredArticles = theSortedArticles ? theSortedArticles.filter((article) => +new Date(article.newsDate) < +new Date()) : [];
    
-        
-        return articleCount > 0 ? theFilteredArticles.slice(0, articleCount) : theFilteredArticles;
+        return articleCount > 0 && theFilteredArticles ? theFilteredArticles.slice(0, articleCount) : theFilteredArticles;
      }
    
       // console.log(articleCount);

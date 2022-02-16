@@ -52,7 +52,7 @@ const SavedSearches: React.FC<props> = () => {
 				const dateString = new Intl.DateTimeFormat('en-GB', options).format(date);
 
 				return <div className="saved-search" 
-				key={savedSearches.savedSearchId} 
+				key={ savedSearches.savedSearchId + '-' + index } 
 				style={{display: "flex", 
 				flexWrap: "wrap",
 				alignItems: "center", 
@@ -90,8 +90,8 @@ const SavedSearches: React.FC<props> = () => {
 
 							{savedSearches.activeFilters.sports.length > 0 && 
 							<div className="sports">
-								{savedSearches.activeFilters.sports.map((sport) => {
-									return <span style={{display: "inline-block", padding: "0 6px 1px 0", fontSize: "0.85em", lineHeight: 1}}>{sport}</span>
+								{savedSearches.activeFilters.sports.map((sport, index) => {
+									return <span key={sport + '-' + index} style={{display: "inline-block", padding: "0 6px 1px 0", fontSize: "0.85em", lineHeight: 1}}>{sport}</span>
 								})}
 							</div> }
 
@@ -112,7 +112,7 @@ const SavedSearches: React.FC<props> = () => {
 							
 							</div> }
 
-							{ console.log(savedSearches.activeFilters) }
+							{/* { console.log(savedSearches.activeFilters) } */}
 						</div>
  
 				

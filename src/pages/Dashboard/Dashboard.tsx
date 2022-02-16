@@ -8,6 +8,8 @@ import LogoutButton from '../../components/LogoutButton';
 import TabBar from '../../components/TabBar';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
+ 
 import Scrollbar from "react-scrollbars-custom";
 
 
@@ -211,7 +213,11 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="user-opportunities">
 
-              <OpportunitiesList profileId={ profileId } />
+            <ErrorBoundary> 
+              
+              <OpportunitiesList profileId={ profileId } /> 
+            
+            </ErrorBoundary>
             
             </div>
             

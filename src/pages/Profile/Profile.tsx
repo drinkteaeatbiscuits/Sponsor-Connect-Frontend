@@ -10,6 +10,7 @@ import useProfile from '../../hooks/useProfile';
 import TabBar from '../../components/TabBar';
 import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
 import { stateToHTML } from "draft-js-export-html";
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 // import { stateToMarkdown } from "draft-js-export-markdown";
 
 import { Fancybox } from "@fancyapps/ui"; 
@@ -300,12 +301,12 @@ const Profile: React.FC = () => {
                 <div className="profile-tab profile-opportunities">
                     <h2 className="ion-color-dark line-height-12 tab-title">Sponsorship Opportunities</h2>
           
-                    
-                    <OpportunitiesList profileId={ profileId.id } />
-
+                    <ErrorBoundary> 
+                      <OpportunitiesList profileId={ profileId.id } />
+                    </ErrorBoundary> 
                  
 
-
+  
                     <div className="other-sponsorship-ideas ion-padding">
                       <p>Have any other sponsorship ideas? <br/>
                       Please get in touch <a href="/">here.</a></p>

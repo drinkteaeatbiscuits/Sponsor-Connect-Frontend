@@ -23,6 +23,8 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 
 	return <div className="opportunities">
 
+			{/* {data.thisdoesntexsist} */}
+
 	
 			{ data?.length > 0 && data?.map(( opportunity:any )=>{
 				return <div className="opportunity" key={opportunity.id} onClick={ ()=> history.push("/opportunity/" + opportunity.id) }>
@@ -30,6 +32,7 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 					
 					<div className=" opportunity-details">
 
+							
 						
 							{opportunity.price && <p className="price">£{opportunity.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>}
 							
