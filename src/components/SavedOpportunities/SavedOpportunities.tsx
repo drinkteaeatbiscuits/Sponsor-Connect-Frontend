@@ -161,6 +161,7 @@ const SavedOpportunities: React.FC<props> = (props) => {
 								alignSelf: "center",
 								width: '24px',
 								height: '24px',
+								minWidth: '24px',
 								borderRadius: '12px',
 								border: 'var(--ion-color-primary) 2px solid',
 								background: selectedOpportunities?.includes(favouriteOpportunityData?.id) ? 'var(--ion-color-primary)' : '#fff',

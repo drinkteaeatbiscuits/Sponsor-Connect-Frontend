@@ -56,7 +56,7 @@ const Profile: React.FC = () => {
 
   error && console.log(error);
 
-  const viewedProfiles = authState.user.viewedProfiles;
+  const viewedProfiles = authState?.user?.viewedProfiles;
 
   useEffect(() => {
 
@@ -70,7 +70,7 @@ const Profile: React.FC = () => {
 
     isSuccess && latestUpdateDate.length === 0 && profileLastUpdated();
 
-    !updatingViewedProfiles && viewedProfile();
+    !updatingViewedProfiles && authState?.user && viewedProfile();
     
   }, [data?.fullDescriptionText, isSuccess, thelocation, updatingViewedProfiles, viewedProfiles, profileId, latestUpdateDate ]);
 
@@ -321,7 +321,7 @@ const Profile: React.FC = () => {
 
                   
 
-                    { authState?.user.profile === parseInt(profileId.id) && <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/edit-profile-description') } >Edit Description</IonButton> }
+                    { authState?.user?.profile === parseInt(profileId.id) && <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/edit-profile-description') } >Edit Description</IonButton> }
 
                     
 
@@ -353,7 +353,7 @@ const Profile: React.FC = () => {
 
               <div className="profile-tab photos">
 
-                  { authState?.user.profile === parseInt(profileId.id) && <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/manage-profile-images') } >Add/Edit Photos</IonButton> }
+                  { authState?.user?.profile === parseInt(profileId.id) && <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/manage-profile-images') } >Add/Edit Photos</IonButton> }
 
                   { profileImages.length > 0 && <div className="profile-images">
                   { profileImages.map((profileImage: any) => {

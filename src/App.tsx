@@ -224,8 +224,6 @@ const App: React.FC = () => {
 
   }
 
-
-
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const [wasUserHere, setWasUserHere] = useState<any>("");
   const [currentLocation, setCurrentLocation] = useState<any>("");
@@ -337,6 +335,11 @@ const App: React.FC = () => {
               <Route exact path="/login">
                 { state.isAuthenticated ? <Redirect to="/dashboard" /> : ( checkUser && <Login />) }
               </Route>
+
+              <Route exact path="/profile/view/:id">
+                  <Profile />
+              </Route>
+
 
                <Route exact path="/profile/:id">
                 {state.isAuthenticated ? <Profile /> : (checkUser && <Redirect to="/login" />)}
