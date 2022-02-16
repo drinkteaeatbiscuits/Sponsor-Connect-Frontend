@@ -3,10 +3,11 @@ import { IonButton, IonContent, IonIcon, IonPage } from '@ionic/react';
 import { useHistory, useParams } from 'react-router';
 import Cookies from 'js-cookie';
 import { AuthContext } from "../../App";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import LogoutButton from '../../components/LogoutButton';
 import TabBar from '../../components/TabBar';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 
 import Scrollbar from "react-scrollbars-custom";
 
@@ -31,6 +32,9 @@ const Favourites: React.FC = () => {
   const { state: authState } = React.useContext(AuthContext);
   const [copied, setCopied] = useState(false);
 
+  const [selectEnabled, setSelectEnabled] = useState(false);
+  const [selectedOpportunities, setSelectedOpportunities] = useState<Array<number>>([]);
+
   const greeting = () => {
     const today = new Date()
     const currentHour = today.getHours()
@@ -44,11 +48,6 @@ const Favourites: React.FC = () => {
     }
   }
 
-  const profileId = authState.user.profile;
-
-  const {isLoading, data, isSuccess, error} = useProfiles();
-
-  // console.log(authState);
 
   return (
     <IonPage> 
@@ -78,8 +77,19 @@ const Favourites: React.FC = () => {
         <div className="dashboard-content-column-2">
           
           <div className="" style={{borderRadius: "5px 5px 0 0",
-                                      backgroundColor: "#fff",}}>
-              <p className="dashboard-section-title" style={{padding: "12px 12px 0",}}>Saved Opportunities</p>
+                                      backgroundColor: "#fff",
+                                      display: 'flex'}}>
+              <p className="dashboard-section-title" style={{padding: "12px 12px 0", flexGrow: 1}}>Saved Opportunities</p>
+
+              <div className="" style={{padding: '8px 20px'}}>
+                
+                
+                <p style={{cursor: 'pointer'}} onClick={() => { selectEnabled ? setSelectEnabled(false) : setSelectEnabled(true) } }>{selectEnabled ? "Cancel" : "Select" }</p>
+              
+
+              </div>
+              
+
         	</div>
 
           <div className="" style={{ 
@@ -89,7 +99,12 @@ const Favourites: React.FC = () => {
             flexGrow: 1,
             flexShrink: 1,
             overflow: "scroll"  }}>
-            <SavedOpportunities />
+              <ErrorBoundary>
+                <SavedOpportunities 
+                selectEnabled={selectEnabled} 
+                selectedOpportunities={selectedOpportunities} 
+                setSelectedOpportunities={setSelectedOpportunities} />
+              </ErrorBoundary>
           </div>
 
 
