@@ -15,11 +15,12 @@ interface EditorSectionProps {
 	className?: string;
 	profileId?: any;
 	fieldRef?: any;
+	autocapitalize?: string;
 }
  
 const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) => {
 
-	const { label, currentValue, fieldType, className, profileId, fieldRef } = EditorSectionProps;
+	const { label, currentValue, fieldType, className, profileId, fieldRef, autocapitalize } = EditorSectionProps;
 	const { state: authState } = React.useContext(AuthContext);
 
 	const [ showEdit, setShowEdit ] = useState(false);
@@ -91,7 +92,7 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 		
 				{ fieldType !== 'TextEditor' && !showEdit ? value && value : 
 				 fieldType !== 'TextEditor' && fieldType !== 'IonTextarea' ? <IonInput autocomplete="off" 
-					autocapitalize="on" 
+					autocapitalize={autocapitalize} 
 					type={fieldType ? fieldType : "text"} 
 					value={ value } 
 					onIonChange={ (e:any) => {
@@ -101,11 +102,12 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 						setSectionData( newSectionData );  
 
 					} } /> : fieldType === 'IonTextarea' && 
-					<IonTextarea value={ value } onIonChange={ (e:any) => {
+					<IonTextarea value={ value } autocapitalize={autocapitalize} onIonChange={ (e:any) => {
 						setValue( e.detail.value ); 
 						let newSectionData = {};
 						newSectionData[ fieldRef ] = e.detail.value;
-						setSectionData( newSectionData );  
+						setSectionData( newSectionData );
+						 
 
 					}} />
             
@@ -116,6 +118,7 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 
 
 				{ fieldType === 'TextEditor' && <TextEditor 
+					  autoCapitalize={autocapitalize}
                       placeholder="Enter your description here." 
                       initialText={ currentValue } 
                       textEditorText={ editorContent } 

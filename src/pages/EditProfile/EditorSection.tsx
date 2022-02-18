@@ -33,6 +33,7 @@ const EditorSection: React.FC<EditorSectionProps> = ( EditorSectionProps ) => {
 
 				<div className="edit-content">
 					<TextEditor 
+						autoCapitalize="Sentences"
 						placeholder="Enter your description here." 
 						initialText={ initialEditorContent && convertFromRaw( initialEditorContent )} 
 						textEditorText={ editorContent } 
