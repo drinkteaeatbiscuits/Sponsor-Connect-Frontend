@@ -149,6 +149,8 @@ class TextEditor extends React.Component {
 		
 		<div className={className} onClick={this.focus}>
 		  <Editor
+			autoCapitalize="on"
+			autoCorrect="on"
 			blockStyleFn={getBlockStyle}
 			customStyleMap={styleMap}
 			handleReturn={this.handleReturn}

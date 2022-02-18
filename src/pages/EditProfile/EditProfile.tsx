@@ -34,6 +34,8 @@ import EditorSection from '../../components/EditorSection/EditorSection';
 import EditorSectionProfile from '../../components/EditorSection/EditorSectionProfile';
 import useEditProfileField from '../../hooks/useEditProfileField';
 import SocialMediaTotals from '../../components/SocialMediaTotals/SocialMediaTotals';
+import SocialMediaTotalsEdit from '../../components/SocialMediaTotalsEdit/SocialMediaTotalsEdit';
+import AchievementsEdit from '../../components/AchievementsEdit/AchievementsEdit';
 
 export interface props {}
 
@@ -67,16 +69,8 @@ const EditProfile: React.FC = () => {
 
   const [filteredSports, setFilteredSports] = useState<any>(sports);
   
-  const [socialMedia, setSocialMedia] = useState<Array<object>>();
-  const [facebookTotal, setFacebookTotal] = useState<any>("");
-  const [facebookUrl, setFacebookUrl] = useState<any>(""); 
-  const [instagramTotal, setInstagramTotal] = useState<any>("");
-  const [instagramUrl, setInstagramUrl] = useState<any>("");
-  const [twitterTotal, setTwitterTotal] = useState<any>("");
-  const [twitterUrl, setTwitterUrl] = useState<any>("");
-  const [youTubeTotal, setYouTubeTotal] = useState<any>("");
-  const [youTubeUrl, setYouTubeUrl] = useState<any>("");
-  const [accolades, setAccolades] = useState<any>("");
+  const [socialMedia, setSocialMedia] = useState<Array<object>>([]);
+  const [accolades, setAccolades] = useState<any>([]);
   
   
   const [shortDescription, setShortDescription] = useState<any>("");
@@ -89,7 +83,8 @@ const EditProfile: React.FC = () => {
 
   const [fullDescriptionText, setFullDescriptionText] = useState();
 
-  // console.log(textEditorText);
+  const [socialMediaObject, setSocialMediaObject] = useState([{}]);
+
 
   const updateProfile = async () => {
     
@@ -123,7 +118,6 @@ const EditProfile: React.FC = () => {
   error && console.log(error);
   profileData.error && console.log(profileData);
 
-  const [initialProfileData, setInitialProfileData] = useState(false);
 
   useEffect(() => {
 
@@ -133,30 +127,16 @@ const EditProfile: React.FC = () => {
 
       !yourSport && setYourSport(profileData.data?.sport);
 
-      setLocation(profileData.data?.location);
+      !location && setLocation(profileData.data?.location);
       setPriceRange(profileData.data?.priceRange);
       setWebsite(profileData.data?.website);
-      
-      setSocialMedia(profileData.data?.socialMedia); 
-
-      setFacebookTotal(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'facebook'; })?.socialMediaTotal);
-      setFacebookUrl(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'facebook'; })?.socialMediaUrl);
-      
-      setInstagramTotal(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'instagram'; })?.socialMediaTotal);
-      setInstagramUrl(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'instagram'; })?.socialMediaUrl);
-      
-      setTwitterTotal(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'twitter'; })?.socialMediaTotal);
-      setTwitterUrl(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'twitter'; })?.socialMediaUrl);
-      
-      setYouTubeTotal(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'youTube'; })?.socialMediaTotal);
-      setYouTubeUrl(profileData.data?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'youTube'; })?.socialMediaUrl);
 
       setShortDescription(profileData.data?.shortDescription);
       setFullDescription(profileData.data?.description);
       
       setFullDescriptionText( profileData.data?.fullDescriptionText && convertFromRaw( profileData.data?.fullDescriptionText ) );
       
-      // setAccolades(profileData.data?.accolades);
+      accolades.length === 0 && setAccolades(profileData.data?.accolades);
       
       setCurrentProfilePicture(profileData.data?.profilePicture);
       setCoverImage(profileData.data?.coverImage);
@@ -167,20 +147,10 @@ const EditProfile: React.FC = () => {
     
   }, [profileData]);
 
-  useIonViewWillEnter(() => {
-
-    if (profileData.status === "success" ) {
-
-      
-      setAccolades(profileData.data?.accolades);
-      
-
-    }
-
-  });
-
-  // console.log(profileData?.data?.accolades);
   
+  // console.log(profileData);
+  // console.log(location);
+
   const focusOnSport = () => {
     
     document.addEventListener('ionModalDidPresent', () => { document.querySelector('ion-searchbar')?.setFocus(); });
@@ -203,9 +173,9 @@ const EditProfile: React.FC = () => {
 
   if (filteredSports?.length > 0) {
 
-    showSports = filteredSports.map((data: any) => {
+    showSports = filteredSports.map((data: any, index) => {
       return (
-        <IonItem className="sport" onClick={() => { setYourSport(data); setShowModal(false); }} key={data}>{data}</IonItem>
+        <IonItem className="sport" onClick={() => { setYourSport(data); setShowModal(false); }} key={data + '-' + index}>{data}</IonItem>
       )
     });
 
@@ -238,90 +208,6 @@ const EditProfile: React.FC = () => {
     });
 
   }
-
-
-  // const getSocialMediaData = (socialMediaName: string) => {
-
-
-  //     return socialMedia?.filter(function (entry:any) { return entry.socialMediaName === socialMediaName; })      
-    
-  // }
-  // console.log(getSocialMediaData('facebook'));
-
-  const socialMediaObject: { socialMediaName: string; socialMediaTotal: any; socialMediaUrl: any; }[] = [];
-
-  facebookTotal && socialMediaObject.push({
-    "socialMediaName": "facebook",
-    "socialMediaTotal": facebookTotal,
-    "socialMediaUrl": facebookUrl
-  });
-  
-  instagramTotal && socialMediaObject.push({
-    "socialMediaName": "instagram",
-    "socialMediaTotal": instagramTotal,
-    "socialMediaUrl": instagramUrl
-  });
-  
-  twitterTotal && socialMediaObject.push({
-    "socialMediaName": "twitter",
-    "socialMediaTotal": twitterTotal,
-    "socialMediaUrl": twitterUrl
-  });
-  
-  youTubeTotal && socialMediaObject.push({
-    "socialMediaName": "youTube",
-    "socialMediaTotal": youTubeTotal,
-    "socialMediaUrl": youTubeUrl
-  });
-
-  
-  // console.log(accolades);
-
-  const createAccolades = (e:any) => {
-
-    // console.log(e);
-    
-    let accoladeIndex = Array.prototype.indexOf.call(e.target.parentElement.parentElement.children, e.target.parentElement);
-    let newAccolades: Array<any> = [];
-    newAccolades = newAccolades.concat(accolades);
-    newAccolades[accoladeIndex] = e.target.value;
-
-    setAccolades(newAccolades);
-
-  }
-    
-  const addAccolade = () => {
-    
-    let newAccolades: Array<string> = [];
-    newAccolades = newAccolades.concat(accolades);
-    accolades?.length < 1 && (newAccolades.push(""));
-    newAccolades.push("");
-    setAccolades(newAccolades);
-    
-  }
-
-  const removeAccolade = (e: any) => {
-
-    const removeIndex = Array.prototype.indexOf.call(e.target.parentElement.parentElement.children, e.target.parentElement);
-    let newAccolades: Array<string> = [];
-    newAccolades = newAccolades.concat(accolades);
-    // console.log(removeIndex);
-    newAccolades.splice(removeIndex, 1);
-    setAccolades(newAccolades);
-    
-  }
-
-
-  const socialMediaIcon = (socialMediaName:any) => {
-		
-		let socialMediaIconName = "";
-		socialMediaName === 'facebook' && (socialMediaIconName = logoFacebook);
-		socialMediaName === 'instagram' && (socialMediaIconName = logoInstagram);
-		socialMediaName === 'twitter' && (socialMediaIconName = logoTwitter);
-		socialMediaName === 'youTube' && (socialMediaIconName = logoYoutube);
-
-		return socialMediaIconName;
-	}
  
 
   return (
@@ -335,7 +221,7 @@ const EditProfile: React.FC = () => {
             <h1 style={{color: "var(--ion-color-dark)", lineHeight: 0.8, fontSize: "4em", padding: "15px"}}>EDIT <br/><span style={{color: "var(--ion-color-primary)"}}>PROFILE</span></h1>
             <div className="editor-wrap">
 
-              <EditorSectionProfile profileId={authState?.user.profile} fieldRef="profileName" label={"Profile Name"} currentValue={profileName} />
+              <EditorSectionProfile autocapitalize='words' profileId={authState?.user.profile} fieldRef="profileName" label={"Profile Name"} currentValue={profileName} />
 
               <NewImageUpload3 
                 currentImage={ coverImage } 
@@ -373,8 +259,8 @@ const EditProfile: React.FC = () => {
 
                   <div className="editor-section-top-buttons">
 
-                    { console.log(profileData.data?.sport) }
-                    { console.log(yourSport) }
+                    {/* { console.log(profileData.data?.sport) }
+                    { console.log(yourSport) } */}
 
                     { profileData.isSuccess && yourSport === profileData.data?.sport && <div className="editor-section-button" onClick={() => { setShowModal(true); focusOnSport(); }}>{ yourSport ? "Edit" : "Add"}</div> }
 
@@ -401,7 +287,7 @@ const EditProfile: React.FC = () => {
 
                   <div className="editor-section-top-buttons">
 
-                    { profileData.isSuccess && location?.label === profileData?.data[0]?.location?.label && (!showLocation && <div className="editor-section-button" onClick={() => { setShowLocation(true); }}>{ location ? "Edit" : "Add"}</div>) }
+                    { profileData.isSuccess && location?.label === profileData?.data?.location?.label && (!showLocation && <div className="editor-section-button" onClick={() => { setShowLocation(true); }}>{ location ? "Edit" : "Add"}</div>) }
 
                     { showLocation && <div className="editor-section-button" onClick={() => { saveField("location", location ); saveField("latLong", latLong ); setShowLocation(false); }}>Save</div> }
  
@@ -434,7 +320,7 @@ const EditProfile: React.FC = () => {
               </div>
 
 
-              <EditorSectionProfile profileId={authState?.user.profile} fieldRef="website" label={"Website"} currentValue={website} />
+              <EditorSectionProfile autocapitalize='off' profileId={authState?.user.profile} fieldRef="website" label={"Website"} currentValue={website} />
               
 
               <div className="editor-section">
@@ -445,9 +331,15 @@ const EditProfile: React.FC = () => {
 
                   <div className="editor-section-top-buttons">
 
-                    { profileData.isSuccess && !showSocials && <div className="editor-section-button" onClick={() => { setShowSocials(true); }}>{ socialMedia ? "Edit" : "Add"}</div> }
+                    { profileData.isSuccess && !showSocials ? <div className="editor-section-button" onClick={() => { setShowSocials(true); }}>{ socialMedia ? "Edit" : "Add"}</div> :
+                    <div className="editor-section-button secondary" onClick={() => {setShowSocials(false); setSocialMediaObject(profileData?.data?.socialMedia) }}>Cancel</div> }
 
-                    { showSocials && <div className="editor-section-button" onClick={() => { saveField("socialMedia", socialMediaObject ); setShowSocials(false); }}>Save</div> }
+                    { showSocials && <div className="editor-section-button" onClick={() => { 
+                      // saveField("socialMedia", socialMediaObject ); setShowSocials(false); 
+                      // console.log(socialMediaObject);
+                      saveField("socialMedia", socialMediaObject );
+                      setShowSocials(false);
+                    }}>Save</div> }
  
                   </div>	
 
@@ -455,96 +347,16 @@ const EditProfile: React.FC = () => {
                 
                 <div className="editor-section-bottom">
 
-                  {  profileData.isSuccess && !showSocials && <SocialMediaTotals socialMediaData={profileData?.data[0]?.socialMedia} showEmpty={true} /> }
+                  {  profileData.isSuccess && !showSocials && <SocialMediaTotals socialMediaData={profileData?.data?.socialMedia} showEmpty={true} /> }
 
+                  {  profileData.isSuccess && showSocials && <SocialMediaTotalsEdit socialMediaData={profileData?.data?.socialMedia} setSocialMediaObject={setSocialMediaObject} /> }
+                  
 
-                  {  profileData.isSuccess && showSocials && <div className="social-media-fields">
-
-                        <div className="social-media-field">
-
-                          <IonIcon color={ facebookTotal || facebookUrl ? "primary" : "tertiary" } size="large" icon={ socialMediaIcon("facebook") } />
-                          <div className="total">
-                            <div className="label">
-                              <label>Total</label>
-                            </div>
-                            
-                            <IonInput type="number" value={ facebookTotal && facebookTotal } onIonChange={ (e:any) => setFacebookTotal(e.detail.value) } />
-                          </div>
-                          <div className="url">
-                            <div className="label">
-                              <label>URL</label>
-                            </div>
-                            <IonInput type="text" value={ facebookUrl && facebookUrl } onIonChange={ (e:any) => setFacebookUrl(e.detail.value) } />
-                          </div>
-                          
-                        </div>
-                        <div className="social-media-field">
-
-                          <IonIcon color={ instagramTotal || instagramUrl ? "primary" : "tertiary" } size="large" icon={ socialMediaIcon("instagram") } />
-                          <div className="total">
-                            <div className="label">
-                              <label>Total</label>
-                            </div>
-                            
-                            <IonInput type="number" value={ instagramTotal && instagramTotal  } onIonChange={ (e:any) => setInstagramTotal(e.detail.value) } />
-                          </div>
-                          <div className="url">
-                            <div className="label">
-                              <label>URL</label>
-                            </div>
-                            <IonInput type="text" value={ instagramUrl && instagramUrl } onIonChange={ (e:any) => setInstagramUrl(e.detail.value) } />
-                          </div>
-                          
-                        </div>
-                        <div className="social-media-field">
-
-                          <IonIcon color={ twitterTotal || twitterUrl ? "primary" : "tertiary" } size="large" icon={ socialMediaIcon("twitter") } />
-                          <div className="total">
-                            <div className="label">
-                              <label>Total</label>
-                            </div>
-                            
-                            <IonInput type="number" value={ twitterTotal && twitterTotal  } onIonChange={ (e:any) => setTwitterTotal(e.detail.value) } />
-                          </div>
-                          <div className="url">
-                            <div className="label">
-                              <label>URL</label>
-                            </div>
-                            <IonInput type="text" value={ twitterUrl && twitterUrl } onIonChange={ (e:any) => setTwitterUrl(e.detail.value) } />
-                          </div>
-                          
-                        </div>
-                        <div className="social-media-field">
-
-                          <IonIcon color={ youTubeTotal || youTubeUrl ? "primary" : "tertiary" } size="large" icon={ socialMediaIcon("youTube") } />
-                          <div className="total">
-                            <div className="label">
-                              <label>Total</label>
-                            </div>
-                            
-                            <IonInput type="number" value={ youTubeTotal && youTubeTotal  } onIonChange={ (e:any) => setYouTubeTotal(e.detail.value) } />
-                          </div>
-                          <div className="url">
-                            <div className="label">
-                              <label>URL</label>
-                            </div>
-                            <IonInput type="text" value={ youTubeUrl && youTubeUrl } onIonChange={ (e:any) => setYouTubeUrl(e.detail.value) } />
-                          </div>
-                          
-                        </div>
- 
-
-                      </div>
-                      
-                      }
-                
-                
                 </div>
               </div>
 
 
-              <EditorSectionProfile fieldType="IonTextarea" profileId={authState?.user.profile} fieldRef="shortDescription" label={"Short Description"} currentValue={shortDescription} />
-              
+              <EditorSectionProfile autocapitalize='on' fieldType="IonTextarea" profileId={authState?.user.profile} fieldRef="shortDescription" label={"Short Description"} currentValue={shortDescription} />
               
               <div className="editor-section">
 
@@ -554,7 +366,8 @@ const EditProfile: React.FC = () => {
 
                   <div className="editor-section-top-buttons">
 
-                    { profileData.isSuccess && (!showEditAccolades && <div className="editor-section-button" onClick={() => { setShowEditAccolades(true); }}>{ accolades?.length > 0  ? "Edit" : "Add"}</div>) }
+                    { profileData.isSuccess && (!showEditAccolades ? <div className="editor-section-button" onClick={() => { setShowEditAccolades(true); }}>{ accolades?.length > 0  ? "Edit" : "Add"}</div> :
+                    <div className="editor-section-button secondary" onClick={() => {setShowEditAccolades(false); setAccolades(profileData?.data?.accolades) }}>Cancel</div>) }
 
                     { showEditAccolades && <div className="editor-section-button" onClick={() => { saveField("accolades", accolades?.filter(Boolean) ); setShowEditAccolades(false); }}>Save</div> }
    
@@ -563,12 +376,10 @@ const EditProfile: React.FC = () => {
                 </div>
 
                 <div className={"editor-section-bottom " + (location?.label ? "" : "")}>
-                      
-                      { !showEditAccolades && (accolades?.length < 0 ? "Add an Achievement..." : 
+
+                { !showEditAccolades && (accolades?.length < 0 ? "Add an Achievement..." : 
                       
                       accolades?.length > 0 && accolades.map((accolade: string, index: any) => {
-
-                        
 
                           return <div className="accolade" key={index}>
                                   { accolade && accolade }
@@ -576,31 +387,10 @@ const EditProfile: React.FC = () => {
 
                         })
 
-                      )} 
+                      )}  
 
-                      
 
-                      { showEditAccolades && <div className="">
-
-                        <div className="accolade-list">
-
-                          { accolades?.length > 0 && accolades.map((accolade: string, index: any) => {
-
-                           
-
-                            return <div className="accolade-field" key={index}>
-                                    <IonInput placeholder="Your Achievement" value={accolade && accolade} id={"accolade-" + index} onIonChange={ (e:any) => createAccolades(e) } />
-                                    <IonIcon icon={close} onClick={ (e) => { removeAccolade(e); } } />
-                                  </div>
-
-                                })
-
-                          } </div>
-
-                            <IonButton expand="block" size="small" className="button-tertiary" onClick={ () => addAccolade() } >Add Accolade</IonButton>
-
-                      </div>  }
-
+                 { showEditAccolades && <AchievementsEdit achievements={accolades} setAchievements={setAccolades}  /> }
                  
 
                 </div>
