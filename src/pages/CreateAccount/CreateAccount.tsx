@@ -376,7 +376,7 @@ const CreateAccount: React.FC = () => {
                     <div className="login-form">
                       <IonItem className="ion-no-padding">
                         <IonLabel position="stacked">Your Name</IonLabel>
-                        <IonInput id="your-name" placeholder="Your Name" value={yourName} autocomplete="name" required={true} autofocus={true} enterkeyhint="next" type="text" autoCapitalize="words" onIonInput={(e: any) => { setYourName(e.target.value); validateYourName(e.target.value); }} onIonChange={(e: any) => { setYourName(e.detail.value); validateYourName(e.detail.value); }} />
+                        <IonInput id="your-name" placeholder="Your Name" value={yourName} autocomplete="name" required={true} autofocus={true} enterkeyhint="next" type="text" autocapitalize="words" onIonInput={(e: any) => { setYourName(e.target.value); validateYourName(e.target.value); }} onIonChange={(e: any) => { setYourName(e.detail.value); validateYourName(e.detail.value); }} />
                         {errorMessages.yourName && <p className="error-message ion-no-margin"><small>{errorMessages.yourName}</small></p>}
                       </IonItem>
 
@@ -473,7 +473,7 @@ const CreateAccount: React.FC = () => {
                     <div className="login-form">
                       <IonItem className="ion-no-padding">
                         <IonLabel position="stacked">Profile Name</IonLabel>
-                        <IonInput placeholder="Name of Athlete, Team, Venue, Event etc." value={profileName} autofocus={true} enterkeyhint="next" type="text" autoCapitalize="words" onIonChange={(e: any) => setProfileName(e.detail.value)} />
+                        <IonInput placeholder="Name of Athlete, Team, Venue, Event etc." value={profileName} autofocus={true} enterkeyhint="next" type="text" autocapitalize="words" onIonChange={(e: any) => setProfileName(e.detail.value)} />
                       </IonItem>
 
                       <IonItem className="ion-no-padding">
