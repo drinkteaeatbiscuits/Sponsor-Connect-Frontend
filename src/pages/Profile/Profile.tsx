@@ -309,7 +309,7 @@ const Profile: React.FC = () => {
   
                     <div className="other-sponsorship-ideas ion-padding">
                       <p>Have any other sponsorship ideas? <br/>
-                      Please get in touch <a href="/">here.</a></p>
+                      Please get in touch <span onClick={() => setProfileTabNumber(4)}>here.</span></p>
                     </div>
                   </div>
                
@@ -356,6 +356,7 @@ const Profile: React.FC = () => {
                   { authState?.user?.profile === parseInt(profileId.id) && <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/manage-profile-images') } >Add/Edit Photos</IonButton> }
 
                   { profileImages.length > 0 && <div className="profile-images">
+                    
                   { profileImages.map((profileImage: any) => {
 						
                     return <div key={profileImage.id} className="profile-image" onMouseLeave={(e) => {(e.currentTarget.querySelector('.active')  as HTMLElement)?.classList.remove("active")}}>
@@ -365,10 +366,12 @@ const Profile: React.FC = () => {
                               data-fancybox="profile-gallery"
                             >
                             <picture>
-                              <source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + ".webp" } />
-                              <source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + profileImage?.ext } />
+                              <source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile/" +  profileImage?.hash + ".webp" } />
+                              <source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile/" +  profileImage?.hash + profileImage?.ext } />
                               <img className="profile-image-thumb" alt={ "Profile Image " + profileImage.id } src={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + profileImage?.ext } /> 
                             </picture>
+
+                            
                             </a>
                         </div>
                       </div>

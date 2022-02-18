@@ -13,15 +13,11 @@ const useMyProfileImages = () => {
 		  credentials: "include",
 		});
 		
-		const posts = await response.json();
-  
-		
+		const profile = await response.json();
 
-		client.setQueryData("profileImages", posts[0].images);
-
+		client.setQueryData("profileImages", profile.images);
 		
-  
-		return posts[0].images;
+		return profile.images;
 	  }
 	)
   }

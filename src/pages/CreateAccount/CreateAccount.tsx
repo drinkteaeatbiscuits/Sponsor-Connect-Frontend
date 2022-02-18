@@ -222,9 +222,9 @@ const CreateAccount: React.FC = () => {
 
   if (filteredSports.length > 0) {
 
-    showSports = filteredSports.map((data: any) => {
+    showSports = filteredSports.map((data: any, index) => {
       return (
-        <IonItem className="sport" onClick={() => { setYourSport(data); setShowModal(false); }} key={data}>{data}</IonItem>
+        <IonItem className="sport" onClick={() => { setYourSport(data); setShowModal(false); }} key={data + '-' + index}>{data}</IonItem>
       )
     });
 
