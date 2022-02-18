@@ -48,7 +48,6 @@ const Favourites: React.FC = () => {
   const [text, setText] = useState<string>();
 
   const [sendEmailErrors, setSendEmailErrors] = useState<string>("");
-
   const [emailSuccess, setEmailSuccess] = useState<string>("");
 
   const greeting = () => {

@@ -346,7 +346,7 @@ useEffect(
 					<div className="editor-section-bottom">
 
 						{ UploadImageProps.currentImage ? 
-							<div className="current-image">
+							UploadImageProps.showCroppedPreview && <div className="current-image">
 								
 								<img onError={(e) => {let image = e.target as HTMLImageElement; image.src = process.env.REACT_APP_S3_URL + "/images/cover_sm/" +  UploadImageProps.currentImage?.hash + UploadImageProps.currentImage?.ext }} className={ UploadImageProps.circularCrop ? "circle-crop" : "" } alt="current thumbnail" src={  process.env.REACT_APP_S3_URL + "/images/cover_sm/" +  UploadImageProps.currentImage?.hash + UploadImageProps.currentImage?.ext } />
 							
