@@ -3,6 +3,7 @@ import React from "react";
 import { useHistory } from "react-router";
 import { showCurrency } from "../../functions/showCurrency";
 import useOpportunities from "../../hooks/useOpportunities";
+import FavouriteOpportunityButton from "../FavouriteOpportunityButton/FavouriteOpportunityButton";
 
 import Image from '../Image/Image';
 
@@ -28,14 +29,26 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 
 	
 			{ data?.length > 0 && data?.map(( opportunity:any )=>{
-				return <div className="opportunity" key={opportunity.id} onClick={ ()=> history.push("/opportunity/" + opportunity.id) }>
+				return <div className="opportunity" style={{position: "relative"}} key={opportunity.id} onClick={ ()=> history.push("/opportunity/" + opportunity.id) }>
 
 					
 					<div className=" opportunity-details">
 
-							
 						
-							{opportunity.price && <p className="price">{ showCurrency(opportunity.profile) }{opportunity.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>}
+
+							{opportunity.price && <p className="price" style={{flexGrow: 1}}>{ showCurrency(opportunity.profile) }{opportunity.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>}
+							
+							<FavouriteOpportunityButton className="" 
+							style={{
+								position: "absolute",
+								right: '12px',
+								top: '10px',
+								zIndex: 9
+							}} 
+							opportunityId={opportunity.id} />
+					
+							
+
 							
 							{opportunity.title && <p className="title">{opportunity.title}</p> }
 					

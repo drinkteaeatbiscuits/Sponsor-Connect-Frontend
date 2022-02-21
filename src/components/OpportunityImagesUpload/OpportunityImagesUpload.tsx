@@ -96,9 +96,9 @@ const OpportunityImagesUpload: React.FC<OpportunityImagesUploadProps> = (Opportu
 
 						
 							<picture>
-								<source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  image?.hash + ".webp" } />
-								<source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  image?.hash + image?.ext } />
-								<img className="gallery-image-thumb" alt={ "Profile Image " + image.id } src={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  image?.hash + image?.ext } /> 
+								<source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile/" +  image?.hash + ".webp" } />
+								<source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile/" +  image?.hash + image?.ext } />
+								<img className="gallery-image-thumb" alt={ "Profile Image " + image.id } src={ process.env.REACT_APP_S3_URL + "/images/profile/" +  image?.hash + image?.ext } /> 
 							</picture>
 
 							<div className="hovering-overlay"></div>
