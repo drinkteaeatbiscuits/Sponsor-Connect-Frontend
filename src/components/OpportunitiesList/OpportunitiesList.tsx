@@ -1,6 +1,7 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonGrid, IonIcon, IonImg, IonItem, IonList, IonRow, IonSlide, IonSlides } from "@ionic/react";
 import React from "react";
 import { useHistory } from "react-router";
+import getOpportunityStatus from "../../functions/getOpportunityStatus";
 import { showCurrency } from "../../functions/showCurrency";
 import useOpportunities from "../../hooks/useOpportunities";
 import FavouriteOpportunityButton from "../FavouriteOpportunityButton/FavouriteOpportunityButton";
@@ -29,10 +30,12 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 
 	
 			{ data?.length > 0 && data?.map(( opportunity:any )=>{
-				return <div className="opportunity" style={{position: "relative"}} key={opportunity.id} onClick={ ()=> history.push("/opportunity/" + opportunity.id) }>
+				return <div className={"opportunity opportunity-status-" + getOpportunityStatus(opportunity.opportunityStatus, opportunity.expiryDate?.date).toLowerCase() }  style={{position: "relative"}} key={opportunity.id} onClick={ ()=> history.push("/opportunity/" + opportunity.id) }>
 
 					
-					<div className=" opportunity-details">
+					<div className=" opportunity-details " >
+
+						
 
 						
 

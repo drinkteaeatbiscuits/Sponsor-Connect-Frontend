@@ -18,6 +18,7 @@ import OpportunityImagesUpload from '../../components/OpportunityImagesUpload/Op
 import EditorSection from '../../components/EditorSection/EditorSection';
 
 import { Calendar } from 'react-date-range';
+import getOpportunityStatus from '../../functions/getOpportunityStatus';
 
 
 export interface props { }
@@ -126,9 +127,7 @@ const EditOpportunity: React.FC = () => {
                     
                     { !opportunityStatus || opportunityStatus === "Draft" && ( new Date() < new Date(date) ) && <div className="editor-section-button" onClick={() => { saveField( {opportunityStatus: "Active" }); }}>Publish</div> }
                    
-
                     {!opportunityStatus && !date && <div className="editor-section-button" onClick={() => { saveField( {opportunityStatus: "Active" }); }}>Publish</div> }
-
 
                     { opportunityStatus === "Active" && !date && <div className="editor-section-button" onClick={() => { saveField( {opportunityStatus: "Draft" }); }}>Set to Draft</div> }
                     
@@ -147,9 +146,7 @@ const EditOpportunity: React.FC = () => {
 
                   
 
-                    { opportunityStatus === "Draft" && new Date() < new Date(date) && "Draft" }
-                    
-                    {/* { opportunityStatus === "Active" && new Date() > new Date(date) && "Active" } */}
+                    {/* { opportunityStatus === "Draft" && new Date() < new Date(date) && "Draft" }
 
                     { opportunityStatus === "Active" && new Date() < new Date(date) && "Active" }
                     
@@ -161,7 +158,9 @@ const EditOpportunity: React.FC = () => {
                     
                     { opportunityStatus === "Draft" && !date && "Draft" }
 
-                    { !opportunityStatus && new Date() < new Date(date) && "Draft" }
+                    { !opportunityStatus && new Date() < new Date(date) && "Draft" } */}
+
+                    { getOpportunityStatus(opportunityStatus, date) }
 
                 </div>	
 
