@@ -88,6 +88,30 @@
 		flex-grow: 2;
 		padding: 16px 16px 16px 18px;
 	}
+	&.opportunity-status-draft {
+		border-left: #b5b5b5 8px solid;
+		.price {
+			color: #b5b5b5;
+		}
+		.title {
+			color: #8a8a8a;
+		}
+		.favourite-button {
+			color: #8a8a8a;
+		}
+	}
+	&.opportunity-status-expired {
+		border-left: #cc7878 8px solid;
+		.price {
+			color: #b5b5b5;
+		}
+		.title {
+			color: #8a8a8a;
+		}
+		.favourite-button {
+			color: #8a8a8a;
+		}
+	}
 }
 
 .other-sponsorship-ideas {
