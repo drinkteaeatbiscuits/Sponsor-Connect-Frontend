@@ -23,9 +23,9 @@ const ImageGallery: React.FC<ImageGalleryProps> = (ImageGalleryProps) => {
 				data-fancybox={galleryId ? galleryId : "image-gallery"}
 				>
 					<picture>
-						<source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  profileImage?.hash + ".webp" } />
-						<source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  profileImage?.hash + profileImage?.ext } />
-						<img className="image-thumb" alt={ "Image " + profileImage.id } src={ process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" +  profileImage?.hash + profileImage?.ext } /> 
+						<source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile/" +  profileImage?.hash + ".webp" } />
+						<source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile/" +  profileImage?.hash + profileImage?.ext } />
+						<img className="image-thumb" alt={ "Image " + profileImage.id } src={ process.env.REACT_APP_S3_URL + "/images/profile/" +  profileImage?.hash + profileImage?.ext } /> 
 					</picture>
 				</a>
 			</div>
