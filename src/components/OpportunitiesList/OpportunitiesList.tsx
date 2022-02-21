@@ -1,6 +1,7 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonGrid, IonIcon, IonImg, IonItem, IonList, IonRow, IonSlide, IonSlides } from "@ionic/react";
 import React from "react";
 import { useHistory } from "react-router";
+import { showCurrency } from "../../functions/showCurrency";
 import useOpportunities from "../../hooks/useOpportunities";
 
 import Image from '../Image/Image';
@@ -34,7 +35,7 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 
 							
 						
-							{opportunity.price && <p className="price">£{opportunity.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>}
+							{opportunity.price && <p className="price">{ showCurrency(opportunity.profile) }{opportunity.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>}
 							
 							{opportunity.title && <p className="title">{opportunity.title}</p> }
 					
@@ -53,9 +54,9 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 							{/* {console.log(opportunity.images)} */}
 							{/* <img className="opportunity-image" src={  process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" + p.images?.hash + ".jpg" } alt={p.title} /> */}
 							<picture>
-								<source type="image/webp" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  opportunity.images?.hash + ".webp" } />
-								<source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  opportunity.images?.hash + opportunity.images?.ext } />
-								<img className="opportunity-image" src={  process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" + opportunity.images?.hash + opportunity.images?.ext } alt={opportunity.title} /> 
+								<source type="image/webp" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/profile/" +  opportunity.images?.hash + ".webp" } />
+								<source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/profile/" +  opportunity.images?.hash + opportunity.images?.ext } />
+								<img className="opportunity-image" src={  process.env.REACT_APP_S3_URL + "/images/profile/" + opportunity.images?.hash + opportunity.images?.ext } alt={opportunity.title} /> 
 							</picture> 
 						</div>
 		 			 }

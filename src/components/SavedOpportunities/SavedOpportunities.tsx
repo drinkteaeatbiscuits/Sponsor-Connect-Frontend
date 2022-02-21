@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { ArrowFunction } from "typescript";
 import { AuthContext } from "../../App";
+import { showCurrency } from "../../functions/showCurrency";
 import useMultipleOpportunities from "../../hooks/useMultipleOpportunities";
 import useMultipleProfiles from "../../hooks/useMultipleProfiles";
 import FavouriteProfileButton from "../FavouriteProfileButton/FavouriteProfileButton";
@@ -27,7 +28,8 @@ const SavedOpportunities: React.FC<props> = (props) => {
 
 	const {isLoading, data: opportunityData, isSuccess, error} = useMultipleOpportunities( favouriteOpportunities, "favourite-opportunities" );
 
-	
+	// console.log(opportunityData)
+
 	const removeOpportunity = async (opportunityId) => {
 
 		const favouriteOpportunityResp = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/favourite-opportunity", {
@@ -83,8 +85,12 @@ const SavedOpportunities: React.FC<props> = (props) => {
 
 
 								<div className="" style={{display: "flex"}}>
+
+									{console.log(favouriteOpportunityData)}
+
+									
 								
-									{favouriteOpportunityData?.price ? <p className="price" style={{flexGrow: 1}}>£{favouriteOpportunityData?.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p> : <p className="price" style={{flexGrow: 1}}></p>}
+									{favouriteOpportunityData?.price ? <p className="price" style={{flexGrow: 1}}>{ showCurrency(favouriteOpportunityData.profile) }{favouriteOpportunityData?.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p> : <p className="price" style={{flexGrow: 1}}></p>}
 								
 									<div className="profile-details" 
 							
