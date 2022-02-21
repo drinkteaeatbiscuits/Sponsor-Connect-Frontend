@@ -19,6 +19,8 @@ const useEditOpportunity = ( opportunityId: any ) => {
           slug?: string;
           published_at?: any;
           opportunityDescription?: any;
+          expiryDate?: Object;
+          opportunityStatus?: string;
         
         }) => {
 

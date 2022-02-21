@@ -13,14 +13,7 @@ const FavouriteProfileButton: React.FC<FavouriteProfileProps> = ( FavouriteProfi
 
 	const { profileId, className } = FavouriteProfileProps;
 
-	// console.log(profileId);
-	const client = useQueryClient();
-
 	const { state: authState, dispatch } = React.useContext(AuthContext);
-
-	// console.log(authState.user.favouriteProfiles);
-
-
 	const [isFavourite, setIsFavourite] = useState(false);
 
 	useEffect(() => {
@@ -39,8 +32,6 @@ const FavouriteProfileButton: React.FC<FavouriteProfileProps> = ( FavouriteProfi
 		
 		const favouriteProfileInfo = await favouriteProfileResp.json();
 
-		// console.log(favouriteProfileInfo);
-
 		favouriteProfileInfo?.favouriteProfiles?.length > 0 && favouriteProfileInfo.favouriteProfiles.includes(profileId) ? setIsFavourite(true) : setIsFavourite(false);
 
 		dispatch && dispatch({
@@ -52,7 +43,6 @@ const FavouriteProfileButton: React.FC<FavouriteProfileProps> = ( FavouriteProfi
 
 	}
 
-	
 	return <div className={className + " favourite-button"} onClick={(e) => { e.stopPropagation(); setFavourite()}}>
 
 		<IonIcon className="" icon={ isFavourite ? star : starOutline}></IonIcon>
