@@ -3,6 +3,7 @@ import { logoFacebook, logoInstagram, logoTwitter, logoYoutube, location, barCha
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { AuthContext } from "../../App";
+import { showCurrency } from "../../functions/showCurrency";
 import useDeleteOpportunity from "../../hooks/useDeleteOpportunity";
 import useOpportunityValues from "../../hooks/useOpportunityValues";
 import ImageGallery from "../ImageGallery/ImageGallery";
@@ -98,7 +99,12 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 			{opportunityData?.images &&
 
+			
+
 				<picture>
+					
+					{/* {console.log(opportunityData?.images.url)} */}
+
 					<source type="image/webp" media="(max-width: 576px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_xs/" + opportunityData?.images?.hash + ".webp"} />
 					<source type="image/webp" media="(max-width: 768px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_sm/" + opportunityData?.images?.hash + ".webp"} />
 					<source type="image/webp" media="(max-width: 992px)" srcSet={process.env.REACT_APP_S3_URL + "/images/cover_md/" + opportunityData?.images?.hash + ".webp"} />
@@ -122,7 +128,7 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 				<div className="opportunity-content-top">
 
-					{opportunityData?.price && <div className="price">£{opportunityData?.price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>}
+					{opportunityData?.price && <div className="price">{ showCurrency(opportunityData.profile) }{opportunityData?.price?.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>}
 
 					<div className="opportunity-call-to-actions">
 
@@ -135,7 +141,7 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 							<IonIcon className=""  icon={shareSocialOutline}></IonIcon>
 						</div>
 						<div className="contact">
-							<IonButton className="contact-button" size="small" >Contact Now</IonButton>
+							<IonButton className="contact-button" size="small">Contact Now</IonButton>
 						</div>
 					</div>
 				</div>

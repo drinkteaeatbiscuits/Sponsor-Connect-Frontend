@@ -1,6 +1,7 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonGrid, IonIcon, IonImg, IonItem, IonList, IonRow, IonSlide, IonSlides } from "@ionic/react";
 import React from "react";
 import { useHistory } from "react-router";
+import { showCurrency } from "../../functions/showCurrency";
 import useOpportunities from "../../hooks/useOpportunities";
 
 import Image from '../Image/Image';
@@ -34,7 +35,7 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 
 							
 						
-							{opportunity.price && <p className="price">£{opportunity.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>}
+							{opportunity.price && <p className="price">{ showCurrency(opportunity.profile) }{opportunity.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>}
 							
 							{opportunity.title && <p className="title">{opportunity.title}</p> }
 					
