@@ -30,7 +30,7 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 
 	return <div className="opportunities">
 
-			{/* {data.thisdoesntexsist} */}
+			{data.thisdoesntexsist}
 
 	
 			{ data?.length > 0 && data?.map(( opportunity:any )=>{

@@ -136,10 +136,10 @@ const EditProfile: React.FC = () => {
       
       setFullDescriptionText( profileData.data?.fullDescriptionText && convertFromRaw( profileData.data?.fullDescriptionText ) );
       
-      accolades.length === 0 && setAccolades(profileData.data?.accolades);
+      accolades?.length === 0 && setAccolades(profileData?.data?.accolades);
       
-      setCurrentProfilePicture(profileData.data?.profilePicture);
-      setCoverImage(profileData.data?.coverImage);
+      setCurrentProfilePicture(profileData?.data?.profilePicture);
+      setCoverImage(profileData?.data?.coverImage);
 
 
     }
