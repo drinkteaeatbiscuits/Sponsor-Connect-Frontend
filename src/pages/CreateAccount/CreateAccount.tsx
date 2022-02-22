@@ -1,6 +1,5 @@
 import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonRow, IonSearchbar, IonTitle, IonToolbar, useIonAlert, useIonViewDidEnter } from '@ionic/react';
-import { useEffect, useState } from 'react';
-import useAddImagePost from '../../hooks/useAddImagePost';
+import { useState } from 'react';
 import PasswordStrengthBar from 'react-password-strength-bar';
 
 
@@ -30,11 +29,6 @@ import Pound from './images/Pound';
 const CreateAccount: React.FC = () => {
 
   const history = useHistory();
-  // const [dtebText, setDTEBText] = useState("");
-  // const {isLoading, error, mutateAsync: addPhotoMutation} = useAddImagePost();
-
-  // console.log(error);
-
   const total_steps = 3;
 
   const [stepNumber, setStepNumber] = useState(1);
@@ -53,11 +47,8 @@ const CreateAccount: React.FC = () => {
   const [profileName, setProfileName] = useState<string>("");
   
   const [selectedCurrency, setSelectedCurrency] = useState<string>("GBP");
-
   const [searchText, setSearchText] = useState<string>("");
-
   const [yourSport, setYourSport] = useState<string>("");
-
   const [showModal, setShowModal] = useState<boolean>(false);
 
 
@@ -75,10 +66,8 @@ const CreateAccount: React.FC = () => {
   const [filteredSports, setFilteredSports] = useState<any>(sports);
 
 
-  // console.log(location);
 
   const doCreateAccount = async () => {
-    // console.log(username, password, yourName);
 
     const createAccountResp = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/auth/local/register", {
       headers: {

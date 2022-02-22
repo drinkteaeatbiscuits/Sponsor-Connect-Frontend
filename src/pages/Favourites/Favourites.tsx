@@ -83,7 +83,7 @@ const Favourites: React.FC = () => {
         replyTo: authState?.user?.email,
         subject: 'Sponsor Connect Opportunities from ' + authState?.user?.yourName,
         text: text,
-        name: authState?.user?.yourName, 
+        name: authState?.user?.yourName,
         opportunities: selectedOpportunities
       })
     }).then((response) => {
@@ -288,73 +288,75 @@ const Favourites: React.FC = () => {
               borderRadius: '5px'
             }}>
 
-           {emailSuccess ? 
-            
-            <div className="" style={{
-              textAlign: 'center',
-              padding: '36px 16px 24px'
+            <ErrorBoundary>
 
-            }}>
-              <IonIcon style={{fontSize: "60px"}} icon={paperPlaneOutline} color="primary" />
-             <p style={{fontWeight: 600, fontSize: '2em', color: 'var(--ion-color-primary)', margin: '16px 0'}}>{ emailSuccess }</p>
-             <p style={{fontSize:'0.95em', cursor: 'pointer', fontWeight: 500, color: 'var(--ion-color-tertiary-shade)'}} onClick={() => {closeShareOpportunitiesModal()}}>Close Window</p>
-            </div>
+              {emailSuccess ?
 
-           : <div className="">
-              <p style={{ fontWeight: 600, fontSize: '2em', margin: '0.25em 0 1em' }}>Share Selected Opportunities</p>
-              <p>This will send an email with the selected opportunities.</p>
+                <div className="" style={{
+                  textAlign: 'center',
+                  padding: '36px 16px 24px'
 
-              <label style={{ fontSize: '0.9em', margin: '0 0 5px', display: 'block' }}>Email Address(es)</label>
-              <ReactMultiEmail
-                placeholder="Please enter the email address(es) you wish to send to"
-                emails={emails}
-                onChange={(_emails: string[]) => {
-                  setShareOpportunitiesErrors("");
-                  setEmails(_emails);
-                }}
-                validateEmail={email => {
-                  return isEmail(email); // return boolean
-                }}
-                getLabel={(
-                  email: string,
-                  index: number,
-                  removeEmail: (index: number) => void,
-                ) => {
-                  return (
-                    <div data-tag key={index}>
-                      {email}
-                      <span data-tag-handle onClick={() => removeEmail(index)}>
-                        ×
-                      </span>
-                    </div>
-                  );
-                }}
-              />
-              {shareOpportunitiesErrors && <div className="error-messages">
-                <p style={{ fontSize: '0.9em', fontWeight: 500, color: 'var(--ion-color-danger)', margin: '0.25em 0 1em' }}>{shareOpportunitiesErrors}</p>
-              </div>}
-
-              <IonTextarea autocapitalize="on" style={{ border: '1px solid rgba(34, 36, 38, 0.15)', borderRadius: '3px' }} className="share-note" placeholder="Enter more information here..." value={text} onIonChange={e => setText(e.detail.value!)} />
-
-
-
-              <div className="buttons" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '16px 0 0' }}>
-
-                {sendEmailErrors && <div className="error-messages">
-                  <p style={{ fontSize: '0.9em', fontWeight: 500, color: 'var(--ion-color-danger)', margin: '0.25em 0 1em' }}>{sendEmailErrors}</p>
-                </div>}
-
-                <div className="" style={{ padding: '16px', cursor: 'pointer' }} onClick={() => setShareOpportunitiesModalOpen(false)}>
-                  <span style={{ padding: '3px 0 0', color: 'var(--ion-color-tertiary)' }}>Cancel</span>
+                }}>
+                  <IonIcon style={{ fontSize: "60px" }} icon={paperPlaneOutline} color="primary" />
+                  <p style={{ fontWeight: 600, fontSize: '2em', color: 'var(--ion-color-primary)', margin: '16px 0' }}>{emailSuccess}</p>
+                  <p style={{ fontSize: '0.95em', cursor: 'pointer', fontWeight: 500, color: 'var(--ion-color-tertiary-shade)' }} onClick={() => { closeShareOpportunitiesModal() }}>Close Window</p>
                 </div>
 
+                : <div className="">
+                  <p style={{ fontWeight: 600, fontSize: '2em', margin: '0.25em 0 1em' }}>Share Selected Opportunities</p>
+                  <p>This will send an email with the selected opportunities.</p>
+
+                  <label style={{ fontSize: '0.9em', margin: '0 0 5px', display: 'block' }}>Email Address(es)</label>
+                  <ReactMultiEmail
+                    placeholder="Please enter the email address(es) you wish to send to"
+                    emails={emails}
+                    onChange={(_emails: string[]) => {
+                      setShareOpportunitiesErrors("");
+                      setEmails(_emails);
+                    }}
+                    validateEmail={email => {
+                      return isEmail(email); // return boolean
+                    }}
+                    getLabel={(
+                      email: string,
+                      index: number,
+                      removeEmail: (index: number) => void,
+                    ) => {
+                      return (
+                        <div data-tag key={index}>
+                          {email}
+                          <span data-tag-handle onClick={() => removeEmail(index)}>
+                            ×
+                          </span>
+                        </div>
+                      );
+                    }}
+                  />
+                  {shareOpportunitiesErrors && <div className="error-messages">
+                    <p style={{ fontSize: '0.9em', fontWeight: 500, color: 'var(--ion-color-danger)', margin: '0.25em 0 1em' }}>{shareOpportunitiesErrors}</p>
+                  </div>}
+
+                  <IonTextarea autocapitalize="on" style={{ border: '1px solid rgba(34, 36, 38, 0.15)', borderRadius: '3px' }} className="share-note" placeholder="Enter more information here..." value={text} onIonChange={e => setText(e.detail.value!)} />
 
 
-                <IonButton style={{ margin: '0' }} size="small" color="primary" onClick={() => sendSharedOpportunities()}>Share Opportunities</IonButton>
-              </div>
 
-            </div> }
+                  <div className="buttons" style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '16px 0 0' }}>
 
+                    {sendEmailErrors && <div className="error-messages">
+                      <p style={{ fontSize: '0.9em', fontWeight: 500, color: 'var(--ion-color-danger)', margin: '0.25em 0 1em' }}>{sendEmailErrors}</p>
+                    </div>}
+
+                    <div className="" style={{ padding: '16px', cursor: 'pointer' }} onClick={() => setShareOpportunitiesModalOpen(false)}>
+                      <span style={{ padding: '3px 0 0', color: 'var(--ion-color-tertiary)' }}>Cancel</span>
+                    </div>
+
+
+
+                    <IonButton style={{ margin: '0' }} size="small" color="primary" onClick={() => sendSharedOpportunities()}>Share Opportunities</IonButton>
+                  </div>
+
+                </div>}
+            </ErrorBoundary>
           </div>
         </div>}
 

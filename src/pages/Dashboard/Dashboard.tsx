@@ -22,6 +22,7 @@ import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesL
 import useNewsFeed from '../../hooks/useNewsFeed';
 import { NewsFeed } from '../../components/NewsFeed/NewsFeed';
 import { env } from 'process';
+import OpportunitiesStatusCounts from '../../components/OpportunitiesStatusCounts/OpportunitiesStatusCounts';
 
 
 export interface props {}
@@ -103,7 +104,7 @@ const Dashboard: React.FC = () => {
             </div>
 
 
-            { isSuccessProfile && <ProfileCard profileData={dataProfile} className="narrow" /> }
+            { isSuccessProfile && <ErrorBoundary><ProfileCard profileData={dataProfile} className="narrow" /></ErrorBoundary> }
 
             <div className="dashboard-actions">
               <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
@@ -157,6 +158,7 @@ const Dashboard: React.FC = () => {
                   </div>
                 </a>
 
+
                 {/* <LogoutButton className="logout-button button-tertiary ion-margin-bottom" expand="block" size="small" /> */}
 
               </div>
@@ -191,26 +193,10 @@ const Dashboard: React.FC = () => {
 
             <div className="" style={{order: 2, borderRadius: "5px 5px 0 0",
                                       backgroundColor: "#fff", margin: "12px 0 0", padding: "12px"}}>
-            <p className="dashboard-section-title">Your Opportunities</p>
-
-            <div className="opportunity-counts">
-              <div className="active">
-                <h2>10</h2>
-                <p>Active</p>
-              </div>
-              <div className="drafts">
-                <h2>03</h2>
-                <p>Drafts</p>
-              </div>
-              <div className="expired">
-                <h2>05</h2>
-                <p>Expired</p>
-              </div>
-              <div className="successful">
-                <h2>01</h2>
-                <p>Successful</p>
-              </div>
-            </div>
+              <p className="dashboard-section-title">Your Opportunities</p>
+              <ErrorBoundary> 
+                <OpportunitiesStatusCounts />
+              </ErrorBoundary>
             </div>
             <div className="user-opportunities">
 
@@ -252,30 +238,10 @@ const Dashboard: React.FC = () => {
                   borderRadius: "0 0 5px 5px",
                   overflow: "scroll"
                   }}>
-                    <NewsFeed articleCount={6} style={{}} />
-
+                    <ErrorBoundary> 
+                      <NewsFeed articleCount={6} style={{}} />
+                    </ErrorBoundary>
                   </div>
-
-                {/* <div className="" style={{
-                  height: "100%", 
-                  flexGrow: 1, 
-                  display: "flex", 
-                  flexDirection: "column", 
-                  backgroundColor: "#fff", 
-                  borderRadius: "5px"
-                  }}>
-                  
-                 
-                    <div style={{flexShrink: 1, overflow: "scroll"}}>
-                      
-                    </div>
-                    
-                 
-                 
-                  
-                </div> */}
-            
-
 
           </div>
         
