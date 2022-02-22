@@ -123,24 +123,24 @@ const EditProfile: React.FC = () => {
 
     if (profileData.status === "success" ) {
 
-      setProfileName(profileData.data?.profileName);
+      setProfileName(profileData?.data?.profileName);
 
-      !yourSport && setYourSport(profileData.data?.sport);
+      !yourSport && setYourSport(profileData?.data?.sport);
 
-      !location && setLocation(profileData.data?.location);
-      setPriceRange(profileData.data?.priceRange);
-      setWebsite(profileData.data?.website);
+      !location && setLocation(profileData?.data?.location);
+      setPriceRange(profileData?.data?.priceRange);
+      setWebsite(profileData?.data?.website);
 
-      setShortDescription(profileData.data?.shortDescription);
-      setFullDescription(profileData.data?.description);
+      setShortDescription(profileData?.data?.shortDescription);
+      setFullDescription(profileData?.data?.description);
       
-      setFullDescriptionText( profileData.data?.fullDescriptionText && convertFromRaw( profileData.data?.fullDescriptionText ) );
+      setFullDescriptionText( profileData?.data?.fullDescriptionText && convertFromRaw( profileData.data?.fullDescriptionText ) );
       
       accolades?.length === 0 && setAccolades(profileData?.data?.accolades);
       
       setCurrentProfilePicture(profileData?.data?.profilePicture);
       setCoverImage(profileData?.data?.coverImage);
-
+ 
 
     }
 
