@@ -66,10 +66,10 @@ const SavedOpportunities: React.FC<props> = (props) => {
 		setSelectedOpportunities(newArr);
 		
 	}
-
+	
 	
 	return <div className="opportunities-saved-list opportunities" style={{padding: "0 16px 0 12px", overflow: "scroll"}}>	
-	
+
 
 
 		{ favouriteOpportunities && favouriteOpportunities.length > 0 && favouriteOpportunities.slice(0).reverse().map((favouriteOpportunity, index) => {
@@ -90,9 +90,6 @@ const SavedOpportunities: React.FC<props> = (props) => {
 
 								<div className="" style={{display: "flex"}}>
 
-
-									
-								
 									{favouriteOpportunityData?.price ? <p className="price" style={{flexGrow: 1}}>{ showCurrency(favouriteOpportunityData.profile) }{favouriteOpportunityData?.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p> : <p className="price" style={{flexGrow: 1}}></p>}
 								
 									<div className="profile-details" 

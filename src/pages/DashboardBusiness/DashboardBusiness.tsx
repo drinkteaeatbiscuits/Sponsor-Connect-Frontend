@@ -65,7 +65,7 @@ const DashboardBusiness: React.FC = () => {
 
         <div className="dashboard-content-column-1">
 
-        <ErrorBoundary><Sidebar className="dashboard-search" isDashboard allProfileData={data} /></ErrorBoundary>
+          <ErrorBoundary><Sidebar className="dashboard-search" isDashboard allProfileData={data} /></ErrorBoundary>
           
           <div className="dashboard-search-profiles-mobile" 
           style={{borderRadius: "5px", padding: "12px 12px 0", backgroundColor: "#fff"}}>
