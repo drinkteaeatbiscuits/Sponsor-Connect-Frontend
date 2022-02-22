@@ -1,23 +1,19 @@
 import { IonIcon } from "@ionic/react";
 import { star, starOutline } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
+import { useQueryClient } from "react-query";
 import { AuthContext } from "../../App";
 
 interface FavouriteProfileProps {
-	profileId: any
+	profileId: any,
+	className?: string
 }
  
 const FavouriteProfileButton: React.FC<FavouriteProfileProps> = ( FavouriteProfileProps ) => {
 
-	const { profileId } = FavouriteProfileProps;
+	const { profileId, className } = FavouriteProfileProps;
 
-	// console.log(profileId);
-
-	const { state: authState } = React.useContext(AuthContext);
-
-	// console.log(authState.user.favouriteProfiles);
-
-
+	const { state: authState, dispatch } = React.useContext(AuthContext);
 	const [isFavourite, setIsFavourite] = useState(false);
 
 	useEffect(() => {
@@ -36,16 +32,18 @@ const FavouriteProfileButton: React.FC<FavouriteProfileProps> = ( FavouriteProfi
 		
 		const favouriteProfileInfo = await favouriteProfileResp.json();
 
-		// console.log(favouriteProfileInfo);
-
 		favouriteProfileInfo?.favouriteProfiles?.length > 0 && favouriteProfileInfo.favouriteProfiles.includes(profileId) ? setIsFavourite(true) : setIsFavourite(false);
+
+		dispatch && dispatch({
+			type: "setFavouriteProfiles",
+			payload: favouriteProfileInfo
+		  });
 
 		return favouriteProfileInfo?.statusCode ? false : favouriteProfileInfo;  
 
 	}
 
-	
-	return <div className="favourite-button" onClick={(e) => { e.stopPropagation(); setFavourite()}}>
+	return <div className={className + " favourite-button"} onClick={(e) => { e.stopPropagation(); setFavourite()}}>
 
 		<IonIcon className="" icon={ isFavourite ? star : starOutline}></IonIcon>
 

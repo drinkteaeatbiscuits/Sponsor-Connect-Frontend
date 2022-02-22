@@ -10,6 +10,7 @@ import useProfile from '../../hooks/useProfile';
 import TabBar from '../../components/TabBar';
 import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
 import { stateToHTML } from "draft-js-export-html";
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 // import { stateToMarkdown } from "draft-js-export-markdown";
 
 import { Fancybox } from "@fancyapps/ui"; 
@@ -38,10 +39,12 @@ const Profile: React.FC = () => {
 
   const profileId = useParams<ParamTypes>();
 	const history = useHistory();
-  const { state: authState } = React.useContext(AuthContext);
+  const { state: authState, dispatch } = React.useContext(AuthContext);
   const [showFullDescription, setShowFullDescription] = useState<boolean>(false) 
   const [fullDescriptionText, setFullDescriptionText] = useState<any>(""); 
   const {isLoading, data, error, isSuccess} = useProfile( profileId.id );
+
+  const [updatingViewedProfiles, setUpdatingViewedProfiles] = useState(false);
 
   const [profileImages, setProfileImages] = useState([]);
 
@@ -49,7 +52,11 @@ const Profile: React.FC = () => {
 
   const [opportunityData, setOpportunityData] = useState();
 
+  const [latestUpdateDate, setLatestUpdateDate] = useState("");
+
   error && console.log(error);
+
+  const viewedProfiles = authState?.user?.viewedProfiles;
 
   useEffect(() => {
 
@@ -58,13 +65,91 @@ const Profile: React.FC = () => {
     isSuccess && setProfileImages( data?.images );
 
     thelocation && thelocation?.state?.tab === "contact" ? setProfileTabNumber(4) : setProfileTabNumber(1);
+
+    isSuccess && latestUpdateDate.length === 0 && profileLastUpdated();
+
+    !updatingViewedProfiles && authState?.user && viewedProfile();
     
-  }, [data?.fullDescriptionText, isSuccess, thelocation])
+  }, [data?.fullDescriptionText, isSuccess, thelocation, updatingViewedProfiles, viewedProfiles, profileId, latestUpdateDate ]);
 
 
   Fancybox.bind("[data-fancybox]", {
     // Your options go here
   });
+
+  const profileLastUpdated = () => {
+
+    let lastUpdatedDate = "";
+
+    lastUpdatedDate = data.updated_at;
+
+    for (let i = 0; i < data.opportunities.length; i++) {
+
+      if(new Date(data.opportunities[i].updated_at) > new Date(lastUpdatedDate)  ) {
+
+        lastUpdatedDate = data.opportunities[i].updated_at;
+
+      }
+
+    }
+    setLatestUpdateDate(lastUpdatedDate);
+  }
+
+
+
+  const viewedProfile = async () => {
+
+    setUpdatingViewedProfiles(true);
+
+    // Get Previously Viewed Date
+    const previouslyViewed = viewedProfiles ? viewedProfiles?.filter(e => e.profileId === profileId.id) : null;
+
+    // Has Latest Profile Update Date Loaded
+    if(latestUpdateDate.length > 0 ){      
+
+
+      // console.log(previouslyViewed[0]?.date);
+      // console.log(latestUpdateDate);
+      // console.log(new Date(previouslyViewed[0]?.date) < new Date(latestUpdateDate));
+
+      // Has Viewed Profiles Loaded
+      // Has Profile Been Previously Viewed
+      // Is the previously viewed date older than the latest update date
+      if ( viewedProfiles && previouslyViewed?.length > 0 
+        && (new Date(previouslyViewed[0]?.date) > new Date(latestUpdateDate) === true ) ) {
+        
+        setUpdatingViewedProfiles(false);
+
+        return
+
+      } else {
+
+        const viewedProfilesResp = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/profile-viewed", {
+          method: "POST",
+          credentials: "include",
+          body: JSON.stringify({
+            profileId: profileId
+          })
+        });
+        
+        const viewedProfileInfo = await viewedProfilesResp.json();
+    
+        dispatch && await dispatch({
+          type: "viewedProfile",
+          payload: viewedProfileInfo
+          });
+
+        setUpdatingViewedProfiles(false);
+
+        return viewedProfileInfo?.statusCode ? false : viewedProfileInfo; 
+
+      }
+      
+    }
+
+      setUpdatingViewedProfiles(false);
+    
+  }
 
 
   return (
@@ -87,10 +172,7 @@ const Profile: React.FC = () => {
 
          <div className="profile-header">
 
-          
-          
-          { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.coverImage && 
-         
+          { isLoading ? <IonSkeletonText animated style={{ width: '60%', margin: '20px  auto' }} /> : data?.coverImage &&          
 
           <picture>
             <source type="image/webp" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/cover_xs/" +  data?.coverImage?.hash + ".webp" } />
@@ -199,17 +281,6 @@ const Profile: React.FC = () => {
 
           </div>
 
-
-          {/* { isLoading ? <IonSkeletonText animated style={{ width: '90%', margin: '10px  auto' }} /> : data?.images?.length > 0 && 
-
-            <div className="profile-images ion-padding-top  ion-padding-bottom images ion-text-center">
-             
-              { data?.images?.length > 1 && <ImageSlider images={data?.images}/> }
-              { data?.images?.length === 1 && <img alt={ "Profile Image " + data?.images.id } src={ data?.images?.url } /> }
-              
-            </div>
-
-          }  */}
           
           </div>
 
@@ -228,29 +299,21 @@ const Profile: React.FC = () => {
                 <div className="profile-tab profile-opportunities">
                     <h2 className="ion-color-dark line-height-12 tab-title">Sponsorship Opportunities</h2>
           
-                    
-                    <OpportunitiesList profileId={ profileId.id } />
-
+                    <ErrorBoundary> 
+                      <OpportunitiesList profileId={ profileId.id } />
+                    </ErrorBoundary> 
                  
-
 
                     <div className="other-sponsorship-ideas ion-padding">
                       <p>Have any other sponsorship ideas? <br/>
-                      Please get in touch <a href="/">here.</a></p>
+                      Please get in touch <span onClick={() => setProfileTabNumber(4)}>here.</span></p>
                     </div>
                   </div>
                
 
-                
-
-
                 <div className="profile-tab profile-description">
-
                   
-
-                    { authState?.user.profile === parseInt(profileId.id) && <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/edit-profile-description') } >Edit Description</IonButton> }
-
-                    
+                    { authState?.user?.profile === parseInt(profileId.id) && <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/edit-profile-description') } >Edit Description</IonButton> }
 
                     {data?.informationAboutYou && <div className="profile-description-section">
                     <p className="ion-color-dark" style={{paddingLeft: "16px", fontWeight: 700, fontSize: "1.3em"}}>About</p>
@@ -280,9 +343,10 @@ const Profile: React.FC = () => {
 
               <div className="profile-tab photos">
 
-                  { authState?.user.profile === parseInt(profileId.id) && <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/manage-profile-images') } >Add/Edit Photos</IonButton> }
+                  { authState?.user?.profile === parseInt(profileId.id) && <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/manage-profile-images') } >Add/Edit Photos</IonButton> }
 
                   { profileImages.length > 0 && <div className="profile-images">
+                    
                   { profileImages.map((profileImage: any) => {
 						
                     return <div key={profileImage.id} className="profile-image" onMouseLeave={(e) => {(e.currentTarget.querySelector('.active')  as HTMLElement)?.classList.remove("active")}}>
@@ -292,10 +356,12 @@ const Profile: React.FC = () => {
                               data-fancybox="profile-gallery"
                             >
                             <picture>
-                              <source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + ".webp" } />
-                              <source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + profileImage?.ext } />
+                              <source type="image/webp" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile/" +  profileImage?.hash + ".webp" } />
+                              <source type="image/jpeg" srcSet={ process.env.REACT_APP_S3_URL + "/images/profile/" +  profileImage?.hash + profileImage?.ext } />
                               <img className="profile-image-thumb" alt={ "Profile Image " + profileImage.id } src={ process.env.REACT_APP_S3_URL + "/images/profile_image_thumbnail/" +  profileImage?.hash + profileImage?.ext } /> 
                             </picture>
+
+                            
                             </a>
                         </div>
                       </div>

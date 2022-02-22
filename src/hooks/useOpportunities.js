@@ -17,8 +17,13 @@ const useOpportunities = ( profileId ) => {
         const opportunities = await opportunitiesResponse.json();
   
         opportunities.forEach((p:any) => {
-          client.setQueryData(["opportunities-" + profileId, p.id], p);
+          client.setQueryData(["opportunity-" + p.id], p);
         });
+
+        client.setQueryData(["opportunities-" + profileId], opportunities);
+
+        // client.invalidateQueries("opportunity");
+        // client.invalidateQueries("opportunities");
   
         return opportunities;
   

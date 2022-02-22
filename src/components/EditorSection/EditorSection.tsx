@@ -90,7 +90,7 @@ const EditorSection: React.FC<EditorSectionProps> = (EditorSectionProps) => {
 		
 				{ fieldType !== 'TextEditor' && !showEdit ? value && value : 
 				 fieldType !== 'TextEditor' && <IonInput autocomplete="off" 
-					autocapitalize="on" 
+				 autoCapitalize="on" 
 					type={fieldType ? fieldType : "text"} 
 					value={ value } 
 					onIonChange={ (e:any) => {

@@ -222,9 +222,9 @@ const CreateAccount: React.FC = () => {
 
   if (filteredSports.length > 0) {
 
-    showSports = filteredSports.map((data: any) => {
+    showSports = filteredSports.map((data: any, index) => {
       return (
-        <IonItem className="sport" onClick={() => { setYourSport(data); setShowModal(false); }} key={data}>{data}</IonItem>
+        <IonItem className="sport" onClick={() => { setYourSport(data); setShowModal(false); }} key={data + '-' + index}>{data}</IonItem>
       )
     });
 
@@ -556,8 +556,6 @@ const CreateAccount: React.FC = () => {
 
               {showSports}
 
-
-
             </IonList>
 
             <IonButton className="ion-padding-top ion-padding-bottom ion-margin-bottom" button-type="link" onClick={() => setShowModal(false)}>Close Search</IonButton>
@@ -576,9 +574,4 @@ const CreateAccount: React.FC = () => {
 };
 
 export default CreateAccount;
-
-
-function ionModalDidPresent() {
-  throw new Error('Function not implemented.');
-}
 

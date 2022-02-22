@@ -8,6 +8,8 @@ import LogoutButton from '../../components/LogoutButton';
 import TabBar from '../../components/TabBar';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
+import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
+ 
 import Scrollbar from "react-scrollbars-custom";
 
 
@@ -19,6 +21,7 @@ import ProfileCard from '../../components/ProfileCard/ProfileCard';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
 import useNewsFeed from '../../hooks/useNewsFeed';
 import { NewsFeed } from '../../components/NewsFeed/NewsFeed';
+import { env } from 'process';
 
 
 export interface props {}
@@ -50,6 +53,20 @@ const Dashboard: React.FC = () => {
 
   // { !authState.user && history.push('/'); }
   // console.log(dataNews);
+
+  const linkCopied = () => {
+
+    
+    setTimeout(function() {
+			setCopied(true);
+		  }, 200);
+
+		setTimeout(function() {
+			setCopied(false);
+		  }, 1500);
+
+  }
+  
 
   return (
     <IonPage> 
@@ -102,15 +119,15 @@ const Dashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <CopyToClipboard text={"app.sponsor-connect.com/profile/" + authState?.user?.profile}
-                  onCopy={() => setCopied(true)}>
+                <CopyToClipboard text={process.env.REACT_APP_PUBLIC_URL + "/profile/view/" + authState?.user?.profile}
+                  onCopy={() => { linkCopied()}}>
                   <div className='menu-list-option'>
                     <div className="icon">
                       <IonIcon color="primary" icon={link} />
                     </div>
                     <div className="text">
-                      <p className="main-text">Your Unique Link</p>
-                      <p className="sub-text">{ "app.sponsor-connect.com/profile/" + authState?.user?.profile }</p>
+                      <p className={copied ? "main-text fade-in" : "main-text"}>{ copied ? <span style={{color: "var(--ion-color-primary)"}}>Link Copied</span> : "Your Unique Link" }</p>
+                      <p className="sub-text">{ process.env.REACT_APP_PUBLIC_URL + "/profile/view/" + authState?.user?.profile }</p>
                     </div>
                   </div>
                 </CopyToClipboard>
@@ -197,7 +214,11 @@ const Dashboard: React.FC = () => {
             </div>
             <div className="user-opportunities">
 
-              <OpportunitiesList profileId={ profileId } />
+            <ErrorBoundary> 
+              
+              <OpportunitiesList profileId={ profileId } /> 
+            
+            </ErrorBoundary>
             
             </div>
             

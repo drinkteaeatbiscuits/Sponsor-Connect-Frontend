@@ -1,0 +1,27 @@
+.profile-matches-list {
+	display: flex;
+	flex-wrap: wrap;
+	.profile-card.condensed {
+		flex-wrap: nowrap;
+		width: 100%;
+		div.profile-image {
+			width: 36%;
+    		flex-basis: 36%;
+			aspect-ratio: unset;
+			@supports not (aspect-ratio: auto) { 
+				padding-top: 0;
+				
+			}
+		}
+		.profile-information {
+			padding: 4px 8px 4px 12px;
+			.description {
+				display: none;
+			} 
+			.profile-facts {
+				padding: 0;
+			}
+		}
+		
+	}
+} 

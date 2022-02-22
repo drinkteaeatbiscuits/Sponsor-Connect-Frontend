@@ -1,6 +1,6 @@
 import React from 'react';
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonBadge, IonButton } from '@ionic/react';
-import { calendar, personCircle, map, informationCircle, settings, trailSign, speedometer, newspaper, logOut } from 'ionicons/icons';
+import { calendar, personCircle, map, informationCircle, settings, trailSign, speedometer, newspaper, logOut, starOutline } from 'ionicons/icons';
 import { useHistory, useLocation } from "react-router";
 import { AuthContext } from '../App';
 import SvgScLogo from '../pages/OnBoardingSport/images/SvgScLogo';
@@ -53,8 +53,10 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
 	  }
 
       const isBusinessAccount = () => {
-        return authState.user?.role.type === "business_user" ? true : false;
+        return authState.user?.accountType === "Business" ? true : false;
       }
+
+     
 
 	return <div className="tab-bar">
         
@@ -74,7 +76,7 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
 
 
                 {isBusinessAccount() ? 
-                <div className={ ( activeTab === 'profile' && "active " ) + " tab-button"} onClick={()=> history.push("/profiles")}>
+                <div className={ ( activeTab === 'profiles' && "active " ) + " tab-button"} onClick={()=> history.push("/profiles")}>
                     <IonIcon icon={personCircle} />
                     <IonLabel>Profiles</IonLabel>
                 </div>
@@ -86,15 +88,15 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
                 }
 
 
-                {isBusinessAccount() ? 
-                <div className={ ( activeTab === 'opportunities' && "active " ) + " tab-button"} onClick={()=> history.push("/search-opportunities/")}>
+                { !isBusinessAccount() && <div className={ ( activeTab === 'opportunities' && "active " ) + " tab-button"} onClick={()=> history.push("/opportunities/"  + authState?.user.profile )}>
                     <IonIcon icon={trailSign} />
                     <IonLabel>Opportunities</IonLabel>
                 </div>
-                :
-                <div className={ ( activeTab === 'opportunities' && "active " ) + " tab-button"} onClick={()=> history.push("/opportunities/"  + authState?.user.profile )}>
-                    <IonIcon icon={trailSign} />
-                    <IonLabel>Opportunities</IonLabel>
+                }
+
+                { isBusinessAccount() && <div className={ ( activeTab === 'favourites' && "active " ) + " tab-button"} onClick={()=> history.push("/favourites/" )}>
+                    <IonIcon icon={starOutline} />
+                    <IonLabel>Favourites</IonLabel>
                 </div>
                 }
 

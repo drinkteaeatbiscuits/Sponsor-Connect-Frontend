@@ -1,0 +1,14 @@
+.saved-searches-list {
+	
+	.saved-search {
+		transition: 0.25s all ease;
+
+		.saved-search-name {
+			height: auto;
+			&:hover {
+				opacity: 0.8;
+				color: var(--ion-color-primary);
+			}
+		}	
+	}
+}

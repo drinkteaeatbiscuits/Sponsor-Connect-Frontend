@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonContent, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonDatetime, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar } from '@ionic/react';
 import Header from '../../components/Header';
 import { useHistory, useParams } from 'react-router';
 import Cookies from 'js-cookie';
@@ -16,6 +16,9 @@ import { convertFromRaw, convertToRaw } from 'draft-js';
 import TextEditor from '../../components/TextEditor/TextEditor';
 import OpportunityImagesUpload from '../../components/OpportunityImagesUpload/OpportunityImagesUpload';
 import EditorSection from '../../components/EditorSection/EditorSection';
+
+import { Calendar } from 'react-date-range';
+import getOpportunityStatus from '../../functions/getOpportunityStatus';
 
 
 export interface props { }
@@ -44,6 +47,13 @@ const EditOpportunity: React.FC = () => {
   const [editorContent, setEditorContent] = useState(null);
   const [showEditTitle, setShowEditTitle] = useState(false);
 
+  const [showExpiryDateEdit, setShowExpiryDateEdit] = useState(false);
+
+  const [date, setDate] = useState("");
+
+  const [opportunityStatus, setOpportunityStatus] = useState("")
+  
+
   const [showOpportunityCoverImageUpload, setShowOpportunityCoverImageUpload] = useState(false);
   
   // const {isLoading: isAddingOpportunity, error: addOpportunityError, mutateAsync: editOpportunityMutation} = useEditOpportunity( opportunityId.id );
@@ -59,29 +69,29 @@ const EditOpportunity: React.FC = () => {
       setPrice(data.price);
       setImages(data.images);
       setEditorContent( data?.opportunityDescription && convertFromRaw( data?.opportunityDescription ));
+      data?.expiryDate?.date && setDate(data.expiryDate.date);
+
+      setOpportunityStatus(data.opportunityStatus);
     }
     
   }, [data, isLoading]);
 
   
-
-  
-  const saveOpportunity = async () => {
-    
-    await editOpportunityMutation({
-      profile: authState?.user.profile.id,
-      title,
-      description,
-      fullDescription,
-      opportunityDescription: editorContent && convertToRaw(editorContent),
-      // images,
-      price,
-    });
-    
-    history.goBack();
+  const displayDate = (date) => {
+    let theDate = new Date(date);
+    return theDate.getDate().toString().padStart(2, "0") + '/' + (theDate.getMonth() + 1).toString().padStart(2, "0") + '/' + theDate.getFullYear();
 
   }
+  
+  const saveField = async ( sectionData ) => {
 
+		await editOpportunityMutation( sectionData );
+
+	}
+
+ 
+// console.log(date)
+// console.log(data)
 
 
   return (
@@ -106,6 +116,86 @@ const EditOpportunity: React.FC = () => {
           <h1 style={{color: "var(--ion-color-dark)", lineHeight: 0.8, fontSize: "4em", padding: "15px"}}>EDIT <br/><span style={{color: "var(--ion-color-primary)"}}>OPPORTUNITY</span></h1>
   
           <div className="editor-wrap">
+
+            <div className="editor-section">
+
+                <div className="editor-section-top">
+
+                  <label className="editor-section-title">Status</label>
+
+                  <div className="editor-section-top-buttons">
+                    
+                    { !opportunityStatus || opportunityStatus === "Draft" && ( new Date() < new Date(date) ) && <div className="editor-section-button" onClick={() => { saveField( {opportunityStatus: "Active" }); }}>Publish</div> }
+                   
+                    {!opportunityStatus && !date && <div className="editor-section-button" onClick={() => { saveField( {opportunityStatus: "Active" }); }}>Publish</div> }
+
+                    { opportunityStatus === "Active" && !date && <div className="editor-section-button" onClick={() => { saveField( {opportunityStatus: "Draft" }); }}>Set to Draft</div> }
+                    
+                    { opportunityStatus === "Active" && ( new Date() < new Date(date) ) && <div className="editor-section-button" onClick={() => { saveField( {opportunityStatus: "Draft" }); }}>Set to Draft</div> }
+
+
+                    { opportunityStatus === "Draft" && !date && <div className="editor-section-button" onClick={() => { saveField( {opportunityStatus: "Active" }); }}>Publish</div> }
+
+                    {/* { new Date() < new Date(date) && <div className="editor-section-button" onClick={() => { saveField( {opportunityStatus: "Active" }); }}>Publish</div> } */}
+                  
+                  </div>
+                  
+
+                </div>
+                <div className="editor-section-bottom">
+
+                  
+
+                    {/* { opportunityStatus === "Draft" && new Date() < new Date(date) && "Draft" }
+
+                    { opportunityStatus === "Active" && new Date() < new Date(date) && "Active" }
+                    
+                    { !date && opportunityStatus === "Active" && "Active" }
+                    
+                    { new Date() > new Date(date) && "Expired" }
+
+                    { !opportunityStatus && !date && "Draft" }
+                    
+                    { opportunityStatus === "Draft" && !date && "Draft" }
+
+                    { !opportunityStatus && new Date() < new Date(date) && "Draft" } */}
+
+                    { getOpportunityStatus(opportunityStatus, date) }
+
+                </div>	
+
+            </div>
+
+            <div className="editor-section">
+
+                <div className="editor-section-top">
+
+                  <label className="editor-section-title">Expiry Date</label>
+
+                  <div className="editor-section-top-buttons">
+
+                    { !showExpiryDateEdit &&  <div className="editor-section-button" onClick={() => { setShowExpiryDateEdit( !showExpiryDateEdit ) }}>{ date ? "Edit" : "Add" }</div> }
+                    
+                    { showExpiryDateEdit && <div className="editor-section-button secondary" onClick={() => { setShowExpiryDateEdit( !showExpiryDateEdit ) }}>Cancel</div> }
+                    
+                    { showExpiryDateEdit && date && <div className="editor-section-button" onClick={() => { setDate(""); saveField( {expiryDate: {} }); setShowExpiryDateEdit( !showExpiryDateEdit );}}>Clear</div> }
+                   
+                    { showExpiryDateEdit && date && <div className="editor-section-button" onClick={() => { saveField( {expiryDate: { date } }); setShowExpiryDateEdit( !showExpiryDateEdit ); }}>Save</div> }
+
+
+                  </div>
+                   
+
+                </div>
+                <div className="editor-section-bottom">
+
+                    { date ? displayDate(date) : "Not Set" }
+
+                    { showExpiryDateEdit && <Calendar date={ date ? new Date(date) : new Date() } onChange={e => setDate(e)} /> }
+
+                </div>	
+
+            </div>
             
             <EditorSection opportunityId={opportunityId.id} fieldRef="title" label={"Opportunity Name"} currentValue={title} />
 
@@ -146,10 +236,9 @@ const EditOpportunity: React.FC = () => {
             
           </div>
           
-          
-          </div>
+        </div>
 
-      </div>
+    </div>
 
 
 

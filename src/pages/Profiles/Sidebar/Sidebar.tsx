@@ -1,8 +1,11 @@
-import { IonButton, IonCheckbox, IonIcon, IonRange, useIonViewDidEnter } from "@ionic/react";
-import { constructOutline, location } from "ionicons/icons";
+import { IonButton, IonCheckbox, IonContent, IonIcon, IonInput, IonModal, IonRange, useIonViewDidEnter } from "@ionic/react";
+import { arrowForward, close, constructOutline, location } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import Geocode from "react-geocode";
+import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
+import { useHistory } from "react-router";
 import { AuthContext } from "../../../App";
+import getProfileOpportunityValues from "../../../functions/getProfileOpportunityValues";
 import useOpportunityValues from "../../../hooks/useOpportunityValues";
 
 Geocode.setApiKey("AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q");
@@ -12,6 +15,8 @@ interface SidebarProps {
 	profileData?: any;
 	setData?: any;
 	className?: string;
+	isDashboard?: boolean;
+	savedActiveFilters?: any;
 }
 
 
@@ -23,9 +28,18 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		budget: null
 	};
 
-	const {className} = SidebarProps;
+	const {className, isDashboard, savedActiveFilters} = SidebarProps;
 
-	const { state: authState } = React.useContext(AuthContext);
+	const history = useHistory();
+
+	const { state: authState, dispatch } = React.useContext(AuthContext);
+
+	const [saveSearchNameOpen, setSaveSearchNameOpen] = useState(false);
+	const [saveSearchName, setSaveSearchName] = useState(new Date().toLocaleDateString() + " - ");
+
+	const [selectedLocation, setSelectedLocation] = useState();
+	const [latLong, setLatLong] = useState<any>({});
+	
 
 	const getLocationPlaceName = (lat, long) => {
 
@@ -75,12 +89,8 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	const [fromLocation, setFromLocation] = useState<any>({});
 	const [locationRange, setLocationRange] = useState(distanceGroups.length);
-	// const [budgetRange, setBudgetRange] = useState(budgetGroups.length);
-
 	const [budget, setBudget] = useState<any>({ lower: 1, upper: 8 });
-	
 	const [budgetGroupCounts, setBudgetGroupCounts] = useState<object>({});
-	
 	const [distanceGroupCounts, setDistanceGroupCounts] = useState<object>({});
 
 	const [budgetRange, setBudgetRange] = useState<{
@@ -96,60 +106,52 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const [distanceData, setDistanceData] = useState<any[]>([]);
 	const [budgetData, setBudgetData] = useState<any[]>([]);
 
-	
-	
-	let result;
-	const numberOfSportsVisible = 8;
+	const [visibleSports, setVisibleSports] = useState<{}>({});
 
-	result = sportsData?.map(a => a.sport);
+	// const [clearingSports, setClearingSports] = useState(false);
 
-	result = result?.filter(function( element ) {
-		return element.length > 0;
-	 });
 
-	 
+	const getSportsCounts = () => {
+		let result;
 
-	const sportsCounts = {};
+		result = sportsData?.map(a => a.sport);
 
-	if(result?.length > 0){
-		for (let sport of result.values()){
+		result = result?.filter(function( element ) {
+			return element.length > 0;
+		});
+
+		const sportsCounts = {};
+		
+			if(result?.length > 0){
+				for (let sport of result.values()){
+					
+					sportsCounts[sport] = sportsCounts[sport] ? sportsCounts[sport] + 1 : 1;
+					
+				}
+			}
+		
+		const sortable = Object.fromEntries( Object.entries(sportsCounts).sort(([,a]:any,[,b]:any) => b-a) );
+
+		
+		let theVisibleSports = Object.keys(sortable).reduce((result, key) => {
+			result[key] = sportsCounts[key];
+			return result;
+		}, {});
+
+
+		activeFilters.sports.length > 0 && activeFilters.sports.forEach((sport) => {
 			
-			sportsCounts[sport] = sportsCounts[sport] ? sportsCounts[sport] + 1 : 1;
+			!theVisibleSports[sport] && ( theVisibleSports = {[sport]: 0, ...theVisibleSports} );
 			
-		}
+		});
+
+
+		setVisibleSports(theVisibleSports);
+
 	}
 
-	// console.log(sportsCounts);
-
-	const sortable = Object.fromEntries( Object.entries(sportsCounts).sort(([,a]:any,[,b]:any) => b-a) );
-
 	
 
-	let visibleSports = Object.keys(sortable).reduce((result, key) => {
-		result[key] = sportsCounts[key];
-		return result;
-	}, {});
-
-	// let hiddenSports = Object.keys(sortable).slice(numberOfSportsVisible).reduce((result, key) => {
-	// 	result[key] = sportsCounts[key];
-	// 	return result;
-	// }, {});
-
-
-	activeFilters.sports.length > 0 && activeFilters.sports.forEach((sport) => {
-		
-		!visibleSports[sport] && (visibleSports = {[sport]: 0, ...visibleSports});
-		
-	});
-
-	// console.log(visibleSports);
-	
-
-	// const updateSportsList = () => {
-
-	// 	setVisibleSports()
-
-	// }
 
 
 	function distance(lat1, lon1, lat2, lon2, unit) {
@@ -180,8 +182,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	
 		distanceData && Object.keys(fromLocation).length > 0 && distanceData.map((profile) => {
 
-			// distance( fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M" );
-
 			let distanceAway;
 
 			Object.keys(profile.latLong).length > 0 && (
@@ -189,19 +189,21 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 			distanceGroups.forEach((distance, i) => {
 
-				distanceAway > distance && distanceAway <= distanceGroups[i + 1] && 
+				distanceAway >= distance && distanceAway <= distanceGroups[i + 1] && 
 					
 					( updatedObject[distance] = updatedObject[distance] ? updatedObject[distance] + 1 : 1 );
 
 			});
 
+			distanceAway === 0 && ( updatedObject[0] = updatedObject[0] ? updatedObject[0] + 1 : 1 );
+
 		});
 
 		setDistanceGroupCounts(updatedObject);
-		// console.log(updatedObject);
+
 	};
 
-
+	// console.log(distanceGroupCounts);
 
 	const updateBudgetGroups = () => {
 
@@ -209,40 +211,28 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		budgetData && Object.keys(budget).length > 0 && budgetData.map((profile) => {
 
-
-			const maxValue = Math.max(...profile.opportunities.map(o => o.price), 0);
-			const minValue = Math.min(...profile.opportunities.map(o => o.price));
-
-			// console.log(maxValue, minValue);
-
+			const maxValue = Number(getProfileOpportunityValues(profile.opportunities)?.max);
+			const minValue = Number(getProfileOpportunityValues(profile.opportunities)?.min);
 
 			budgetGroups.forEach((budget, i) => {
-
-				// console.log(budget, minValue, maxValue);
 
 				let addtogroup = false;
 
 				( minValue >= budget && minValue <= budgetGroups[i + 1] ) && ( addtogroup = true );
-
 				( maxValue <= budget && maxValue >= budgetGroups[i - 1] ) && ( addtogroup = true );
 				
 				addtogroup && ( updatedObject[budget] = updatedObject[budget] ? updatedObject[budget] + 1 : 1 );
 
 			});
 			
-
 		});
 
 		setBudgetGroupCounts(updatedObject);
 
 	}
 
-	// console.log(budgetGroupCounts);
 
-	const updateProfiles = async () => {
-
-		// console.log('updating profiles');
-		
+	const updateProfiles = async () => {		
 
 		allProfileData && await setData( allProfileData.filter(profile => {
 
@@ -252,14 +242,8 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 			activeFilters?.sports.length === 0 && (showProfile = true); 
 			
 			activeFilters?.sports.length > 0 && activeFilters.sports.forEach((activeFilter) => {
-				// console.log(activeFilter);
-				// console.log(profile.sport);
 				if( profile.sport === activeFilter ){ showProfile = true; }
 			});
-
-
-			// console.log('filtered distance - ' + activeFilters?.distance);
-			// console.log('actual distance - ' + distance(fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M"));
 
 
 			let showProfileDistance = false;
@@ -289,8 +273,8 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 			// console.log(activeFilters?.budget);
 			
 
-			let maxValue = Math.max(...profile.opportunities.map(o => o.price), 0);
-			let minValue = Math.min(...profile.opportunities.map(o => o.price));
+			let maxValue = Number(getProfileOpportunityValues(profile.opportunities)?.max);
+			let minValue = Number(getProfileOpportunityValues(profile.opportunities)?.min);
 			
 			if(activeFilters?.budget){
 				// console.log(maxValue);
@@ -402,32 +386,52 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	}
 
-	
-
-	
+	// console.log(locationRange);
+	// console.log(distanceGroupCounts);
 
 	const [gettingLocation, setGettingLocation] = useState(false);
+	
+
+	const [filtersLoaded, setFiltersLoaded] = useState(0);
+	const loadFilters = () => {
+
+		
+		activeFilters && setActiveFilters(authState.user.searchNow);
+		
+		authState.user.searchNow.distance && setLocationRange(distanceGroups.indexOf(authState.user.searchNow.distance) + 1 as number);
+
+		authState.user.searchNow.budget && setBudget(authState.user.searchNow.budget);
+
+		const dualRange = document.querySelectorAll('#dual-range') as any;
+
+		 if(authState.user.searchNow.budget) { for (let i = 0; i < dualRange.length; ++i) {
+			dualRange[i].value = authState.user.searchNow.budget;
+		  } }
+		
+		
+		setFiltersLoaded(filtersLoaded + 1);
+
+	}
+	
 
 	useEffect(() => {
+
+
+		Object.keys(visibleSports).length === 0 && getSportsCounts();
+
 		
-
 		if( allProfileData && authState?.currentLocation && currentLocation.length <= 0 ) {
-
-			// console.log('already got location');
 			
 			setCurrentLocation([authState?.currentLocation]);
 			setFromLocation(authState?.currentLocation);
 			
 			setUpdatingProfiles(true);
-			// updateProfiles();
 	
 		}
 		
 		if ( allProfileData && !authState?.currentLocation && currentLocation.length <= 0 && !gettingLocation ) {
 
 			setGettingLocation(true);
-	
-			console.log('getting location');
 	
 			navigator.geolocation.getCurrentPosition(function(position) {
 				setCurrentLocation([
@@ -446,30 +450,42 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		currentLocation.length > 0 && setGettingLocation(false);
 
-		if( updatingProfiles ){
+		if( updatingProfiles && !isDashboard ){
 
 			updateProfiles();
 
 		}
 
-		allProfileData && Object.keys(profileData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setData(allProfileData);
+		allProfileData && profileData && Object.keys(profileData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setData(allProfileData);
 		allProfileData && Object.keys(sportsData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setSportsData(allProfileData)
 
 
 		sportsData && updateProfileDistances();
-
 		sportsData && updateBudgetGroups();
 
-		
+		authState.user.searchNow && filtersLoaded < 2 && loadFilters();
+
+		// console.log(authState?.currentLocation);
 
 
-	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters ])
+	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters, visibleSports ])
 	
 
+
 	useIonViewDidEnter(() => {
-		const dualRange = document.querySelector('#dual-range') as any;
-    	dualRange && (dualRange.value = { lower: 0, upper: 8 });
+		const dualRange = document.querySelectorAll('#dual-range') as any;
+
+		for (let i = 0; i < dualRange.length; ++i) {
+			dualRange[i].value = { lower: 0, upper: 8 };
+		  }
+
+		setFiltersLoaded(0);
+
 	})
+
+	
+
+	// console.log(searchNowFilters);
 	
 	
 	const filterSports = (e: any, sport: any) => {
@@ -516,14 +532,150 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	}
 	
 
-	const saveSearch = () => {
-		console.log("search saved!");
+
+
+	const saveSearch = async () => {
+		// console.log(activeFilters);
+
+		const response = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/save-search", {
+			method: "POST",
+			credentials: "include",
+			body: JSON.stringify({
+				savedSearchName: saveSearchName,
+				savedSearchId: Date.now(),
+				activeFilters: activeFilters
+			})
+		});
+		
+		const savedSearchInfo = await response.json();
+
+
+		dispatch && dispatch({
+			type: "setSavedSearches",
+			payload: savedSearchInfo
+		  });
+
+		setSaveSearchNameOpen(false)
+		setSaveSearchName( "" )
+
+		setOpacity(1);
+
+		setTimeout(function() {
+			setOpacity(0);
+		  }, 1000);
+
+		return savedSearchInfo?.statusCode ? false : savedSearchInfo;
 	}
+
+
+
+	const searchNow = () => {
+		// console.log("search now!");
+		
+	  dispatch && dispatch({
+		type: "setSearchNow",
+		payload: activeFilters
+	  });
+		
+		history.push( {
+			pathname: '/profiles'
+	   } );
+
+	   
+	}
+
+	const clearSports = () => {
+
+
+		const sportsCheckboxes = document.querySelectorAll('.sports-checkbox') as any;
+
+		for (let i = 0; i < sportsCheckboxes.length; ++i) {
+			sportsCheckboxes[i].checked = false;
+		  }
+
+		
+		setActiveFilters( prevState => ({ ...prevState, sports: []}));
+
+		
+
+		// setClearingSports(true); 
+
+	}
+
+	const clearBudget = () => {
+		
+		const dualRange = document.querySelectorAll('#dual-range') as any;
+
+		for (let i = 0; i < dualRange.length; ++i) {
+			dualRange[i].value = { lower: 0, upper: 8 };
+		  }
+	}
+
+	const clearLocation = () => {
+
+		const locationRange = document.querySelectorAll('.location-range') as any;
+
+		for (let i = 0; i < locationRange.length; ++i) {
+			locationRange[i].value = distanceGroups.length;
+		  }
+	}
+
+	const [showChangeLocation, setShowChangeLocation] = useState(false);
+
+	const changeLocation = () => {
+		showChangeLocation ? setShowChangeLocation(false) : setShowChangeLocation(true);
+	}
+
+	const doLocationSelected = async (event) => {
+		console.log('location selected');
+
+
+		setSelectedLocation(event);
+
+		await geocodeByAddress(event.label)
+		.then(results => getLatLng(results[0]))
+		.then(({ lat, lng }) => {
+			
+			// console.log('Successfully got latitude and longitude', { lat, lng });
+
+			
+			setLatLong({ lat, lng });
+
+			dispatch && dispatch({
+				type: "setCurrentLocation",
+				payload: {lat: lat, long: lng, city: event.label }
+			  });
+
+			  document.cookie = "user_location=" + JSON.stringify({lat: lat, long: lng, city: event.label }) + ";max-age=" + 60*60*24 ;
+	
+			  setCurrentLocation([{lat: lat, long: lng, city: event.label }]);
+			  setFromLocation({lat: lat, long: lng, city: event.label });
+			  setUpdatingProfiles(true);
+			  
+		}
+		).then( () => setShowChangeLocation(false) )
+		
+
+	}
+
+	const [opacity, setOpacity] = useState(0);
+
+
+	  
+	const nameSearch = () => {
+
+		setSaveSearchNameOpen(true);	
+		
+	}
+
+	
+
+
 
 	return <aside className={"sidebar " + className }>
 				<h1>Search <span className="ion-color-primary">Profiles</span></h1>
 
-				<p className="results">{ profileData?.length > 0 ? "Showing " + profileData?.length + " results" : "No results found." }</p>
+				{ !isDashboard && <p className="results">{ profileData?.length > 0 ? "Showing " + profileData?.length + " results" : "No results found." }</p> }
 
 				{/* <p className="filter-by">Filter by</p> */}
 
@@ -533,7 +685,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 							<p className="filter-section-title">Sports</p>
 						</div>
 
-						{ activeFilters?.sports.length > 0 && <div className="clear" onClick={()=>{ setActiveFilters( prevState => ({ ...prevState, sports: []}))}}>Clear</div> }
+						{ activeFilters?.sports.length > 0 && <div className="clear" onClick={()=>{ clearSports();  }}>Clear</div> }
 
 					</div>
 					<div className="filter-section-bottom">
@@ -544,34 +696,18 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 							let profileCount = visibleSports[sport];
 							return <div key={sport} className="sport">
-									<IonCheckbox checked={ activeFilters?.sports.includes(sport) ? true : false } 
+
+									<IonCheckbox className="sports-checkbox" checked={ activeFilters?.sports.includes(sport) ? true : false } 
 									onIonChange={(e) => { 
+
 										filterSports(e, sport);
-										
+			
 									}} />
 									
 									<div className="checkbox-label" onClick={(e) => filterSports(e, sport)}>{sport}</div>
 									<div className="checkbox-count">{ profileCount }</div>
 								</div>	
 							}) }
-						
-						{/* { Object.keys(hiddenSports).length > 0 &&	<div className="view-more-sports" onClick={() => setShowMoreSports( showMoreSports ? false : true )}>
-								{showMoreSports ? "Less" : "More" }
-							</div> }
-
-							{showMoreSports && <div className="hidden-sports">
-							{ Object.keys(hiddenSports).map((sport) => {
-							let profileCount = hiddenSports[sport];
-							return <div key={sport} className="sport">
-									<IonCheckbox checked={ activeFilters?.sports.includes(sport) ? true : false } 
-									onIonChange={e => {
-										filterSports(e, sport); 
-										}} />
-									<div className="checkbox-label">{sport}</div>
-									<div className="checkbox-count">{profileCount}</div>
-								</div>	
-							}) }
-							</div> } */}
 
 						</div>
 					</div>
@@ -584,30 +720,39 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 							<p className="filter-section-title">Location</p>
 						</div>
 
-						<div className="clear" onClick={() => console.log('change')}>Change Location</div>
+						<div className="clear" onClick={() => clearLocation()}>Clear</div>
 
 					</div>
 					<div className="filter-section-bottom">
 
 						<div className="selected-location" style={{display: "flex", alignItems: "center"}}>
-							<IonIcon icon={location} color="primary" style={{fontSize: "24px", marginRight: "5px"}} />
-							{ fromLocation.city }
+							<IonIcon icon={location} color="primary" style={{fontSize: "24px", marginRight: "5px", minWidth: "18px"}} />
+							<span className="" style={{fontSize: "0.9em", lineHeight: 1.2}}>{ fromLocation.city }</span>
+							<span onClick={ () => changeLocation() } 
+							style={{fontSize: "0.8em", 
+							color: "var(--ion-color-primary", 
+							padding: "2px 0 0 8px", 
+							cursor: "pointer", 
+							whiteSpace: "nowrap"}}>{ showChangeLocation ? "Cancel" : "Change Location" }</span>
 						</div>
 
-						<div className="range-graph">
-
-							<div className="distance-group"
+					{!showChangeLocation && <div className=""> 
+					
+					<div className="range-graph" style={{display: isDashboard ? "none" : "flex"}}>
+							
+						
+							<div className="distance-group active"
 								style={{
-									height: "0%",
+									height: getGraphHeight(distanceGroupCounts[0]) + "%",
 								}}></div>
 
-
+								
 							{ distanceGroups.map((distanceGroup, i) => {
 
 								if(i + 1 >= distanceGroups.length ) { return } else {
 								
 									return <div key={distanceGroupCounts[distanceGroup] + "-" + distanceGroup} 
-									className={"distance-group " + (locationRange >= i + 2 ? "active" : "")}
+									className={"distance-group " + distanceGroup + (locationRange >= i + 2 ? " active " : " ")}
 									style={{
 										height: getGraphHeight(distanceGroupCounts[distanceGroup]) + "%",
 									}}></div>
@@ -616,12 +761,22 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 							
 							}
 
-						</div>
+						</div> 
 						
 
 						<IonRange 
+						className="location-range"
 						value={locationRange} 
-						onIonChange={(e) => { setDistance(e.detail.value as number); setLocationRange(e.detail.value as number) }} 
+						onIonChange={(e) => { 
+							if(e.detail.value <= 1){  
+								setLocationRange(1); 
+								setDistance(1); 
+							} else {
+								setDistance(e.detail.value as number); 
+								setLocationRange(e.detail.value as number) 
+							}
+							
+						}} 
 						min={0} 
 						max={distanceGroups.length} 
 						step={1} 
@@ -629,7 +784,29 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 						
 						{ distanceGroups[locationRange - 1] !== undefined && <p className="location-distance">{ distanceGroups[locationRange - 1] === 0 ? "All Locations" : "Within " + distanceGroups[locationRange - 1] + " Miles" }</p>}
 
+					
+						</div>
+						
+						}
 
+					{showChangeLocation && <div className="" style={{padding: "16px 0 0"}}>
+						<GooglePlacesAutocomplete
+                          apiKey="AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q"
+
+                          selectProps={{
+                            location,
+                            onChange: doLocationSelected,
+                            placeholder: "Start typing to select location",
+                            menuPlacement: "auto",
+                            className: "google-places"
+                          }}
+                          autocompletionRequest={{
+                            componentRestrictions: {
+                              country: ['uk', 'ie'],
+                            }
+                          }}
+                        /></div>
+					}
 					</div>
 				</div>
 
@@ -640,7 +817,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 							<p className="filter-section-title">Budget</p>
 						</div>
 
-						<div className="clear" onClick={() => console.log('change')}>Clear</div>
+						<div className="clear" onClick={() => clearBudget()}>Clear</div>
 
 					</div>
 					<div className="filter-section-bottom">
@@ -689,18 +866,42 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 					
 
 				</div>
-				<div className="save-search">
+				<div className="save-search" style={{position: "relative"}}>
 
-                	<IonButton expand="block" className="" size="small" onClick={() => saveSearch()}>Save Search</IonButton>
+				
+                {saveSearchNameOpen ? <div className="saved-search-name">
+						<IonInput id="nameSearchField" autofocus={true} type="text" autoCapitalize="on" value={saveSearchName} onIonInput={( e:any ) => setSaveSearchName( e.target.value )} onKeyDown={e => e.key === 'Enter' && saveSearch() } onIonChange={( e:any ) => setSaveSearchName( e.detail.value )} />	
+						<IonIcon className="close-save-search" color="tertiary" size="24px" onClick={() => setSaveSearchNameOpen(false)} icon={close} />
+						<IonButton className="save-search-button" size="small" onClick={() => saveSearch()}><IonIcon icon={arrowForward} /></IonButton>
+					</div>
+					:
+					<IonButton style={{transition: "0.5s opacity", opacity: opacity ? 0 : 1 }} expand="block" className="" size="small" onClick={() => { isDashboard ? searchNow() : ( nameSearch() ) }}>{ isDashboard ? "Search Now" : "Save Search" }</IonButton>
+				}
+
+				<div className="search-saved-message" style={{
+					pointerEvents: "none", 
+					position: "absolute",
+					top: "50%",
+					right: "16px",
+					zIndex: 99,
+					transform: "translate(0, -50%)",
+					margin: "-2px 0 0",
+					opacity: opacity,
+					fontWeight: "bold",
+					color: "var(--ion-color-primary)",
+					transition: "0.25s opacity"}}>Search Saved</div>
+					
+
 				</div>
 
 		</aside>
+
+
 }
 
 
  
 export default Sidebar;
-function ionViewDidEnter(arg0: () => void) {
-	throw new Error("Function not implemented.");
-}
+
+
 

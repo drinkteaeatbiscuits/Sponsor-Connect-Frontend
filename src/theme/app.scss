@@ -20,6 +20,15 @@ ion-content {
 	background-color: var(--ion-color-light);
 }
 
+@keyframes fadein {
+    from {opacity: 0;}
+    to {opacity: 1;}
+  }
+
+.fade-in {
+	animation: fadein 200ms ease 0s 1;
+}
+
 @import 'scss/tab-bar'; 
 @import 'scss/buttons'; 
 @import 'scss/content'; 

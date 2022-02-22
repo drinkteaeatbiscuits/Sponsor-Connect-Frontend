@@ -71,10 +71,12 @@ import Notifications from './components/Notifications/Notifications';
 import { colorWandOutline } from 'ionicons/icons';
 import NewsArticles from './pages/Admin/NewsArticles/NewsArticles';
 import BookConsultation from './pages/BookConsultation/BookConsultation';
+import DashboardBusiness from './pages/DashboardBusiness/DashboardBusiness';
+import Favourites from './pages/Favourites/Favourites';
+import DugoutArticles from './pages/DugoutArticles/DugoutArticles';
+import DugoutArticle from './pages/DugoutArticle/DugoutArticle';
 
 Geocode.setApiKey("AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q");
-
-
 const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
 
 export const AuthContext = React.createContext<{
@@ -120,6 +122,42 @@ const reducer = (state: any, action: any) => {
       return {
         ...state,
         selectedSubscription: action.payload
+      }
+    }
+    case "setFavouriteProfiles": {
+      state.user.favouriteProfiles = action.payload
+      return {
+        ...state 
+      }
+    }
+    case "setFavouriteOpportunities": {
+      state.user.favouriteOpportunities = action.payload
+      return {
+        ...state 
+      }
+    }
+    case "setSavedSearches": {
+      state.user.savedSearches = action.payload
+      return {
+        ...state 
+      }
+    }
+    case "setSearchNow": {
+      state.user.searchNow = action.payload
+      return {
+        ...state 
+      }
+    }
+    case "setCurrentLocation": {
+      state.currentLocation = action.payload
+      return {
+        ...state 
+      }
+    }
+    case "viewedProfile": {
+      state.user.viewedProfiles = action.payload
+      return {
+        ...state 
       }
     }
 
@@ -186,9 +224,6 @@ const App: React.FC = () => {
 
   }
 
-  
-	
-
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const [wasUserHere, setWasUserHere] = useState<any>("");
   const [currentLocation, setCurrentLocation] = useState<any>("");
@@ -199,7 +234,12 @@ const App: React.FC = () => {
 
   useEffect(() => {
 
-    !wasUserHere && checkIfAuthenticated().then( (data) => { setWasUserHere(data); setCheckUser(true); } );
+    !wasUserHere && checkIfAuthenticated().then( (data) => { 
+      
+      setWasUserHere(data); 
+      setCheckUser(true); 
+
+    } );
 
     !doesLocationCookieExist() && !checkingLocation && currentLocation.length <= 0 && navigator.geolocation.getCurrentPosition(function(position) {
     
@@ -225,7 +265,7 @@ const App: React.FC = () => {
 
   }, [currentLocation, fromLocation, state.isAuthenticated, doesLocationCookieExist()]);
 
-  // console.log(wasUserHere);
+  
   // console.log(state.isAuthenticated);
 
   wasUserHere && (initialState.isAuthenticated = true);
@@ -234,7 +274,7 @@ const App: React.FC = () => {
   
   const history = useHistory();
 
-  // console.log(checkUser);
+  // console.log(state?.user?.accountType);
 
   return (
 
@@ -251,7 +291,8 @@ const App: React.FC = () => {
           {/* {!state.isAuthenticated ? <p>logged out</p> : <p>logged in</p>} */}
           
           <IonReactRouter>
-            <Notifications /> 
+           
+            { state?.user?.profile && <Notifications /> }
 
             <IonRouterOutlet>
 
@@ -279,13 +320,26 @@ const App: React.FC = () => {
                 {state.isAuthenticated ? <Redirect to="/dashboard" /> : <CreateAccountBusiness />}
               </Route> 
 
-              <Route exact path="/dashboard">                
-                { state.isAuthenticated ? <Dashboard /> : ( checkUser && <Redirect to="/login" /> ) }
+              <Route exact path="/dashboard">
+
+                { state.isAuthenticated ? ( state.user.profile ? <Dashboard /> : <DashboardBusiness /> ) : ( checkUser && <Redirect to="/login" /> ) }
+
+              </Route>
+
+              <Route exact path="/favourites">
+
+                { state.isAuthenticated ? <Favourites /> : ( checkUser && <Redirect to="/login" /> ) }
+
               </Route>
 
               <Route exact path="/login">
                 { state.isAuthenticated ? <Redirect to="/dashboard" /> : ( checkUser && <Login />) }
               </Route>
+
+              <Route exact path="/profile/view/:id">
+                  <Profile />
+              </Route>
+
 
                <Route exact path="/profile/:id">
                 {state.isAuthenticated ? <Profile /> : (checkUser && <Redirect to="/login" />)}
@@ -372,7 +426,11 @@ const App: React.FC = () => {
               </Route>
 
               <Route exact path="/the-dugout">
-                <Landing />
+                <DugoutArticles />
+              </Route>
+              
+              <Route exact path="/the-dugout/:slug">
+                <DugoutArticle />
               </Route>
 
 

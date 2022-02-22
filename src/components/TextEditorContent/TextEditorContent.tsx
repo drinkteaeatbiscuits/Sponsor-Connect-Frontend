@@ -27,7 +27,7 @@ const addBreaklines = (children:any ) => {
     
     return children.map((child:any, index:any) => {
 		
-		console.log(child);
+
 
 	return <p key={(Math.random() + 1).toString(36).substring(7)}>{ [child, <br key={(Math.random() + 1).toString(36).substring(7)} />]}</p>
 	

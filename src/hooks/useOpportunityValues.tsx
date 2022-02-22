@@ -1,4 +1,5 @@
 import { useQuery, useQueryClient } from 'react-query';
+import { showCurrency } from '../functions/showCurrency';
 
 const useOpportunityValues = ( profileId:any ) => {
 
@@ -17,14 +18,19 @@ const useOpportunityValues = ( profileId:any ) => {
   
 		if(opportunities.length > 0){
 		let opportunityPriceRange: any[] = [];
+
+		let currency = "£"
 		
 		opportunities.forEach(( opportunity:any )=>{
 			
 			opportunityPriceRange.push(opportunity.price);
 
+			currency = showCurrency(opportunity.profile);
+
 		})
 
-			priceRange = "£" + Math.min.apply(Math, opportunityPriceRange).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " - " + Math.max.apply(Math, opportunityPriceRange).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			priceRange = currency + Math.min.apply(Math, opportunityPriceRange).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + " - " + Math.max.apply(Math, opportunityPriceRange).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		
 		}else{
 			
 			priceRange = null;

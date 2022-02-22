@@ -25,7 +25,6 @@ const Notifications: React.FC<NotificationsProps> = () => {
 	const {isLoading, data, error, isSuccess} = useMyProfile( authState.user?.profile );
 	
 	
-
 	useEffect(() => {
 		// console.log(data);
 		isSuccess && setProfileComplete(data?.profileComplete);
