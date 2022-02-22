@@ -41,7 +41,7 @@ const ContactProfile: React.FC<ContactProfileProps> = (ContactProfileProps) => {
 
 		
 		// console.log(yourEmail)
-		console.log(profileData)
+		// console.log(profileData)
 
 		const sendMessage = async () => {
 			// console.log('favourite opportunity');

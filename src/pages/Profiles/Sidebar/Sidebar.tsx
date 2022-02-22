@@ -5,6 +5,7 @@ import Geocode from "react-geocode";
 import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from "react-google-places-autocomplete";
 import { useHistory } from "react-router";
 import { AuthContext } from "../../../App";
+import getProfileOpportunityValues from "../../../functions/getProfileOpportunityValues";
 import useOpportunityValues from "../../../hooks/useOpportunityValues";
 
 Geocode.setApiKey("AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q");
@@ -88,16 +89,8 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	const [fromLocation, setFromLocation] = useState<any>({});
 	const [locationRange, setLocationRange] = useState(distanceGroups.length);
-	// const [budgetRange, setBudgetRange] = useState(budgetGroups.length);
-
-	// console.log(fromLocation);
-	// console.log(selectedLocation);
-	// console.log(latLong);
-
 	const [budget, setBudget] = useState<any>({ lower: 1, upper: 8 });
-	
 	const [budgetGroupCounts, setBudgetGroupCounts] = useState<object>({});
-	
 	const [distanceGroupCounts, setDistanceGroupCounts] = useState<object>({});
 
 	const [budgetRange, setBudgetRange] = useState<{
@@ -200,15 +193,9 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 					
 					( updatedObject[distance] = updatedObject[distance] ? updatedObject[distance] + 1 : 1 );
 
-				
-				
-
 			});
 
 			distanceAway === 0 && ( updatedObject[0] = updatedObject[0] ? updatedObject[0] + 1 : 1 );
-
-
-			
 
 		});
 
@@ -224,15 +211,14 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		budgetData && Object.keys(budget).length > 0 && budgetData.map((profile) => {
 
-			const maxValue = Math.max(...profile.opportunities.map(o => o.price), 0);
-			const minValue = Math.min(...profile.opportunities.map(o => o.price));
+			const maxValue = Number(getProfileOpportunityValues(profile.opportunities)?.max);
+			const minValue = Number(getProfileOpportunityValues(profile.opportunities)?.min);
 
 			budgetGroups.forEach((budget, i) => {
 
 				let addtogroup = false;
 
 				( minValue >= budget && minValue <= budgetGroups[i + 1] ) && ( addtogroup = true );
-
 				( maxValue <= budget && maxValue >= budgetGroups[i - 1] ) && ( addtogroup = true );
 				
 				addtogroup && ( updatedObject[budget] = updatedObject[budget] ? updatedObject[budget] + 1 : 1 );
@@ -256,14 +242,8 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 			activeFilters?.sports.length === 0 && (showProfile = true); 
 			
 			activeFilters?.sports.length > 0 && activeFilters.sports.forEach((activeFilter) => {
-				// console.log(activeFilter);
-				// console.log(profile.sport);
 				if( profile.sport === activeFilter ){ showProfile = true; }
 			});
-
-
-			// console.log('filtered distance - ' + activeFilters?.distance);
-			// console.log('actual distance - ' + distance(fromLocation.lat, fromLocation.long, profile.latLong.lat, profile.latLong.lng, "M"));
 
 
 			let showProfileDistance = false;
@@ -293,8 +273,8 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 			// console.log(activeFilters?.budget);
 			
 
-			let maxValue = Math.max(...profile.opportunities.map(o => o.price), 0);
-			let minValue = Math.min(...profile.opportunities.map(o => o.price));
+			let maxValue = Number(getProfileOpportunityValues(profile.opportunities)?.max);
+			let minValue = Number(getProfileOpportunityValues(profile.opportunities)?.min);
 			
 			if(activeFilters?.budget){
 				// console.log(maxValue);

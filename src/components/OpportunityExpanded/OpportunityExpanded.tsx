@@ -3,6 +3,7 @@ import { logoFacebook, logoInstagram, logoTwitter, logoYoutube, location, barCha
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { AuthContext } from "../../App";
+import getOpportunityStatus from "../../functions/getOpportunityStatus";
 import { showCurrency } from "../../functions/showCurrency";
 import useDeleteOpportunity from "../../hooks/useDeleteOpportunity";
 import FavouriteOpportunityButton from "../FavouriteOpportunityButton/FavouriteOpportunityButton";
@@ -37,6 +38,7 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 	}, [hasDeletedOpportunity])
 
+	const opportunityStatus = getOpportunityStatus(opportunityData?.opportunityStatus, opportunityData?.expiryDate?.date).toLowerCase();
 
 	return <div className="opportunity-expanded">
 
@@ -68,7 +70,13 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 			</div>
 
-			{opportunityData?.images &&
+			
+			
+			{/* { if( opportunityStatus != "active" && authState?.user?.profile !== parseInt(profileId) ){ return } } */}
+
+				
+
+			{opportunityData?.images && opportunityStatus === "active" &&
 
 				<picture>
 
@@ -89,7 +97,18 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 			}
 
-			<div className="opportunity-content">
+		{ opportunityStatus != "active" ? <div  className="opportunity-content">
+			<div className="opportunity-content-bottom">
+				<h1 className="ion-color-dark line-height-1">Opportunity no longer active.</h1>
+				<p>Unfortunately, this sponsorship opportunity has either expired or been removed.</p>
+				<p>If you are still interested in available opportunities from this profile <span style={{color: 'var(--ion-color-primary', textDecoration: 'underline', cursor: 'pointer'}} onClick={() => { history.push('/profile/' + opportunityData.profile.id)}}>click here.</span></p>
+				<p>Alternatively, <span style={{color: 'var(--ion-color-primary', textDecoration: 'underline', cursor: 'pointer'}} onClick={() => { 
+							history.push('/profile/' + opportunityData.profile.id, {tab: "contact"})}}>click here to contact this profile.</span></p>
+			</div>
+			
+		
+
+		</div> : <div className="opportunity-content">
 
 				{ showShare && <ShareButtons url={ window.location.href } /> }
 
@@ -130,8 +149,11 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 			</div>
 
-		</div> : <div className="opportunity-deleted"><p style={{fontWeight: 700, fontSize: '24px', letterSpacing: "-0.02em"}}>Opportunity Deleted</p> <p style={{cursor: "pointer"}} onClick={() => history.push("/opportunities/" + opportunityData.profile.id)}>{"< Back to all opportunities"}</p> </div> }
+		}
 
+		</div>  : <div className="opportunity-deleted"><p style={{fontWeight: 700, fontSize: '24px', letterSpacing: "-0.02em"}}>Opportunity Deleted</p> <p style={{cursor: "pointer"}} onClick={() => history.push("/opportunities/" + opportunityData.profile.id)}>{"< Back to all opportunities"}</p> </div> }
+
+		
 	</div>
 
 }

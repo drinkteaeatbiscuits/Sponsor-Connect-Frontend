@@ -1,6 +1,6 @@
 const getOpportunityStatus = (opportunityStatus, date) => {
 
-	console.log(date)
+	// console.log(date)
 	
 
 	let calculatedOpportunityStatus = "Active";

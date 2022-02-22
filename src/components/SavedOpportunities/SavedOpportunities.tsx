@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router";
 import { ArrowFunction } from "typescript";
 import { AuthContext } from "../../App";
+import getOpportunityStatus from "../../functions/getOpportunityStatus";
 import { showCurrency } from "../../functions/showCurrency";
 import useMultipleOpportunities from "../../hooks/useMultipleOpportunities";
 import useMultipleProfiles from "../../hooks/useMultipleProfiles";
@@ -76,9 +77,11 @@ const SavedOpportunities: React.FC<props> = (props) => {
 
 					const favouriteOpportunityData = isSuccess && opportunityData.find(x => x.id === favouriteOpportunityId);
 				
+					const opportunityStatus = getOpportunityStatus(favouriteOpportunityData?.opportunityStatus, favouriteOpportunityData?.expiryDate?.date).toLowerCase();
+				// { if( opportunityStatus != "active" && authState?.user?.profile !== parseInt(profileId) ){ return }}
 
 					return (<div className="opportunity-row" style={{display: "flex"}} key={ favouriteOpportunityData?.id + '-' + index + new Date()}>
-					<div className="opportunity" style={{flexGrow: '1', transition: '0.2s all ease'}}  onClick={ () => { selectEnabled ? selectOpportunity(favouriteOpportunityData?.id) : history.push("/opportunity/" + favouriteOpportunityData?.id) }} >
+					<div className={"opportunity opportunity-status-" + opportunityStatus} style={{flexGrow: '1', transition: '0.2s all ease'}}  onClick={ () => { selectEnabled ? selectOpportunity(favouriteOpportunityData?.id) : history.push("/opportunity/" + favouriteOpportunityData?.id) }} >
 							
 
 							<div className="opportunity-details" style={{width: '100%'}}>
@@ -86,7 +89,6 @@ const SavedOpportunities: React.FC<props> = (props) => {
 
 								<div className="" style={{display: "flex"}}>
 
-									{console.log(favouriteOpportunityData)}
 
 									
 								
