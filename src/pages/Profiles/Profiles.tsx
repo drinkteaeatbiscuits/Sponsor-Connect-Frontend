@@ -1,24 +1,18 @@
 import { IonButton, IonContent, IonItem, IonList, IonLoading, IonPage } from '@ionic/react';
-// import useImagePosts from '../hooks/useImagePosts';
-import Header from '../../components/Header';
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
 import TabBar from '../../components/TabBar';
 import useProfiles from '../../hooks/useProflies';
 
-import Masonry from 'react-masonry-css';
-
 import './Profiles.scss';
 import Sidebar from './Sidebar/Sidebar';
 import { useEffect, useState } from 'react';
-import { useLocation, useParams } from 'react-router';
+import { useLocation } from 'react-router';
 
 export interface props {
 }
 
-
 const Profiles: React.FC<props> = (props) => {
 
- 
   const thelocation = useLocation<any>();
 
   const {isLoading, data, isSuccess, error} = useProfiles();
@@ -56,7 +50,6 @@ const Profiles: React.FC<props> = (props) => {
               { profileData?.length > 0 && profileData?.map(( profile:any )=>{
                   return <ProfileCard key={profile.id} profileData={profile} />
                 }) }
-
 
           </div>
       </IonContent>

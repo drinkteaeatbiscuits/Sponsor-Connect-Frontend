@@ -1,6 +1,7 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonGrid, IonIcon, IonImg, IonItem, IonList, IonRow, IonSlide, IonSlides } from "@ionic/react";
 import React from "react";
 import { useHistory } from "react-router";
+import { AuthContext } from "../../App";
 import getOpportunityStatus from "../../functions/getOpportunityStatus";
 import { showCurrency } from "../../functions/showCurrency";
 import useOpportunities from "../../hooks/useOpportunities";
@@ -12,7 +13,7 @@ import './OpportunitiesList.scss';
 
 interface OpportunitiesListProps {
 	images?: any,
-	profileId? : string,
+	profileId: string,
 	
 }
 
@@ -22,7 +23,10 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 	// console.log(OpportunitiesListProps);
 	const history = useHistory();
 	const {isLoading, data, error} = useOpportunities( OpportunitiesListProps?.profileId );
+	const { state: authState, dispatch } = React.useContext(AuthContext);
 
+	const { profileId } = OpportunitiesListProps;
+	
 
 	return <div className="opportunities">
 
@@ -30,14 +34,13 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 
 	
 			{ data?.length > 0 && data?.map(( opportunity:any )=>{
+
+				const opportunityStatus = getOpportunityStatus(opportunity.opportunityStatus, opportunity.expiryDate?.date).toLowerCase();
+				{ if( opportunityStatus != "active" && authState?.user?.profile !== parseInt(profileId) ){ return }}
+
 				return <div className={"opportunity opportunity-status-" + getOpportunityStatus(opportunity.opportunityStatus, opportunity.expiryDate?.date).toLowerCase() }  style={{position: "relative"}} key={opportunity.id} onClick={ ()=> history.push("/opportunity/" + opportunity.id) }>
 
-					
 					<div className=" opportunity-details " >
-
-						
-
-						
 
 							{opportunity.price && <p className="price" style={{flexGrow: 1}}>{ showCurrency(opportunity.profile) }{opportunity.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</p>}
 							
@@ -50,8 +53,6 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 							}} 
 							opportunityId={opportunity.id} />
 					
-							
-
 							
 							{opportunity.title && <p className="title">{opportunity.title}</p> }
 					

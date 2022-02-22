@@ -1,6 +1,6 @@
 import { useQuery, useQueryClient } from 'react-query';
 
-const useOpportunity = ( id:any ) => {
+const useOpportunity = ( id:any, profileId ) => {
 
     const client = useQueryClient();
 
@@ -19,6 +19,8 @@ const useOpportunity = ( id:any ) => {
 			const opportunity = await opportunityResponse.json();
 
 			// client.setQueryData([ "opportunity-" + id ], opportunity);
+
+			client.invalidateQueries(["opportunities-" + profileId]);
 	  
 			return opportunity;
 		}

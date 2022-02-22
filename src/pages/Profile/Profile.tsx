@@ -66,8 +66,6 @@ const Profile: React.FC = () => {
 
     thelocation && thelocation?.state?.tab === "contact" ? setProfileTabNumber(4) : setProfileTabNumber(1);
 
-    
-
     isSuccess && latestUpdateDate.length === 0 && profileLastUpdated();
 
     !updatingViewedProfiles && authState?.user && viewedProfile();
@@ -306,7 +304,6 @@ const Profile: React.FC = () => {
                     </ErrorBoundary> 
                  
 
-  
                     <div className="other-sponsorship-ideas ion-padding">
                       <p>Have any other sponsorship ideas? <br/>
                       Please get in touch <span onClick={() => setProfileTabNumber(4)}>here.</span></p>
@@ -314,16 +311,9 @@ const Profile: React.FC = () => {
                   </div>
                
 
-                
-
-
                 <div className="profile-tab profile-description">
-
                   
-
                     { authState?.user?.profile === parseInt(profileId.id) && <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/edit-profile-description') } >Edit Description</IonButton> }
-
-                    
 
                     {data?.informationAboutYou && <div className="profile-description-section">
                     <p className="ion-color-dark" style={{paddingLeft: "16px", fontWeight: 700, fontSize: "1.3em"}}>About</p>
