@@ -1,9 +1,9 @@
 import { IonButton, IonButtons, IonContent, IonPage, IonToolbar } from '@ionic/react';
 import Header from '../../components/Header';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useLocation, useParams } from 'react-router';
 import Cookies from 'js-cookie';
 import { AuthContext } from "../../App";
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import LogoutButton from '../../components/LogoutButton';
 import TabBar from '../../components/TabBar';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
@@ -26,15 +26,20 @@ const Opportunity: React.FC = () => {
 
   const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
-
-  const { isLoading, data: opportunityData, error } = useOpportunity(opportunityId.id);
+  const theLocation = useLocation<any>();
+  const { isLoading, data: opportunityData, error } = useOpportunity(Number(opportunityId.id));
   
 
-  // useEffect(() => {
+  const [deletedOpportunity, setDeletedOpportunity] = useState(theLocation?.state?.deletedOpportunity);
+  
+  useEffect(() => {
+    
+    setDeletedOpportunity(theLocation?.state?.deletedOpportunity);
 
-	// }, [opportunityData]);
+	}, [theLocation?.state?.deletedOpportunity]);
 
-
+  // console.log(deletedOpportunity);
+  // console.log( theLocation.state.deletedOpportunity );
 
   return (
     <IonPage>
@@ -45,7 +50,7 @@ const Opportunity: React.FC = () => {
         {!isLoading &&
           <div className="content">
 
-              { opportunityData &&  <OpportunityExpanded opportunityData={opportunityData}  /> }
+              { opportunityData &&  <OpportunityExpanded opportunityData={opportunityData} deletedOpportunity={deletedOpportunity} setDeletedOpportunity={setDeletedOpportunity} /> }
         
           </div>
         }

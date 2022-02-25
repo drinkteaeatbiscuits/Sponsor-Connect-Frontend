@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from 'react-query';
 
-const useUpdateProfileDescriptions = () => {
+const useUpdateProfileDescriptions = (id) => {
 
 	const client = useQueryClient();
 	  
 	  return useMutation(
-		"profiles",
+		["profile", id],
 		async (data: { 
 		  
 		  informationAboutYou: any;
@@ -37,8 +37,8 @@ const useUpdateProfileDescriptions = () => {
 		{
 		  onSuccess: () => {
 			// console.log('profile updated');
-			client.invalidateQueries("profiles");
-			client.invalidateQueries("profile");
+			client.invalidateQueries(["profiles"]);
+			client.invalidateQueries(["profile", id]);
 		  }
 		}
 	  )

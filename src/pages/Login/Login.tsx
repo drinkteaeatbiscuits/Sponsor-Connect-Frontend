@@ -16,6 +16,7 @@ const Login: React.FC<props> = () => {
 
   const [username, setUsername] = useState<any>("");
   const [password, setPassword] = useState<any>("");
+  const [loginError, setLoginError] = useState<string>("");
 
   const { dispatch } = React.useContext(AuthContext);
 
@@ -37,11 +38,9 @@ const Login: React.FC<props> = () => {
 
     const loginInfo = await loginResp.json();
 
-    
-
     if (loginInfo?.statusCode) {
 
-      alert("Error: " + loginInfo?.data[0]?.messages[0]?.message);
+      setLoginError(loginInfo?.data[0]?.messages[0]?.message);
 
     } else {
 
@@ -78,15 +77,15 @@ const Login: React.FC<props> = () => {
 
               <div className="login-form">
                 <IonItem className="ion-no-padding">
-                  <IonLabel position="stacked">Username</IonLabel>
-                  <IonInput type="email" onKeyUp={(e: any) => keyUp(e)} onIonInput={(e: any) => setUsername(e.target.value)} onIonChange={(e: any) => setUsername(e.detail.value)} />
+                  <IonLabel position="stacked">Email Address</IonLabel>
+                  <IonInput type="email" autofocus={true} onKeyUp={(e: any) => keyUp(e)} onIonInput={(e: any) => setUsername(e.target.value)} onIonChange={(e: any) => setUsername(e.detail.value)} />
                 </IonItem>
                 <IonItem className="ion-no-padding">
                   <IonLabel position="stacked">Password</IonLabel>
                   <IonInput type="password" onKeyUp={(e: any) => keyUp(e)} onIonInput={(e: any) => setPassword(e.target.value)} onIonChange={(e: any) => setPassword(e.detail.value)} />
                   
                 </IonItem>
-                
+                {loginError && <div style={{fontSize: '0.85em', color: 'var(--ion-color-danger)', paddingTop: '8px'}} className="">{ loginError }</div> }
                 <div style={{ paddingTop: 8 }}><IonButton onClick={() => doLogin()} expand="block">Login</IonButton></div>
                 
                 <div className="form-secondary-buttons">

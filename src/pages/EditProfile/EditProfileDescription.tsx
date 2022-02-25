@@ -1,19 +1,13 @@
 import { IonButton, IonContent, IonPage } from '@ionic/react';
-import Header from '../../components/Header';
 import { useHistory } from 'react-router';
-import Cookies from 'js-cookie';
 import { AuthContext } from "../../App";
 import React, { useEffect, useState } from 'react';
-import LogoutButton from '../../components/LogoutButton';
 import TabBar from '../../components/TabBar';
-import TextEditor from '../../components/TextEditor/TextEditor';
 import useMyProfile from '../../hooks/useMyProfile';
 import { convertFromRaw, convertToRaw } from 'draft-js';
-import useUpdateProfile from '../../hooks/useUpdateProfile';
 import useUpdateProfileDescriptions from '../../hooks/useUpdateProfileDescriptions';
 
 import './EditProfileDescription.scss';
-import TextEditorContent from '../../components/TextEditorContent/TextEditorContent';
 import EditorSection from './EditorSection';
 
 export interface props {}
@@ -24,29 +18,31 @@ const EditProfileDescription: React.FC = () => {
   const { state: authState } = React.useContext(AuthContext);
 
   const profileData = useMyProfile();
-  const {isLoading, error, mutateAsync: addProfileDescriptionMutation} = useUpdateProfileDescriptions();
+  const {isLoading, error, mutateAsync: addProfileDescriptionMutation} = useUpdateProfileDescriptions(authState.user.profile);
 
   const [informationAboutYou, setInformationAboutYou] : any = useState();
   const [competitionInformation, setCompetitionInformation] : any = useState();
   const [supportersInformation, setSupportersInformation] : any = useState();
   const [anyOtherInfo, setAnyOtherInfo] : any = useState();
 
-  const [showInformationAboutYouEditor, setShowInformationAboutYouEditor] = useState(false);
-  const [showCompetitionInformationEditor, setShowCompetitionInformationEditor] = useState(false);
-  const [showSupportersInformationEditor, setShowSupportersInformationEditor] = useState(false);
-  const [showAnyOtherInfoEditor, setShowAnyOtherInfoEditor] = useState(false);
+  // const [showInformationAboutYouEditor, setShowInformationAboutYouEditor] = useState(false);
+  // const [showCompetitionInformationEditor, setShowCompetitionInformationEditor] = useState(false);
+  // const [showSupportersInformationEditor, setShowSupportersInformationEditor] = useState(false);
+  // const [showAnyOtherInfoEditor, setShowAnyOtherInfoEditor] = useState(false);
 
+
+  // console.log(profileData);
   useEffect(() => {
 
     if (profileData.status === "success") {
 
-      setInformationAboutYou(profileData.data[0]?.informationAboutYou && convertFromRaw( profileData.data[0]?.informationAboutYou ));
+      setInformationAboutYou(profileData.data?.informationAboutYou && convertFromRaw( profileData.data?.informationAboutYou ));
 
-      setCompetitionInformation(profileData.data[0]?.competitionInformation && convertFromRaw( profileData.data[0]?.competitionInformation ));
+      setCompetitionInformation(profileData.data?.competitionInformation && convertFromRaw( profileData.data?.competitionInformation ));
 
-      setSupportersInformation(profileData.data[0]?.supportersInformation && convertFromRaw( profileData.data[0]?.supportersInformation ));
+      setSupportersInformation(profileData.data?.supportersInformation && convertFromRaw( profileData.data?.supportersInformation ));
 
-      setAnyOtherInfo(profileData.data[0]?.anyOtherInfo && convertFromRaw( profileData.data[0]?.anyOtherInfo ));
+      setAnyOtherInfo(profileData.data?.anyOtherInfo && convertFromRaw( profileData.data?.anyOtherInfo ));
 
     }
 
@@ -67,8 +63,6 @@ const EditProfileDescription: React.FC = () => {
     // history.goBack();
   }
 
-
-
   return (
 
     <IonPage>
@@ -77,20 +71,18 @@ const EditProfileDescription: React.FC = () => {
 
           <div className="content edit-profile-description-content">
 
-            <h1 className="text-uppercase">Edit Profile Description</h1>
+            <h1 style={{textTransform: 'uppercase', color: 'var(--ion-color-dark)'}}>Edit Profile <span style={{color: 'var(--ion-color-primary)'}}>Description</span></h1>
 
-    
-
-            { profileData.status === "success" && <EditorSection title="Information About You" initialEditorContent={ profileData?.data[0]?.informationAboutYou } editorContent={ informationAboutYou } setEditorContent={ setInformationAboutYou } saveContent={() => updateProfile()} /> }
+            { profileData.status === "success" && <EditorSection title="Information About You" initialEditorContent={ profileData?.data?.informationAboutYou } editorContent={ informationAboutYou } setEditorContent={ setInformationAboutYou } saveContent={() => updateProfile()} /> }
             
-            { profileData.status === "success" && <EditorSection title="Competition Information" initialEditorContent={ profileData?.data[0]?.competitionInformation } editorContent={ competitionInformation } setEditorContent={ setCompetitionInformation } saveContent={() => updateProfile()} /> }
+            { profileData.status === "success" && <EditorSection title="Competition Information" initialEditorContent={ profileData?.data?.competitionInformation } editorContent={ competitionInformation } setEditorContent={ setCompetitionInformation } saveContent={() => updateProfile()} /> }
             
-            { profileData.status === "success" && <EditorSection title="Supporters Information" initialEditorContent={ profileData?.data[0]?.supportersInformation } editorContent={ supportersInformation } setEditorContent={ setSupportersInformation } saveContent={() => updateProfile()} /> }
+            { profileData.status === "success" && <EditorSection title="Supporters Information" initialEditorContent={ profileData?.data?.supportersInformation } editorContent={ supportersInformation } setEditorContent={ setSupportersInformation } saveContent={() => updateProfile()} /> }
             
-            { profileData.status === "success" && <EditorSection title="Any Other Information" initialEditorContent={ profileData?.data[0]?.anyOtherInfo } editorContent={ anyOtherInfo } setEditorContent={ setAnyOtherInfo } saveContent={() => updateProfile()} /> }
+            { profileData.status === "success" && <EditorSection title="Any Other Information" initialEditorContent={ profileData?.data?.anyOtherInfo } editorContent={ anyOtherInfo } setEditorContent={ setAnyOtherInfo } saveContent={() => updateProfile()} /> }
 
             
-           <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/profile/' + profileData.data[0]?.id ) } >Back to profile</IonButton>
+           <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/profile/' + profileData.data?.id ) } >Back to profile</IonButton>
 
 
           </div>

@@ -7,7 +7,7 @@ const useOpportunities = ( profileId ) => {
     const client = useQueryClient();
     
     return useQuery(
-      "opportunities-" + profileId,
+      ["opportunities", profileId],
       async () => {
         
         const opportunitiesResponse = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/opportunities?profile=" + profileId, {
@@ -17,13 +17,8 @@ const useOpportunities = ( profileId ) => {
         const opportunities = await opportunitiesResponse.json();
   
         opportunities.forEach((p:any) => {
-          client.setQueryData(["opportunity-" + p.id], p);
+          client.setQueryData(["opportunity", p.id], p);
         });
-
-        client.setQueryData(["opportunities-" + profileId], opportunities);
-
-        // client.invalidateQueries("opportunity");
-        // client.invalidateQueries("opportunities");
   
         return opportunities;
   

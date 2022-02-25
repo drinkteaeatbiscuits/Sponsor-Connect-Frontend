@@ -1,36 +1,20 @@
 import { IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonSearchbar, IonTextarea, IonTitle, IonToolbar, useIonViewWillEnter } from '@ionic/react';
-import Header from '../../components/Header';
 import { useHistory } from 'react-router';
-import Cookies from 'js-cookie';
 import { AuthContext } from "../../App";
 import React, { useEffect, useState } from 'react';
-import LogoutButton from '../../components/LogoutButton';
 import { useMutation, useQuery, useQueryClient } from 'react-query';
 import useUpdateProfile from '../../hooks/useUpdateProfile';
 import useMyProfile from '../../hooks/useMyProfile';
 import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
-import ReactCrop from 'react-image-crop';
-import { saveAs } from 'file-saver';
 
-import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
-
-
+import { convertToRaw, convertFromRaw } from 'draft-js';
 import 'react-image-crop/dist/ReactCrop.css';
-
-// import '../../../node_modules/react-image-crop/lib/ReactCrop.scss';
-
-
 import './edit-profile.scss';
 
 import sports from '../CreateAccount/sports.json';
-import { env } from 'process';
-import useUploadImage from '../../hooks/useUploadImage';
-import UploadImage from '../../components/UploadImage/UploadImage';
-import { constructOutline, closeCircleOutline, happy, close, logoFacebook, logoInstagram, logoTwitter, logoYoutube } from 'ionicons/icons';
+
 import NewImageUpload3 from '../../components/NewImageUpload3/NewImageUpload3';
-import TextEditor from '../../components/TextEditor/TextEditor';
 import TabBar from '../../components/TabBar';
-import EditorSection from '../../components/EditorSection/EditorSection';
 import EditorSectionProfile from '../../components/EditorSection/EditorSectionProfile';
 import useEditProfileField from '../../hooks/useEditProfileField';
 import SocialMediaTotals from '../../components/SocialMediaTotals/SocialMediaTotals';
@@ -48,10 +32,10 @@ const EditProfile: React.FC = () => {
   const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
 
-  const { isLoading, error, mutateAsync: addProfileMutation } = useUpdateProfile();
-  const { isLoading: isEditingOpportunity, error: editOpportunityError, isSuccess, mutateAsync: editProfileMutation } = useEditProfileField(authState?.user.profile.id);
+  const { isLoading, error, mutateAsync: addProfileMutation } = useUpdateProfile(authState?.user?.profile);
+  const { isLoading: isEditingOpportunity, error: editOpportunityError, isSuccess, mutateAsync: editProfileMutation } = useEditProfileField(authState?.user?.profile);
 
-  const profileData = useMyProfile(authState?.user.profile.id);
+  const profileData = useMyProfile(authState?.user.profile);
 
   const [profileName, setProfileName] = useState("");
   const [sport, setSport] = useState("");
@@ -235,7 +219,7 @@ const EditProfile: React.FC = () => {
                   refId={authState?.user.profile}
                   imageCropAspectRatio={3 / 1}
                   circularCrop={false}
-                  // showCroppedPreview={ false }
+                  showCroppedPreview={ true }
                   label="Cover Image"
                   required={true}
                 />
@@ -250,7 +234,7 @@ const EditProfile: React.FC = () => {
                   refId={authState?.user.profile}
                   imageCropAspectRatio={1}
                   circularCrop={true}
-                  // showCroppedPreview={ false }
+                  showCroppedPreview={ true }
                   label="Profile Picture"
                   required={true}
                 />

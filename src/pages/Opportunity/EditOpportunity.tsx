@@ -1,19 +1,19 @@
 import { IonButton, IonButtons, IonContent, IonDatetime, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar } from '@ionic/react';
-import Header from '../../components/Header';
+
 import { useHistory, useParams } from 'react-router';
-import Cookies from 'js-cookie';
+
 import { AuthContext } from "../../App";
 import React, { useEffect, useState } from 'react';
-import LogoutButton from '../../components/LogoutButton';
+
 import TabBar from '../../components/TabBar';
-import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
+
 import useOpportunity from '../../hooks/useOpportunity';
-import useAddOpportunity from '../../hooks/useAddOpportunity';
+
 import useEditOpportunity from '../../hooks/useEditOpportunity';
-import UploadImage from '../../components/UploadImage/UploadImage';
+
 import NewImageUpload3 from '../../components/NewImageUpload3/NewImageUpload3';
 import { convertFromRaw, convertToRaw } from 'draft-js';
-import TextEditor from '../../components/TextEditor/TextEditor';
+
 import OpportunityImagesUpload from '../../components/OpportunityImagesUpload/OpportunityImagesUpload';
 import EditorSection from '../../components/EditorSection/EditorSection';
 
@@ -35,7 +35,7 @@ const EditOpportunity: React.FC = () => {
   const { state: authState } = React.useContext(AuthContext);
 
 // console.log(profileId);
-  const { isLoading, isSuccess: opportunitySuccess, refetch: opportunityRefetch, data, error } = useOpportunity(opportunityId.id);
+  const { isLoading, isSuccess: opportunitySuccess, refetch: opportunityRefetch, data, error } = useOpportunity(Number(opportunityId.id));
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -89,10 +89,6 @@ const EditOpportunity: React.FC = () => {
 
 	}
 
- 
-// console.log(date)
-// console.log(data)
-
 
   return (
     <IonPage>
@@ -113,9 +109,15 @@ const EditOpportunity: React.FC = () => {
         
         <div className="opportunity">
 
-          <h1 style={{color: "var(--ion-color-dark)", lineHeight: 0.8, fontSize: "4em", padding: "15px"}}>EDIT <br/><span style={{color: "var(--ion-color-primary)"}}>OPPORTUNITY</span></h1>
-  
+          <h1 style={{color: "var(--ion-color-dark)", lineHeight: 0.8, fontSize: "4em", padding: "16px 16px 0"}}>EDIT <br/><span style={{color: "var(--ion-color-primary)"}}>OPPORTUNITY</span></h1>
+          
+          <div className="opportunity-back">
+            <p onClick={() => { history.push('/opportunity/' + opportunityId.id)}}>{"< Back to opportunity"}</p>
+          </div>
+
           <div className="editor-wrap">
+
+          
 
             <div className="editor-section">
 
@@ -133,7 +135,6 @@ const EditOpportunity: React.FC = () => {
                     
                     { opportunityStatus === "Active" && ( new Date() < new Date(date) ) && <div className="editor-section-button" onClick={() => { saveField( {opportunityStatus: "Draft" }); }}>Set to Draft</div> }
 
-
                     { opportunityStatus === "Draft" && !date && <div className="editor-section-button" onClick={() => { saveField( {opportunityStatus: "Active" }); }}>Publish</div> }
 
                     {/* { new Date() < new Date(date) && <div className="editor-section-button" onClick={() => { saveField( {opportunityStatus: "Active" }); }}>Publish</div> } */}
@@ -143,22 +144,6 @@ const EditOpportunity: React.FC = () => {
 
                 </div>
                 <div className="editor-section-bottom">
-
-                  
-
-                    {/* { opportunityStatus === "Draft" && new Date() < new Date(date) && "Draft" }
-
-                    { opportunityStatus === "Active" && new Date() < new Date(date) && "Active" }
-                    
-                    { !date && opportunityStatus === "Active" && "Active" }
-                    
-                    { new Date() > new Date(date) && "Expired" }
-
-                    { !opportunityStatus && !date && "Draft" }
-                    
-                    { opportunityStatus === "Draft" && !date && "Draft" }
-
-                    { !opportunityStatus && new Date() < new Date(date) && "Draft" } */}
 
                     { getOpportunityStatus(opportunityStatus, date) }
 

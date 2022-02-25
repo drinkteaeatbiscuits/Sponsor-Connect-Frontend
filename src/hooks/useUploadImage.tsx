@@ -10,6 +10,7 @@ const useUploadImage = ( profileId:any, setTheImage:Function, setUploadProgress:
     
     return useMutation(
       "uploadedImages",
+
       async (data: any) => {
 
       var formdata = new FormData();
@@ -32,10 +33,6 @@ const useUploadImage = ( profileId:any, setTheImage:Function, setUploadProgress:
 
           
           client.invalidateQueries("uploadedImages");
-          // setImageRef(response.data[0]);
-
-          
-
           setTheImage(response.data[0]);
           
         })

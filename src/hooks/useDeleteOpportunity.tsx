@@ -5,7 +5,7 @@ const useDeleteOpportunity = ( opportunityId: any ) => {
     const client = useQueryClient();
     
     return useMutation(
-      "opportunity",
+      ["opportunity", opportunityId],
       async () => {
   
       const opportunityResponse = await fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/opportunities/" + opportunityId, {
@@ -22,8 +22,8 @@ const useDeleteOpportunity = ( opportunityId: any ) => {
       {
         onSuccess: () => {
             
-          client.invalidateQueries("opportunity");
-          client.invalidateQueries("opportunities");
+          // client.invalidateQueries(["opportunity", opportunityId]);
+          client.invalidateQueries(["opportunities"]);
         }
       }
     )

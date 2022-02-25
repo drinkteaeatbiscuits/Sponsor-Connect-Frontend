@@ -1,10 +1,7 @@
 import { IonButton, IonContent, IonPage } from '@ionic/react';
-import Header from '../../components/Header';
 import { useHistory, useParams } from 'react-router';
-import Cookies from 'js-cookie';
 import { AuthContext } from "../../App";
 import React from 'react';
-import LogoutButton from '../../components/LogoutButton';
 import TabBar from '../../components/TabBar';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
 

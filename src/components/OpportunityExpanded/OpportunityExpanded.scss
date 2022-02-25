@@ -96,6 +96,9 @@
 		@media screen and (min-width: 768px) {
 			font-size: 4em;
 		}
+		.opportunity-status-draft & {
+			color: var(--ion-color-tertiary);
+		}
 	}
 }
 
@@ -154,6 +157,9 @@
 		@media screen and (min-width: 768px) {
 			font-size: 2.5em;
 		}
+		.opportunity-status-draft & {
+			color: var(--ion-color-tertiary);
+		}
 	}
 
 	.interest-button {
@@ -168,4 +174,14 @@
 .opportunity-deleted {
 	color: var(--ion-color-dark);
 	padding: 16px 24px;
+}
+
+
+.opportunity-expanded {
+	.opportunity-status-draft {
+		color: var(--ion-color-tertiary);
+	}
+	.opportunity-status-expired {
+		color: var(--ion-color-danger);
+	}
 }
