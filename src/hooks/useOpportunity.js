@@ -1,13 +1,13 @@
 import { useQuery, useQueryClient } from 'react-query';
 
-const useOpportunity = ( id:any, profileId ) => {
+const useOpportunity = ( id:number, profileId ) => {
 
     const client = useQueryClient();
 
 	// console.log(id);
 
     return useQuery(
-      "opportunity-" + id,
+      ["opportunity", id],
       async () => {
 
 		if(id){
@@ -18,9 +18,9 @@ const useOpportunity = ( id:any, profileId ) => {
 
 			const opportunity = await opportunityResponse.json();
 
-			// client.setQueryData([ "opportunity-" + id ], opportunity);
+			client.setQueryData([ "opportunity", id ], opportunity);
 
-			client.invalidateQueries(["opportunities-" + profileId]);
+			// client.invalidateQueries(["opportunities-" + profileId]);
 	  
 			return opportunity;
 		}

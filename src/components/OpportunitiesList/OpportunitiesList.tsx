@@ -7,8 +7,6 @@ import { showCurrency } from "../../functions/showCurrency";
 import useOpportunities from "../../hooks/useOpportunities";
 import FavouriteOpportunityButton from "../FavouriteOpportunityButton/FavouriteOpportunityButton";
 
-import Image from '../Image/Image';
-
 import './OpportunitiesList.scss';
 
 interface OpportunitiesListProps {
@@ -36,7 +34,10 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 				const opportunityStatus = getOpportunityStatus(opportunity.opportunityStatus, opportunity.expiryDate?.date).toLowerCase();
 				{ if( opportunityStatus != "active" && authState?.user?.profile !== parseInt(profileId) ){ return }}
 
-				return <div className={"opportunity opportunity-status-" + getOpportunityStatus(opportunity.opportunityStatus, opportunity.expiryDate?.date).toLowerCase() }  style={{position: "relative"}} key={opportunity.id} onClick={ ()=> history.push("/opportunity/" + opportunity.id) }>
+				return <div className={"opportunity opportunity-status-" + getOpportunityStatus(opportunity.opportunityStatus, opportunity.expiryDate?.date).toLowerCase() }  
+				style={{position: "relative"}} 
+				key={opportunity.id} 
+				onClick={ ()=> history.push("/opportunity/" + opportunity.id, {deletedOpportunity: false}) }>
 
 					<div className=" opportunity-details " >
 

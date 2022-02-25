@@ -6,7 +6,7 @@ const useProfile = ( profileId: any ) => {
 	const client = useQueryClient();
 	
 	return useQuery(
-	  ["profiles", parseInt(profileId)],
+	  ["profile", parseInt(profileId)],
 	  async() => {
 		
 		if(profileId){
@@ -17,7 +17,7 @@ const useProfile = ( profileId: any ) => {
 		const post = await response.json();
   
 
-		client.setQueryData(["profiles", post.id], post);
+		// client.setQueryData(["profiles", post.id], post);
 
 		return post;
 	}

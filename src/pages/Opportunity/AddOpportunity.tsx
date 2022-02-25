@@ -9,13 +9,15 @@ import TabBar from '../../components/TabBar';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
 import useOpportunity from '../../hooks/useOpportunity';
 import useAddOpportunity from '../../hooks/useAddOpportunity';
-import UploadImage from '../../components/UploadImage/UploadImage';
+
 import urlSlug from 'url-slug';
 import useEditOpportunity from '../../hooks/useEditOpportunity';
 import NewImageUpload3 from '../../components/NewImageUpload3/NewImageUpload3';
 import TextEditor from '../../components/TextEditor/TextEditor';
 import { convertFromRaw, convertToRaw } from 'draft-js';
 import OpportunityImagesUpload from '../../components/OpportunityImagesUpload/OpportunityImagesUpload';
+
+import { Calendar } from 'react-date-range';
 
 export interface props { }
 
@@ -42,6 +44,7 @@ const AddOpportunity: React.FC = () => {
   const [publishedAt, setPublishedAt] = useState<any>(null);
   const [opportunityId, setOpportunityId] = useState<any>("");
   const [opportunitySlug, setOpportunitySlug] = useState<any>("");
+  const [date, setDate] = useState("");
 
   const [newOpportunityData, setNewOpportunityData] = useState<any>("");
 
@@ -69,7 +72,7 @@ const AddOpportunity: React.FC = () => {
 
   const [editorContent, setEditorContent] = useState(null);
 
- 
+ const [showExpiryDateEdit, setShowExpiryDateEdit] = useState(false);
 
   const refetchOpportunityImages = () => {
     
@@ -91,7 +94,7 @@ const AddOpportunity: React.FC = () => {
 
   }
 
-  const saveOpportunity = async () => {
+  const saveOpportunity = async (status) => {
     
     await editOpportunityMutation({
       profile: profileId.id,
@@ -101,10 +104,32 @@ const AddOpportunity: React.FC = () => {
       // images,
       opportunityDescription: editorContent && convertToRaw(editorContent),
       price,
-      published_at: publishedAt 
+      published_at: publishedAt ,
+      expiryDate: date,
+      opportunityStatus: status,
+    }).then(() => {
+
+      setTitle("");
+      setDescription("");
+      setImages("");
+      setPrice("");
+      setOpportunityError("");
+      setPublishedAt(null);
+      setOpportunityId("");
+      setOpportunitySlug("");
+      setDate("");
+
+      history.push("/opportunity/" + opportunityId);
+
     });
     
-    history.push("/opportunity/" + opportunityId);
+    
+
+  }
+
+  const displayDate = (date) => {
+    let theDate = new Date(date);
+    return theDate.getDate().toString().padStart(2, "0") + '/' + (theDate.getMonth() + 1).toString().padStart(2, "0") + '/' + theDate.getFullYear();
 
   }
 
@@ -146,6 +171,34 @@ const AddOpportunity: React.FC = () => {
                   </div>
                 </div>
 
+                <div className="editor-section">
+
+                    <div className="editor-section-top">
+
+                      <label className="editor-section-title">Expiry Date</label>
+
+                      <div className="editor-section-top-buttons">
+                        { !showExpiryDateEdit &&  <div className="editor-section-button" onClick={() => { setShowExpiryDateEdit( !showExpiryDateEdit ) }}> Add</div> }
+                    
+                        { showExpiryDateEdit && <div className="editor-section-button secondary" onClick={() => { setDate(""); setShowExpiryDateEdit( !showExpiryDateEdit ) }}>Cancel</div> }
+                        
+                        { showExpiryDateEdit && date && <div className="editor-section-button" onClick={() => { setDate(""); setShowExpiryDateEdit( !showExpiryDateEdit );}}>Clear</div> }
+                      
+
+                      </div>
+                      
+
+                    </div>
+                    <div className="editor-section-bottom">
+
+                        <p>{ date ? displayDate(date) : "Not Set" }</p>
+
+                        { showExpiryDateEdit && <Calendar date={ date ? new Date(date) : new Date() } onChange={e => setDate(e)} /> }
+
+                    </div>	
+
+                </div>
+
                 <NewImageUpload3 
                   currentImage={ images } 
                   setCurrentImage={ setImages } 
@@ -154,7 +207,7 @@ const AddOpportunity: React.FC = () => {
                   refId={ opportunityId }
                   imageCropAspectRatio={3 / 1} 
                   circularCrop={false}
-                  // showCroppedPreview={ false }  
+                  showCroppedPreview={ true }  
                   label="Cover Image"
                   /> 
 
@@ -209,7 +262,9 @@ const AddOpportunity: React.FC = () => {
                 { opportunitySuccess && isSuccess && data && <OpportunityImagesUpload opportunityData={ data } refetchOpportunityImages={ opportunityRefetch } label="Opportunity Images" /> }
 
 
-                { opportunitySuccess && <IonButton expand="block" className="add-opportunity" onClick={title ? () => saveOpportunity() : () => setOpportunityError('Please enter a title')}>Save Opportunity</IonButton> }
+                { opportunitySuccess && <IonButton expand="block" size="small" color="light" onClick={title ? () => saveOpportunity('Draft') : () => setOpportunityError('Please enter a title')}>Save Opportunity as Draft</IonButton> }
+                
+                { opportunitySuccess && <IonButton expand="block" className="add-opportunity" onClick={title ? () => saveOpportunity('Active') : () => setOpportunityError('Please enter a title')}>Publish Opportunity</IonButton> }
                 
               </div>
               

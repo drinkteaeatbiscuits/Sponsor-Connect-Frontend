@@ -27,7 +27,7 @@ const ProfileImages: React.FC = () => {
 	const [	showImageUpload, setShowImageUpload ] = useState(false);
 	
 
-	const { isLoading: isDeletingImage, isSuccess: isDeletingImageSuccess, error: isDeletingImageError, mutateAsync: addDeletingImageMutation, reset: resetDeletingImage } = useDeleteImage();
+	const { isLoading: isDeletingImage, isSuccess: isDeletingImageSuccess, error: isDeletingImageError, mutateAsync: addDeletingImageMutation, reset: resetDeletingImage } = useDeleteImage(authState?.user?.profile);
 
 	
 	useEffect(() => {

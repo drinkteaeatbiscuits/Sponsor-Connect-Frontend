@@ -5,7 +5,7 @@ const useEditProfileField = ( profileId: any ) => {
     const client = useQueryClient();
     
     return useMutation(
-      "my-profile",
+      ["profile", profileId],
       async ( data ) => {
 
         // console.log(data);
@@ -26,10 +26,10 @@ const useEditProfileField = ( profileId: any ) => {
         onSuccess: (data) => {
 
           // console.log(data);
-            
-          client.invalidateQueries("profile-" + profileId);
-          client.invalidateQueries("my-profile");
-          client.invalidateQueries("profiles");
+          client.setQueryData(["profile", profileId], data);
+          // client.invalidateQueries("profile-" + profileId);
+          // client.invalidateQueries("my-profile");
+          client.invalidateQueries(["profile"]);
           
         }
       }
