@@ -60,7 +60,6 @@ const EditProfile: React.FC = () => {
 
   const [shortDescription, setShortDescription] = useState<any>("");
   const [fullDescription, setFullDescription] = useState<any>("");
-
   const [currentProfilePicture, setCurrentProfilePicture] = useState<any>("");
 
   const [coverImage, setCoverImage] = useState<any>("");
@@ -125,7 +124,6 @@ const EditProfile: React.FC = () => {
 
       setCurrentProfilePicture(profileData?.data?.profilePicture);
       setCoverImage(profileData?.data?.coverImage);
-
 
     }
 
