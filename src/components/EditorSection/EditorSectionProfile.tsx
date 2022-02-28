@@ -39,7 +39,7 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 
 	const saveField = async ( sectionData ) => {
 		
-		// console.log(sectionData);
+		console.log('save field', sectionData);
 
 		await editProfileMutation( sectionData.sectionData );
 	}
@@ -69,7 +69,7 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 					<div className="editor-section-button secondary" onClick={() => {setShowEdit(false); currentValue && setValue(currentValue); }}>Cancel</div> }
 
 					
-					{ showEdit && fieldType !== 'TextEditor' && <div className="editor-section-button" onClick={() => saveField({ sectionData })} >Save</div> }
+					{ showEdit && fieldType !== 'TextEditor' && <div className="editor-section-button" onClick={() => {console.log(sectionData); saveField({ sectionData })}} >Save</div> }
 					
 					{ showEdit && fieldType === 'TextEditor' && <div className="editor-section-button" onClick={() => saveEditor({ editorContent })} >Save</div> }
 
