@@ -23,19 +23,22 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 	const { label, currentValue, fieldType, className, profileId, fieldRef, autocapitalize } = EditorSectionProps;
 	const { state: authState } = React.useContext(AuthContext);
 	const [ showEdit, setShowEdit ] = useState(false);
-	const [ value, setValue ] = useState("");
+	const [ value, setValue ] = useState(currentValue);
 	const [ sectionData, setSectionData ] = useState<object>([]);
 	const [ editorContent, setEditorContent ] = useState(null);
 	const {isLoading: isEditingOpportunity, error: editOpportunityError, isSuccess, mutateAsync: editProfileMutation} = useEditProfileField( profileId );
 
 	useEffect(() => {
-		setValue(currentValue);
+		
+		// setValue(currentValue);
 		let newSectionData = {};
 		currentValue && ( newSectionData[ fieldRef ] = currentValue );
 		currentValue && setSectionData(newSectionData);
 		currentValue && setEditorContent(currentValue);
 		isSuccess && setShowEdit(false);
+
 	}, [ currentValue, isSuccess ]);
+
 
 	const saveField = async ( sectionData ) => {
 		
@@ -54,7 +57,7 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 
 	}
 
-	
+	console.log(sectionData);
 
 	return <div className={( className ? className : "" ) + " editor-section"}>
 
@@ -94,6 +97,9 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 
 					} } /> : fieldType === 'IonTextarea' && 
 					<IonTextarea value={ value } autocapitalize={autocapitalize} onIonChange={ (e:any) => {
+
+						console.log(e.detail.value);
+
 						setValue( e.detail.value ); 
 						let newSectionData = {};
 						newSectionData[ fieldRef ] = e.detail.value;
