@@ -23,14 +23,14 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 	const { label, currentValue, fieldType, className, profileId, fieldRef, autocapitalize } = EditorSectionProps;
 	const { state: authState } = React.useContext(AuthContext);
 	const [ showEdit, setShowEdit ] = useState(false);
-	const [ value, setValue ] = useState(currentValue);
+	const [ value, setValue ] = useState("");
 	const [ sectionData, setSectionData ] = useState<object>([]);
 	const [ editorContent, setEditorContent ] = useState(null);
 	const {isLoading: isEditingOpportunity, error: editOpportunityError, isSuccess, mutateAsync: editProfileMutation} = useEditProfileField( profileId );
 
 	useEffect(() => {
 		
-		// setValue(currentValue);
+		setValue(currentValue);
 		let newSectionData = {};
 		currentValue && ( newSectionData[ fieldRef ] = currentValue );
 		currentValue && setSectionData(newSectionData);
