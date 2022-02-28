@@ -40,14 +40,51 @@ const CreateAccountBusiness: React.FC = () => {
 
   const [validForm, setValidForm] = useState<boolean>(false);
   const [errorMessages, setErrorMessages] = useState<any>({
-    "yourName": "Please enter your name",
-    "username": "Please enter an email address",
-    "password": "Please enter a password"
+    "yourName": "",
+    "username": "",
+    "password": ""
   });
 
+  // Please enter your name
+// Please enter an email address
+// Please enter a password
 
   const doCreateAccount = async () => {
     // console.log(username, password, yourName);
+    let anyErrors = false;
+    const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    
+    if(!yourName){
+      setErrorMessages({ ...errorMessages, "yourName": "Please enter your name" });
+      anyErrors = true;
+    }
+
+
+    
+    if ( !username?.match(mailformat)) {
+      setErrorMessages({ ...errorMessages, "username": "Please enter a valid email address" });
+      anyErrors = true;
+    }
+
+    if(!yourName){
+      setErrorMessages({ ...errorMessages, "yourName": "Please enter your name" });
+      
+    }
+
+    if (!passwordStrongEnough ) {
+      setErrorMessages({ ...errorMessages, "password": "Please enter a stronger password" });
+      anyErrors = true;
+    }
+
+    if (!password ) {
+      setErrorMessages({ ...errorMessages, "password": "Please enter a password" });
+      anyErrors = true;
+    }
+
+    if(anyErrors){
+      return
+    }
+
 
     const createAccountResp = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/auth/local/register", {
       headers: {
@@ -105,7 +142,7 @@ const CreateAccountBusiness: React.FC = () => {
 
       let newArray = { ...errorMessages, "yourName": "Please enter your name" };
 
-      setErrorMessages(newArray);
+      setErrorMessages({ ...errorMessages, "yourName": "Please enter your name" });
 
     }
 
@@ -197,7 +234,7 @@ const CreateAccountBusiness: React.FC = () => {
                     <div className="login-form">
                       <IonItem className="ion-no-padding">
                         <IonLabel position="stacked">Your Name</IonLabel>
-                        <IonInput id="your-name" placeholder="Your Name" value={yourName} autocomplete="name" required={true} autofocus={true} enterkeyhint="next" type="text" autocapitalize="words" onIonChange={(e: any) => { setYourName(e.detail.value); validateYourName(e.detail.value); }} />
+                        <IonInput id="your-name" placeholder="Your Name" value={yourName} autocomplete="name" required={true} autofocus={true} enterkeyhint="next" type="text" autocapitalize="words" onIonInput={(e: any) => { setYourName(e.target.value); validateYourName(e.target.value); }} onIonChange={(e: any) => { setYourName(e.detail.value); validateYourName(e.detail.value); }} />
                         {errorMessages.yourName && <p className="error-message ion-no-margin"><small>{errorMessages.yourName}</small></p>}
                       </IonItem>
 

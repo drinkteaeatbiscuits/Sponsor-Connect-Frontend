@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from 'react-query';
 
-const useUpdateProfile = () => {
+const useUpdateProfile = (id) => {
 
 	const client = useQueryClient();
 	  
 	  return useMutation(
-		"profiles",
+		["profile", id],
 		async (data: { 
 		  profileName: string; 
 		  sport: string;
@@ -43,14 +43,23 @@ const useUpdateProfile = () => {
 			}), 
 		});
 	
-		  return await profilesResponse.json();
+		const profiles = await profilesResponse.json();
+
+		return profiles;
 	
 		},
 		{
-		  onSuccess: () => {
+		  onSuccess: (data) => {
+			// client.setQueryData(["profiles", post.id], post);
+			  
+			client.setQueryData(["profile", id], data);
+			// client.invalidateQueries(["profile", id]);
+
+		  return data
+			  
 			// console.log('profile updated');
-			client.invalidateQueries("profiles");
-			client.invalidateQueries("profile");
+			// client.invalidateQueries("profiles");
+			// client.invalidateQueries("profile");
 		  }
 		}
 	  )

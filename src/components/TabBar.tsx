@@ -72,7 +72,7 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
                 {/* <div className={ ( activeTab === 'profiles' && "active " ) + " tab-button"} onClick={()=> history.push("/profiles")}>
                     <IonIcon icon={personCircle} />
                     <IonLabel>Profiles</IonLabel>
-                </div> */}
+                </div>  */}
 
 
                 {isBusinessAccount() ? 

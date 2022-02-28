@@ -56,7 +56,6 @@ import CreateAccountBusiness from './pages/CreateAccountBusiness/CreateAccountBu
 import SearchOpportunities from './pages/SearchOpportunities/SearchOpportunities';
 import ResetPassword from './pages/ResetPassword/ResetPassword';
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
-import NewUpload from './pages/NewUpload';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
 import Subscribe from './pages/Subscribe/Subscribe';
 import TextEditor from './components/TextEditor/TextEditor';
@@ -433,10 +432,6 @@ const App: React.FC = () => {
                 <DugoutArticle />
               </Route>
 
-
-              <Route exact path="/new-upload">
-                <NewUpload />
-              </Route>
 
               <Route exact path="/text-editor">
                 <NewTextEditor />

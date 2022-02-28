@@ -11,40 +11,56 @@ interface EditorSectionProps {
 	saveContent?: any,
 }
 
-const EditorSection: React.FC<EditorSectionProps> = ( EditorSectionProps ) => {
+const EditorSection: React.FC<EditorSectionProps> = (EditorSectionProps) => {
 
 
 	const { title, initialEditorContent, editorContent, setEditorContent, saveContent } = EditorSectionProps;
 
-	const [showEditor, setShowEditor ] = useState(false);
-	
+	const [showEditor, setShowEditor] = useState(false);
 
-	return <div className={ ( showEditor ? "show-editor" : "" ) + " editor-section ion-padding"}>
 
-				{title && <p className="font-weight-700 editor-section-title">{ title }</p> }
-				
-				<div className="editor-section-content">
+	return <div className={(showEditor ? "show-editor" : "") + " editor-section ion-padding"}>
 
-					<TextEditorContent editorContent={ initialEditorContent && initialEditorContent } />
-				
-					<div className="edit" onClick={() => setShowEditor(true)}>{initialEditorContent ? "Edit" : "Add" }</div>
+		<div className="editor-section-top" style={{padding: '0 8px'}}>
 
-				</div>
+			<label className="editor-section-title">{title}</label>
 
-				<div className="edit-content">
-					<TextEditor 
-						autoCapitalize="Sentences"
-						placeholder="Enter your description here." 
-						initialText={ initialEditorContent && convertFromRaw( initialEditorContent )} 
-						textEditorText={ editorContent } 
-						setTextEditorText={ setEditorContent } />
-					<div className="editor-options">
-						<div className="cancel" onClick={() => { setShowEditor(false); setEditorContent(initialEditorContent);  }}>Cancel</div>
-						<div className="save" onClick={ () => { saveContent(); setShowEditor(false);} }>Save</div> 
-					</div>     
-				</div>  
-	
+			<div className="editor-section-top-buttons">
+
+				{!showEditor ? <div className="editor-section-button" onClick={() => setShowEditor(true)}>{initialEditorContent ? "Edit" : "Add"}</div> :
+
+					<div className="editor-section-button secondary" onClick={() => { setShowEditor(false); setEditorContent(initialEditorContent); }}>Cancel</div>}
+
+				{showEditor && <div className="editor-section-button" onClick={() => {saveContent(); setShowEditor(false);}} >Save</div>}
+
 			</div>
+
+		</div>
+
+		<div className={"editor-section-bottom " + (showEditor ? "show-editor" : "")}>
+			<div className="editor-section-content">
+
+				<TextEditorContent editorContent={initialEditorContent && initialEditorContent} />
+
+				{/* <div className="edit" onClick={() => setShowEditor(true)}>{initialEditorContent ? "Edit" : "Add"}</div> */}
+
+			</div>
+
+			<div className="edit-content">
+				<TextEditor
+					autoCapitalize="Sentences"
+					placeholder="Enter your description here."
+					initialText={initialEditorContent && convertFromRaw(initialEditorContent)}
+					textEditorText={editorContent}
+					setTextEditorText={setEditorContent} />
+				
+			</div>
+		</div>
+
+
+
+
+	</div>
 
 }
 

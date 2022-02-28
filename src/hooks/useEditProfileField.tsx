@@ -5,10 +5,10 @@ const useEditProfileField = ( profileId: any ) => {
     const client = useQueryClient();
     
     return useMutation(
-      "my-profile",
+      ["profile", profileId],
       async ( data ) => {
 
-        // console.log(data);
+      console.log(data);
   
       const response = await fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/profiles/me", {
           headers: {
@@ -23,13 +23,13 @@ const useEditProfileField = ( profileId: any ) => {
   
       },
       {
-        onSuccess: (data) => {
+        onSuccess: (theresponse) => {
 
           // console.log(data);
-            
-          client.invalidateQueries("profile-" + profileId);
-          client.invalidateQueries("my-profile");
-          client.invalidateQueries("profiles");
+          client.setQueryData(["profile", profileId], theresponse);
+          // client.invalidateQueries("profile-" + profileId);
+          // client.invalidateQueries("my-profile");
+          client.invalidateQueries(["profile"]);
           
         }
       }

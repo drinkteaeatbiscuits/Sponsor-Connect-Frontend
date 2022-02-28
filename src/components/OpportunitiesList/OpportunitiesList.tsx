@@ -7,8 +7,6 @@ import { showCurrency } from "../../functions/showCurrency";
 import useOpportunities from "../../hooks/useOpportunities";
 import FavouriteOpportunityButton from "../FavouriteOpportunityButton/FavouriteOpportunityButton";
 
-import Image from '../Image/Image';
-
 import './OpportunitiesList.scss';
 
 interface OpportunitiesListProps {
@@ -30,15 +28,16 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 
 	return <div className="opportunities">
 
-			{data.thisdoesntexsist}
-
 	
 			{ data?.length > 0 && data?.map(( opportunity:any )=>{
 
 				const opportunityStatus = getOpportunityStatus(opportunity.opportunityStatus, opportunity.expiryDate?.date).toLowerCase();
 				{ if( opportunityStatus != "active" && authState?.user?.profile !== parseInt(profileId) ){ return }}
 
-				return <div className={"opportunity opportunity-status-" + getOpportunityStatus(opportunity.opportunityStatus, opportunity.expiryDate?.date).toLowerCase() }  style={{position: "relative"}} key={opportunity.id} onClick={ ()=> history.push("/opportunity/" + opportunity.id) }>
+				return <div className={"opportunity opportunity-status-" + getOpportunityStatus(opportunity.opportunityStatus, opportunity.expiryDate?.date).toLowerCase() }  
+				style={{position: "relative"}} 
+				key={opportunity.id} 
+				onClick={ ()=> history.push("/opportunity/" + opportunity.id, {deletedOpportunity: false}) }>
 
 					<div className=" opportunity-details " >
 
@@ -57,19 +56,17 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 							{opportunity.title && <p className="title">{opportunity.title}</p> }
 					
 			
-						{opportunity.description && <p className="description">
-							{opportunity.description} 
-						</p> }
+							{opportunity.description && <p className="description">
+							
+								{opportunity.description} 
 
+							</p> }
 
 					</div>
 
-			{ opportunity.images && 
+				{ opportunity.images && 
          
 						<div className="opportunity-image-thumb">
-
-							{/* {console.log(opportunity.images)} */}
-							{/* <img className="opportunity-image" src={  process.env.REACT_APP_S3_URL + "/profile_image_thumbnail_" + p.images?.hash + ".jpg" } alt={p.title} /> */}
 							<picture>
 								<source type="image/webp" media="(max-width: 576px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/profile/" +  opportunity.images?.hash + ".webp" } />
 								<source type="image/jpeg" media="(min-width: 1441px)" srcSet={  process.env.REACT_APP_S3_URL + "/images/profile/" +  opportunity.images?.hash + opportunity.images?.ext } />
@@ -78,12 +75,10 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 						</div>
 		 			 }
 						
-
 				  	</div>
 				})}
 
-		
-	
+
 		</div>;
 
 }

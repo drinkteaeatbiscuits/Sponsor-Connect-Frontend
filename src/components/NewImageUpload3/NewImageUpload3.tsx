@@ -82,6 +82,9 @@ const getFileName = (file: any) => {
  
 const NewImageUpload3: React.FC<UploadImageProps> = (UploadImageProps) => {
 
+	const { state: authState } = React.useContext(AuthContext);
+
+
 	const client = useQueryClient();
 
 	const imageWriter = createDefaultImageWriter({
@@ -146,7 +149,11 @@ const NewImageUpload3: React.FC<UploadImageProps> = (UploadImageProps) => {
 							method: "POST",
 							credentials: "include",
 						}).then(() => {
-							client.invalidateQueries("my-profile");
+							
+							
+							client.invalidateQueries(["profile"]);
+							client.invalidateQueries(["profile", authState?.user?.profile]);
+
 						})
 
 
@@ -156,11 +163,11 @@ const NewImageUpload3: React.FC<UploadImageProps> = (UploadImageProps) => {
 				};
 	
 				// start uploading the image
-				request.send(formData);
-			}),
+				request.send(formData);  
+			}), 
 	});
 
-	const { isLoading: isDeletingImage, error: isDeletingImageError, mutateAsync: addDeletingImageMutation } = useDeleteImage();
+	const { isLoading: isDeletingImage, error: isDeletingImageError, mutateAsync: addDeletingImageMutation } = useDeleteImage(authState?.user?.profile);
 	const [src, setSrc] = useState<any>("");
 	const [croppedImageUrl, setCroppedImageUrl] = useState<any>("");
 	const [aNewImage, setANewImage] = useState<boolean>(false);
@@ -344,6 +351,8 @@ useEffect(
 					</div>
 
 					<div className="editor-section-bottom">
+
+
 
 						{ UploadImageProps.currentImage ? 
 							UploadImageProps.showCroppedPreview && <div className="current-image">
