@@ -22,37 +22,26 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 
 	const { label, currentValue, fieldType, className, profileId, fieldRef, autocapitalize } = EditorSectionProps;
 	const { state: authState } = React.useContext(AuthContext);
-
 	const [ showEdit, setShowEdit ] = useState(false);
 	const [ value, setValue ] = useState("");
 	const [ sectionData, setSectionData ] = useState<object>([]);
-
 	const [ editorContent, setEditorContent ] = useState(null);
-
 	const {isLoading: isEditingOpportunity, error: editOpportunityError, isSuccess, mutateAsync: editProfileMutation} = useEditProfileField( profileId );
 
-
 	useEffect(() => {
-
 		setValue(currentValue);
-
 		let newSectionData = {};
 		currentValue && ( newSectionData[ fieldRef ] = currentValue );
-
 		currentValue && setSectionData(newSectionData);
-
 		currentValue && setEditorContent(currentValue);
-		
 		isSuccess && setShowEdit(false);
-
 	}, [ currentValue, isSuccess ]);
 
-	
-
 	const saveField = async ( sectionData ) => {
+		
+		// console.log(sectionData);
 
 		await editProfileMutation( sectionData.sectionData );
-
 	}
 
 	const saveEditor = async ( editorContent ) => {
@@ -64,6 +53,8 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 		await editProfileMutation( newEditorContent );
 
 	}
+
+	
 
 	return <div className={( className ? className : "" ) + " editor-section"}>
 
