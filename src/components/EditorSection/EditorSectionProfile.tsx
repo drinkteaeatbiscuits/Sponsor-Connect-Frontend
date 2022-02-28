@@ -54,7 +54,7 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 
 	}
 
-	
+	console.log(sectionData);
 
 	return <div className={( className ? className : "" ) + " editor-section"}>
 
@@ -94,6 +94,9 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 
 					} } /> : fieldType === 'IonTextarea' && 
 					<IonTextarea value={ value } autocapitalize={autocapitalize} onIonChange={ (e:any) => {
+
+						console.log(e.detail.value);
+
 						setValue( e.detail.value ); 
 						let newSectionData = {};
 						newSectionData[ fieldRef ] = e.detail.value;
