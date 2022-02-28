@@ -107,15 +107,15 @@ const EditProfile: React.FC = () => {
 
     if (profileData.status === "success") {
 
-      setProfileName(profileData?.data?.profileName);
+      !profileName && setProfileName(profileData?.data?.profileName);
 
       !yourSport && setYourSport(profileData?.data?.sport);
 
       !location && setLocation(profileData?.data?.location);
       setPriceRange(profileData?.data?.priceRange);
-      setWebsite(profileData?.data?.website);
+      !website && setWebsite(profileData?.data?.website);
 
-      setShortDescription(profileData?.data?.shortDescription);
+      !shortDescription && setShortDescription(profileData?.data?.shortDescription);
       setFullDescription(profileData?.data?.description);
 
       setFullDescriptionText(profileData?.data?.fullDescriptionText && convertFromRaw(profileData.data?.fullDescriptionText));
@@ -205,7 +205,9 @@ const EditProfile: React.FC = () => {
             <div className="editor-wrap">
 
               <ErrorBoundary>
-                <EditorSectionProfile autocapitalize='words' profileId={authState?.user.profile} fieldRef="profileName" label={"Profile Name"} currentValue={profileName} />
+                <EditorSectionProfile autocapitalize='words' 
+                profileId={authState?.user.profile} fieldRef="profileName" 
+                label={"Profile Name"} currentValue={profileName} setValue={setProfileName} />
               </ErrorBoundary>
 
               <ErrorBoundary>
@@ -308,7 +310,8 @@ const EditProfile: React.FC = () => {
               </div>
 
 
-              <ErrorBoundary><EditorSectionProfile autocapitalize='off' profileId={authState?.user.profile} fieldRef="website" label={"Website"} currentValue={website} />
+              <ErrorBoundary>
+                <EditorSectionProfile autocapitalize='off' profileId={authState?.user.profile} fieldRef="website" label={"Website"} currentValue={website} setValue={setWebsite} />
               </ErrorBoundary>
 
               <div className="editor-section">
@@ -345,7 +348,7 @@ const EditProfile: React.FC = () => {
 
 
               <ErrorBoundary>
-                <EditorSectionProfile autocapitalize='on' fieldType="IonTextarea" profileId={authState?.user.profile} fieldRef="shortDescription" label={"Short Description"} currentValue={shortDescription} />
+                <EditorSectionProfile autocapitalize='on' fieldType="IonTextarea" profileId={authState?.user.profile} fieldRef="shortDescription" label={"Short Description"} currentValue={shortDescription} setValue={setShortDescription} />
               </ErrorBoundary>
 
               <div className="editor-section">
