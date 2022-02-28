@@ -105,7 +105,7 @@ const AddOpportunity: React.FC = () => {
       opportunityDescription: editorContent && convertToRaw(editorContent),
       price,
       published_at: publishedAt ,
-      expiryDate: date,
+      expiryDate: date ? { date } : {},
       opportunityStatus: status,
     }).then(() => {
 
