@@ -30,7 +30,7 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 
 	useEffect(() => {
 		
-		setValue(currentValue);
+		!value && setValue(currentValue);
 		let newSectionData = {};
 		currentValue && ( newSectionData[ fieldRef ] = currentValue );
 		currentValue && setSectionData(newSectionData);
