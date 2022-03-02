@@ -119,7 +119,7 @@ const AddOpportunity: React.FC = () => {
       setOpportunitySlug("");
       setDate("");
 
-      history.push("/opportunity/" + opportunityId);
+      history.push("/opportunity/" + opportunityId, {deletedOpportunity: false});
 
     });
     

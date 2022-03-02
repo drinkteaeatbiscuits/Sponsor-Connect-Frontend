@@ -29,7 +29,6 @@ const Opportunity: React.FC = () => {
   const theLocation = useLocation<any>();
   const { isLoading, data: opportunityData, error } = useOpportunity(Number(opportunityId.id));
   
-
   const [deletedOpportunity, setDeletedOpportunity] = useState(theLocation?.state?.deletedOpportunity);
   
   useEffect(() => {
@@ -38,8 +37,8 @@ const Opportunity: React.FC = () => {
 
 	}, [theLocation?.state?.deletedOpportunity]);
 
-  // console.log(deletedOpportunity);
-  // console.log( theLocation.state.deletedOpportunity );
+  console.log(deletedOpportunity);
+  console.log( theLocation?.state?.deletedOpportunity );
 
   return (
     <IonPage>
