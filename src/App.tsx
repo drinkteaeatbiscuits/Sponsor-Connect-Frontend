@@ -294,7 +294,7 @@ const App: React.FC = () => {
            
             { state?.user?.profile && <Notifications /> }
 
-            <IonRouterOutlet>
+            <IonRouterOutlet animated={false}>
 
               <Route exact path="/">
                 {state.isAuthenticated ? <Redirect to="/dashboard" /> : <Landing />}
