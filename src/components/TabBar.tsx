@@ -101,7 +101,7 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
                 }
 
 
-                <div className={ ( activeTab === 'the-dugout' && "active " ) + " tab-button"} onClick={()=> history.push("/the-dugout")}>
+                <div className={ ( activeTab === 'the-dugout' && "active " ) + " tab-button"} onClick={()=> history.push("/the-dugout-categories")}>
                     <IonIcon icon={newspaper} />
                     <IonLabel>The Dugout</IonLabel>
                 </div>

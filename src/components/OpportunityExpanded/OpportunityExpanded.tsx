@@ -29,7 +29,6 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 	const [showDelete, setShowDelete] = useState(false);
 
 
-
 	const [showShare, setShowShare] = useState(false);
 
 	const deleteOpportunity = async () => {
@@ -63,7 +62,7 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 					{ authState?.user.profile === parseInt(opportunityData?.profile.id) && <div className={'opportunity-status-' + opportunityStatus.toLowerCase()} style={{ 
 							fontWeight: 700}}>{ opportunityStatus }</div> }
 
-					{!showDelete && <div className="edit" onClick={() => history.push("/edit-opportunity/" + opportunityData.id)}>Edit</div>}
+					{!showDelete && <div className="edit" onClick={() => history.push("/edit-opportunity/" + opportunityData.id, {deletedOpportunity: false})}>Edit</div>}
 
 					{!showDelete && <IonIcon className="" onClick={() => { showDelete ? setShowDelete(false) : setShowDelete(true) }} icon={trashOutline}></IonIcon>}
 
