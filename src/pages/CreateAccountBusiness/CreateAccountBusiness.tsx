@@ -38,6 +38,9 @@ const CreateAccountBusiness: React.FC = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [passwordStrongEnough, setPasswordStrongEnough] = useState<boolean>(false);
 
+  const [location, setLocation] = useState<any>({});
+  const [latLong, setLatLong] = useState<any>({});
+
   const [validForm, setValidForm] = useState<boolean>(false);
   const [errorMessages, setErrorMessages] = useState<any>({
     "yourName": "",
@@ -46,42 +49,42 @@ const CreateAccountBusiness: React.FC = () => {
   });
 
   // Please enter your name
-// Please enter an email address
-// Please enter a password
+  // Please enter an email address
+  // Please enter a password
 
   const doCreateAccount = async () => {
     // console.log(username, password, yourName);
     let anyErrors = false;
     const mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    
-    if(!yourName){
+
+    if (!yourName) {
       setErrorMessages({ ...errorMessages, "yourName": "Please enter your name" });
       anyErrors = true;
     }
 
 
-    
-    if ( !username?.match(mailformat)) {
+
+    if (!username?.match(mailformat)) {
       setErrorMessages({ ...errorMessages, "username": "Please enter a valid email address" });
       anyErrors = true;
     }
 
-    if(!yourName){
+    if (!yourName) {
       setErrorMessages({ ...errorMessages, "yourName": "Please enter your name" });
-      
+
     }
 
-    if (!passwordStrongEnough ) {
+    if (!passwordStrongEnough) {
       setErrorMessages({ ...errorMessages, "password": "Please enter a stronger password" });
       anyErrors = true;
     }
 
-    if (!password ) {
+    if (!password) {
       setErrorMessages({ ...errorMessages, "password": "Please enter a password" });
       anyErrors = true;
     }
 
-    if(anyErrors){
+    if (anyErrors) {
       return
     }
 
@@ -91,11 +94,13 @@ const CreateAccountBusiness: React.FC = () => {
         "Content-Type": "application/json"
       },
       method: "POST",
-      body: JSON.stringify({ 
+      body: JSON.stringify({
         username: username,
         email: username,
         password: password,
         yourName: yourName,
+        location: location,
+        latLong: latLong,
         accountType: "Business",
       }),
       credentials: "include",
@@ -118,14 +123,14 @@ const CreateAccountBusiness: React.FC = () => {
       })
     } else {
 
-        dispatch && dispatch({
-          type: "setUser",
-          payload: createAccountInfo
-        });
-      
-      }
+      dispatch && dispatch({
+        type: "setUser",
+        payload: createAccountInfo
+      });
 
     }
+
+  }
 
   const [present] = useIonAlert();
 
@@ -207,7 +212,20 @@ const CreateAccountBusiness: React.FC = () => {
     }
 
   }
-  
+
+
+  const doLocationSelected = (event: any) => {
+
+    setLocation(event);
+    geocodeByAddress(event.label)
+      .then(results => getLatLng(results[0]))
+      .then(({ lat, lng }) => {
+        // console.log('Successfully got latitude and longitude', { lat, lng });
+        setLatLong({ lat, lng });
+      }
+      );
+  }
+
 
   return (
     <IonPage>
@@ -220,50 +238,72 @@ const CreateAccountBusiness: React.FC = () => {
             <IonCol className="login-image app-sidebar">
 
               <div className="sc-logo" onClick={() => history.push("/")}><SvgScLogo /></div>
-              
+
             </IonCol>
 
             <IonCol className="on-boarding-fields">
 
               <div className="create-account-steps">
 
-                  <div className="create-account-step create-account">
+                <div className="create-account-step create-account">
 
-                    <h1 className="ion-text-center">CREATE ACCOUNT</h1>
-      
-                    <div className="login-form">
-                      <IonItem className="ion-no-padding">
-                        <IonLabel position="stacked">Your Name</IonLabel>
-                        <IonInput id="your-name" placeholder="Your Name" value={yourName} autocomplete="name" required={true} autofocus={true} enterkeyhint="next" type="text" autocapitalize="words" onIonInput={(e: any) => { setYourName(e.target.value); validateYourName(e.target.value); }} onIonChange={(e: any) => { setYourName(e.detail.value); validateYourName(e.detail.value); }} />
-                        {errorMessages.yourName && <p className="error-message ion-no-margin"><small>{errorMessages.yourName}</small></p>}
-                      </IonItem>
+                  <h1 className="ion-text-center">CREATE ACCOUNT</h1>
 
-                      <IonItem className="ion-no-padding">
-                        <IonLabel position="stacked">Email Address</IonLabel>
-                        <IonInput id="your-email" placeholder="your@email.com" value={username} autocomplete="email" required={true} pattern="email" type="email" enterkeyhint="next" inputmode="email" onIonChange={(e: any) => { setUsername(e.detail.value); validateUsername(e.detail.value); }} />
-                        {errorMessages.username && <p className="error-message ion-no-margin"><small>{errorMessages.username}</small></p> }
-                      </IonItem>
-                      <IonItem className="ion-no-padding password-item">
-                        <IonLabel position="stacked">Password</IonLabel>
-                        <EyeSVG className={ showPassword ? "password-show active" : "password-show"}  onClick={() => { showPassword ? setShowPassword(false) : setShowPassword(true) } } />
-                        <IonInput id="your-password" className="password-input" value={password} enterkeyhint="go" type={ showPassword ? "text" : "password" } autocomplete="off" required={true} minlength={6} onIonChange={(e: any) => { setPassword(e.detail.value); validatePassword(e.detail.value); }} />
-                        <PasswordStrengthBar className="password-strength" onChangeScore={(score) => { score >= 3 ? setPasswordStrongEnough(true) : setPasswordStrongEnough(false) }} password={password} barColors={['#ddd', '#ef4836', '#ff5722', '#0eb567', '#0EB59A']} />
-                        {errorMessages.password && <p className="error-message ion-no-margin"><small>{errorMessages.password}</small></p> }
-                      </IonItem>
-                    </div>
+                  <div className="login-form">
+                    <IonItem className="ion-no-padding">
+                      <IonLabel position="stacked">Your Name</IonLabel>
+                      <IonInput id="your-name" placeholder="Your Name" value={yourName} autocomplete="name" required={true} autofocus={true} enterkeyhint="next" type="text" autocapitalize="words" onIonInput={(e: any) => { setYourName(e.target.value); validateYourName(e.target.value); }} onIonChange={(e: any) => { setYourName(e.detail.value); validateYourName(e.detail.value); }} />
+                      {errorMessages.yourName && <p className="error-message ion-no-margin"><small>{errorMessages.yourName}</small></p>}
+                    </IonItem>
+
+                    <IonItem className="location-item ion-no-padding">
+
+                      <IonLabel className="location-label" position="stacked" >Location</IonLabel>
+
+                      <GooglePlacesAutocomplete
+                        apiKey="AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q"
+
+                        selectProps={{
+                          location,
+                          onChange: doLocationSelected,
+                          placeholder: "Start typing to select location",
+                          menuPlacement: "auto",
+                          className: "google-places"
+                        }}
+                        autocompletionRequest={{
+                          componentRestrictions: {
+                            country: ['uk', 'ie'],
+                          }
+                        }}
+                      />
+
+                    </IonItem>
+                    <IonItem className="ion-no-padding">
+                      <IonLabel position="stacked">Email Address</IonLabel>
+                      <IonInput id="your-email" placeholder="your@email.com" value={username} autocomplete="email" required={true} pattern="email" type="email" enterkeyhint="next" inputmode="email" onIonChange={(e: any) => { setUsername(e.detail.value); validateUsername(e.detail.value); }} />
+                      {errorMessages.username && <p className="error-message ion-no-margin"><small>{errorMessages.username}</small></p>}
+                    </IonItem>
+                    <IonItem className="ion-no-padding password-item">
+                      <IonLabel position="stacked">Password</IonLabel>
+                      <EyeSVG className={showPassword ? "password-show active" : "password-show"} onClick={() => { showPassword ? setShowPassword(false) : setShowPassword(true) }} />
+                      <IonInput id="your-password" className="password-input" value={password} enterkeyhint="go" type={showPassword ? "text" : "password"} autocomplete="off" required={true} minlength={6} onIonChange={(e: any) => { setPassword(e.detail.value); validatePassword(e.detail.value); }} />
+                      <PasswordStrengthBar className="password-strength" onChangeScore={(score) => { score >= 3 ? setPasswordStrongEnough(true) : setPasswordStrongEnough(false) }} password={password} barColors={['#ddd', '#ef4836', '#ff5722', '#0eb567', '#0EB59A']} />
+                      {errorMessages.password && <p className="error-message ion-no-margin"><small>{errorMessages.password}</small></p>}
+                    </IonItem>
                   </div>
+                </div>
 
               </div>
               <div className="create-account-buttons">
 
-                
-                  <div className="create-account-button-group">
-                    <IonButton className="arrow previous" onClick={() => history.push('/')} expand="block"><Arrow /></IonButton>
 
-                    <div><IonButton className="create-account primary-button" onClick={() => doCreateAccount()} expand="block">Create Account</IonButton></div>
+                <div className="create-account-button-group">
+                  <IonButton className="arrow previous" onClick={() => history.push('/')} expand="block"><Arrow /></IonButton>
 
-                  </div>
-             
+                  <div><IonButton className="create-account primary-button" onClick={() => doCreateAccount()} expand="block">Create Account</IonButton></div>
+
+                </div>
+
               </div>
 
 
@@ -274,7 +314,7 @@ const CreateAccountBusiness: React.FC = () => {
 
 
 
-  
+
 
 
       </IonContent>

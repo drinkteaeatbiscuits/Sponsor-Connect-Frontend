@@ -45,7 +45,7 @@ const DugoutArticle: React.FC = () => {
 
   }, [isSuccess, thelocation.state]);
 
-  console.log(articleContent);
+  // console.log(articleContent);
   
 //   console.log(articleContent?._embedded?['wp:featuredmedia'][0]?.media_details.sizes.thumbnail.source_url );
 
@@ -74,8 +74,9 @@ const DugoutArticle: React.FC = () => {
               <div className="entry-header__meta entry-meta">
                 <span className="" style={{padding: "0 16px 16px 0", display: "inline-block"}}>Written by <a href="">tom@sponsor-connect.com</a></span>
 
-                  <span className="last-updated" style={{padding: "0 16px 16px 0", display: "inline-block"}}>Last updated: February 7th, 2022</span>				
-                <span className="published"  style={{padding: "0 16px 16px 0", display: "inline-block"}}>Published: 4 February 2022</span>
+                  {/* <span className="last-updated" style={{padding: "0 16px 16px 0", display: "inline-block"}}>Last updated: February 7th, 2022</span>				 */}
+                {/* <span className="published"  style={{padding: "0 16px 16px 0", display: "inline-block"}}>Published: 4 February 2022</span> */}
+                {articleContent.date && <span className="published" style={{ display: "inline-block" }}>Published: {new Date(articleContent.date).getDate() + "/" + (new Date(articleContent.date).getMonth() + 1) + "/" + new Date(articleContent.date).getFullYear()}</span>}
 
                 
               </div>
