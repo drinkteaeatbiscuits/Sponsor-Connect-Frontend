@@ -37,8 +37,8 @@ const Opportunity: React.FC = () => {
 
 	}, [theLocation?.state?.deletedOpportunity]);
 
-  console.log(deletedOpportunity);
-  console.log( theLocation?.state?.deletedOpportunity );
+  // console.log(deletedOpportunity);
+  // console.log( theLocation?.state?.deletedOpportunity );
 
   return (
     <IonPage>

@@ -319,7 +319,7 @@ const Profile: React.FC = () => {
 
                     <div className="other-sponsorship-ideas ion-padding">
                       <p>Have any other sponsorship ideas? <br/>
-                      Please get in touch <span onClick={() => setProfileTabNumber(4)}>here.</span></p>
+                      Please get in touch <span onClick={() => {setProfileTabNumber(4); gotoContact()}}>here.</span></p>
                     </div>
                   </div>
                

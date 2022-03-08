@@ -43,13 +43,14 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 	const opportunityStatus = getOpportunityStatus(opportunityData?.opportunityStatus, opportunityData?.expiryDate?.date);
 
+	console.log(opportunityData);
+
 	return <div className={'opportunity-expanded opportunity-status-' + opportunityStatus.toLowerCase()}>
 
 		{ !deletedOpportunity ? <div className="">
 
 			<div className="opportunity-actions">
 
-				
 				<div className="opportunity-back">
 				{ authState?.user.profile === parseInt(opportunityData?.profile.id) ? <p onClick={() => history.push("/opportunities/" + opportunityData.profile.id)}>{"< Back to all opportunities"}</p> 
 				: <p onClick={() => { history.push('/profile/' + opportunityData.profile.id)}}>{"< Back to profile"}</p>}
@@ -73,21 +74,12 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 					</div>}
 
-					
-
 				</div>
 
 				}
 
 			</div>
 
-			
-
-			
-			
-			{/* { if( opportunityStatus != "active" && authState?.user?.profile !== parseInt(profileId) ){ return } } */}
-
-				
 
 			{opportunityData?.images && (opportunityStatus === "Active" || authState?.user?.profile === parseInt(opportunityData.profile.id)) &&
 
@@ -110,18 +102,18 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 			}
 
-		{ opportunityStatus != "Active" && authState?.user?.profile !== parseInt(opportunityData.profile.id) && <div className="opportunity-content">
-			<div className="opportunity-content-bottom">
-				<h1 className="ion-color-dark line-height-1">Opportunity no longer active.</h1>
-				<p>Unfortunately, this sponsorship opportunity has either expired or been removed.</p>
-				<p>If you are still interested in available opportunities from this profile <span style={{color: 'var(--ion-color-primary', textDecoration: 'underline', cursor: 'pointer'}} onClick={() => { history.push('/profile/' + opportunityData.profile.id)}}>click here.</span></p>
-				<p>Alternatively, <span style={{color: 'var(--ion-color-primary', textDecoration: 'underline', cursor: 'pointer'}} onClick={() => { 
-							history.push('/profile/' + opportunityData.profile.id, {tab: "contact"})}}>click here to contact this profile.</span></p>
-			</div>
+			{ opportunityStatus != "Active" && authState?.user?.profile !== parseInt(opportunityData.profile.id) && <div className="opportunity-content">
+				<div className="opportunity-content-bottom">
+					<h1 className="ion-color-dark line-height-1">Opportunity no longer active.</h1>
+					<p>Unfortunately, this sponsorship opportunity has either expired or been removed.</p>
+					<p>If you are still interested in available opportunities from this profile <span style={{color: 'var(--ion-color-primary', textDecoration: 'underline', cursor: 'pointer'}} onClick={() => { history.push('/profile/' + opportunityData.profile.id)}}>click here.</span></p>
+					<p>Alternatively, <span style={{color: 'var(--ion-color-primary', textDecoration: 'underline', cursor: 'pointer'}} onClick={() => { 
+								history.push('/profile/' + opportunityData.profile.id, {tab: "contact"})}}>click here to contact this profile.</span></p>
+				</div>
 
-		</div> } 
+			</div> } 
 
-		{ authState?.user?.profile === parseInt(opportunityData.profile.id) && <div className="opportunity-content">
+			<div className="opportunity-content">
 
 				{ showShare && <ShareButtons url={ window.location.href } /> }
 
@@ -162,7 +154,7 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 			</div>
 
-		}
+		
 
 		</div>  : <div className="opportunity-deleted"><p style={{fontWeight: 700, fontSize: '24px', letterSpacing: "-0.02em"}}>Opportunity Deleted</p> <p style={{cursor: "pointer"}} onClick={() => history.push("/opportunities/" + opportunityData.profile.id)}>{"< Back to all opportunities"}</p> </div> }
 
