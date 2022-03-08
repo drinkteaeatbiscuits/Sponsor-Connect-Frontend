@@ -44,7 +44,7 @@ export const NewsFeed = (props) => {
                     </div>
                     
                     <p className="news-description">{ newsData.newsDescription }</p>
-                    <a href={ newsData.newsLink } target="_blank" className="news-link"><IonIcon color="primary" icon={link} /> <span>{ newsData.newsLink }</span></a>
+                    {newsData.newsLink.length > 0 && <a href={ newsData.newsLink } target="_blank" className="news-link"><IonIcon color="primary" icon={link} /> <span>{ newsData.newsLink }</span></a> }
 
 
                     {articleImage &&
