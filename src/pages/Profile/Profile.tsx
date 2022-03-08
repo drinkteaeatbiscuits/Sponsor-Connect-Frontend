@@ -18,7 +18,7 @@ import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox.css";
 
 import './profile.scss';
-import { personCircle, location, cash, wallet, cellular, browsersOutline, logoVimeo, settings } from 'ionicons/icons';
+import { personCircle, location, cash, wallet, cellular, browsersOutline, logoVimeo, settings, text } from 'ionicons/icons';
 import SocialMediaTotals from '../../components/SocialMediaTotals/SocialMediaTotals';
 import ImageSlider from '../../components/ImageSlider/ImageSlider';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
@@ -153,6 +153,19 @@ const Profile: React.FC = () => {
   }
 
 
+  const gotoContact = () => { 
+    let y = document?.getElementById("contact-form")?.offsetTop;
+    let content = document.querySelector("ion-content");
+
+    if( y && y > 0 ){
+
+      content?.scrollToPoint(0, y, 200);
+
+    }
+    
+  };
+
+
   return (
     <IonPage className="profile">
 
@@ -166,8 +179,7 @@ const Profile: React.FC = () => {
             
       <TabBar activeTab="profile"/>
       
-      <IonContent className="profile-content" fullscreen>
-
+      <IonContent className="profile-content" fullscreen scrollEvents={true}>
 
         <IonLoading isOpen={isLoading} message="Loading Profile" />
 
@@ -254,7 +266,7 @@ const Profile: React.FC = () => {
               
               } 
               <div className="contact-button ion-padding-top">
-                <IonButton expand="block" className="contact-now " onClick={() => setProfileTabNumber(4)}>Contact Now</IonButton>
+                <IonButton expand="block" className="contact-now " onClick={() => {setProfileTabNumber(4); gotoContact()}}>Contact Now</IonButton>
               </div>
               
 
@@ -373,7 +385,7 @@ const Profile: React.FC = () => {
 
                 </div> 
 
-                <div className="profile-tab contact">
+                <div id="contact-form" className="profile-tab contact">
                   
                   <ContactProfile profileId={profileId.id} label="Contact" profileData={data} />
                 </div> 
