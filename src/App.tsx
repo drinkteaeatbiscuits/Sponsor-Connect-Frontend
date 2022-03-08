@@ -74,6 +74,7 @@ import DashboardBusiness from './pages/DashboardBusiness/DashboardBusiness';
 import Favourites from './pages/Favourites/Favourites';
 import DugoutArticles from './pages/DugoutArticles/DugoutArticles';
 import DugoutArticle from './pages/DugoutArticle/DugoutArticle';
+import DugoutCategories from './pages/DugoutCategories/DugoutCategories';
 
 Geocode.setApiKey("AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q");
 const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
@@ -293,7 +294,7 @@ const App: React.FC = () => {
            
             { state?.user?.profile && <Notifications /> }
 
-            <IonRouterOutlet>
+            <IonRouterOutlet animated={false}>
 
               <Route exact path="/">
                 {state.isAuthenticated ? <Redirect to="/dashboard" /> : <Landing />}
@@ -426,6 +427,10 @@ const App: React.FC = () => {
 
               <Route exact path="/the-dugout">
                 <DugoutArticles />
+              </Route>
+
+              <Route exact path="/the-dugout-categories">
+                <DugoutCategories />
               </Route>
               
               <Route exact path="/the-dugout/:slug">

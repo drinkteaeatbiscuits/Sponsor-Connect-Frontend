@@ -2,7 +2,7 @@ import { IonButton, IonContent, IonIcon, IonPage, IonSpinner } from '@ionic/reac
 
 import parse from 'html-react-parser';
 
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useLocation, useParams } from 'react-router';
 import { AuthContext } from "../../App";
 import React, { useEffect, useState } from 'react';
 import TabBar from '../../components/TabBar';
@@ -12,6 +12,7 @@ import useDugoutArticles from '../../hooks/useDugoutArticles';
 
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
+import { useQueryClient } from 'react-query';
 
 
 export interface props { }
@@ -20,13 +21,19 @@ const DugoutArticles: React.FC = () => {
 
 	const history = useHistory();
 	const { state: authState } = React.useContext(AuthContext);
+	const location = useLocation<any>();
 
 
+	const category = location?.state?.category;
 
 	// const [allPosts, setAllPosts] = useState(null);
 	const [page, setPage] = useState(1);
 	const [totalPages, setTotalPages] = useState(0);
 	const [totalPosts, setTotalPosts] = useState(0);
+	const [theCategory, setTheCategory] = useState("");
+
+
+
 
 	const [allPosts, setAllPosts] = useState<any>([]);
 
@@ -34,7 +41,8 @@ const DugoutArticles: React.FC = () => {
 		data,
 		error,
 		isFetching,
-		isSuccess } = useDugoutArticles(page, setTotalPages, setTotalPosts);
+		isSuccess,
+		refetch } = useDugoutArticles(page, setTotalPages, setTotalPosts, category);
 
 
 	const updatedDate = (updated, published) => {
@@ -47,30 +55,40 @@ const DugoutArticles: React.FC = () => {
 			return
 		}
 	}
-
-
-	// console.log(totalPages);
-	// console.log(totalPosts);
+	
 
 
 	useEffect(() => {
 
-		data && allPosts.length < totalPosts && data[0]?.id !== allPosts[0]?.id && setAllPosts([...allPosts, ...data]);
+		category && setTheCategory(category);
 
-	}, [data]);
+		if(category !== theCategory) { 
+
+			
+
+			setAllPosts([]);
+			setPage(1);
+
+			page === 1 && refetch();
+			data && allPosts.length < totalPosts && data[0]?.id !== allPosts[0]?.id && setAllPosts(data);
+			setTheCategory(category);
 
 
+		}else{
+			console.log('same category');
+			data && allPosts.length < totalPosts && data[0]?.id !== allPosts[0]?.id && setAllPosts([...allPosts, ...data]);
+		}
+		
+
+	}, [data, category]);
+
+	
 
 	const getNextPage = () => {
-
-		// console.log(totalPages);
-		// console.log(page);
 
 		totalPages > page && setPage(page + 1);
 
 	}
-
-
 
 	const loadMoreButtonRef = React.useRef<any>();
 
@@ -87,7 +105,7 @@ const DugoutArticles: React.FC = () => {
 
 	return (
 		<IonPage>
-			<TabBar activeTab="dugout" />
+			<TabBar activeTab="the-dugout" />
 
 			<IonContent fullscreen className="ion-padding dugout" >
 				<div className="dugout-articles">
@@ -110,7 +128,7 @@ const DugoutArticles: React.FC = () => {
 											<div className="entry-header__meta entry-meta">
 												<span className="" style={{ paddingRight: "12px", display: "inline-block", paddingBottom: "12px" }}>Written by {post._embedded?.author[0]?.name}</span>
 
-												{updatedDate(post.modified, post.date)}
+												{/* {updatedDate(post.modified, post.date)} */}
 
 												{post.date && <span className="published" style={{ display: "inline-block", paddingBottom: "12px" }}>Published: {new Date(post.date).getDate() + "/" + (new Date(post.date).getMonth() + 1) + "/" + new Date(post.date).getFullYear()}</span>}
 

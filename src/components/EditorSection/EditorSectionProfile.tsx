@@ -11,6 +11,7 @@ import TextEditorContent from "../TextEditorContent/TextEditorContent";
 interface EditorSectionProps {
 	label?: string;
 	currentValue?: any;
+	setValue?: any;
 	fieldType?: any;
 	className?: string;
 	profileId?: any;
@@ -20,31 +21,33 @@ interface EditorSectionProps {
  
 const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) => {
 
-	const { label, currentValue, fieldType, className, profileId, fieldRef, autocapitalize } = EditorSectionProps;
+	const { label, currentValue, fieldType, className, profileId, fieldRef, autocapitalize, setValue } = EditorSectionProps;
 	const { state: authState } = React.useContext(AuthContext);
 	const [ showEdit, setShowEdit ] = useState(false);
-	const [ value, setValue ] = useState(currentValue);
+	// const [ value, setValue ] = useState(currentValue);
 	const [ sectionData, setSectionData ] = useState<object>([]);
 	const [ editorContent, setEditorContent ] = useState(null);
 	const {isLoading: isEditingOpportunity, error: editOpportunityError, isSuccess, mutateAsync: editProfileMutation} = useEditProfileField( profileId );
 
 	useEffect(() => {
 		
-		// setValue(currentValue);
-		let newSectionData = {};
-		currentValue && ( newSectionData[ fieldRef ] = currentValue );
-		currentValue && setSectionData(newSectionData);
-		currentValue && setEditorContent(currentValue);
-		isSuccess && setShowEdit(false);
+		// !value && setValue(currentValue);
+		// let newSectionData = {};
+		// currentValue && ( newSectionData[ fieldRef ] = currentValue );
+		// currentValue && setSectionData(newSectionData);
+		// currentValue && setEditorContent(currentValue);
+		// isSuccess && setShowEdit(false);
 
-	}, [ currentValue, isSuccess ]);
+	}, []);
 
 
 	const saveField = async ( sectionData ) => {
 		
-		console.log('save field', sectionData);
+		// console.log(sectionData);
 
 		await editProfileMutation( sectionData.sectionData );
+
+		setShowEdit(false);
 	}
 
 	const saveEditor = async ( editorContent ) => {
@@ -57,8 +60,6 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 
 	}
 
-	console.log(sectionData);
-
 	return <div className={( className ? className : "" ) + " editor-section"}>
 
 			<div className="editor-section-top">
@@ -67,7 +68,7 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 			
 				<div className="editor-section-top-buttons">
 
-					{ !showEdit ? <div className="editor-section-button" onClick={() => setShowEdit(true)}>{ value ? "Edit" : "Add"}</div> :
+					{ !showEdit ? <div className="editor-section-button" onClick={ () => setShowEdit(true) }>{ currentValue ? "Edit" : "Add"}</div> :
 
 					<div className="editor-section-button secondary" onClick={() => {setShowEdit(false); currentValue && setValue(currentValue); }}>Cancel</div> }
 
@@ -84,21 +85,24 @@ const EditorSectionProfile: React.FC<EditorSectionProps> = (EditorSectionProps) 
 
 				{ label === "Price" && <div className="currency-display">{authState && authState.user.currency === "GBP" ? String.fromCharCode(163) : authState.user.currency === "EUR" ? String.fromCharCode(8364) : String.fromCharCode(163) }</div> }
 		
-				{ fieldType !== 'TextEditor' && !showEdit ? value && value : 
+				{ fieldType !== 'TextEditor' && !showEdit ? currentValue && currentValue : 
 				 fieldType !== 'TextEditor' && fieldType !== 'IonTextarea' ? <IonInput autocomplete="off" 
 					autocapitalize={autocapitalize} 
 					type={fieldType ? fieldType : "text"} 
-					value={ value } 
+					value={ currentValue } 
 					onIonChange={ (e:any) => {
+
+						
+
 						setValue( e.detail.value ); 
 						let newSectionData = {};
 						newSectionData[ fieldRef ] = e.detail.value;
 						setSectionData( newSectionData );  
 
 					} } /> : fieldType === 'IonTextarea' && 
-					<IonTextarea value={ value } autocapitalize={autocapitalize} onIonChange={ (e:any) => {
+					<IonTextarea value={ currentValue } autocapitalize={autocapitalize} onIonChange={ (e:any) => {
 
-						console.log(e.detail.value);
+						// console.log(e.detail.value);
 
 						setValue( e.detail.value ); 
 						let newSectionData = {};

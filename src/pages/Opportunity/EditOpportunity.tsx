@@ -1,6 +1,6 @@
-import { IonButton, IonButtons, IonContent, IonDatetime, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonDatetime, IonIcon, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar } from '@ionic/react';
 
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useLocation, useParams } from 'react-router';
 
 import { AuthContext } from "../../App";
 import React, { useEffect, useState } from 'react';
@@ -19,6 +19,8 @@ import EditorSection from '../../components/EditorSection/EditorSection';
 
 import { Calendar } from 'react-date-range';
 import getOpportunityStatus from '../../functions/getOpportunityStatus';
+import useDeleteOpportunity from '../../hooks/useDeleteOpportunity';
+import { checkmark, closeOutline, trashOutline } from 'ionicons/icons';
 
 
 export interface props { }
@@ -33,6 +35,9 @@ const EditOpportunity: React.FC = () => {
 
   const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
+
+  const theLocation = useLocation<any>();
+  const [deletedOpportunity, setDeletedOpportunity] = useState(false);
 
 // console.log(profileId);
   const { isLoading, isSuccess: opportunitySuccess, refetch: opportunityRefetch, data, error } = useOpportunity(Number(opportunityId.id));
@@ -60,22 +65,32 @@ const EditOpportunity: React.FC = () => {
 
   const {isLoading: isEditingOpportunity, error: editOpportunityError, mutateAsync: editOpportunityMutation} = useEditOpportunity( opportunityId.id );
 
+  const { isLoading: isDeletingOpportunity, error: deleteOpportunityError, isSuccess: hasDeletedOpportunity, mutateAsync: deleteOpportunityMutation } = useDeleteOpportunity( opportunityId.id );
+	const [showDelete, setShowDelete] = useState(false);
+
   useEffect(() => {
     
-    if (!isLoading) {
-      setTitle(data.title);
-      setDescription(data.description);
-      setFullDescription(data.fullDescription);
-      setPrice(data.price);
-      setImages(data.images);
+    if (opportunitySuccess) {
+      setTitle(data?.title);
+      setDescription(data?.description);
+      setFullDescription(data?.fullDescription);
+      setPrice(data?.price);
+      setImages(data?.images);
       setEditorContent( data?.opportunityDescription && convertFromRaw( data?.opportunityDescription ));
       data?.expiryDate?.date && setDate(data.expiryDate.date);
 
       setOpportunityStatus(data.opportunityStatus);
     }
-    
-  }, [data, isLoading]);
 
+    hasDeletedOpportunity && setDeletedOpportunity(true);
+
+
+
+    
+  }, [data, isLoading, hasDeletedOpportunity]);
+
+  // console.log('hasDeletedOpportunity', hasDeletedOpportunity);
+  // console.log('deletedOpportunity', deletedOpportunity);
   
   const displayDate = (date) => {
     let theDate = new Date(date);
@@ -89,6 +104,13 @@ const EditOpportunity: React.FC = () => {
 
 	}
 
+  const deleteOpportunity = async () => {
+		await deleteOpportunityMutation();
+	}
+
+
+  // console.log(deletedOpportunity);
+  // console.log(theLocation);
 
   return (
     <IonPage>
@@ -107,17 +129,24 @@ const EditOpportunity: React.FC = () => {
       <IonContent className="editor-content" fullscreen>
       <div className="content">
         
-        <div className="opportunity">
+      { !deletedOpportunity ? <div className="opportunity">
 
           <h1 style={{color: "var(--ion-color-dark)", lineHeight: 0.8, fontSize: "4em", padding: "16px 16px 0"}}>EDIT <br/><span style={{color: "var(--ion-color-primary)"}}>OPPORTUNITY</span></h1>
           
-          <div className="opportunity-back">
+          { !error && <div className="opportunity-back">
             <p onClick={() => { history.push('/opportunity/' + opportunityId.id)}}>{"< Back to opportunity"}</p>
-          </div>
+          </div> }
 
-          <div className="editor-wrap">
+          { opportunitySuccess && <div className="editor-wrap">
 
-          
+            {!showDelete && <IonIcon className="" onClick={() => { showDelete ? setShowDelete(false) : setShowDelete(true) }} icon={trashOutline}></IonIcon>}
+
+            {showDelete && <div className="delete-opportunity">
+              <span>Delete opportunity? </span>
+              <IonIcon className="tick" onClick={() => { setShowDelete(false); deleteOpportunity(); }} icon={checkmark}></IonIcon>
+              <IonIcon className="" onClick={() => setShowDelete(false)} icon={closeOutline}></IonIcon>
+
+                </div>}
 
             <div className="editor-section">
 
@@ -220,11 +249,19 @@ const EditOpportunity: React.FC = () => {
           
             
           </div>
+          }
+
+          { error && <div className="opportunity-deleted"><p style={{fontWeight: 700, fontSize: '24px', letterSpacing: "-0.02em"}}>Opportunity Not Found</p> <p style={{cursor: "pointer"}} 
+        onClick={() => history.push("/opportunities/" + authState?.user?.profile)}>{"< Back to all opportunities"}</p> </div> }
           
         </div>
 
-    </div>
+        : <div className="opportunity-deleted" style={{backgroundColor: '#fff', padding: '8px 28px' , margin: '28px 0'}}><p style={{fontWeight: 700, fontSize: '24px', letterSpacing: "-0.02em"}}>Opportunity Deleted</p> <p style={{cursor: "pointer"}} 
+        onClick={() => history.push("/opportunities/" + authState?.user?.profile)}>{"< Back to all opportunities"}</p> </div> }
 
+        
+    </div>
+          
 
 
       </IonContent>

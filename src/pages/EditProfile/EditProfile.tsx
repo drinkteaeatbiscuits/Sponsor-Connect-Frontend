@@ -35,9 +35,9 @@ const EditProfile: React.FC = () => {
   const { isLoading, error, mutateAsync: addProfileMutation } = useUpdateProfile(authState?.user?.profile);
   const { isLoading: isEditingOpportunity, error: editOpportunityError, isSuccess, mutateAsync: editProfileMutation } = useEditProfileField(authState?.user?.profile);
 
-  const profileData = useMyProfile(authState?.user.profile);
+  const { isSuccess: isSuccessProfile, isLoading: isLoadingProfile, data: profileData, error: profileError } = useMyProfile(authState?.user.profile);
 
-  const [profileName, setProfileName] = useState("");
+  const [profileName, setProfileName] = useState(profileData?.profileName);
   const [sport, setSport] = useState("");
   const [location, setLocation] = useState<any>("");
   const [priceRange, setPriceRange] = useState("");
@@ -70,23 +70,6 @@ const EditProfile: React.FC = () => {
   const [socialMediaObject, setSocialMediaObject] = useState([{}]);
 
 
-  const updateProfile = async () => {
-
-    await addProfileMutation({
-      profileName,
-      sport: yourSport,
-      location,
-      priceRange,
-      website,
-      socialMedia: socialMediaObject,
-      shortDescription,
-      accolades: accolades?.filter(Boolean),
-      description: fullDescription,
-      fullDescriptionText: fullDescriptionText && convertToRaw(fullDescriptionText)
-    });
-
-    history.goBack();
-  }
 
 
   const saveField = async (fieldName: string, fieldData: any) => {
@@ -100,35 +83,41 @@ const EditProfile: React.FC = () => {
   }
 
   error && console.log(error);
-  profileData.error && console.log(profileData);
+  profileError && console.log(profileError);
 
 
   useEffect(() => {
 
-    if (profileData.status === "success") {
+    if (!isLoadingProfile) {
+     
+      setProfileName(profileData?.profileName);
+      
+    }
 
-      setProfileName(profileData?.data?.profileName);
+    if (!isLoadingProfile) {
 
-      !yourSport && setYourSport(profileData?.data?.sport);
+      // !profileName && setProfileName(profileData?.data?.profileName);
+      
+      setYourSport(profileData?.sport);
 
-      !location && setLocation(profileData?.data?.location);
-      setPriceRange(profileData?.data?.priceRange);
-      setWebsite(profileData?.data?.website);
+      !location && setLocation(profileData?.location);
+      setPriceRange(profileData?.priceRange);
+      !website && setWebsite(profileData?.website);
 
-      setShortDescription(profileData?.data?.shortDescription);
-      setFullDescription(profileData?.data?.description);
+      !shortDescription && setShortDescription(profileData?.shortDescription);
+      setFullDescription(profileData?.description);
 
-      setFullDescriptionText(profileData?.data?.fullDescriptionText && convertFromRaw(profileData.data?.fullDescriptionText));
+      setFullDescriptionText(profileData?.fullDescriptionText && convertFromRaw(profileData?.fullDescriptionText));
 
-      accolades?.length === 0 && setAccolades(profileData?.data?.accolades);
+      accolades?.length === 0 && setAccolades(profileData?.accolades);
 
-      setCurrentProfilePicture(profileData?.data?.profilePicture);
-      setCoverImage(profileData?.data?.coverImage);
+      setCurrentProfilePicture(profileData?.profilePicture);
+      setCoverImage(profileData?.coverImage);
 
     }
 
 
-  }, [profileData]);
+  }, [profileData, isLoadingProfile]);
 
 
   // console.log(profileData);
@@ -205,7 +194,9 @@ const EditProfile: React.FC = () => {
             <div className="editor-wrap">
 
               <ErrorBoundary>
-                <EditorSectionProfile autocapitalize='words' profileId={authState?.user.profile} fieldRef="profileName" label={"Profile Name"} currentValue={profileName} />
+                <EditorSectionProfile autocapitalize='words' 
+                profileId={authState?.user.profile} fieldRef="profileName" 
+                label={"Profile Name"} currentValue={profileName} setValue={setProfileName} />
               </ErrorBoundary>
 
               <ErrorBoundary>
@@ -249,9 +240,9 @@ const EditProfile: React.FC = () => {
                     {/* { console.log(profileData.data?.sport) }
                     { console.log(yourSport) } */}
 
-                    {profileData.isSuccess && yourSport === profileData.data?.sport && <div className="editor-section-button" onClick={() => { setShowModal(true); focusOnSport(); }}>{yourSport ? "Edit" : "Add"}</div>}
+                    {isSuccessProfile && yourSport === profileData?.sport && <div className="editor-section-button" onClick={() => { setShowModal(true); focusOnSport(); }}>{yourSport ? "Edit" : "Add"}</div>}
 
-                    {profileData.isSuccess && yourSport !== profileData.data?.sport && <div className="editor-section-button" onClick={() => { saveField("sport", yourSport) }}>Save</div>}
+                    {isSuccessProfile && yourSport !== profileData?.sport && <div className="editor-section-button" onClick={() => { saveField("sport", yourSport) }}>Save</div>}
 
                   </div>
 
@@ -274,7 +265,7 @@ const EditProfile: React.FC = () => {
 
                   <ErrorBoundary> <div className="editor-section-top-buttons">
 
-                    {profileData.isSuccess && location?.label === profileData?.data?.location?.label && (!showLocation && <div className="editor-section-button" onClick={() => { setShowLocation(true); }}>{location ? "Edit" : "Add"}</div>)}
+                    {isSuccessProfile && location?.label === profileData?.location?.label && (!showLocation && <div className="editor-section-button" onClick={() => { setShowLocation(true); }}>{location ? "Edit" : "Add"}</div>)}
 
                     {showLocation && <div className="editor-section-button" onClick={() => { saveField("location", location); saveField("latLong", latLong); setShowLocation(false); }}>Save</div>}
 
@@ -308,7 +299,8 @@ const EditProfile: React.FC = () => {
               </div>
 
 
-              <ErrorBoundary><EditorSectionProfile autocapitalize='off' profileId={authState?.user.profile} fieldRef="website" label={"Website"} currentValue={website} />
+              <ErrorBoundary>
+                <EditorSectionProfile autocapitalize='off' profileId={authState?.user.profile} fieldRef="website" label={"Website"} currentValue={website} setValue={setWebsite} />
               </ErrorBoundary>
 
               <div className="editor-section">
@@ -319,8 +311,8 @@ const EditProfile: React.FC = () => {
 
                   <div className="editor-section-top-buttons">
                     <ErrorBoundary>
-                      {profileData.isSuccess && !showSocials ? <div className="editor-section-button" onClick={() => { setShowSocials(true); }}>{socialMedia ? "Edit" : "Add"}</div> :
-                        <div className="editor-section-button secondary" onClick={() => { setShowSocials(false); setSocialMediaObject(profileData?.data?.socialMedia) }}>Cancel</div>}
+                      {isSuccessProfile && !showSocials ? <div className="editor-section-button" onClick={() => { setShowSocials(true); }}>{socialMedia ? "Edit" : "Add"}</div> :
+                        <div className="editor-section-button secondary" onClick={() => { setShowSocials(false); setSocialMediaObject(profileData?.socialMedia) }}>Cancel</div>}
 
                       {showSocials && <div className="editor-section-button" onClick={() => {
                         // saveField("socialMedia", socialMediaObject ); setShowSocials(false); 
@@ -335,17 +327,17 @@ const EditProfile: React.FC = () => {
 
                 <div className="editor-section-bottom">
                   <ErrorBoundary>
-                    {profileData.isSuccess && !showSocials && <SocialMediaTotals socialMediaData={profileData?.data?.socialMedia} showEmpty={true} />}
+                    {isSuccessProfile && !showSocials && <SocialMediaTotals socialMediaData={profileData?.socialMedia} showEmpty={true} />}
 
-                    {profileData.isSuccess && showSocials && <SocialMediaTotalsEdit socialMediaData={profileData?.data?.socialMedia} setSocialMediaObject={setSocialMediaObject} />}
+                    {isSuccessProfile && showSocials && <SocialMediaTotalsEdit socialMediaData={profileData?.socialMedia} setSocialMediaObject={setSocialMediaObject} />}
                   </ErrorBoundary>
 
-                </div>
+                </div> 
               </div>
 
 
               <ErrorBoundary>
-                <EditorSectionProfile autocapitalize='on' fieldType="IonTextarea" profileId={authState?.user.profile} fieldRef="shortDescription" label={"Short Description"} currentValue={shortDescription} />
+                <EditorSectionProfile autocapitalize='on' fieldType="IonTextarea" profileId={authState?.user.profile} fieldRef="shortDescription" label={"Short Description"} currentValue={shortDescription} setValue={setShortDescription} />
               </ErrorBoundary>
 
               <div className="editor-section">
@@ -356,8 +348,8 @@ const EditProfile: React.FC = () => {
 
                   <div className="editor-section-top-buttons">
                     <ErrorBoundary>
-                      {profileData.isSuccess && (!showEditAccolades ? <div className="editor-section-button" onClick={() => { setShowEditAccolades(true); }}>{accolades?.length > 0 ? "Edit" : "Add"}</div> :
-                        <div className="editor-section-button secondary" onClick={() => { setShowEditAccolades(false); setAccolades(profileData?.data?.accolades) }}>Cancel</div>)}
+                      {isSuccessProfile && (!showEditAccolades ? <div className="editor-section-button" onClick={() => { setShowEditAccolades(true); }}>{accolades?.length > 0 ? "Edit" : "Add"}</div> :
+                        <div className="editor-section-button secondary" onClick={() => { setShowEditAccolades(false); setAccolades(profileData?.accolades) }}>Cancel</div>)}
 
                       {showEditAccolades && <div className="editor-section-button" onClick={() => { saveField("accolades", accolades?.filter(Boolean)); setShowEditAccolades(false); }}>Save</div>}
                     </ErrorBoundary>
@@ -389,7 +381,7 @@ const EditProfile: React.FC = () => {
               </div>
 
 
-              {profileData.isSuccess && <IonButton className="button-tertiary" expand="block" size="small" onClick={() => { client.invalidateQueries("profile-" + profileData.data.id); history.push('/profile/' + profileData.data.id) }}>Back to Profile</IonButton>}
+              {isSuccessProfile && <IonButton className="button-tertiary" expand="block" size="small" onClick={() => { client.invalidateQueries("profile-" + profileData.id); history.push('/profile/' + profileData.id) }}>Back to Profile</IonButton>}
 
             </div>
 

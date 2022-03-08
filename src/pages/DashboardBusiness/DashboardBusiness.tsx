@@ -59,7 +59,7 @@ const DashboardBusiness: React.FC = () => {
     <IonPage> 
       <TabBar activeTab="dashboard" />
       
-      <IonContent fullscreen className="ion-padding dashboard">
+      <IonContent fullscreen scroll-y="false" className="ion-padding dashboard">
 
         <div className="dashboard-content">
 
