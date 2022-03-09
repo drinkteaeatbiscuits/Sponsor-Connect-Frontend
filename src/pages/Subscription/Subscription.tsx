@@ -219,7 +219,7 @@ const Subscription: React.FC = () => {
                     return <div className="payment-row" key={payment.id}>
 
                               <div className="payment-column amount">
-                                {getPrice(payment.amount_captured, payment.currency ) }
+                                { getPrice(payment.amount_captured, payment.currency ) }
                               </div>
                               
                               
