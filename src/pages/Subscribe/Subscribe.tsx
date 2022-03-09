@@ -11,9 +11,6 @@ import {CardElement, useStripe, Elements, useElements} from '@stripe/react-strip
 
 import './Subscribe.scss';
 import useMySubscription from '../../hooks/useMySubscription';
-import { AnyARecord } from 'dns';
-import useCancelMySubscription from '../../hooks/useCancelMySubscription';
-import { useQueryClient, useMutation } from 'react-query';
 import usePrices from '../../hooks/usePrices';
 import getSymbolFromCurrency from 'currency-symbol-map';
 import { newspaper, personCircle, settings, trailSign } from 'ionicons/icons';
@@ -30,7 +27,6 @@ const Subscribe: React.FC = () => {
 
 //   const mySubscription = useMySubscription();
     
-  
   const [succeeded, setSucceeded] = useState<any>(false);
   const [error, setError] = useState<any>(null);
   const [processing, setProcessing] = useState<any>('');
@@ -45,17 +41,14 @@ const Subscribe: React.FC = () => {
   const [isToastOpen, setIsToastOpen] = useState(false);
   // const [customerId, setCustomerId] = useState('');
 
-
   const [selectedPrice, setSelectedPrice] = useState();
-
-
   const stripe = useStripe();
   const elements = useElements();
 
   const [refetchInterval, setRefetchInterval] = useState<any>(false);
 //   const [expectedStatus, setExpectedStatus] = useState("");
   
-  const {isLoading: isLoadingPrices, data: dataPrices, isSuccess: isSuccessPrices, error: errorPrices} = usePrices();
+  const {isLoading: isLoadingPrices, data: dataPrices, isSuccess: isSuccessPrices, error: errorPrices} = usePrices(authState?.user?.currency.toLowerCase());
 
   const {isLoading, data: mySubscription, isSuccess, error: errorMySubscription, refetch: refetchMySubscription } = useMySubscription(refetchInterval);
   // console.log(selectedSubscription)

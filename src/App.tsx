@@ -76,8 +76,11 @@ import DugoutArticles from './pages/DugoutArticles/DugoutArticles';
 import DugoutArticle from './pages/DugoutArticle/DugoutArticle';
 import DugoutCategories from './pages/DugoutCategories/DugoutCategories';
 
-Geocode.setApiKey("AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q");
-const stripePromise = loadStripe('pk_test_yQKqjRLkG226jx0QSGsWyFSJ00nWfNPrKh');
+Geocode.setApiKey(process.env.REACT_APP_GEOCODE_API_KEY);
+
+let stripePK = "";
+process.env.REACT_APP_STRIPE_PK && (stripePK = process.env.REACT_APP_STRIPE_PK);
+const stripePromise = loadStripe(stripePK);
 
 export const AuthContext = React.createContext<{
   state?: any;
