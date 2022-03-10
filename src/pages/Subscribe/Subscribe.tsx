@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonIcon, IonPage, IonSpinner, IonToast } from '@ionic/react';
+import { IonButton, IonContent, IonIcon, IonInput, IonPage, IonSkeletonText, IonSpinner, IonToast } from '@ionic/react';
 import Header from '../../components/Header';
 import { useHistory } from 'react-router';
 import Cookies from 'js-cookie';
@@ -41,6 +41,13 @@ const Subscribe: React.FC = () => {
   const [isToastOpen, setIsToastOpen] = useState(false);
   // const [customerId, setCustomerId] = useState('');
 
+  const [coupon, setCoupon] = useState("");
+  const [couponError, setCouponError] = useState("");
+  const [applyingDiscount, setApplyingDiscount] = useState(false);
+  const [discountApplied, setDiscountApplied] = useState("");
+
+  const [latestInvoice, setLatestInvoice] = useState<any>({});
+
   const [selectedPrice, setSelectedPrice] = useState();
   const stripe = useStripe();
   const elements = useElements();
@@ -55,6 +62,10 @@ const Subscribe: React.FC = () => {
 
   // console.log();
 
+
+
+  // console.log(authState.user.currency);
+
   useEffect(() => {
 
         if(isSuccess && mySubscription[0]?.subscriptionStatus === 'active'){
@@ -66,7 +77,7 @@ const Subscribe: React.FC = () => {
         } 
         isSuccess && setSubscriptionStatus(mySubscription[0]?.subscriptionStatus);
 
-       if(isSuccess && subscriptionStatus !== 'active' && selectedPrice && !subscriptionId) { 
+       if( isSuccess && subscriptionStatus !== 'active' && selectedPrice && !subscriptionId ) { 
 
          window.fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/subscriptions/create-customer", {
             method: "POST",
@@ -76,6 +87,8 @@ const Subscribe: React.FC = () => {
             },
             body: JSON.stringify({ 
               email: authState.user.email,
+              location: authState.user.currency === "EUR" ? "IE" : "GB",
+              // ipAddress: 
             })
           })
 
@@ -111,9 +124,11 @@ const Subscribe: React.FC = () => {
               }else{
 
                 console.log('not succeeded');
-                console.log(data);
+            
                 setSubscriptionId(data.subscription.id);
                 setClientSecret(data.subscription.latest_invoice.payment_intent.client_secret);
+
+                setLatestInvoice(data.subscription.latest_invoice);
 
               }
 
@@ -124,7 +139,7 @@ const Subscribe: React.FC = () => {
 
   }, [authState.user.email, mySubscription, isSuccess, selectedPrice, subscriptionId]);
 
-
+// console.log(mySubscription);
   
   const CARD_OPTIONS = {
     // iconStyle: "solid",
@@ -176,9 +191,15 @@ const Subscribe: React.FC = () => {
   
     const cardElement = elements.getElement(CardElement);
 
+   
+
     if(cardElement){
+
+      if(latestInvoice?.total > 0) {
+      
+      
       // Create payment method and confirm payment intent.
-      stripe.confirmCardPayment(clientSecret, {
+      await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
           card: cardElement,
         }
@@ -203,9 +224,82 @@ const Subscribe: React.FC = () => {
 
         }
       });
+
+      }else{
+
+        await stripe.createPaymentMethod({
+          type: 'card',
+          card: cardElement,
+          billing_details: {
+            name: authState.user.yourName,
+            email: authState.user.email
+          },
+        })
+        .then(function(result) {
+
+          // Handle result.error or result.paymentMethod
+          if(result.error) {
+
+            setError(`Payment failed - ${result.error.message}`);
+            setProcessing(false);
+  
+          } else {
+  
+            
+            fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/subscriptions/attach-payment-method", {
+              method: "POST",
+              credentials: "include",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                paymentMethod: result.paymentMethod.id,
+                customer: mySubscription[0].stripeCustomerId,
+                subscriptionId: mySubscription[0].subscriptionId,
+                subscriptionStatus: mySubscription[0].status
+              })
+            })
+            .then(res => {
+
+              return res.json();
+
+            })
+            .then(data => {
+              
+              console.log(data);
+
+              setError(null);
+              setProcessing(false);
+              setSucceeded(true);
+
+              setActivatingSubscription(true);
+              
+            //   setSubscriptionStatus('active');
+
+              setRefetchInterval(2000);
+              refetchMySubscription();
+
+            });
+
+            // console.log(result);
+          //   setError(null);
+          //   setProcessing(false);
+          //   setSucceeded(true);
+  
+          //   setActivatingSubscription(true);
+            
+          // //   setSubscriptionStatus('active');
+  
+          //   setRefetchInterval(2000);
+          //   refetchMySubscription();
+  
+          }
+          
+        });
+
+      }
     }
   }
-
 
 
 
@@ -214,9 +308,85 @@ const Subscribe: React.FC = () => {
       return getSymbolFromCurrency(currency) + (Math.round(price) / 100).toFixed(2);
     }
 
-    // console.log(processing);
-    // console.log(disabled);
-    // console.log(succeeded);
+
+    const setDiscountCode = async () => {
+
+      setCouponError("");
+      setApplyingDiscount(true);
+      
+
+      if(coupon.length < 1){
+        setCouponError("Please enter a discount code."); 
+        setApplyingDiscount(false);
+        return
+      } 
+
+      if(dataPrices?.data?.find(x => x.id === selectedPrice)?.recurring.interval !== "year"){
+        setCouponError("Discounts only apply to annual plans."); 
+        setApplyingDiscount(false);
+        return
+      }
+
+      // setLatestInvoice({});
+      // console.log(selectedPrice);
+      // console.log(selectedCost);
+
+
+      await fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/subscriptions/apply-coupon", {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          coupon: coupon,
+          subscriptionId: subscriptionId,
+        })
+      })
+      .then(res => {
+            
+        return res.json();
+
+      })
+      .then(data => {
+
+        if(data.error){
+
+          setCouponError(data.error.message);
+          setApplyingDiscount(false);
+
+          return
+
+        }
+
+        if(data.status === "succeeded"){
+                
+          setSucceeded(true);
+        
+        }else{
+
+
+          setSubscriptionId(data.id);
+          data.latest_invoice?.payment_intent?.client_secret && setClientSecret(data.latest_invoice.payment_intent.client_secret);
+          setApplyingDiscount(false);
+          setDiscountApplied("Discount applied");
+          setLatestInvoice(data.latest_invoice);
+
+          
+
+        }
+
+        // setSubscriptionId(data.subscription.id);
+        // setClientSecret(data.subscription.latest_invoice.payment_intent.client_secret);
+
+        
+
+      })
+
+
+    }
+
+
 
   return (
     <IonPage>
@@ -230,6 +400,15 @@ const Subscribe: React.FC = () => {
         onDidDismiss={() => console.log('test')}
         message={error}
         duration={0}
+      />
+
+      <IonToast
+        isOpen={discountApplied.length > 0 ? true : false}
+        color="success"
+        translucent={true}
+        onDidDismiss={() => console.log('test')}
+        message={discountApplied}
+        duration={1000}
       />
         <div className="content subscribe-content"> 
 
@@ -249,6 +428,10 @@ const Subscribe: React.FC = () => {
 
             return <div className={ selectedPrice === element.id ? "plan active" : "plan" } key={element.id} 
                         onClick={(e) => { 
+
+                          setSubscriptionId('');
+                          setClientSecret('');
+                          setLatestInvoice({});
                           
                           !(e.currentTarget as Element).classList.contains("active") && 
                             
@@ -280,25 +463,84 @@ const Subscribe: React.FC = () => {
 
         }
 
+        { isSuccess && subscriptionStatus !== 'active' && isSuccessPrices && selectedPrice && !refetchInterval &&
+          
+          Object.keys(latestInvoice).length > 0 &&
+          <div className="apply-coupon">
+            <IonInput style={{backgroundColor: '#fff'}} value={coupon} onIonChange={(e:any) => setCoupon( e.target.value )} />
+            <IonButton onClick={() => setDiscountCode()}>Apply Discount Code</IonButton>
+
+            { couponError && <p>{ couponError }</p> }
+           
+            { applyingDiscount && <p>Applying Discount</p> }
+          </div>
+
+        }
+
         {isSuccess && subscriptionStatus !== 'active' && isSuccessPrices && selectedPrice && !refetchInterval &&
+        
+
+
+        Object.keys(latestInvoice).length > 0 ?
+
         <div className="billing-details">
           <p style={{fontSize: '1.2em', fontWeight: 700, letterSpacing: '-0.01em', paddingTop: '15px', color: 'var(--ion-color-dark)'}}>Billing details</p>
           <div className="billing-details-table">
-            <div className="billing-row billing-item">
-              <div className="billing-columm quantity">1 x</div>
-              <div className="billing-columm description" style={{letterSpacing: '-0.01em'}}>Sponsor Connect Subscription</div>
-              <div className="billing-columm price"><p>{selectedCost}</p><p className="frequency">every { selectedFrequency }</p></div>
+
+            {
+              latestInvoice?.lines.data.map(line => {
+                return <div key={line.id} className="billing-row billing-item">
+                <div className="billing-columm description" style={{letterSpacing: '-0.01em'}}>{ line.description }</div>
+                <div className="billing-columm price"><p>{getPrice(line.price.unit_amount_decimal, line.currency)}</p><p className="frequency">every { line.price.recurring.interval }</p></div>
+              </div>
+                
+              })
+            
+            }
+
+            {latestInvoice?.discount && 
+            <div className="billing-row discount"
+            style={{
+              borderBottom: '2px dashed var(--ion-color-light-shade)'
+            }}>
+              <div className="billing-columm discount" style={{fontWeight: 700}}>Discount</div>
+              <div className="billing-columm discount-price"
+              style={{
+                flexGrow: 1,
+                textAlign: 'right'
+              }}
+              ><span style={{paddingRight: '8px', fontWeight: 500}}>{latestInvoice?.discount.coupon.name}</span> <span style={{paddingRight: '8px'}}>-</span> <span style={{fontWeight: 500}}>{ getPrice(latestInvoice.total_discount_amounts[0].amount, latestInvoice.currency) }</span></div>
             </div>
-            <div className="billing-row tax">
-              <div className="billing-columm tax">VAT</div>
-              <div className="billing-columm tax-price">£0.00</div>
-            </div>
-            <div className="billing-row total">
+            }
+
+
+            {latestInvoice?.tax && 
+              <div className="billing-row tax">
+                <div className="billing-columm tax">VAT (20% inclusive)</div>
+                <div className="billing-columm tax-price">{ getPrice(latestInvoice?.tax, latestInvoice.currency) }</div>
+              </div>
+            }
+            
+            
+            {latestInvoice?.total && <div className="billing-row total">
               <div className="billing-columm total">Total</div>
-              <div className="billing-columm total-price">{selectedCost}</div>
+              <div className="billing-columm total-price">{ getPrice(latestInvoice?.total, latestInvoice.currency) }</div>
             </div>
+            }
           </div>
-        </div> }
+        </div> :
+        selectedPrice && <div className="" style={{
+          display: 'flex', 
+          justifyContent: 'center', 
+          alignItems: 'center', 
+          width: '100%', 
+          background: 'rgba(0,0,0,0.2)', 
+          height: '180px', 
+          borderRadius: '5px'}}>
+           <IonSpinner color="primary" />
+          </div>
+        
+      }
         {/* {console.log(selectedPrice)}
         {console.log(mySubscription?.status)}
         {console.log(subscriptionStatus)} */}
