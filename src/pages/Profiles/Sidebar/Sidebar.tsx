@@ -28,7 +28,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		budget: null
 	};
 
-	const {className, isDashboard, savedActiveFilters} = SidebarProps;
+	const {className, isDashboard, savedActiveFilters, allProfileData, profileData, setData} = SidebarProps;
 
 	const history = useHistory();
 
@@ -75,7 +75,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const distanceGroups = [1, 5, 10, 25, 50, 100, 200, 0];
 	const budgetGroups = [0, 100, 500, 1000, 2500, 5000, 10000, -1];
 
-	const { allProfileData, profileData, setData } = SidebarProps;
+	
 	const [showMoreSports, setShowMoreSports] = useState(false);
 	const [activeFilters, setActiveFilters] = useState<any>(filters);
 	
@@ -395,7 +395,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const [filtersLoaded, setFiltersLoaded] = useState(0);
 	const loadFilters = () => {
 
-		
 		activeFilters && setActiveFilters(authState.user.searchNow);
 		
 		authState.user.searchNow.distance && setLocationRange(distanceGroups.indexOf(authState.user.searchNow.distance) + 1 as number);
@@ -415,12 +414,10 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	
 
 	useEffect(() => {
-
-
-		Object.keys(visibleSports).length === 0 && getSportsCounts();
-
+	
+		allProfileData?.length > 0 && Object.keys(visibleSports).length === 0 && getSportsCounts();
 		
-		if( allProfileData && authState?.currentLocation && currentLocation.length <= 0 ) {
+		if( allProfileData && allProfileData?.length > 0 && authState?.currentLocation && currentLocation.length <= 0 ) {
 			
 			setCurrentLocation([authState?.currentLocation]);
 			setFromLocation(authState?.currentLocation);
@@ -429,7 +426,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	
 		}
 		
-		if ( allProfileData && !authState?.currentLocation && currentLocation.length <= 0 && !gettingLocation ) {
+		if ( allProfileData && allProfileData?.length > 0 && !authState?.currentLocation && currentLocation.length <= 0 && !gettingLocation ) {
 
 			setGettingLocation(true);
 	
@@ -456,8 +453,8 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		}
 
-		allProfileData && profileData && Object.keys(profileData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setData(allProfileData);
-		allProfileData && Object.keys(sportsData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setSportsData(allProfileData)
+		allProfileData && allProfileData?.length > 0 && profileData && Object.keys(profileData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setData(allProfileData);
+		allProfileData && allProfileData?.length > 0 && Object.keys(sportsData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setSportsData(allProfileData)
 
 
 		sportsData && updateProfileDistances();

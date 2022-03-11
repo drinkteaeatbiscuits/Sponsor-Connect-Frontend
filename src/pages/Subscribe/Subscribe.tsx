@@ -21,7 +21,7 @@ export interface props {}
 const Subscribe: React.FC = () => {
 
 	// const history = useHistory();
-  const { state: authState } = React.useContext(AuthContext);
+  const { state: authState, dispatch } = React.useContext(AuthContext);
 
   const history = useHistory();
 
@@ -67,12 +67,17 @@ const Subscribe: React.FC = () => {
   // console.log(authState.user.currency);
 
   useEffect(() => {
-
+  
         if(isSuccess && mySubscription[0]?.subscriptionStatus === 'active'){
             
             setRefetchInterval(false) 
             setSucceeded(false);
             setSelectedPrice(undefined);
+
+            dispatch && dispatch({
+              type: "setSubscription",
+              payload: mySubscription[0]?.subscriptionStatus
+            });
 
         } 
         isSuccess && setSubscriptionStatus(mySubscription[0]?.subscriptionStatus);
@@ -222,6 +227,10 @@ const Subscribe: React.FC = () => {
           setRefetchInterval(2000);
           refetchMySubscription();
 
+          // dispatch("setSubscription")
+
+          
+
         }
       });
 
@@ -278,6 +287,8 @@ const Subscribe: React.FC = () => {
 
               setRefetchInterval(2000);
               refetchMySubscription();
+
+         
 
             });
 

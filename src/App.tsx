@@ -75,6 +75,8 @@ import Favourites from './pages/Favourites/Favourites';
 import DugoutArticles from './pages/DugoutArticles/DugoutArticles';
 import DugoutArticle from './pages/DugoutArticle/DugoutArticle';
 import DugoutCategories from './pages/DugoutCategories/DugoutCategories';
+import useMySubscription from './hooks/useMySubscription';
+import PleaseSubscribe from './pages/PleaseSubscribe/PleaseSubscribe';
 
 Geocode.setApiKey(process.env.REACT_APP_GEOCODE_API_KEY);
 
@@ -91,7 +93,8 @@ const initialState = {
   isAuthenticated: false,
   user: null,
   currentLocation: null,
-  profile: null
+  profile: null,
+  mySubscription: {}
 };
 
 const reducer = (state: any, action: any) => {
@@ -122,9 +125,9 @@ const reducer = (state: any, action: any) => {
       }
     }
     case "setSubscription": {
+      state.mySubscription.subscriptionStatus = action.payload
       return {
         ...state,
-        selectedSubscription: action.payload
       }
     }
     case "setFavouriteProfiles": {
@@ -183,6 +186,8 @@ const checkIfAuthenticated = async () => {
 
 }
 
+
+
 const App: React.FC = () => {
 
   const getLocationPlaceName = (lat, long) => {
@@ -234,6 +239,7 @@ const App: React.FC = () => {
   const [checkUser, setCheckUser] = useState<any>(false);
   const [checkingLocation, setCheckingLocation] = useState<any>(false);
   const [checkingLocationPlaceName, setCheckingLocationPlaceName] = useState<any>(false);
+  const {data: mySubscription, isSuccess: subscriptionSuccess, error: subscriptionError } = useMySubscription();
 
   useEffect(() => {
 
@@ -243,6 +249,9 @@ const App: React.FC = () => {
       setCheckUser(true); 
 
     } );
+
+
+    subscriptionSuccess && mySubscription.length > 0 && (initialState.mySubscription = mySubscription[0]);
 
     !doesLocationCookieExist() && !checkingLocation && currentLocation.length <= 0 && navigator.geolocation.getCurrentPosition(function(position) {
     
@@ -278,6 +287,15 @@ const App: React.FC = () => {
   const history = useHistory();
 
   // console.log(state?.user?.accountType);
+
+  const subscriptionActive = () => {
+    if(state?.mySubscription?.subscriptionStatus === 'active'){
+      return true
+    }else{
+      return false
+    }
+  }
+
 
   return (
 
@@ -360,7 +378,6 @@ const App: React.FC = () => {
                 {state.isAuthenticated ? <EditProfileDescription /> : (checkUser && <Redirect to="/login" />)}
               </Route>
               
-              
                <Route exact path="/opportunities/:id">
                 {state.isAuthenticated ? <Opportunities /> : (checkUser && <Redirect to="/login" />)}
               </Route>
@@ -377,24 +394,26 @@ const App: React.FC = () => {
                 {state.isAuthenticated ? <EditOpportunity /> : (checkUser && <Redirect to="/login" />)}
               </Route>
 
-
               <Route exact path="/search-opportunities">
                 {state.isAuthenticated ? <SearchOpportunities /> : (checkUser && <Redirect to="/login" />)}
               </Route>
-
               
               <Route exact path="/settings/billing">
                 {state.isAuthenticated ? <Billing /> : (checkUser && <Redirect to="/login" />)}
               </Route>
+
               <Route exact path="/subscribe">
                 {state.isAuthenticated ? <Subscribe /> : (checkUser && <Redirect to="/login" />)}
               </Route>
+
               <Route exact path="/settings/subscription">
                 {state.isAuthenticated ? <Subscription /> : (checkUser && <Redirect to="/login" />)}
               </Route>
+
               <Route exact path="/settings/account">
                 {state.isAuthenticated ? <Account /> : (checkUser && <Redirect to="/login" />)}
               </Route>
+
               <Route exact path="/settings/notifications">
                 {state.isAuthenticated ? <NotificationSettings /> : (checkUser && <Redirect to="/login" />)}
               </Route>
@@ -406,47 +425,40 @@ const App: React.FC = () => {
               <Route exact path="/reset-password">
                 <ResetPassword />
               </Route>
+
               <Route exact path="/forgot-password">
                 <ForgotPassword /> 
               </Route>
-              <Route exact path="/menu">
-                <Menu />
-              </Route>
-              <Route exact path="/add-item">
-                <AddItem />
-              </Route>
+
               <Route exact path="/profiles">
                 {state.isAuthenticated ? <Profiles /> : (checkUser && <Redirect to="/login" />)}
               </Route>
 
               <Route exact path="/book-consultation">
-                {state.isAuthenticated ? <BookConsultation /> : (checkUser && <Redirect to="/login" />)}
+                {state.isAuthenticated ? (subscriptionActive() ? <BookConsultation /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
               </Route>
 
 
-              <Route exact path="/admin/news-feed">
+              {/* <Route exact path="/admin/news-feed">
                 <NewsArticles />
-              </Route>
+              </Route> */}
 
               <Route exact path="/the-dugout">
-                <DugoutArticles />
+              
+                {state.isAuthenticated ? (subscriptionActive() ? <DugoutArticles /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
+                
               </Route>
 
               <Route exact path="/the-dugout-categories">
-                <DugoutCategories />
+                
+                {state.isAuthenticated ? (subscriptionActive() ? <DugoutCategories /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
+
               </Route>
               
               <Route exact path="/the-dugout/:slug">
-                <DugoutArticle />
-              </Route>
-
-
-              <Route exact path="/text-editor">
-                <NewTextEditor />
-              </Route>
-
-              <Route exact path="/range-test">
-                <RangeTest />
+                
+                {state.isAuthenticated ? (subscriptionActive() ? <DugoutArticle /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
+                
               </Route>
 
               

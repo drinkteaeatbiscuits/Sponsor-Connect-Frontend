@@ -25,17 +25,20 @@ const Profiles: React.FC<props> = (props) => {
   useEffect(() => {
     
     isSuccess && !profileData && setProfileData(data);
-
+    
   }, [ data ]);
 
-
+  // console.log(data);
   return (
     <IonPage>
       <TabBar activeTab='profiles' />
       <IonContent className="profiles-content" fullscreen>
         <IonLoading isOpen={isLoading} message="Loading..." />
           
-          <Sidebar className={showSidebar ? 'show-sidebar' : ''} allProfileData={data} profileData={profileData} setData={setProfileData}  />
+          <Sidebar className={showSidebar ? 'show-sidebar' : ''} 
+          allProfileData={data} 
+          profileData={profileData} 
+          setData={setProfileData}  />
 
           <div className="toggle-sidebar-button" >
            
@@ -47,6 +50,7 @@ const Profiles: React.FC<props> = (props) => {
           </div>
 
           <div className="content">
+
               { profileData?.length > 0 && profileData?.map(( profile:any )=>{
                   return <ProfileCard key={profile.id} profileData={profile} />
                 }) }

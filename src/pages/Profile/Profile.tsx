@@ -164,7 +164,22 @@ const Profile: React.FC = () => {
     }
     
   };
+  
+  const profileVisible = () => {
+    let showProfile = false;
 
+    if(isSuccess && data?.profileComplete === 100 && data?.user?.subscriptionStatus === 'active' ){
+      showProfile = true;
+    }
+
+    if( authState?.user?.profile === parseInt(profileId.id)) {
+      showProfile = true;
+    }
+
+    return showProfile;
+  }
+
+  
 
   return (
     <IonPage className="profile">
@@ -179,8 +194,9 @@ const Profile: React.FC = () => {
             
       <TabBar activeTab="profile"/>
       
-      <IonContent className="profile-content" fullscreen scrollEvents={true}>
+      { profileVisible() ? <IonContent className="profile-content" fullscreen scrollEvents={true}>
 
+        
         <IonLoading isOpen={isLoading} message="Loading Profile" />
 
          <div className="profile-header">
@@ -395,7 +411,13 @@ const Profile: React.FC = () => {
           </div>
 
           
-      </IonContent>
+      </IonContent> : <div style={{ 
+				padding: '16px 24px',
+        width: '100%', 
+				margin: "180px auto", 
+				maxWidth: '920px', 
+				background: '#fff',
+				borderRadius: '5px' }}><h1 style={{textTransform: 'uppercase', color: 'var(--ion-color-dark)'}}>Profile Not Found</h1></div>}
       
     </IonPage>
 
