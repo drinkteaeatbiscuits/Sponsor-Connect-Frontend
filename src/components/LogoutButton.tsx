@@ -35,13 +35,14 @@ const LogoutButton: React.FC<LogoutProps> = ( props: LogoutProps ) => {
 			  
 			//   console.log(logoutInfo);
 
+                // history.push('/');
+
 			  dispatch && dispatch({
 				type: "LOGOUT"
 			  });
 
-			
+			  window.location.reload();
 
-			  
 		  }
 
 	  }

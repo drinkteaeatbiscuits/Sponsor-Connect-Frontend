@@ -146,6 +146,24 @@ const Subscription: React.FC = () => {
           
         }
 
+        const mySubscription = isSuccess && data[0];
+
+        const calculateNextInvoicePrice = (subscriptionObject) => {
+
+          let nextInvoicePrice = subscriptionObject.plan.amount;
+
+          if(subscriptionObject.discount && Object.keys(subscriptionObject.discount).length > 0 
+          && subscriptionObject.discount.coupon.valid
+          && subscriptionObject.discount.coupon.duration === 'forever' ){
+            
+            nextInvoicePrice = ( 1 - (subscriptionObject.discount.coupon.percent_off / 100)) * nextInvoicePrice
+          
+          }
+
+          return getPrice( nextInvoicePrice, subscriptionObject.plan.currency )
+        
+        }
+
   return (
     <IonPage>
       <TabBar activeTab="settings"/>
@@ -167,7 +185,9 @@ const Subscription: React.FC = () => {
               
               <p style={{color: "var(--ion-color-medium)", fontWeight: 500, margin: 0, padding: "3px 0 0"}}>{ switchBilling(data[0]?.subscriptionObject?.plan?.interval) }</p>
               
-              {data[0]?.subscriptionStatus === 'active' && !subscriptionCancelling && <p style={{padding: "12px 0"}}>Your next invoice is for <strong>{ getPrice(data[0]?.subscriptionObject?.plan?.amount, data[0]?.subscriptionObject?.plan?.currency ) }</strong> on <strong>{ getDate(data[0]?.currentPeriodEnd) }</strong></p> }
+              {/* {mySubscription.subscriptionStatus === 'active' && !subscriptionCancelling && calculateNextInvoicePrice(mySubscription.subscriptionObject) } */}
+              {data[0]?.subscriptionStatus === 'active' && !subscriptionCancelling && <p style={{padding: "12px 0"}}>Your next invoice is for <strong>{ calculateNextInvoicePrice(mySubscription.subscriptionObject) }
+              </strong> on <strong>{ getDate(data[0]?.currentPeriodEnd) }</strong></p> }
               
               {subscriptionCancelling && subscriptionStatus === 'active' && <p style={{padding: "12px 0"}}>Your subscription has been cancelled<br/> and will expire on <strong>{ getDate(data[0]?.currentPeriodEnd) }</strong></p> }
               
@@ -219,7 +239,7 @@ const Subscription: React.FC = () => {
                     return <div className="payment-row" key={payment.id}>
 
                               <div className="payment-column amount">
-                                {getPrice(payment.amount_captured, payment.currency ) }
+                                { getPrice(payment.amount_captured, payment.currency ) }
                               </div>
                               
                               
