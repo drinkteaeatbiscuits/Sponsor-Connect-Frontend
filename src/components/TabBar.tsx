@@ -22,8 +22,6 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
 
 
 	const doLogout = async () => {
-
-        
 	
 		const logoutResp = await fetch( (process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/logout", {
 			method: "POST",

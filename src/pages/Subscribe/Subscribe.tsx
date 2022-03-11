@@ -514,7 +514,7 @@ const Subscribe: React.FC = () => {
             }
 
 
-            {latestInvoice?.tax && 
+            {latestInvoice?.tax > 0 && 
               <div className="billing-row tax">
                 <div className="billing-columm tax">VAT (20% inclusive)</div>
                 <div className="billing-columm tax-price">{ getPrice(latestInvoice?.tax, latestInvoice.currency) }</div>
