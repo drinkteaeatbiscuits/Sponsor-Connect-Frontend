@@ -95,8 +95,17 @@ const Subscription: React.FC = () => {
             });
                         
             subscriptionResponse.ok && refetchMySubscription();
-           
-          return await subscriptionResponse.json();
+
+            const resjson = await subscriptionResponse.json();
+
+            
+            dispatch && dispatch({
+              type: "setSubscription",
+              payload: resjson.status
+            });
+              
+      
+          return resjson
           
         }
 
@@ -117,9 +126,17 @@ const Subscription: React.FC = () => {
             });            
               
             subscriptionResponse.ok && refetchMySubscription();
+          
+            const resjson = await subscriptionResponse.json();
+
+            
+            dispatch && dispatch({
+              type: "setSubscription",
+              payload: resjson.status
+            });
               
       
-          return await subscriptionResponse.json();
+          return resjson
           
         }
         
@@ -140,9 +157,17 @@ const Subscription: React.FC = () => {
             });            
               
             subscriptionResponse.ok && refetchMySubscription();
+
+            const resjson = await subscriptionResponse.json();
+
+            
+            dispatch && dispatch({
+              type: "setSubscription",
+              payload: resjson.status
+            });
               
       
-          return await subscriptionResponse.json();
+          return resjson
           
         }
 

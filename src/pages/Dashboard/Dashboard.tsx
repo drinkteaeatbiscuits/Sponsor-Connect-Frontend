@@ -49,14 +49,21 @@ const Dashboard: React.FC = () => {
   const profileId = authState.user.profile;
 
   const {isLoading: isLoadingProfile, data: dataProfile, error: errorProfile, isSuccess: isSuccessProfile} = useProfile( profileId );
-  // console.log(authState.user.profile); 
-  // console.log(dataProfile); 
+  
+
+  const subscriptionActive = () => {
+    if(authState?.mySubscription?.subscriptionStatus === 'active'){
+      return true
+    }else{
+      return false
+    }
+  }
+  // console.log(authState?.user?.subscriptionStatus); 
 
   // { !authState.user && history.push('/'); }
   // console.log(dataNews);
 
   const linkCopied = () => {
-
     
     setTimeout(function() {
 			setCopied(true);
@@ -73,7 +80,7 @@ const Dashboard: React.FC = () => {
     <IonPage> 
       <TabBar activeTab="dashboard" />
       
-      <IonContent fullscreen className="ion-padding dashboard">
+      <ErrorBoundary><IonContent fullscreen className="ion-padding dashboard">
 
         <div className="dashboard-content">
 
@@ -120,7 +127,7 @@ const Dashboard: React.FC = () => {
                   </div>
                 </div>
 
-                <CopyToClipboard text={process.env.REACT_APP_PUBLIC_URL + "/profile/view/" + authState?.user?.profile}
+              {subscriptionActive() ? <CopyToClipboard text={process.env.REACT_APP_PUBLIC_URL + "/profile/view/" + authState?.user?.profile}
                   onCopy={() => { linkCopied()}}>
                   <div className='menu-list-option'>
                     <div className="icon">
@@ -132,6 +139,17 @@ const Dashboard: React.FC = () => {
                     </div>
                   </div>
                 </CopyToClipboard>
+              : <div className='menu-list-option'
+              onClick={() => history.push("/settings/subscription/")}>
+              <div className="icon">
+                <IonIcon color="primary" icon={link} />
+              </div>
+              <div className="text">
+                <p className="main-text">Your Unique Link</p>
+                <p className="sub-text">Activate subscription to use</p>
+              </div>
+            </div> }
+                
 
                 
 
@@ -213,10 +231,10 @@ const Dashboard: React.FC = () => {
 
           <div className="dashboard-content-column-3">
                   
-            <div className="dashboard-notifications">
+           { !subscriptionActive() && <div className="dashboard-notifications">
               <p className="dashboard-section-title">Notifications</p>
               
-              <div className="dashboard-notification">
+              <div className="dashboard-notification" style={{cursor: 'pointer'}} onClick={() => history.push("/settings/subscription/")}>
                   <div className="icon">
                     <IonIcon color="primary" icon={chatbubbles} />
                   </div>
@@ -226,7 +244,7 @@ const Dashboard: React.FC = () => {
                   </div>
                 </div>
 
-            </div>
+            </div> }
 
             <div className="" style={{borderRadius: "5px 5px 0 0",
                                       backgroundColor: "#fff",}}>
@@ -247,7 +265,9 @@ const Dashboard: React.FC = () => {
         
         </div>
 
-      </IonContent>
+        
+
+      </IonContent></ErrorBoundary>
       
     </IonPage>
   );

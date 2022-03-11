@@ -7,7 +7,7 @@ const useProfiles = () => {
       ["profile"],
       async () => {
 
-        const profilesResponse = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/profiles", {
+        const profilesResponse = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/active-profiles", {
             credentials: 'include'
         });
 

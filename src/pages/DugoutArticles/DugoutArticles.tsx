@@ -32,9 +32,6 @@ const DugoutArticles: React.FC = () => {
 	const [totalPosts, setTotalPosts] = useState(0);
 	const [theCategory, setTheCategory] = useState("");
 
-
-
-
 	const [allPosts, setAllPosts] = useState<any>([]);
 
 	const { status,
@@ -64,8 +61,6 @@ const DugoutArticles: React.FC = () => {
 
 		if(category !== theCategory) { 
 
-			
-
 			setAllPosts([]);
 			setPage(1);
 
@@ -73,9 +68,8 @@ const DugoutArticles: React.FC = () => {
 			data && allPosts.length < totalPosts && data[0]?.id !== allPosts[0]?.id && setAllPosts(data);
 			setTheCategory(category);
 
-
 		}else{
-			console.log('same category');
+			// console.log('same category');
 			data && allPosts.length < totalPosts && data[0]?.id !== allPosts[0]?.id && setAllPosts([...allPosts, ...data]);
 		}
 		
