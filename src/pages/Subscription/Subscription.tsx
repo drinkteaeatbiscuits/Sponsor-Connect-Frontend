@@ -1,25 +1,17 @@
 import { IonButton, IonContent, IonIcon, IonPage, IonSpinner } from '@ionic/react';
-import Header from '../../components/Header';
 import { useHistory } from 'react-router';
-import Cookies from 'js-cookie';
 import { AuthContext } from "../../App";
 import React, { useEffect, useState } from 'react';
-import LogoutButton from '../../components/LogoutButton';
 import TabBar from '../../components/TabBar';
-import { loadStripe } from "@stripe/stripe-js";
-import {CardElement, useStripe, Elements, useElements} from '@stripe/react-stripe-js';
-
 import getSymbolFromCurrency from 'currency-symbol-map'
 
 
 import './Subscription.scss';
 import useMySubscription from '../../hooks/useMySubscription';
-import usePrices from '../../hooks/usePrices';
 import CardLogos from '../../components/CardLogos/CardLogos';
 import usePayments from '../../hooks/usePayments';
 
 import { document } from 'ionicons/icons';
-import { useQueryClient } from 'react-query';
 
 export interface props {}
 
@@ -30,11 +22,11 @@ const Subscription: React.FC = () => {
   const [expectedCancelling, setExpectedCancelling] = useState(false);
 
 	const history = useHistory();
-  const { state: authState, dispatch } = React.useContext(AuthContext);
+  const { dispatch } = React.useContext(AuthContext);
 
 
-  const {isLoading, data, isSuccess, error, refetch: refetchMySubscription } = useMySubscription(refetchInterval);
-  const {isLoading: isLoadingPayments, data: dataPayments, isSuccess: isSuccessPayments, error: errorPayments} = usePayments();
+  const { data, isSuccess, refetch: refetchMySubscription } = useMySubscription(refetchInterval);
+  const { data: dataPayments } = usePayments();
   
   const [subscriptionStatus, setSubscriptionStatus] = useState("");
   const [subscriptionCancelling, setSubscriptionCancelling] = useState("");

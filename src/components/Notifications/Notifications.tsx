@@ -31,7 +31,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
 
 		profileComplete === 100 && setShowCompleteProfileNotification(true);
 
-	}, [data, useMyProfile]);
+	}, [data, useMyProfile, authState]);
 	// authState.user && console.log(authState.user.profileComplete);
 	// isSuccess && console.log(data.profileComplete);
 

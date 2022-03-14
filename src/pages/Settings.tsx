@@ -1,12 +1,10 @@
-import { IonButton, IonContent, IonIcon, IonPage } from '@ionic/react';
-import Header from '../components/Header';
+import {  IonContent, IonIcon, IonPage } from '@ionic/react';
 import { useHistory } from 'react-router';
-import Cookies from 'js-cookie';
 import { AuthContext } from "../App";
 import React from 'react';
 import LogoutButton from '../components/LogoutButton';
 import TabBar from '../components/TabBar';
-import { card, key, notifications, personCircle, settings, trailSign } from 'ionicons/icons';
+import { card, key } from 'ionicons/icons';
 
 export interface props {}
 

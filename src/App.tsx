@@ -5,13 +5,10 @@ import { IonReactRouter } from '@ionic/react-router';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-// import Cookies from 'js-cookie';
 
-import Home from './pages/Home';
-import AddItem from './pages/AddItem';
 import Login from './pages/Login/Login';
 import CreateAccount from './pages/CreateAccount/CreateAccount';
-import Menu from './pages/Menu';
+
 
 
 /* Core CSS required for Ionic components to work properly */
@@ -43,8 +40,7 @@ import Settings from './pages/Settings';
 import EditProfile from './pages/EditProfile/EditProfile';
 import Billing from './pages/Billing';
 import Account from './pages/Account/Account';
-// import Notifications from './pages/Notifications';
-// import MainMenu from './components/MainMenu';
+
 import Subscription from './pages/Subscription/Subscription';
 import Landing from './pages/Landing/Landing';
 import Opportunity from './pages/Opportunity/Opportunity';
@@ -58,17 +54,12 @@ import ResetPassword from './pages/ResetPassword/ResetPassword';
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
 import Subscribe from './pages/Subscribe/Subscribe';
-import TextEditor from './components/TextEditor/TextEditor';
-import NewTextEditor from './pages/NewTextEditor/NewTextEditor';
 import ProfileImages from './pages/ProfileImages/ProfileImages';
 import EditProfileDescription from './pages/EditProfile/EditProfileDescription';
 
 import Geocode from "react-geocode";
-import RangeTest from './pages/RangeTest';
 import NotificationSettings from './pages/NotificationSettings/NotificationSettings';
 import Notifications from './components/Notifications/Notifications';
-import { colorWandOutline } from 'ionicons/icons';
-import NewsArticles from './pages/Admin/NewsArticles/NewsArticles';
 import BookConsultation from './pages/BookConsultation/BookConsultation';
 import DashboardBusiness from './pages/DashboardBusiness/DashboardBusiness';
 import Favourites from './pages/Favourites/Favourites';
@@ -162,6 +153,12 @@ const reducer = (state: any, action: any) => {
     }
     case "viewedProfile": {
       state.user.viewedProfiles = action.payload
+      return {
+        ...state 
+      }
+    }
+    case "updateProfileComplete": {
+      state.user.profileComplete = action.payload
       return {
         ...state 
       }
@@ -277,16 +274,9 @@ const App: React.FC = () => {
 
   }, [currentLocation, fromLocation, state.isAuthenticated, doesLocationCookieExist()]);
 
-  
-  // console.log(state.isAuthenticated);
-
   wasUserHere && (initialState.isAuthenticated = true);
   wasUserHere && (initialState.user = wasUserHere);
 
-  
-  const history = useHistory();
-
-  // console.log(state?.user?.accountType);
 
   const subscriptionActive = () => {
     if(state?.mySubscription?.subscriptionStatus === 'active'){
@@ -296,6 +286,7 @@ const App: React.FC = () => {
     }
   }
 
+  console.log(state);
 
   return (
 
@@ -308,8 +299,6 @@ const App: React.FC = () => {
             dispatch
           }}
         >
-          
-          {/* {!state.isAuthenticated ? <p>logged out</p> : <p>logged in</p>} */}
           
           <IonReactRouter>
            
