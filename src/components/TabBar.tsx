@@ -61,6 +61,9 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
                 <div className="logo-header">
                     <div className="" onClick={()=> history.push("/dashboard")}><SvgScLogoHorizontal /></div>
                 </div>
+                {/* <div className="">
+                    { authState?.mySubscription && authState?.mySubscription?.subscriptionStatus }    
+                </div> */}
                 <div className={ ( activeTab === 'dashboard' && "active " ) + " tab-button"} onClick={()=> history.push("/dashboard")}>
                    <IonIcon icon={speedometer} /> 
                     <IonLabel>Dashboard</IonLabel> 
