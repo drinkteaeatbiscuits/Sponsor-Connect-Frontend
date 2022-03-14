@@ -1,13 +1,13 @@
-import { IonButton, IonButtons, IonContent, IonIcon, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonSearchbar, IonTextarea, IonTitle, IonToolbar, useIonViewWillEnter } from '@ionic/react';
+import { IonButton, IonContent, IonItem, IonList, IonModal, IonPage, IonSearchbar, IonToolbar } from '@ionic/react';
 import { useHistory } from 'react-router';
 import { AuthContext } from "../../App";
 import React, { useEffect, useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from 'react-query';
+import {useQueryClient } from 'react-query';
 import useUpdateProfile from '../../hooks/useUpdateProfile';
 import useMyProfile from '../../hooks/useMyProfile';
 import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
 
-import { convertToRaw, convertFromRaw } from 'draft-js';
+import { convertFromRaw } from 'draft-js';
 import 'react-image-crop/dist/ReactCrop.css';
 import './edit-profile.scss';
 
@@ -120,8 +120,6 @@ const EditProfile: React.FC = () => {
   }, [profileData, isLoadingProfile]);
 
 
-  // console.log(profileData);
-  // console.log(location);
 
   const focusOnSport = () => {
 
@@ -135,7 +133,7 @@ const EditProfile: React.FC = () => {
     geocodeByAddress(event.label)
       .then(results => getLatLng(results[0]))
       .then(({ lat, lng }) => {
-        // console.log('Successfully got latitude and longitude', { lat, lng });
+
         setLatLong({ lat, lng });
       }
       );
@@ -237,8 +235,7 @@ const EditProfile: React.FC = () => {
 
                   <div className="editor-section-top-buttons">
 
-                    {/* { console.log(profileData.data?.sport) }
-                    { console.log(yourSport) } */}
+  
 
                     {isSuccessProfile && yourSport === profileData?.sport && <div className="editor-section-button" onClick={() => { setShowModal(true); focusOnSport(); }}>{yourSport ? "Edit" : "Add"}</div>}
 
@@ -315,8 +312,7 @@ const EditProfile: React.FC = () => {
                         <div className="editor-section-button secondary" onClick={() => { setShowSocials(false); setSocialMediaObject(profileData?.socialMedia) }}>Cancel</div>}
 
                       {showSocials && <div className="editor-section-button" onClick={() => {
-                        // saveField("socialMedia", socialMediaObject ); setShowSocials(false); 
-                        // console.log(socialMediaObject);
+                   
                         saveField("socialMedia", socialMediaObject);
                         setShowSocials(false);
                       }}>Save</div>}

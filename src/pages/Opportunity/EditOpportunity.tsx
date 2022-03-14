@@ -139,14 +139,16 @@ const EditOpportunity: React.FC = () => {
 
           { opportunitySuccess && <div className="editor-wrap">
 
-            {!showDelete && <IonIcon className="" onClick={() => { showDelete ? setShowDelete(false) : setShowDelete(true) }} icon={trashOutline}></IonIcon>}
+              <div className="" style={{display: 'flex', width: '100%', justifyContent: 'flex-end'}}>
+                  {!showDelete && <IonIcon className="" color='primary' style={{position: 'relative', fontSize: '20px', marginRight: '5px', cursor: 'pointer'}} onClick={() => { showDelete ? setShowDelete(false) : setShowDelete(true) }} icon={trashOutline}></IonIcon>}
 
-            {showDelete && <div className="delete-opportunity">
-              <span>Delete opportunity? </span>
-              <IonIcon className="tick" onClick={() => { setShowDelete(false); deleteOpportunity(); }} icon={checkmark}></IonIcon>
-              <IonIcon className="" onClick={() => setShowDelete(false)} icon={closeOutline}></IonIcon>
+                  {showDelete && <div className="delete-opportunity">
+                    <span>Delete opportunity? </span>
+                    <IonIcon className="tick" onClick={() => { setShowDelete(false); deleteOpportunity(); }} icon={checkmark}></IonIcon>
+                    <IonIcon className="" onClick={() => setShowDelete(false)} icon={closeOutline}></IonIcon>
 
-                </div>}
+                      </div>}
+              </div>
 
             <div className="editor-section">
 

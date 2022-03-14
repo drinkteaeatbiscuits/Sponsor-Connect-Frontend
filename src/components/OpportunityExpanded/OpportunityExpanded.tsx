@@ -43,7 +43,7 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 	const opportunityStatus = getOpportunityStatus(opportunityData?.opportunityStatus, opportunityData?.expiryDate?.date);
 
-	console.log(opportunityData);
+	// console.log(opportunityData);
 
 	return <div className={'opportunity-expanded opportunity-status-' + opportunityStatus.toLowerCase()}>
 
