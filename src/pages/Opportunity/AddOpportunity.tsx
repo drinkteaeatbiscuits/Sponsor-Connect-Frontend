@@ -1,12 +1,8 @@
-import { IonButton, IonButtons, IonContent, IonInput, IonItem, IonLabel, IonList, IonPage, IonToolbar } from '@ionic/react';
-import Header from '../../components/Header';
+import { IonButton, IonButtons, IonContent, IonInput, IonPage, IonToolbar } from '@ionic/react';
 import { useHistory, useParams } from 'react-router';
-import Cookies from 'js-cookie';
 import { AuthContext } from "../../App";
 import React, { useEffect, useState } from 'react';
-import LogoutButton from '../../components/LogoutButton';
 import TabBar from '../../components/TabBar';
-import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
 import useOpportunity from '../../hooks/useOpportunity';
 import useAddOpportunity from '../../hooks/useAddOpportunity';
 
@@ -16,6 +12,9 @@ import NewImageUpload3 from '../../components/NewImageUpload3/NewImageUpload3';
 import TextEditor from '../../components/TextEditor/TextEditor';
 import { convertFromRaw, convertToRaw } from 'draft-js';
 import OpportunityImagesUpload from '../../components/OpportunityImagesUpload/OpportunityImagesUpload';
+
+import "react-date-range/dist/styles.css"; 
+import "react-date-range/dist/theme/default.css";
 
 import { Calendar } from 'react-date-range';
 
@@ -32,8 +31,6 @@ const AddOpportunity: React.FC = () => {
   const history = useHistory();
   const { state: authState } = React.useContext(AuthContext);
 
-// console.log(profileId);
-// const { isLoading, data, error } = useOpportunity(profileId.id);
 
   const [title, setTitle] = useState<string>("");
   const [description, setDescription] = useState<string>("");
