@@ -66,7 +66,7 @@ const Settings: React.FC = () => {
               </div>
             </div>
 
-            <div className='menu-list-option'
+            {/* <div className='menu-list-option'
               onClick={() => history.push("/settings/notifications/")}>
               <div className="icon">
                 <IonIcon color="primary" icon={notifications} />
@@ -75,7 +75,7 @@ const Settings: React.FC = () => {
                 <p className="main-text">Notifications</p>
                 <p className="sub-text">Manage your notifications</p>
               </div>
-            </div>
+            </div> */} 
 
             <LogoutButton className="logout-button button-tertiary ion-margin-bottom" expand="block" size="small" />
 
