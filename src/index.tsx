@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 
+// import { Helmet, HelmetProvider } from 'react-helmet-async';
+
 // import { Auth0Provider } from "@auth0/auth0-react";
 
 import { QueryClient, QueryClientProvider} from 'react-query';
@@ -12,11 +14,11 @@ import reportWebVitals from './reportWebVitals';
 
 const queryClient = new QueryClient();
 
+
 ReactDOM.render(
-  
     <QueryClientProvider client={queryClient}>
       <React.StrictMode>
-        <App />
+            <App />
         <ReactQueryDevtools />
       </React.StrictMode>
     </QueryClientProvider>,
@@ -27,6 +29,7 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://cra.link/PWA
 serviceWorkerRegistration.unregister();
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
