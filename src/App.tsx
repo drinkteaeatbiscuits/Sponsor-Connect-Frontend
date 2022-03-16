@@ -69,6 +69,7 @@ import DugoutCategories from './pages/DugoutCategories/DugoutCategories';
 import useMySubscription from './hooks/useMySubscription';
 import PleaseSubscribe from './pages/PleaseSubscribe/PleaseSubscribe';
 import ScrollToTop from './components/ScrollTop/ScrollTop';
+import { HelmetProvider } from 'react-helmet-async';
 
 Geocode.setApiKey(process.env.REACT_APP_GEOCODE_API_KEY);
 
@@ -240,6 +241,7 @@ const App: React.FC = () => {
   const { data: mySubscription, isSuccess: subscriptionSuccess, error: subscriptionError, refetch: refetchMySubscription } = useMySubscription();
 
   const [activeSubscription, setActiveSubscription] = useState(false);
+  const [accountType, setAccountType] = useState('');
 
   // console.log(activeSubscription);
 
@@ -250,6 +252,16 @@ const App: React.FC = () => {
       setActiveSubscription(false);
     } 
   }
+  
+  const businessAccount = () => {
+    if(state?.user?.accountType && state?.user?.accountType === 'Business'){
+      setAccountType('Business');
+    }else{
+      setAccountType('');
+    } 
+  }
+
+  
 
   useEffect(() => {
 
@@ -262,11 +274,11 @@ const App: React.FC = () => {
     } );
 
 
-
-
     subscriptionSuccess && mySubscription.length > 0 && (state.mySubscription = mySubscription[0]);
 
     subscriptionActive();
+
+    businessAccount();
 
     !doesLocationCookieExist() && !checkingLocation && currentLocation.length <= 0 && navigator.geolocation.getCurrentPosition(function(position) {
     
@@ -296,9 +308,9 @@ const App: React.FC = () => {
   wasUserHere && (initialState.user = wasUserHere);
 
 
-  
+console.log(accountType)
 
-  console.log(state);
+  // console.log();
 
   return (
 <HelmetProvider>
@@ -448,21 +460,23 @@ const App: React.FC = () => {
                 <NewsArticles />
               </Route> */}
 
+              
+
               <Route exact path="/the-dugout">
               
-                {state.isAuthenticated ? (activeSubscription ? <DugoutArticles /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
+                {state.isAuthenticated ? ((activeSubscription || accountType === "Business") ? <DugoutArticles /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
                 
               </Route>
 
               <Route exact path="/the-dugout-categories">
                 
-                {state.isAuthenticated ? (activeSubscription ? <DugoutCategories /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
+                {state.isAuthenticated ? ((activeSubscription || accountType === "Business") ? <DugoutCategories /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
 
               </Route>
               
               <Route exact path="/the-dugout/:slug">
                 
-                {state.isAuthenticated ? (activeSubscription ? <DugoutArticle /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
+                {state.isAuthenticated ? ((activeSubscription || accountType === "Business") ? <DugoutArticle /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
                 
               </Route>
 
