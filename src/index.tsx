@@ -2,10 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 
-// import { Helmet, HelmetProvider } from 'react-helmet-async';
-
-// import { Auth0Provider } from "@auth0/auth0-react";
-
 import { QueryClient, QueryClientProvider} from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
@@ -18,8 +14,9 @@ const queryClient = new QueryClient();
 ReactDOM.render(
     <QueryClientProvider client={queryClient}>
       <React.StrictMode>
+        
             <App />
-        <ReactQueryDevtools />
+            <ReactQueryDevtools />
       </React.StrictMode>
     </QueryClientProvider>,
   document.getElementById('root')
