@@ -88,6 +88,7 @@ $breakpoints: (
 			position: relative;
 			.post-info {
 				order: 2;
+				flex-grow: 1;
 				padding: 8px 24px 8px 0;
 				@include respond-to('md'){
 					padding: 0 48px 24px 0;	
@@ -108,6 +109,8 @@ $breakpoints: (
 				order: 1;
 				width: 320px;
 				padding: 12px 0;
+				flex-shrink: 0;
+				flex-grow: 0;
 				@include respond-to('md'){
 					order: 2;
 					padding: 0;
