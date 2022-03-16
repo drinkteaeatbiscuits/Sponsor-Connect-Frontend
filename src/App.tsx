@@ -5,15 +5,10 @@ import { IonReactRouter } from '@ionic/react-router';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
-import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-// import Cookies from 'js-cookie';
-
-import Home from './pages/Home';
-import AddItem from './pages/AddItem';
 import Login from './pages/Login/Login';
 import CreateAccount from './pages/CreateAccount/CreateAccount';
-import Menu from './pages/Menu';
+
 
 
 /* Core CSS required for Ionic components to work properly */
@@ -45,8 +40,7 @@ import Settings from './pages/Settings';
 import EditProfile from './pages/EditProfile/EditProfile';
 import Billing from './pages/Billing';
 import Account from './pages/Account/Account';
-// import Notifications from './pages/Notifications';
-// import MainMenu from './components/MainMenu';
+
 import Subscription from './pages/Subscription/Subscription';
 import Landing from './pages/Landing/Landing';
 import Opportunity from './pages/Opportunity/Opportunity';
@@ -60,17 +54,12 @@ import ResetPassword from './pages/ResetPassword/ResetPassword';
 import ForgotPassword from './pages/ForgotPassword/ForgotPassword';
 import ErrorPage from './pages/ErrorPage/ErrorPage';
 import Subscribe from './pages/Subscribe/Subscribe';
-import TextEditor from './components/TextEditor/TextEditor';
-import NewTextEditor from './pages/NewTextEditor/NewTextEditor';
 import ProfileImages from './pages/ProfileImages/ProfileImages';
 import EditProfileDescription from './pages/EditProfile/EditProfileDescription';
 
 import Geocode from "react-geocode";
-import RangeTest from './pages/RangeTest';
 import NotificationSettings from './pages/NotificationSettings/NotificationSettings';
 import Notifications from './components/Notifications/Notifications';
-import { colorWandOutline } from 'ionicons/icons';
-import NewsArticles from './pages/Admin/NewsArticles/NewsArticles';
 import BookConsultation from './pages/BookConsultation/BookConsultation';
 import DashboardBusiness from './pages/DashboardBusiness/DashboardBusiness';
 import Favourites from './pages/Favourites/Favourites';
@@ -80,6 +69,7 @@ import DugoutCategories from './pages/DugoutCategories/DugoutCategories';
 import useMySubscription from './hooks/useMySubscription';
 import PleaseSubscribe from './pages/PleaseSubscribe/PleaseSubscribe';
 import ScrollToTop from './components/ScrollTop/ScrollTop';
+import { HelmetProvider } from 'react-helmet-async';
 
 Geocode.setApiKey(process.env.REACT_APP_GEOCODE_API_KEY);
 
@@ -169,6 +159,12 @@ const reducer = (state: any, action: any) => {
         ...state 
       }
     }
+    case "updateProfileComplete": {
+      state.user.profileComplete = action.payload
+      return {
+        ...state 
+      }
+    }
 
     default:
 
@@ -245,6 +241,7 @@ const App: React.FC = () => {
   const { data: mySubscription, isSuccess: subscriptionSuccess, error: subscriptionError, refetch: refetchMySubscription } = useMySubscription();
 
   const [activeSubscription, setActiveSubscription] = useState(false);
+  const [accountType, setAccountType] = useState('');
 
   // console.log(activeSubscription);
 
@@ -255,6 +252,16 @@ const App: React.FC = () => {
       setActiveSubscription(false);
     } 
   }
+  
+  const businessAccount = () => {
+    if(state?.user?.accountType && state?.user?.accountType === 'Business'){
+      setAccountType('Business');
+    }else{
+      setAccountType('');
+    } 
+  }
+
+  
 
   useEffect(() => {
 
@@ -267,11 +274,11 @@ const App: React.FC = () => {
     } );
 
 
-
-
     subscriptionSuccess && mySubscription.length > 0 && (state.mySubscription = mySubscription[0]);
 
     subscriptionActive();
+
+    businessAccount();
 
     !doesLocationCookieExist() && !checkingLocation && currentLocation.length <= 0 && navigator.geolocation.getCurrentPosition(function(position) {
     
@@ -297,19 +304,13 @@ const App: React.FC = () => {
 
   }, [currentLocation, fromLocation, state.isAuthenticated, doesLocationCookieExist(), mySubscription, state.mySubscription]);
 
-  
-  // console.log(state.isAuthenticated);
-
   wasUserHere && (initialState.isAuthenticated = true);
   wasUserHere && (initialState.user = wasUserHere);
 
-  
-  const history = useHistory();
 
-  // console.log(state?.user?.accountType);
+console.log(accountType)
 
-  
-
+  // console.log();
 
   return (
 <HelmetProvider>
@@ -322,8 +323,6 @@ const App: React.FC = () => {
             dispatch
           }}
         >
-          
-          {/* {!state.isAuthenticated ? <p>logged out</p> : <p>logged in</p>} */}
           
           <IonReactRouter>
            
@@ -461,21 +460,23 @@ const App: React.FC = () => {
                 <NewsArticles />
               </Route> */}
 
+              
+
               <Route exact path="/the-dugout">
               
-                {state.isAuthenticated ? (activeSubscription ? <DugoutArticles /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
+                {state.isAuthenticated ? ((activeSubscription || accountType === "Business") ? <DugoutArticles /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
                 
               </Route>
 
               <Route exact path="/the-dugout-categories">
                 
-                {state.isAuthenticated ? (activeSubscription ? <DugoutCategories /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
+                {state.isAuthenticated ? ((activeSubscription || accountType === "Business") ? <DugoutCategories /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
 
               </Route>
               
               <Route exact path="/the-dugout/:slug">
                 
-                {state.isAuthenticated ? (activeSubscription ? <DugoutArticle /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
+                {state.isAuthenticated ? ((activeSubscription || accountType === "Business") ? <DugoutArticle /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
                 
               </Route>
 
