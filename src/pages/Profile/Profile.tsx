@@ -12,6 +12,7 @@ import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw } from 'dr
 import { stateToHTML } from "draft-js-export-html";
 import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 // import { stateToMarkdown } from "draft-js-export-markdown";
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import { Fancybox } from "@fancyapps/ui"; 
 
@@ -26,6 +27,7 @@ import TextEditorContent from '../../components/TextEditorContent/TextEditorCont
 import OpportunityExpanded from '../../components/OpportunityExpanded/OpportunityExpanded';
 import useOpportunity from '../../hooks/useOpportunity';
 import ContactProfile from '../../components/ContactProfile/ContactProfile';
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 export interface props {}
 
@@ -183,6 +185,9 @@ const Profile: React.FC = () => {
 
   return (
     <IonPage className="profile">
+
+
+        <MetaTags title={data?.profileName} path={'/profile/' + profileId.id} />
 
       { authState?.user?.profile === parseInt(profileId.id) && 
         <IonToolbar>

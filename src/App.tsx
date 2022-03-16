@@ -68,6 +68,7 @@ import DugoutArticle from './pages/DugoutArticle/DugoutArticle';
 import DugoutCategories from './pages/DugoutCategories/DugoutCategories';
 import useMySubscription from './hooks/useMySubscription';
 import PleaseSubscribe from './pages/PleaseSubscribe/PleaseSubscribe';
+import ScrollToTop from './components/ScrollTop/ScrollTop';
 
 Geocode.setApiKey(process.env.REACT_APP_GEOCODE_API_KEY);
 
@@ -236,7 +237,19 @@ const App: React.FC = () => {
   const [checkUser, setCheckUser] = useState<any>(false);
   const [checkingLocation, setCheckingLocation] = useState<any>(false);
   const [checkingLocationPlaceName, setCheckingLocationPlaceName] = useState<any>(false);
-  const {data: mySubscription, isSuccess: subscriptionSuccess, error: subscriptionError } = useMySubscription();
+  const { data: mySubscription, isSuccess: subscriptionSuccess, error: subscriptionError, refetch: refetchMySubscription } = useMySubscription();
+
+  const [activeSubscription, setActiveSubscription] = useState(false);
+
+  // console.log(activeSubscription);
+
+  const subscriptionActive = () => {
+    if(state?.mySubscription?.subscriptionStatus === 'active'){
+      setActiveSubscription(true);
+    }else{
+      setActiveSubscription(false);
+    } 
+  }
 
   useEffect(() => {
 
@@ -244,11 +257,16 @@ const App: React.FC = () => {
       
       setWasUserHere(data); 
       setCheckUser(true); 
+      refetchMySubscription();
 
     } );
 
 
-    subscriptionSuccess && mySubscription.length > 0 && (initialState.mySubscription = mySubscription[0]);
+
+
+    subscriptionSuccess && mySubscription.length > 0 && (state.mySubscription = mySubscription[0]);
+
+    subscriptionActive();
 
     !doesLocationCookieExist() && !checkingLocation && currentLocation.length <= 0 && navigator.geolocation.getCurrentPosition(function(position) {
     
@@ -272,24 +290,18 @@ const App: React.FC = () => {
     
     doesLocationCookieExist() && (initialState.currentLocation = JSON.parse( document.cookie.split('; ').find(row => row.startsWith('user_location='))?.split('=')[1] || "" ));
 
-  }, [currentLocation, fromLocation, state.isAuthenticated, doesLocationCookieExist()]);
+  }, [currentLocation, fromLocation, state.isAuthenticated, doesLocationCookieExist(), mySubscription, state.mySubscription]);
 
   wasUserHere && (initialState.isAuthenticated = true);
   wasUserHere && (initialState.user = wasUserHere);
 
 
-  const subscriptionActive = () => {
-    if(state?.mySubscription?.subscriptionStatus === 'active'){
-      return true
-    }else{
-      return false
-    }
-  }
+  
 
   console.log(state);
 
   return (
-
+<HelmetProvider>
     <IonApp>
       <Elements stripe={stripePromise}>
 
@@ -304,8 +316,12 @@ const App: React.FC = () => {
            
             { state?.user?.profile && <Notifications /> }
 
+            <ScrollToTop />
+
             <IonRouterOutlet animated={false}>
 
+              
+            
               <Route exact path="/">
                 {state.isAuthenticated ? <Redirect to="/dashboard" /> : <Landing />}
               </Route>
@@ -424,7 +440,7 @@ const App: React.FC = () => {
               </Route>
 
               <Route exact path="/book-consultation">
-                {state.isAuthenticated ? (subscriptionActive() ? <BookConsultation /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
+                {state.isAuthenticated ? ( activeSubscription ? <BookConsultation /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
               </Route>
 
 
@@ -434,19 +450,19 @@ const App: React.FC = () => {
 
               <Route exact path="/the-dugout">
               
-                {state.isAuthenticated ? (subscriptionActive() ? <DugoutArticles /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
+                {state.isAuthenticated ? (activeSubscription ? <DugoutArticles /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
                 
               </Route>
 
               <Route exact path="/the-dugout-categories">
                 
-                {state.isAuthenticated ? (subscriptionActive() ? <DugoutCategories /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
+                {state.isAuthenticated ? (activeSubscription ? <DugoutCategories /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
 
               </Route>
               
               <Route exact path="/the-dugout/:slug">
                 
-                {state.isAuthenticated ? (subscriptionActive() ? <DugoutArticle /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
+                {state.isAuthenticated ? (activeSubscription ? <DugoutArticle /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
                 
               </Route>
 
@@ -463,6 +479,7 @@ const App: React.FC = () => {
         
       </Elements>
     </IonApp>
+    </HelmetProvider>
   )
 };
 

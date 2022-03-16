@@ -19,6 +19,7 @@ const useMySubscription = (refetchInterval) => {
   
 		client.setQueryData(["mySubscription"], posts);
   
+		// console.log(posts);
 		return posts;
 	  },
 	  {

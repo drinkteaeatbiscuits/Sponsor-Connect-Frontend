@@ -23,6 +23,8 @@ import useNewsFeed from '../../hooks/useNewsFeed';
 import { NewsFeed } from '../../components/NewsFeed/NewsFeed';
 import { env } from 'process';
 import OpportunitiesStatusCounts from '../../components/OpportunitiesStatusCounts/OpportunitiesStatusCounts';
+import { Helmet } from 'react-helmet-async';
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 
 export interface props {}
@@ -78,6 +80,10 @@ const Dashboard: React.FC = () => {
 
   return (
     <IonPage> 
+
+
+      <MetaTags title={'Dashboard'} path={'/dashboard'} />  
+
       <TabBar activeTab="dashboard" />
       
       <ErrorBoundary><IonContent fullscreen className="ion-padding dashboard">
