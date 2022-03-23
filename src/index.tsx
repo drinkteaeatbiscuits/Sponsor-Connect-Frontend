@@ -13,8 +13,7 @@ const queryClient = new QueryClient();
 
 ReactDOM.render(
     <QueryClientProvider client={queryClient}>
-      <React.StrictMode>
-        
+      <React.StrictMode> 
             <App />
             <ReactQueryDevtools />
       </React.StrictMode>
