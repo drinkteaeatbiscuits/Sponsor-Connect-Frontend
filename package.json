@@ -1,6 +1,6 @@
 {
   "name": "sponsorconnect",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "homepage": "https://app.sponsor-connect.com",
   "private": true,
   "dependencies": {
@@ -52,6 +52,7 @@
     "react-dropzone": "^11.4.2",
     "react-geocode": "^0.2.3",
     "react-google-places-autocomplete": "^3.3.2",
+    "react-helmet": "^6.1.0",
     "react-helmet-async": "^1.2.3",
     "react-image-crop": "^9.0.5",
     "react-masonry-css": "^1.0.16",

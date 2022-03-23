@@ -313,7 +313,7 @@ const App: React.FC = () => {
   // console.log();
 
   return (
-<HelmetProvider>
+    <HelmetProvider>  
     <IonApp>
       <Elements stripe={stripePromise}>
 
@@ -375,6 +375,7 @@ const App: React.FC = () => {
               <Route exact path="/profile/view/:id">
                   <Profile />
               </Route>
+
 
                <Route exact path="/profile/:id">
                 {state.isAuthenticated ? <Profile /> : (checkUser && <Redirect to="/login" />)}
