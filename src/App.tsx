@@ -308,7 +308,7 @@ const App: React.FC = () => {
   wasUserHere && (initialState.user = wasUserHere);
 
 
-console.log(accountType)
+// console.log(accountType)
 
   // console.log();
 
@@ -331,8 +331,6 @@ console.log(accountType)
             <ScrollToTop />
 
             <IonRouterOutlet animated={false}>
-
-              
             
               <Route exact path="/">
                 {state.isAuthenticated ? <Redirect to="/dashboard" /> : <Landing />}
@@ -377,7 +375,6 @@ console.log(accountType)
               <Route exact path="/profile/view/:id">
                   <Profile />
               </Route>
-
 
                <Route exact path="/profile/:id">
                 {state.isAuthenticated ? <Profile /> : (checkUser && <Redirect to="/login" />)}

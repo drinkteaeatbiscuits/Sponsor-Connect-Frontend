@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonContent, IonInput, IonPage, IonToolbar } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonInput, IonPage, IonToolbar, useIonViewDidEnter } from '@ionic/react';
 import { useHistory, useParams } from 'react-router';
 import { AuthContext } from "../../App";
 import React, { useEffect, useState } from 'react';
@@ -45,7 +45,8 @@ const AddOpportunity: React.FC = () => {
 
   const [newOpportunityData, setNewOpportunityData] = useState<any>("");
 
-  const { isLoading: isAddingOpportunity, data: opportunityData, error: addOpportunityError, isSuccess: opportunitySuccess, mutateAsync: addOpportunityMutation } = useAddOpportunity();
+  const { isLoading: isAddingOpportunity, data: opportunityData, error: addOpportunityError, isSuccess: opportunitySuccess, mutateAsync: addOpportunityMutation, reset } = useAddOpportunity();
+
   const { isLoading: isEditingOpportunity, error: editOpportunityError, mutateAsync: editOpportunityMutation } = useEditOpportunity( opportunityId );
   
   const { isLoading, isSuccess, refetch: opportunityRefetch, data, error } = useOpportunity( opportunityId );
@@ -68,19 +69,8 @@ const AddOpportunity: React.FC = () => {
   
 
   const [editorContent, setEditorContent] = useState(null);
+  const [showExpiryDateEdit, setShowExpiryDateEdit] = useState(false);
 
- const [showExpiryDateEdit, setShowExpiryDateEdit] = useState(false);
-
-  const refetchOpportunityImages = () => {
-    
-    console.log(opportunityData);
-
-  }
-
-  // console.log(opportunityData);
-  // console.log(opportunityId);
-  // console.log(opportunityId);
-  // console.log(opportunitySlug);
 
   const createOpportunity = async () => {
     
@@ -118,11 +108,18 @@ const AddOpportunity: React.FC = () => {
 
       history.push("/opportunity/" + opportunityId, {deletedOpportunity: false});
 
+      // reset();
+
     });
     
     
 
   }
+
+  useIonViewDidEnter(() => {
+    createOpportunity();
+  });
+    
 
   const displayDate = (date) => {
     let theDate = new Date(date);
@@ -280,3 +277,5 @@ const AddOpportunity: React.FC = () => {
 };
 
 export default AddOpportunity;
+
+
