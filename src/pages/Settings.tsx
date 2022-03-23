@@ -5,6 +5,7 @@ import React from 'react';
 import LogoutButton from '../components/LogoutButton';
 import TabBar from '../components/TabBar';
 import { card, key } from 'ionicons/icons';
+import MetaTags from '../components/MetaTags/MetaTags';
 
 export interface props {}
 
@@ -28,6 +29,8 @@ const Settings: React.FC = () => {
 
   return (
     <IonPage>
+
+      <MetaTags title={'Settings | Sponsor Connect'} path={'/settings'} description={'Sponsor Connect settings.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
 
       <TabBar activeTab="settings"/>
       <IonContent fullscreen className="ion-padding dashboard">

@@ -18,6 +18,7 @@ import Sidebar from '../Profiles/Sidebar/Sidebar';
 import useProfiles from '../../hooks/useProflies';
 import ProfilesContacted from '../../components/ProfilesContacted/ProfilesContacted';
 import ProfileMatches from '../../components/ProfileMatches/ProfileMatches';
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 
 
@@ -57,6 +58,10 @@ const DashboardBusiness: React.FC = () => {
 
   return (
     <IonPage> 
+
+      <MetaTags title={'Dashboard | Sponsor Connect'} path={'/dashboard'} description={'Your Sponsor Connect dashboard.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
+
+
       <TabBar activeTab="dashboard" />
       
       <IonContent fullscreen scroll-y="false" className="ion-padding dashboard">

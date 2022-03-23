@@ -7,6 +7,7 @@ import './Profiles.scss';
 import Sidebar from './Sidebar/Sidebar';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 export interface props {
 }
@@ -31,6 +32,9 @@ const Profiles: React.FC<props> = (props) => {
   // console.log(data);
   return (
     <IonPage>
+
+      <MetaTags title={'Profiles | Sponsor Connect'} path={'/profiles/'} description={'Sponsor Connect profiles.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
+
       <TabBar activeTab='profiles' />
       <IonContent className="profiles-content" fullscreen>
         <IonLoading isOpen={isLoading} message="Loading..." />

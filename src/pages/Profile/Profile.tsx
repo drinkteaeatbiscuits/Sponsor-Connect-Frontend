@@ -179,15 +179,14 @@ const Profile: React.FC = () => {
     }
 
     return showProfile;
-  }
+  }  
 
-  
+  console.log(data?.profileName )
 
   return (
     <IonPage className="profile">
 
-
-        <MetaTags title={data?.profileName + ' | Sponsor Connect'} path={'/profile/' + profileId.id} description={data?.shortDescription} image={ data?.coverImage ? process.env.REACT_APP_S3_URL + "/images/cover_xl/" + data?.coverImage?.hash + data?.coverImage?.ext : "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />
+      { isSuccess && <MetaTags title={data?.profileName + ' | Sponsor Connect'} path={thelocation.pathname} description={data?.shortDescription} image={ data?.coverImage ? process.env.REACT_APP_S3_URL + "/images/cover_xl/" + data?.coverImage?.hash + data?.coverImage?.ext : "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } /> }
 
       { authState?.user?.profile === parseInt(profileId.id) && 
         <IonToolbar>

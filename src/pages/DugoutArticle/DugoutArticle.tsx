@@ -11,6 +11,7 @@ import './DugoutArticle.scss';
 import { useQuery, useQueryClient } from 'react-query';
 import useDugoutArticles from '../../hooks/useDugoutArticles';
 import useDugoutArticle from '../../hooks/useDugoutArticle';
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 interface ParamTypes {
 	slug: string;
@@ -51,6 +52,10 @@ const DugoutArticle: React.FC = () => {
 
   return (
     <IonPage> 
+
+      <MetaTags title={articleContent?.title.rendered + ' | Sponsor Connect'} path={/the-dugout/ + articleSlug} description={'A Sponsor Connect dugout article.'} image={ articleContent?.featured_image_array.dugout_image_strip_lg_x2 ? articleContent?.featured_image_array.dugout_image_strip_lg_x2 : "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
+
+
       <TabBar activeTab="dugout" />
       
       <IonContent fullscreen className="ion-padding dugout-article" >

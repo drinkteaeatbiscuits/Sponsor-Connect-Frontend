@@ -21,6 +21,7 @@ import { Calendar } from 'react-date-range';
 import getOpportunityStatus from '../../functions/getOpportunityStatus';
 import useDeleteOpportunity from '../../hooks/useDeleteOpportunity';
 import { checkmark, closeOutline, trashOutline } from 'ionicons/icons';
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 
 export interface props { }
@@ -107,6 +108,8 @@ const EditOpportunity: React.FC = () => {
 
   return (
     <IonPage>
+
+        <MetaTags title={'Add Opportunity | Sponsor Connect'} path={'/edit-opportunity/' + opportunityId.id} description={'Edit a Sponsor Connect opportunity.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
 
        
         <IonToolbar>
