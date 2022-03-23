@@ -308,7 +308,7 @@ const App: React.FC = () => {
   wasUserHere && (initialState.user = wasUserHere);
 
 
-console.log(accountType)
+// console.log(accountType)
 
   // console.log();
 
