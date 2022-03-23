@@ -46,8 +46,6 @@ const AddOpportunity: React.FC = () => {
   const [newOpportunityData, setNewOpportunityData] = useState<any>("");
 
   const { isLoading: isAddingOpportunity, data: opportunityData, error: addOpportunityError, isSuccess: opportunitySuccess, mutateAsync: addOpportunityMutation, reset } = useAddOpportunity();
-  
-  console.log(isAddingOpportunity);
 
   const { isLoading: isEditingOpportunity, error: editOpportunityError, mutateAsync: editOpportunityMutation } = useEditOpportunity( opportunityId );
   
@@ -71,14 +69,7 @@ const AddOpportunity: React.FC = () => {
   
 
   const [editorContent, setEditorContent] = useState(null);
-
- const [showExpiryDateEdit, setShowExpiryDateEdit] = useState(false);
-
-  const refetchOpportunityImages = () => {
-    
-    console.log(opportunityData);
-
-  }
+  const [showExpiryDateEdit, setShowExpiryDateEdit] = useState(false);
 
 
   const createOpportunity = async () => {
@@ -286,7 +277,5 @@ const AddOpportunity: React.FC = () => {
 };
 
 export default AddOpportunity;
-function ionViewDidEnter() {
-  throw new Error('Function not implemented.');
-}
+
 
