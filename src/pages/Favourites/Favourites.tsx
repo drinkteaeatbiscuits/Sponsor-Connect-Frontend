@@ -26,6 +26,7 @@ import SavedProfiles from '../../components/SavedProfiles/SavedProfiles';
 import SavedOpportunities from '../../components/SavedOpportunities/SavedOpportunities';
 import SavedSearches from '../../components/SavedSearches/SavedSearches';
 import { paperPlaneOutline, shareSocial, trashOutline } from 'ionicons/icons';
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 
 
@@ -146,6 +147,10 @@ const Favourites: React.FC = () => {
 
   return (
     <IonPage>
+
+      <MetaTags title={'Favourites | Sponsor Connect'} path={'/favourites'} description={'Sponsor Connect favourites.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
+
+
       <TabBar activeTab="favourites" />
 
       <IonContent fullscreen className="ion-padding dashboard favourites">

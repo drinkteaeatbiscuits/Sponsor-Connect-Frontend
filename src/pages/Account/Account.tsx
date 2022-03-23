@@ -8,6 +8,7 @@ import LogoutButton from '../../components/LogoutButton';
 import TabBar from '../../components/TabBar';
 
 import "./Account.scss"
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 export interface props { }
 
@@ -83,6 +84,8 @@ const Account: React.FC = () => {
 
   return (
     <IonPage>
+
+      <MetaTags title={'Account | Sponsor Connect'} path={'/settings/account'} description={'Sponsor Connect account settings.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />
 
       <TabBar activeTab="settings" />
 

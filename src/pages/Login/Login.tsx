@@ -7,6 +7,7 @@ import OnBoardingProgress from '../../components/OnBoardingProgress/OnBoardingPr
 import SvgScLogo from '../OnBoardingSport/images/SvgScLogo';
 import { useHistory } from 'react-router';
 import { keypadOutline } from 'ionicons/icons';
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 export interface props { }
 
@@ -64,6 +65,7 @@ const Login: React.FC<props> = () => {
 
   return (
     <IonPage>
+      <MetaTags title={'Login | Sponsor Connect'} path={'/login'} description={'Login to Sponsor Connect.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
 
       <IonContent fullscreen className="on-boarding">
 

@@ -6,6 +6,7 @@ import TabBar from '../../components/TabBar';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
 
 import './Opportunities.scss';
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 export interface props {}
 
@@ -23,12 +24,15 @@ const Opportunities: React.FC = () => {
 
   return (
     <IonPage>
+
+      <MetaTags title={'Opportunities | Sponsor Connect'} path={ '/opportunities/' + profileId.id } description={'Sponsor Connect opportunities.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
+
+
       <TabBar activeTab="opportunities"/>
       <IonContent className="opportunities-content " fullscreen>
         <div className="content">
 
                   <IonButton className="link" fill="clear" color="dark" size="small" onClick={() => history.push("/profile/" + profileId.id )}>Back to Profile</IonButton>
-                  
 
                     <h1 className="ion-text-uppercase ion-text-center ion-color-dark line-height-1 ion-color-dark">Sponsorship Opportunities</h1>
 
