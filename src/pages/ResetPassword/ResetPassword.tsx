@@ -5,6 +5,7 @@ import SvgScLogo from '../OnBoardingSport/images/SvgScLogo';
 import { useHistory, useParams } from 'react-router';
 import { keypadOutline } from 'ionicons/icons';
 import {useLocation} from "react-router-dom";
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 export interface props { }
 
@@ -66,6 +67,9 @@ const ResetPassword: React.FC<props> = () => {
 
   return (
     <IonPage>
+
+    <MetaTags title={'Reset Password | Sponsor Connect'} path={'/reset-password'} description={'Sponsor Connect reset password.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
+
 
       <IonContent fullscreen className="on-boarding">
 

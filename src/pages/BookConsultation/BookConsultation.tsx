@@ -7,9 +7,13 @@ import { InlineWidget } from "react-calendly";
 // import 'https://assets.calendly.com/assets/external/widget.js';
 
 import './BookConsultation.scss'
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 const BookConsultation: React.FC = () => {
     return <IonPage>
+
+        <MetaTags title={'Book Consultation | Sponsor Connect'} path={'/book-consultation'} description={'Book a Sponsor Connect consultation.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />
+
         <TabBar activeTab="dashboard" />
 
         <IonContent fullscreen className="ion-padding dashboard">
@@ -26,10 +30,6 @@ const BookConsultation: React.FC = () => {
                 }} 
                 url="https://calendly.com/sponsorconnect"
                  />
-
-
-
-
 
             </div>
         </IonContent>

@@ -4,6 +4,7 @@ import { AuthContext } from "../../App";
 import SvgScLogo from '../OnBoardingSport/images/SvgScLogo';
 import { useHistory } from 'react-router';
 import { keypadOutline } from 'ionicons/icons';
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 export interface props { }
 
@@ -49,6 +50,8 @@ const ForgotPassword: React.FC<props> = () => {
 
   return (
     <IonPage>
+      
+      <MetaTags title={'Forgot Password | Sponsor Connect'} path={'/forgot-password'} description={'Sponsor Connect forgot password.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
 
       <IonContent fullscreen className="on-boarding">
 

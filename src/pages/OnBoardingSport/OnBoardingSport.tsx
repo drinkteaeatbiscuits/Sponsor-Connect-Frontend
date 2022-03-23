@@ -14,6 +14,7 @@ import 'react-circular-progressbar/dist/styles.css';
 import './OnBoardingSport.scss';
 import OnBoardingProgress from '../../components/OnBoardingProgress/OnBoardingProgress';
 import { AuthContext } from '../../App';
+import MetaTags from '../../components/MetaTags/MetaTags';
  
 // import TabBar from '../../components/TabBar';
 // import Header from '../../components/Header';
@@ -30,6 +31,9 @@ const OnBoardingSport: React.FC = () => {
 
   return (
     <IonPage>
+
+      <MetaTags title={'Welcome | Sponsor Connect'} path={'/sport'} description={'Welcome to Sponsor Connect.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
+
       <IonContent className="on-boarding" fullscreen>
 
           <IonGrid className="on-boarding-grid ion-padding-bottom">

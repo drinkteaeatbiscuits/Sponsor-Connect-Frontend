@@ -21,6 +21,7 @@ import SocialMediaTotals from '../../components/SocialMediaTotals/SocialMediaTot
 import SocialMediaTotalsEdit from '../../components/SocialMediaTotalsEdit/SocialMediaTotalsEdit';
 import AchievementsEdit from '../../components/AchievementsEdit/AchievementsEdit';
 import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 export interface props { }
 
@@ -182,6 +183,8 @@ const EditProfile: React.FC = () => {
 
   return (
     <IonPage>
+
+      <MetaTags title={'Edit Profile | Sponsor Connect'} path={'/profile/' + authState?.user.profile + '/edit'} description={'Edit Sponsor Connect profile.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
 
 
       <TabBar activeTab="profile" />

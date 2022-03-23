@@ -18,6 +18,8 @@ const PleaseSubscribe: React.FC = () => {
 		<TabBar activeTab="" />
 
 		<IonContent fullscreen className="ion-padding please-subscribe">
+
+			
 			<div className="" style={{ 
 				padding: '16px 24px', 
 				margin: "180px auto", 

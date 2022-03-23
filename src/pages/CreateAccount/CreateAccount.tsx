@@ -24,6 +24,7 @@ import OtherSVG from './images/OtherSVG';
 import EyeSVG from './images/EyeSVG';
 import { logoEuro } from 'ionicons/icons';
 import Pound from './images/Pound';
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 
 const CreateAccount: React.FC = () => {
@@ -340,6 +341,9 @@ const CreateAccount: React.FC = () => {
 
   return (
     <IonPage>
+
+    <MetaTags title={'Create Account | Sponsor Connect'} path={'/create-account-sports'} description={'Create a Sponsor Connect account.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />
+
 
       <IonContent fullscreen scrollY={true} className="on-boarding create-account">
 

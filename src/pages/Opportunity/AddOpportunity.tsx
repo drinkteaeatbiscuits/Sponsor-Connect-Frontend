@@ -17,6 +17,7 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
 import { Calendar } from 'react-date-range';
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 export interface props { }
 
@@ -129,6 +130,8 @@ const AddOpportunity: React.FC = () => {
 
   return (
     <IonPage>
+
+      <MetaTags title={'Add Opportunity | Sponsor Connect'} path={'/add-opportunity/' + profileId.id} description={'Add a Sponsor Connect opportunity.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
 
        
         <IonToolbar>

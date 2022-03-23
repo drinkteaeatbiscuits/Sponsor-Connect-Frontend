@@ -22,6 +22,7 @@ import VenueSVG from '../CreateAccount/images/VenueSVG';
 import TeamSVG from '../CreateAccount/images/TeamSVG';
 import OtherSVG from '../CreateAccount/images/OtherSVG';
 import EyeSVG from '../CreateAccount/images/EyeSVG';
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 
 const CreateAccountBusiness: React.FC = () => {
@@ -229,6 +230,9 @@ const CreateAccountBusiness: React.FC = () => {
 
   return (
     <IonPage>
+
+      <MetaTags title={'Create Account | Sponsor Connect'} path={'/create-account-business'} description={'Create a Sponsor Connect account.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />
+
 
       <IonContent fullscreen scrollY={true} className="on-boarding create-account">
 

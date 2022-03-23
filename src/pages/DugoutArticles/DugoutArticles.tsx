@@ -13,6 +13,7 @@ import useDugoutArticles from '../../hooks/useDugoutArticles';
 import useIntersectionObserver from '../../hooks/useIntersectionObserver';
 import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 import { useQueryClient } from 'react-query';
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 
 export interface props { }
@@ -99,6 +100,8 @@ const DugoutArticles: React.FC = () => {
 
 	return (
 		<IonPage>
+			 <MetaTags title={'The Dugout | Sponsor Connect'} path={/the-dugout/} description={'Sponsor Connect dugout articles.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
+
 			<TabBar activeTab="the-dugout" />
 
 			<IonContent fullscreen className="ion-padding dugout" >

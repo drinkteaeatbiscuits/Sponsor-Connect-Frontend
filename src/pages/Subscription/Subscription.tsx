@@ -12,6 +12,7 @@ import CardLogos from '../../components/CardLogos/CardLogos';
 import usePayments from '../../hooks/usePayments';
 
 import { document } from 'ionicons/icons';
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 export interface props {}
 
@@ -183,6 +184,9 @@ const Subscription: React.FC = () => {
 
   return (
     <IonPage>
+
+      <MetaTags title={'Subscription | Sponsor Connect'} path={'/subscription'} description={'Sponsor Connect subscription.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
+
       <TabBar activeTab="settings"/>
       <IonContent className="ion-padding" fullscreen >
         <div className="content">

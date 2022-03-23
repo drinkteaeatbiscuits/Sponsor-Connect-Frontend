@@ -15,6 +15,7 @@ import './landing.scss';
 import OnBoardingProgress from '../../components/OnBoardingProgress/OnBoardingProgress';
 import { AuthContext } from '../../App';
 import SvgScLogoWhite from './images/SvgScLogoWhite';
+import MetaTags from '../../components/MetaTags/MetaTags';
  
 // import TabBar from '../../components/TabBar';
 // import Header from '../../components/Header';
@@ -32,6 +33,9 @@ const Landing: React.FC = () => {
 
   return (
     <IonPage>
+
+      <MetaTags title={'Welcome | Sponsor Connect'} path={'/'} description={'Welcome to Sponsor Connect.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
+
       <IonContent fullscreen>
 
         <div className="landing-background-wrap">

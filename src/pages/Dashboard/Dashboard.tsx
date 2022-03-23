@@ -82,7 +82,8 @@ const Dashboard: React.FC = () => {
     <IonPage> 
 
 
-      <MetaTags title={'Dashboard'} path={'/dashboard'} />  
+
+      <MetaTags title={'Dashboard | Sponsor Connect'} path={'/dashboard'} description={'Your Sponsor Connect dashboard.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
 
       <TabBar activeTab="dashboard" />
       

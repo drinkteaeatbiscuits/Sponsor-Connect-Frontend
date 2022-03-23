@@ -14,6 +14,7 @@ import useMySubscription from '../../hooks/useMySubscription';
 import usePrices from '../../hooks/usePrices';
 import getSymbolFromCurrency from 'currency-symbol-map';
 import { newspaper, personCircle, settings, trailSign } from 'ionicons/icons';
+import MetaTags from '../../components/MetaTags/MetaTags';
 
 
 export interface props {} 
@@ -401,6 +402,10 @@ const Subscribe: React.FC = () => {
 
   return (
     <IonPage>
+
+      <MetaTags title={'Subscribe | Sponsor Connect'} path={'/subscribe'} description={'Sponsor Connect subscribe.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
+
+
       <TabBar activeTab="settings"/>
       <IonContent className="ion-padding" fullscreen >
 
