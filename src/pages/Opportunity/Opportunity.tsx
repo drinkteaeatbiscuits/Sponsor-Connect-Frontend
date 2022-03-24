@@ -44,7 +44,7 @@ const Opportunity: React.FC = () => {
   return (
     <IonPage>
 
-      <MetaTags title={opportunityData.title + ' | Sponsor Connect'} path={'/opportunity/' + opportunityId.id} description={ opportunityData?.opportunityDescription } image={ opportunityData?.images ? process.env.REACT_APP_S3_URL + "/images/cover_xl/" + opportunityData?.images?.hash + opportunityData?.images?.ext : "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
+      <MetaTags title={opportunityData?.title ? opportunityData?.title + ' | Sponsor Connect' : 'Sponsor Connect'} path={'/opportunity/' + opportunityId?.id} description={ opportunityData?.opportunityDescription } image={ opportunityData?.images ? process.env.REACT_APP_S3_URL + "/images/cover_xl/" + opportunityData?.images?.hash + opportunityData?.images?.ext : "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
 
       <TabBar activeTab="opportunities" />
       <IonContent className="opportunity-content" fullscreen>
