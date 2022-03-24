@@ -181,7 +181,7 @@ const Profile: React.FC = () => {
     return showProfile;
   }  
 
-  console.log(data?.profileName )
+  // console.log(data?.profileName )
 
   return (
     <IonPage className="profile">
