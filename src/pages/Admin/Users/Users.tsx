@@ -40,15 +40,13 @@ const Users: React.FC = () => {
 			sortUsers('id', 'desc');
 		}
 
-
-
 	}, [users, sortBy, sortedUsers])
 
 	// sortedUsers && console.log(sortedUsers);
 	// sortBy && console.log(sortBy);
 
 	const columnWidths = {
-		id: '4%',
+		id: '5%',
 		userName: '12%',
 		email: '17%',		
 		sport: '8%',
@@ -56,7 +54,7 @@ const Users: React.FC = () => {
 		created: '10%',
 		currency: '9%',
 		subscription: '11%',
-		location: '16%',
+		location: '15%',
 		
 	}
 
@@ -74,7 +72,7 @@ const Users: React.FC = () => {
 
 		} else if (sortBy === 'subscriptionStatus') {
 
-			console.log(sortBy);
+			// console.log(sortBy);
 			order === 'asc' && setSortedUsers(sortedUsers.sort((a, b) => (a.subscriptionStatus) ? 1 : (b.subscriptionStatus ? -1 : 0)))
 			order === 'desc' && setSortedUsers(sortedUsers.sort((a, b) => (a.subscriptionStatus) ? -1 : (b.subscriptionStatus ? 1 : 0)))
 
@@ -280,7 +278,7 @@ const Users: React.FC = () => {
 
 							{sortedUsers && sortedUsers.map((user, index) => {
 
-								console.log(user);
+								// console.log(user);
 								return user.accountType != 'Admin' && <div key={user.id} className="user" style={{
 									position: 'relative',
 									display: 'flex',
