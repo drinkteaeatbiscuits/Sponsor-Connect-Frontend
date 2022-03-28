@@ -1,0 +1,7 @@
+.dashboard-content .profile-link, 
+.dashboard-content .email-link {
+	text-decoration: none;
+	&:hover {
+		text-decoration: underline;
+	}
+}

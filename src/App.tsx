@@ -70,6 +70,10 @@ import useMySubscription from './hooks/useMySubscription';
 import PleaseSubscribe from './pages/PleaseSubscribe/PleaseSubscribe';
 import ScrollToTop from './components/ScrollTop/ScrollTop';
 import { HelmetProvider } from 'react-helmet-async';
+import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard';
+import Subscriptions from './pages/Admin/Subscriptions/Subscriptions';
+import Users from './pages/Admin/Users/Users';
+import Discounts from './pages/Admin/Discounts/Discounts';
 
 Geocode.setApiKey(process.env.REACT_APP_GEOCODE_API_KEY);
 
@@ -171,6 +175,8 @@ const reducer = (state: any, action: any) => {
     return state;
   }
 };
+
+
 
 const checkIfAuthenticated = async () => {
 
@@ -308,7 +314,8 @@ const App: React.FC = () => {
   wasUserHere && (initialState.user = wasUserHere);
 
 
-// console.log(accountType)
+  // console.log(state?.user && state?.user?.role.type === 'admin' )
+  // console.log(state.isAuthenticated )
 
   // console.log();
 
@@ -358,7 +365,7 @@ const App: React.FC = () => {
 
               <Route exact path="/dashboard">
 
-                { state.isAuthenticated ? ( state.user.profile ? <Dashboard /> : <DashboardBusiness /> ) : ( checkUser && <Redirect to="/login" /> ) }
+                { state.isAuthenticated ? ( state.user.profile ? <Dashboard /> : (state?.user?.role.type === 'admin' ? <AdminDashboard />  : <DashboardBusiness />) ) : ( checkUser && <Redirect to="/login" /> ) }
 
               </Route>
 
@@ -447,6 +454,19 @@ const App: React.FC = () => {
 
               <Route exact path="/profiles">
                 {state.isAuthenticated ? <Profiles /> : (checkUser && <Redirect to="/login" />)}
+              </Route>
+
+
+              <Route exact path="/subscriptions">
+                {state.isAuthenticated && state?.user?.role.type === 'admin' ? <Subscriptions /> : (checkUser && <Redirect to="/login" />)}
+              </Route>
+
+              <Route exact path="/dashboard/users">
+                {state.isAuthenticated && state?.user?.role.type === 'admin' ? <Users /> : (checkUser && <Redirect to="/login" />)}
+              </Route>
+
+              <Route exact path="/discounts">
+                {state.isAuthenticated && state?.user?.role.type === 'admin' ? <Discounts /> : (checkUser && <Redirect to="/login" />)}
               </Route>
 
               <Route exact path="/book-consultation">

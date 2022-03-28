@@ -42,21 +42,22 @@ const Settings: React.FC = () => {
 
             <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
             
-            {authState.user?.accountType !== "Business" &&
+            { authState.user?.accountType !== "Business" && authState?.user?.role.type != 'admin' &&
           
-            <div className="menu-list-option ion-margin-top"
-              onClick={() => history.push("/settings/subscription/")}>
-              <div className="icon">
-                <IonIcon color="primary" icon={card} />
+              <div className="menu-list-option ion-margin-top"
+                onClick={() => history.push("/settings/subscription/")}>
+                <div className="icon">
+                  <IonIcon color="primary" icon={card} />
+                </div>
+                <div className="text">
+                  <p className="main-text">Subscription/Billing</p>
+                  <p className="sub-text">Manage your payment settings</p>
+                </div>
               </div>
-              <div className="text">
-                <p className="main-text">Subscription/Billing</p>
-                <p className="sub-text">Manage your payment settings</p>
-              </div>
-            </div>
+
             }
 
-            <div className={authState.user?.accountType === "Business" ? "menu-list-option ion-margin-top" : "menu-list-option"}
+            { authState?.user?.role.type != 'admin' && <div className={authState.user?.accountType === "Business" ? "menu-list-option ion-margin-top" : "menu-list-option"}
               onClick={() => history.push("/settings/account/")}>
               <div className="icon">
                 <IonIcon color="primary" icon={key} />
@@ -65,7 +66,7 @@ const Settings: React.FC = () => {
                 <p className="main-text">Account</p>
                 <p className="sub-text">Manage your account settings</p>
               </div>
-            </div>
+            </div> }
 
             {/* <div className='menu-list-option'
               onClick={() => history.push("/settings/notifications/")}>

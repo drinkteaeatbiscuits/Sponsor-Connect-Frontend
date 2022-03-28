@@ -1,6 +1,6 @@
 import React from 'react';
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonBadge, IonButton } from '@ionic/react';
-import { calendar, personCircle, map, informationCircle, settings, trailSign, speedometer, newspaper, logOut, starOutline } from 'ionicons/icons';
+import { calendar, personCircle, map, informationCircle, settings, trailSign, speedometer, newspaper, logOut, starOutline, cashOutline, pricetagsOutline } from 'ionicons/icons';
 import { useHistory, useLocation } from "react-router";
 import { AuthContext } from '../App';
 import SvgScLogo from '../pages/OnBoardingSport/images/SvgScLogo';
@@ -54,6 +54,11 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
         return authState.user?.accountType === "Business" ? true : false;
       }
 
+      const isAdminUser = () => {
+        return authState.user?.role?.type === 'admin' ? true : false;
+      }
+
+    //   console.log(isAdminUser())
      
 
 	return <div className="tab-bar">
@@ -82,14 +87,19 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
                     <IonLabel>Profiles</IonLabel>
                 </div>
                 :
+                !isAdminUser() ?
                 <div className={ ( activeTab === 'profile' && "active " ) + " tab-button"} onClick={()=> history.push("/profile/" + authState?.user.profile )}>
                     <IonIcon icon={personCircle} />
                     <IonLabel>Profile</IonLabel>
                 </div>
+                :
+                <div className={ ( activeTab === 'users' && "active " ) + " tab-button"} onClick={()=> history.push("/dashboard/users" )}>
+                    <IonIcon icon={personCircle} />
+                    <IonLabel>Users</IonLabel>
+                </div>
                 }
 
-
-                { !isBusinessAccount() && <div className={ ( activeTab === 'opportunities' && "active " ) + " tab-button"} onClick={()=> history.push("/opportunities/"  + authState?.user.profile )}>
+                { !isBusinessAccount() && !isAdminUser() && <div className={ ( activeTab === 'opportunities' && "active " ) + " tab-button"} onClick={()=> history.push("/opportunities/"  + authState?.user.profile )}>
                     <IonIcon icon={trailSign} />
                     <IonLabel>Opportunities</IonLabel>
                 </div>
@@ -101,11 +111,23 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
                 </div>
                 }
 
+                {isAdminUser() && 
+                <div className={ ( activeTab === 'subscriptions' && "active " ) + " tab-button"} onClick={()=> history.push("/subscriptions")}>
+                    <IonIcon icon={cashOutline} />
+                    <IonLabel>Subscriptions</IonLabel>
+                </div>}
 
-                <div className={ ( activeTab === 'the-dugout' && "active " ) + " tab-button"} onClick={()=> history.push("/the-dugout-categories")}>
+                {isAdminUser() && 
+                <div className={ ( activeTab === 'discounts' && "active " ) + " tab-button"} onClick={()=> history.push("/discounts")}>
+                    <IonIcon icon={pricetagsOutline} />
+                    <IonLabel>Discounts</IonLabel>
+                </div>}
+
+
+               { !isAdminUser() && <div className={ ( activeTab === 'the-dugout' && "active " ) + " tab-button"} onClick={()=> history.push("/the-dugout-categories")}>
                     <IonIcon icon={newspaper} />
                     <IonLabel>The Dugout</IonLabel>
-                </div>
+                </div>}
 
                 <div className={ ( activeTab === 'settings' && "active " ) + " tab-button"} onClick={()=> history.push("/settings")}>
                     <IonIcon icon={settings} />
