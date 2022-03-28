@@ -178,6 +178,10 @@ const Profile: React.FC = () => {
       showProfile = true;
     }
 
+    if(authState?.user?.role.type === 'admin') {
+      showProfile = true;
+    }
+
     return showProfile;
   }  
 
