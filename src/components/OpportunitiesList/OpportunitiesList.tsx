@@ -29,7 +29,7 @@ const OpportunitiesList: React.FC<OpportunitiesListProps> = ( OpportunitiesListP
 	return <div className="opportunities">
 
 	
-			{ data?.length > 0 && data?.map(( opportunity:any )=>{
+			{ data?.length > 0 && data?.sort((a,b) => (a.price > b.price) ? -1 : ((b.price > a.price) ? 1 : 0)).map(( opportunity:any )=>{
 
 				const opportunityStatus = getOpportunityStatus(opportunity.opportunityStatus, opportunity.expiryDate?.date).toLowerCase();
 				{ if( opportunityStatus != "active" && authState?.user?.profile !== parseInt(profileId) ){ return }}
