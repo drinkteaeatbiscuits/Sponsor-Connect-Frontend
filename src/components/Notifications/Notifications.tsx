@@ -2,11 +2,10 @@ import { IonIcon } from "@ionic/react";
 import { closeOutline } from "ionicons/icons";
 import React, { useEffect, useState } from "react";
 import { CircularProgressbar } from "react-circular-progressbar";
-import { useHistory } from "react-router";
+import { useHistory, useLocation } from "react-router";
 import { AuthContext } from "../../App";
 import useMyProfile from "../../hooks/useMyProfile";
 import useProfile from "../../hooks/useProfile";
-
 
 import './Notifications.scss';
 
@@ -18,7 +17,9 @@ const Notifications: React.FC<NotificationsProps> = () => {
 	
 	const history = useHistory();
 
-	const [showCompleteProfileNotification, setShowCompleteProfileNotification] = useState(true);
+	const location = useLocation();
+
+	const [ showCompleteProfileNotification, setShowCompleteProfileNotification ] = useState(true);
 	const { state: authState } = React.useContext(AuthContext);
 	const [ profileComplete, setProfileComplete ] = useState(0);
 	
@@ -38,10 +39,13 @@ const Notifications: React.FC<NotificationsProps> = () => {
 	// isSuccess && console.log(data);
 
 	//  /console.log(authState?.user?.profile);
+	// console.log(location?.pathname);
 
-	return <div className="notifications">
-		
-			{ authState.user?.profile && showCompleteProfileNotification && profileComplete < 100 && <div className="notification dark" onClick={(e) => {e.preventDefault(); history.push( "/profile/" + authState.user?.profile +"/edit" )} }>
+	return <div className="notifications" style={{display: location?.pathname !== '/profile/'+ authState.user?.profile + '/build' ? 'block' : 'none' }}>
+
+			{ authState.user?.profile && showCompleteProfileNotification && profileComplete < 100 && <div className="notification dark" 
+			onClick={(e) => {e.preventDefault(); history.push( "/profile/" + authState.user?.profile +"/edit" )} }
+			>
 					<div className="notification-badge">
 						<div className="progress-circle" style={{ 
 							width: 75, 
