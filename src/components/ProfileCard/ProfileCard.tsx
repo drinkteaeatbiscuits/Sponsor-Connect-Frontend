@@ -11,7 +11,8 @@ import './ProfileCard.scss';
  
 interface ProfileProps {
 	profileData?: any,
-	className?: string
+	className?: string,
+	
 }
 
 const ProfileCard: React.FC<ProfileProps> = ( ProfileProps ) => {
@@ -80,12 +81,8 @@ const ProfileCard: React.FC<ProfileProps> = ( ProfileProps ) => {
 
 					</div>
 				</div>
-
-				
+			
 					<FavouriteProfileButton profileId={profileData?.id} />
-				
-				
-
 
 			</div>
 

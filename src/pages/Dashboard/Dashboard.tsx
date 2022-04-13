@@ -1,31 +1,20 @@
-import { IonButton, IonContent, IonIcon, IonPage } from '@ionic/react';
-import Header from '../../components/Header';
-import { useHistory, useParams } from 'react-router';
-import Cookies from 'js-cookie';
+import { IonContent, IonIcon, IonPage } from '@ionic/react';
+import { useHistory } from 'react-router';
 import { AuthContext } from "../../App";
 import React, { useState } from 'react';
-import LogoutButton from '../../components/LogoutButton';
 import TabBar from '../../components/TabBar';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
- 
-import Scrollbar from "react-scrollbars-custom";
-
 
 import './dashboard.scss';
-import { personCircle, trailSign, settings, linkOutline, link, chatbubbles, home } from 'ionicons/icons';
-import Notifications from '../../components/Notifications/Notifications';
+import { personCircle, link, chatbubbles, home } from 'ionicons/icons';
 import useProfile from '../../hooks/useProfile';
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
-import useNewsFeed from '../../hooks/useNewsFeed';
 import { NewsFeed } from '../../components/NewsFeed/NewsFeed';
-import { env } from 'process';
 import OpportunitiesStatusCounts from '../../components/OpportunitiesStatusCounts/OpportunitiesStatusCounts';
-import { Helmet } from 'react-helmet-async';
 import MetaTags from '../../components/MetaTags/MetaTags';
-
 
 export interface props {}
 
@@ -50,9 +39,8 @@ const Dashboard: React.FC = () => {
 
   const profileId = authState.user.profile;
 
-  const {isLoading: isLoadingProfile, data: dataProfile, error: errorProfile, isSuccess: isSuccessProfile} = useProfile( profileId );
+  const { data: dataProfile, isSuccess: isSuccessProfile } = useProfile( profileId );
   
-
   const subscriptionActive = () => {
     if(authState?.mySubscription?.subscriptionStatus === 'active'){
       return true
@@ -60,10 +48,6 @@ const Dashboard: React.FC = () => {
       return false
     }
   }
-  // console.log(authState?.user?.subscriptionStatus); 
-
-  // { !authState.user && history.push('/'); }
-  // console.log(dataNews);
 
   const linkCopied = () => {
     
@@ -80,8 +64,6 @@ const Dashboard: React.FC = () => {
 
   return (
     <IonPage> 
-
-
 
       <MetaTags title={'Dashboard | Sponsor Connect'} path={'/dashboard'} description={'Your Sponsor Connect dashboard.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
 
@@ -123,6 +105,18 @@ const Dashboard: React.FC = () => {
             <div className="dashboard-actions">
               <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
                 
+                {authState.user.profileComplete < 100 ? 
+                <div className="menu-list-option"
+                  onClick={() => history.push("/profile/" + authState?.user?.profile + "/build")}>
+                  <div className="icon">
+                    <IonIcon color="primary" icon={personCircle} />
+                  </div>
+                  <div className="text">
+                    <p className="main-text">Build Profile</p>
+                    <p className="sub-text">Build your profile</p>
+                  </div>
+                </div> 
+                :  
                 <div className="menu-list-option"
                   onClick={() => history.push("/profile/" + authState?.user?.profile + "/edit")}>
                   <div className="icon">
@@ -133,6 +127,8 @@ const Dashboard: React.FC = () => {
                     <p className="sub-text">Update your profile</p>
                   </div>
                 </div>
+                
+                }
 
               {subscriptionActive() ? <CopyToClipboard text={process.env.REACT_APP_PUBLIC_URL + "/profile/view/" + authState?.user?.profile}
                   onCopy={() => { linkCopied()}}>

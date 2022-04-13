@@ -87,7 +87,7 @@
     "workbox-streams": "^5.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "GENERATE_SOURCEMAP=false react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -117,6 +117,7 @@
     "@types/draft-js": "^0.11.8",
     "@types/file-saver": "^2.0.4",
     "@types/js-cookie": "^2.2.7",
-    "@types/react-transition-group": "^4.4.4"
+    "@types/react-transition-group": "^4.4.4",
+    "css-loader": "^6.7.1"
   }
 }
