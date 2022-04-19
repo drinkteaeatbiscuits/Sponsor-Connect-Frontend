@@ -163,7 +163,9 @@ const reducer = (state: any, action: any) => {
       }
     }
     case "updateProfileComplete": {
-      state.user.profileComplete = action.payload
+      // console.log(action.payload);
+      state.user.profileComplete = action.payload.profileComplete
+      state.user.profileCompletionList = action.payload.profileCompletionList
       return {
         ...state 
       }
