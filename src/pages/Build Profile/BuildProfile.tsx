@@ -222,7 +222,7 @@ const isProfileComplete = () => {
 
       setFullDescriptionText(profileData?.fullDescriptionText && convertFromRaw(profileData?.fullDescriptionText));
 
-      accolades?.length === 0 && profileData?.accolades.length > 0 ? setAccolades(profileData?.accolades) : setAccolades([""]);
+      accolades?.length === 0 && profileData?.accolades?.length > 0 ? setAccolades(profileData?.accolades) : setAccolades([""]);
 
 
 	  if(profileData?.socialMedia ) {
@@ -351,7 +351,7 @@ const isProfileComplete = () => {
 							flexGrow: 1,
 							// width: '12px', 
 							height: '7px', 
-							borderRadius: index === 0 && stepNumber !== 0 ? '7px 0 0 7px' : index === ( stepNames.length - 1 ) ? '0 7px 7px 0' : stepNumber === index ? index === 0 ? '7px' : '0 7px 7px 0' : '0',
+							borderRadius: index === 0 && stepNumber !== 0 ? '7px 0 0 7px' : index === ( stepNames?.length - 1 ) ? '0 7px 7px 0' : stepNumber === index ? index === 0 ? '7px' : '0 7px 7px 0' : '0',
 							// boxShadow: stepNumber === index ? '0 0 0 2px var(--ion-color-primary)' : '0 0 0 3px transparent',
 						
 						}}></div>
