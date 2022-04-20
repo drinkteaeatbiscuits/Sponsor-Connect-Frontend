@@ -1,4 +1,7 @@
 import { IonButton } from "@ionic/react";
+import React from "react";
+import { useHistory } from "react-router";
+import { AuthContext } from "../../App";
 
 import useCheckProfileCompletion from "../../hooks/useCheckProfileCompletion";
 import Arrow from "../../pages/CreateAccount/images/Arrow";
@@ -16,6 +19,9 @@ interface props {
 
 const BuildNavigation: React.FC<props> = (props) => {
 
+	const { state: authState, dispatch } = React.useContext(AuthContext);
+	const history = useHistory();
+
 	const {mutateAsync: checkProfileCompletion} = useCheckProfileCompletion();
 	
 	const { isFirst, saveFieldName, saveFieldValue, className, setStepNumber, stepNumber, saveField, isLast } = props;
@@ -31,14 +37,18 @@ const BuildNavigation: React.FC<props> = (props) => {
 		
 		}
 		
-		<IonButton className="arrow primary-button" onClick={() => { 
+		{ !isLast && <IonButton className="arrow primary-button" onClick={() => { 
 				
 				setStepNumber( stepNumber + 1 );
 				saveField && saveField(saveFieldName, saveFieldValue); 
 
 				!saveField && checkProfileCompletion();
 			 
-			 }} expand="block"><Arrow className="next-arrow" /></IonButton>
+			 }} expand="block"><Arrow className="next-arrow" /></IonButton> }
+
+		{ isLast && <IonButton className="" style={{width: '170px', fontSize: '16px', height: '50px'}} expand="block" onClick={() => { 
+			 history.push("/profile/" + authState?.user?.profile )
+			 }} >View Profile</IonButton> }
 
 	</div>
 

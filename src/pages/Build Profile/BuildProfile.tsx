@@ -27,6 +27,7 @@ import Arrow from '../CreateAccount/images/Arrow';
 import { chatbubbles, map, personCircle, rocket, trailSign } from 'ionicons/icons';
 import TextEditor from '../../components/TextEditor/TextEditor';
 import BuildNavigation from '../../components/BuildNavigation/BuildNavigation';
+import ProfileTodoList from '../../components/ProfileTodoList/ProfileTodoList';
 
 export interface props { }
 
@@ -173,9 +174,12 @@ const isProfileComplete = () => {
 
 		setProfileComplete( { profile: true, opportunity: true } );
 
-	}else if( authState.user.profileCompletionList.length === 1 && authState.user.profileCompletionList[0] === "At least one active opportunity") {
+	}else if( authState.user.profileCompletionList.length === 1 && authState.user.profileCompletionList[0] === "Add at least one active opportunity") {
+		
 		setProfileComplete({ profile: true, opportunity: false } );
+
 	} else {
+
 		setProfileComplete( { profile: false, opportunity: false } );
 	}
 }
@@ -963,28 +967,29 @@ const isProfileComplete = () => {
 
 							{!profileComplete.profile && 
 								<div className="">
-									<p style={{fontSize: '1.2em', letterSpacing: '-0.01em',  paddingBottom: '0', marginBottom: '0'}}><span style={{fontWeight: 700}}>Profile incomplete!</span></p>
-									<p style={{marginTop: '8px'}} >There are still things that need adding to your profile.</p>
+									<p style={{fontSize: '1.2em', letterSpacing: '-0.01em',  paddingBottom: '0', marginBottom: '0'}}><span style={{fontWeight: 700}}>Profile incomplete</span></p>
+									<p style={{marginTop: '8px'}}>There are still things that need adding to your profile.</p> 
+									<p style={{marginTop: '8px', marginBottom: '8px'}}>In order to begin to show up to potential sponsors we require each of the following to be added:</p>
 								</div>
 							}
 
 
-							{!profileComplete.profile &&
-							<ul>
-								{ authState.user.profileCompletionList.map((item) => {
-									if(item === "At least one active opportunity"){
-										return
-									}else{
-										return <li key={item}>{item}</li>
-									}
-									
-								}) }
-								
-							</ul> }
+							{!profileComplete.profile && <ProfileTodoList setStepNumber={setStepNumber} excludeOpportunity /> }
+
+							{!profileComplete.profile && <div className="" style={{margin: '0 -12px'}}><p style={{padding: '12px 18px 12px', margin: '0'}}>Need help completing your profile?</p><div className="menu-list"><div className='menu-list-option'
+										onClick={() => history.push("/book-consultation/")}>
+											<div className="icon">
+												<IonIcon color="primary" icon={chatbubbles} />
+											</div>
+											<div className="text">
+												<p className="main-text">Book Consultation</p>
+												<p className="sub-text">Get advice about sponsorship</p>
+											</div>
+										</div></div></div> }
 
 							{profileComplete.profile && !profileComplete.opportunity && 
-								<div className="">
-									<p>To start finding potential sponsors:</p>
+								<div className="" style={{margin: '0 -12px'}}>
+									<p style={{padding: '12px 12px 12px', margin: '0'}}>To start finding potential sponsors:</p>
 									<div className="menu-list">
 										<div className="menu-list-option"
 										onClick={() => history.push("/add-opportunity/" + authState?.user?.profile )}>
