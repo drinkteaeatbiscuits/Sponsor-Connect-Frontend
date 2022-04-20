@@ -105,7 +105,7 @@ const Dashboard: React.FC = () => {
             <div className="dashboard-actions">
               <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
                 
-                { authState.user.profileCompletionList.length === 1 && authState.user.profileCompletionList[0] === "Add at least one active opportunity" ? 
+                { authState?.user?.profileCompletionList?.length === 1 && authState?.user?.profileCompletionList[0] === "Add at least one active opportunity" ? 
                  <div className="menu-list-option"
                   onClick={() => history.push("/profile/" + authState?.user?.profile + "/edit")}>
                   <div className="icon">
