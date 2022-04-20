@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonList, IonModal, IonPage, IonSearchbar, IonTextarea, IonToolbar } from '@ionic/react';
+import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonList, IonModal, IonPage, IonPopover, IonSearchbar, IonTextarea, IonToolbar } from '@ionic/react';
 import { useHistory } from 'react-router';
 import { AuthContext } from "../../App";
 import React, { useEffect, useState } from 'react';
@@ -7,7 +7,7 @@ import useUpdateProfile from '../../hooks/useUpdateProfile';
 import useMyProfile from '../../hooks/useMyProfile';
 import GooglePlacesAutocomplete, { geocodeByAddress, getLatLng } from 'react-google-places-autocomplete';
 
-import { convertFromRaw } from 'draft-js';
+import { convertFromRaw, convertToRaw } from 'draft-js';
 import 'react-image-crop/dist/ReactCrop.css';
 import './BuildProfile.scss';
 
@@ -24,7 +24,10 @@ import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 import MetaTags from '../../components/MetaTags/MetaTags';
 import ExampleProfileCard from '../../components/ExampleProfileCard/ExampleProfileCard';
 import Arrow from '../CreateAccount/images/Arrow';
-import { personCircle } from 'ionicons/icons';
+import { chatbubbles, map, personCircle, rocket, trailSign } from 'ionicons/icons';
+import TextEditor from '../../components/TextEditor/TextEditor';
+import BuildNavigation from '../../components/BuildNavigation/BuildNavigation';
+import ProfileTodoList from '../../components/ProfileTodoList/ProfileTodoList';
 
 export interface props { }
 
@@ -34,7 +37,7 @@ const BuildProfile: React.FC = () => {
   const client = useQueryClient();
 
   const history = useHistory();
-  const { state: authState } = React.useContext(AuthContext);
+  const { state: authState, dispatch } = React.useContext(AuthContext);
 
   const { isLoading, error, mutateAsync: addProfileMutation } = useUpdateProfile(authState?.user?.profile);
   const { isLoading: isEditingOpportunity, error: editOpportunityError, isSuccess, mutateAsync: editProfileMutation } = useEditProfileField(authState?.user?.profile);
@@ -86,10 +89,36 @@ const BuildProfile: React.FC = () => {
   const [youTubeTotal, setYouTubeTotal] = useState<any>(profileData?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'youTube'; })[0]?.socialMediaTotal);
   const [youTubeUrl, setYouTubeUrl] = useState<any>(profileData?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'youTube'; })[0]?.socialMediaUrl);
 
+  const [informationAboutYou, setInformationAboutYou] : any = useState();
+  const [competitionInformation, setCompetitionInformation] : any = useState();
+  const [supportersInformation, setSupportersInformation] : any = useState();
+  const [anyOtherInfo, setAnyOtherInfo] : any = useState();
+
+  const [informationAboutYouTipState, setInformationAboutYouTipState] = useState({
+	showPopover: false,
+	event: undefined
+  });
+  const [competitionInformationTipState, setCompetitionInformationTipState] = useState({
+	showPopover: false,
+	event: undefined
+});
+
+const [supportersInformationTipState, setSupportersInformationTipState] = useState({
+	showPopover: false,
+	event: undefined
+});
+const [anyOtherInfoTipState, setAnyOtherInfoTipState] = useState({
+	showPopover: false,
+	event: undefined
+});
 
 //   console.log(profileData);
 
+
+
   const saveField = async (fieldName: string, fieldData: any) => {
+
+	// console.log(fieldData);
 
     let newEditorContent;
     newEditorContent = {};
@@ -97,12 +126,16 @@ const BuildProfile: React.FC = () => {
 
     await editProfileMutation(newEditorContent);
 
+
+	isProfileComplete();
+
   }
 
   error && console.log(error);
   profileError && console.log(profileError);
 
   const updateSocialMediaObject = () => {
+
 	const socialMediaObject: { socialMediaName: string; socialMediaTotal: any; socialMediaUrl: any; }[] = [];
 
 	facebookTotal && socialMediaObject.push({
@@ -133,17 +166,48 @@ const BuildProfile: React.FC = () => {
 	setSocialMedia(socialMediaObject);
 }
 
-//   console.log(profileData);
+const [profileComplete, setProfileComplete] = useState<any>({ profile: true, opportunity: false });
+
+const isProfileComplete = () => {
+
+	if( authState.user.profileComplete === 100 ){
+
+		setProfileComplete( { profile: true, opportunity: true } );
+
+	}else if( authState.user.profileCompletionList.length === 1 && authState.user.profileCompletionList[0] === "Add at least one active opportunity") {
+		
+		setProfileComplete({ profile: true, opportunity: false } );
+
+	} else {
+
+		setProfileComplete( { profile: false, opportunity: false } );
+	}
+}
+
+// console.log(profileComplete);
+// console.log(authState.user.profileCompletionList);
+// console.log(authState.user.profileComplete);
 
   useEffect(() => {
 
-    if (!isLoadingProfile) {
+	isProfileComplete();
+
+    if (isSuccessProfile) {
      
       setProfileName(profileData?.profileName);
       
     }
 
-    if (!isLoadingProfile) {
+	if (isSuccessProfile) {
+
+		setInformationAboutYou(profileData.data?.informationAboutYou && convertFromRaw( profileData.data?.informationAboutYou ));
+  
+		setCompetitionInformation(profileData.data?.competitionInformation && convertFromRaw( profileData.data?.competitionInformation ));
+  
+		setSupportersInformation(profileData.data?.supportersInformation && convertFromRaw( profileData.data?.supportersInformation ));
+  
+		setAnyOtherInfo(profileData.data?.anyOtherInfo && convertFromRaw( profileData.data?.anyOtherInfo ));
+  
 
       // !profileName && setProfileName(profileData?.data?.profileName);
       
@@ -158,7 +222,7 @@ const BuildProfile: React.FC = () => {
 
       setFullDescriptionText(profileData?.fullDescriptionText && convertFromRaw(profileData?.fullDescriptionText));
 
-      accolades?.length === 0 && setAccolades(profileData?.accolades);
+      accolades?.length === 0 && profileData?.accolades.length > 0 ? setAccolades(profileData?.accolades) : setAccolades([""]);
 
 
 	  if(profileData?.socialMedia ) {
@@ -174,7 +238,6 @@ const BuildProfile: React.FC = () => {
 		!youTubeTotal && setYouTubeTotal(profileData?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'youTube'; })[0]?.socialMediaTotal)
 		!youTubeUrl && setYouTubeUrl(profileData?.socialMedia?.filter(function (entry:any) { return entry.socialMediaName === 'youTube'; })[0]?.socialMediaUrl)
 	  
-	
 	  } 
 
 	  updateSocialMediaObject(); 
@@ -185,8 +248,7 @@ const BuildProfile: React.FC = () => {
     }
 
 
-  }, [profileData, isLoadingProfile, youTubeTotal, youTubeUrl, twitterTotal, twitterUrl, instagramTotal, instagramUrl, facebookTotal, facebookUrl ]);
-
+  }, [ profileData, isSuccessProfile, isLoadingProfile, youTubeTotal, youTubeUrl, twitterTotal, twitterUrl, instagramTotal, instagramUrl, facebookTotal, facebookUrl ]);
 
 
   const focusOnSport = () => {
@@ -247,7 +309,29 @@ const BuildProfile: React.FC = () => {
 
   }
 
+  const [ stepNumber, setStepNumber ] = useState(0);
+  const stepNames = [
+	"profileName", 
+	"sport",
+	"cover",
+	"description",
+	"location",
+	"profilePicture",
+	"website",
+	"facebook",
+	"instagram",
+	"twitter",
+	"youtube",
+	"achievements",
+	"informationAboutYou",
+	"competitionInformation",
+	"supportersInformation",
+	"anyOtherInfo",
+	"buildComplete"
+  ];
+
   
+	
 
 
   return (
@@ -258,9 +342,25 @@ const BuildProfile: React.FC = () => {
       <TabBar activeTab="profile" />
       <IonContent className="editor-content" fullscreen>
         <div className="content build-profile">
+
+				<div className="progress-dots" style={{display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '18px 16px 0'}}>
+					{stepNames.map((step, index) => {
+						return <div className="dot" key={step} style={{
+							backgroundColor: stepNumber >= index ? 'var(--ion-color-primary)' : 'var(--ion-color-tertiary-tint)',
+							margin: '0', 
+							flexGrow: 1,
+							// width: '12px', 
+							height: '7px', 
+							borderRadius: index === 0 && stepNumber !== 0 ? '7px 0 0 7px' : index === ( stepNames.length - 1 ) ? '0 7px 7px 0' : stepNumber === index ? index === 0 ? '7px' : '0 7px 7px 0' : '0',
+							// boxShadow: stepNumber === index ? '0 0 0 2px var(--ion-color-primary)' : '0 0 0 3px transparent',
+						
+						}}></div>
+					})}
+					
+				</div>
           
 
-				{!buildStep && 
+				{stepNumber === 0 && 
 					<div className="build-step build-profile-name">
 
 						<div className="example-profile" style={{}}>
@@ -286,19 +386,14 @@ const BuildProfile: React.FC = () => {
 								} } />
 						</div>
 
-						<div className="build-navigation" style={{display: 'flex', justifyContent: 'space-between', margin: '0 -12px'}}>
 
-							{/* <IonButton className="arrow previous" onClick={() => console.log('previous')} expand="block"><Arrow /></IonButton> */}
-							<IonButton button-type="link" size="small" onClick={() => setBuildStep('sport')} expand="block">Skip</IonButton>
-							<IonButton className="arrow primary-button" onClick={() => { setBuildStep('sport'); saveField("profileName", profileName) }} expand="block"><Arrow className="next-arrow" /></IonButton>
-						
-						</div>
+						<BuildNavigation isFirst saveFieldName="profileName" saveFieldValue={profileName} className="" setStepNumber={setStepNumber} stepNumber={stepNumber} saveField={saveField} />
 						
 
 					</div>
 				}
 
-				{ buildStep === 'sport' && 
+				{ stepNumber === 1 && 
 					<div className="build-step">
 
 						<div className="example-profile" style={{}}>
@@ -325,20 +420,15 @@ const BuildProfile: React.FC = () => {
 								 />
 
 						</div>
-
-						<div className="build-navigation" style={{display: 'flex', justifyContent: 'space-between', margin: '0 -12px'}}>
-
-							<IonButton className="arrow previous" onClick={() => setBuildStep('')} expand="block"><Arrow /></IonButton>
-							<IonButton button-type="link" size="small" onClick={() => setBuildStep('cover')} expand="block">Skip</IonButton>
-							<IonButton className="arrow primary-button" onClick={() => { setBuildStep('cover'); saveField("sport", yourSport) } } expand="block"><Arrow className="next-arrow" /></IonButton>
-						
-						</div>
+	
+						<BuildNavigation className="" saveFieldName="sport" saveFieldValue={yourSport}  
+						setStepNumber={setStepNumber} stepNumber={stepNumber} saveField={saveField} />
 						
 
 					</div>
 				}
 
-				{ buildStep === 'cover' && 
+				{ stepNumber === 2 && 
 					<div className="build-step">
 
 						<div className="example-profile" style={{}}>
@@ -371,19 +461,16 @@ const BuildProfile: React.FC = () => {
 
 						</div>
 
-						<div className="build-navigation" style={{display: 'flex', justifyContent: 'space-between', margin: '0 -12px'}}>
+	
 
-							<IonButton className="arrow previous" onClick={() => setBuildStep('sport')} expand="block"><Arrow /></IonButton>
-							<IonButton button-type="link" size="small" onClick={() => setBuildStep('description')} expand="block">Skip</IonButton>
-							<IonButton className="arrow primary-button" onClick={() => setBuildStep('description')} expand="block"><Arrow className="next-arrow" /></IonButton>
-						
-						</div>
+						<BuildNavigation className=""   
+						setStepNumber={setStepNumber} stepNumber={stepNumber} />
 						
 
 					</div>
 				}
 
-				{ buildStep === 'description' && 
+				{ stepNumber === 3 && 
 					<div className="build-step short-description-step">
 
 						<div className="example-profile" style={{}}>
@@ -404,19 +491,17 @@ const BuildProfile: React.FC = () => {
 
 						</div>
 
-						<div className="build-navigation" style={{display: 'flex', justifyContent: 'space-between', margin: '0 -12px'}}>
+			
 
-							<IonButton className="arrow previous" onClick={() => setBuildStep('cover')} expand="block"><Arrow /></IonButton>
-							<IonButton button-type="link" size="small" onClick={() => setBuildStep('location')} expand="block">Skip</IonButton>
-							<IonButton className="arrow primary-button" onClick={() => {setBuildStep('location');  saveField("shortDescription", shortDescription)}} expand="block"><Arrow className="next-arrow" /></IonButton>
 						
-						</div>
+						<BuildNavigation className="" saveFieldName="shortDescription" saveFieldValue={shortDescription}  
+						setStepNumber={setStepNumber} stepNumber={stepNumber} saveField={saveField} />
 						
 
 					</div>
 				}
 
-				{ buildStep === 'location' && 
+				{ stepNumber === 4 && 
 					<div className="build-step">
 
 						<div className="example-profile" style={{}}>
@@ -448,18 +533,13 @@ const BuildProfile: React.FC = () => {
 
 						</div>
 
-						<div className="build-navigation" style={{display: 'flex', justifyContent: 'space-between', margin: '0 -12px'}}>
-
-							<IonButton className="arrow previous" onClick={() => setBuildStep('location')} expand="block"><Arrow /></IonButton>
-							<IonButton button-type="link" size="small" onClick={() => setBuildStep('profilePicture')} expand="block">Skip</IonButton>
-							<IonButton className="arrow primary-button" onClick={() => {setBuildStep('profilePicture');  saveField("location", location)}} expand="block"><Arrow className="next-arrow" /></IonButton>
 						
-						</div>
-						
+						<BuildNavigation className="" saveFieldName="location" saveFieldValue={location}  
+						setStepNumber={setStepNumber} stepNumber={stepNumber} saveField={saveField} />
 
 					</div>
 				}
-				{buildStep === 'profilePicture' && 
+				{ stepNumber === 5 && 
 					<div className="build-step">
 
 						<div className="example-profile" style={{}}>
@@ -506,19 +586,14 @@ const BuildProfile: React.FC = () => {
 
 						</div>
 
-						<div className="build-navigation" style={{display: 'flex', justifyContent: 'space-between', margin: '0 -12px'}}>
-
-							<IonButton className="arrow previous" onClick={() => setBuildStep('location')} expand="block"><Arrow /></IonButton>
-							<IonButton button-type="link" size="small" onClick={() => setBuildStep('website')} expand="block">Skip</IonButton>
-							<IonButton className="arrow primary-button" onClick={() => setBuildStep('website')} expand="block"><Arrow className="next-arrow" /></IonButton>
-						
-						</div>
+						<BuildNavigation className=""   
+						setStepNumber={setStepNumber} stepNumber={stepNumber}  />
 						
 
 					</div>
 				}
 
-				{buildStep === 'website' && 
+				{ stepNumber === 6 && 
 					<div className="build-step build-website">
 
 						<div className="example-profile" style={{}}>
@@ -544,20 +619,14 @@ const BuildProfile: React.FC = () => {
 									setWebsite( e.detail.value );   
 								} } />
 						</div>
-
-						<div className="build-navigation" style={{display: 'flex', justifyContent: 'space-between', margin: '0 -12px'}}>
-
-							<IonButton className="arrow previous" onClick={() => setBuildStep('profilePicture')} expand="block"><Arrow /></IonButton>
-							<IonButton button-type="link" size="small" onClick={() => setBuildStep('facebook')} expand="block">Skip</IonButton>
-							<IonButton className="arrow primary-button" onClick={() => {setBuildStep('facebook'); saveField("website", website) }} expand="block"><Arrow className="next-arrow" /></IonButton>
 						
-						</div>
-						
+						<BuildNavigation className="" saveFieldName="website" saveFieldValue={website}  
+						setStepNumber={setStepNumber} stepNumber={stepNumber} saveField={saveField} />
 
 					</div>
 				}
 
-				{buildStep === 'facebook' && 
+				{ stepNumber === 7 && 
 					<div className="build-step build-social-media">
 
 						<div className="example-profile" style={{}}>
@@ -580,19 +649,14 @@ const BuildProfile: React.FC = () => {
 							
 						</div>
 
-						<div className="build-navigation" style={{display: 'flex', justifyContent: 'space-between', margin: '0 -12px'}}>
-
-							<IonButton className="arrow previous" onClick={() => setBuildStep('website')} expand="block"><Arrow /></IonButton>
-							<IonButton button-type="link" size="small" onClick={() => setBuildStep('instagram')} expand="block">Skip</IonButton>
-							<IonButton className="arrow primary-button" onClick={() => {setBuildStep('instagram'); saveField("socialMedia", socialMediaObject) }} expand="block"><Arrow className="next-arrow" /></IonButton>
-						
-						</div>
+						<BuildNavigation className="" saveFieldName="socialMedia" saveFieldValue={socialMediaObject}  
+						setStepNumber={setStepNumber} stepNumber={stepNumber} saveField={saveField} />
 						
 
 					</div>
 				}
 
-				{buildStep === 'instagram' && 
+				{stepNumber === 8 && 
 					<div className="build-step build-social-media">
 
 						<div className="example-profile" style={{}}>
@@ -614,19 +678,14 @@ const BuildProfile: React.FC = () => {
 							
 						</div>
 
-						<div className="build-navigation" style={{display: 'flex', justifyContent: 'space-between', margin: '0 -12px'}}>
-
-							<IonButton className="arrow previous" onClick={() => setBuildStep('facebook')} expand="block"><Arrow /></IonButton>
-							<IonButton button-type="link" size="small" onClick={() => setBuildStep('twitter')} expand="block">Skip</IonButton>
-							<IonButton className="arrow primary-button" onClick={() => {setBuildStep('twitter'); saveField("socialMedia", socialMediaObject) }} expand="block"><Arrow className="next-arrow" /></IonButton>
-						
-						</div>
+						<BuildNavigation className="" saveFieldName="socialMedia" saveFieldValue={socialMediaObject}  
+						setStepNumber={setStepNumber} stepNumber={stepNumber} saveField={saveField} />
 						
 
 					</div>
 				}
 
-				{buildStep === 'twitter' && 
+				{stepNumber === 9 && 
 					<div className="build-step build-social-media">
 
 						<div className="example-profile" style={{}}>
@@ -648,19 +707,13 @@ const BuildProfile: React.FC = () => {
 							
 						</div>
 
-						<div className="build-navigation" style={{display: 'flex', justifyContent: 'space-between', margin: '0 -12px'}}>
-
-							<IonButton className="arrow previous" onClick={() => setBuildStep('instagram')} expand="block"><Arrow /></IonButton>
-							<IonButton button-type="link" size="small" onClick={() => setBuildStep('youtube')} expand="block">Skip</IonButton>
-							<IonButton className="arrow primary-button" onClick={() => {setBuildStep('youtube'); saveField("socialMedia", socialMediaObject) }} expand="block"><Arrow className="next-arrow" /></IonButton>
-						
-						</div>
-						
+						<BuildNavigation className="" saveFieldName="socialMedia" saveFieldValue={socialMediaObject}  
+						setStepNumber={setStepNumber} stepNumber={stepNumber} saveField={saveField} />
 
 					</div>
 				}
 
-				{buildStep === 'youtube' && 
+				{stepNumber === 10 && 
 					<div className="build-step build-social-media">
 
 						<div className="example-profile" style={{}}>
@@ -682,19 +735,13 @@ const BuildProfile: React.FC = () => {
 							
 						</div>
 
-						<div className="build-navigation" style={{display: 'flex', justifyContent: 'space-between', margin: '0 -12px'}}>
-
-							<IonButton className="arrow previous" onClick={() => setBuildStep('twitter')} expand="block"><Arrow /></IonButton>
-							<IonButton button-type="link" size="small" onClick={() => setBuildStep('achievements')} expand="block">Skip</IonButton>
-							<IonButton className="arrow primary-button" onClick={() => {setBuildStep('achievements'); saveField("socialMedia", socialMediaObject) }} expand="block"><Arrow className="next-arrow" /></IonButton>
-						
-						</div>
-						
+						<BuildNavigation className="" saveFieldName="socialMedia" saveFieldValue={socialMediaObject}  
+						setStepNumber={setStepNumber} stepNumber={stepNumber} saveField={saveField} />
 
 					</div>
 				}
 
-				{buildStep === 'achievements' && 
+				{stepNumber === 11 && 
 					<div className="build-step build-achievements">
 						
 						<div className="section-text" style={{color: 'var(--ion-color-dark)', padding: '24px 5px 0'}}>
@@ -710,18 +757,284 @@ const BuildProfile: React.FC = () => {
 							</div>
 						</div>
 
-						<div className="build-navigation" style={{display: 'flex', justifyContent: 'space-between', margin: '0 -12px'}}>
 
-							<IonButton className="arrow previous" onClick={() => setBuildStep('youtube')} expand="block"><Arrow /></IonButton>
-							<IonButton button-type="link" size="small" onClick={() => setBuildStep('youtube')} expand="block">Skip</IonButton>
-							<IonButton className="arrow primary-button" onClick={() => {setBuildStep('youtube'); saveField("accolades", accolades?.filter(Boolean));}} expand="block"><Arrow className="next-arrow" /></IonButton>
-						
-						</div>
+						<BuildNavigation className="" saveFieldName="accolades" saveFieldValue={accolades?.filter(Boolean)}  
+						setStepNumber={setStepNumber} stepNumber={stepNumber} saveField={saveField} />
 						
 
 					</div>
 				}
 
+				{ stepNumber === 12 && 
+					<div className="build-step description-step">
+
+						<div className="section-text" style={{color: 'var(--ion-color-dark)', padding: '0 5px'}}>
+							<p style={{fontSize: '1.2em', letterSpacing: '-0.01em',  paddingBottom: '0', marginBottom: '0'}}>Information <span style={{fontWeight: 700}}>about you.</span></p>
+							<p style={{marginTop: '8px'}} onClick={(e: any) => {
+							e.persist();
+							setInformationAboutYouTipState({ showPopover: true, event: e });
+							}}>Need ideas? <span style={{color: 'var(--ion-color-primary)', textDecoration: 'underline', cursor: 'pointer'}}>Click here.</span></p>
+							<IonPopover
+								cssClass="description-hints-tips"
+								event={informationAboutYouTipState.event}
+								isOpen={informationAboutYouTipState.showPopover}
+								onDidDismiss={() => setInformationAboutYouTipState({ showPopover: false, event: undefined })}
+								mode="ios"
+							>	<div className="" style={{padding: '8px 16px'}}>
+									<p style={{fontSize: '0.95em'}}>These are some suggestions for key bits of information that potential sponsors may wish to know.</p>
+									<p style={{fontSize: '0.95em'}}>Please feel free to expand on this as you see fit.</p>
+									<ul style={{margin: '0', fontSize: '0.95em', padding: '8px 12px 8px 18px'}}>
+										<li style={{padding: '0 0 8px', fontWeight: 500}}>What makes you special?</li>
+										<li style={{padding: '0 0 8px', fontWeight: 500}}>History within the sport</li>
+										<li style={{padding: '0 0 8px', fontWeight: 500}}>Training schedule/sacrifices</li>
+										<li style={{padding: '0 0 8px', fontWeight: 500}}>Ambition – What do you want the sponsorship to help achieve</li>
+										<li style={{padding: '0 0 8px', fontWeight: 500}}>Support team</li>
+									</ul>
+							</div>
+								
+							</IonPopover>
+						</div>
+
+						
+						<div className="section-input">
+				
+						<TextEditor
+							autoCapitalize="Sentences"
+							placeholder="Enter your description here."
+							initialText={profileData?.informationAboutYou && convertFromRaw(profileData?.informationAboutYou)}
+							textEditorText={informationAboutYou}
+							setTextEditorText={setInformationAboutYou} />
+
+						</div>
+
+		
+
+						<BuildNavigation className="" saveFieldName="informationAboutYou" saveFieldValue={informationAboutYou && convertToRaw( informationAboutYou )}  
+						setStepNumber={setStepNumber} stepNumber={stepNumber} saveField={saveField} />
+						
+
+					</div>
+				}
+
+				{ stepNumber === 13 && 
+					<div className="build-step description-step">
+
+						<div className="section-text" style={{color: 'var(--ion-color-dark)', padding: '0 5px'}}>
+							<p style={{fontSize: '1.2em', letterSpacing: '-0.01em',  paddingBottom: '0', marginBottom: '0'}}><span style={{fontWeight: 700}}>Competition</span> information</p>
+							<p style={{marginTop: '8px'}} onClick={(e: any) => {
+							e.persist();
+							setCompetitionInformationTipState({ showPopover: true, event: e });
+							}}>Need ideas? <span style={{color: 'var(--ion-color-primary)', textDecoration: 'underline', cursor: 'pointer'}}>Click here.</span></p>
+							<IonPopover
+								cssClass="description-hints-tips"
+								event={competitionInformationTipState.event}
+								isOpen={competitionInformationTipState.showPopover}
+								onDidDismiss={() => setCompetitionInformationTipState({ showPopover: false, event: undefined })}
+								mode="ios"
+							>	<div className="" style={{padding: '8px 16px'}}>
+									<p style={{fontSize: '0.95em'}}>These are some suggestions for key bits of information that potential sponsors may wish to know.</p>
+									<p style={{fontSize: '0.95em'}}>Please feel free to expand on this as you see fit.</p>
+									<ul style={{margin: '0', fontSize: '0.95em', padding: '8px 12px 8px 18px'}}>
+										<li style={{padding: '0 0 8px', fontWeight: 500}}>What makes you special?</li>
+										<li style={{padding: '0 0 8px', fontWeight: 500}}>History within the sport</li>
+										<li style={{padding: '0 0 8px', fontWeight: 500}}>Training schedule/sacrifices</li>
+										<li style={{padding: '0 0 8px', fontWeight: 500}}>Ambition – What do you want the sponsorship to help achieve</li>
+										<li style={{padding: '0 0 8px', fontWeight: 500}}>Support team</li>
+									</ul>
+							</div>
+								
+							</IonPopover>
+						</div>
+
+						
+						<div className="section-input">
+				
+						<TextEditor
+							autoCapitalize="Sentences"
+							placeholder="Enter your description here."
+							initialText={profileData?.competitionInformation && convertFromRaw(profileData?.competitionInformation)}
+							textEditorText={competitionInformation}
+							setTextEditorText={setCompetitionInformation} />
+
+						</div>
+
+				
+
+						<BuildNavigation className="" saveFieldName="competitionInformation" saveFieldValue={competitionInformation && convertToRaw( competitionInformation )}  
+						setStepNumber={setStepNumber} stepNumber={stepNumber} saveField={saveField} />
+						
+
+					</div>
+				}
+
+				{ stepNumber === 14 && 
+					<div className="build-step description-step">
+
+						<div className="section-text" style={{color: 'var(--ion-color-dark)', padding: '0 5px'}}>
+							<p style={{fontSize: '1.2em', letterSpacing: '-0.01em',  paddingBottom: '0', marginBottom: '0'}}><span style={{fontWeight: 700}}>Supporters</span> information</p>
+							<p style={{marginTop: '8px'}} onClick={(e: any) => {
+							e.persist();
+							setSupportersInformationTipState({ showPopover: true, event: e });
+							}}>Need ideas? <span style={{color: 'var(--ion-color-primary)', textDecoration: 'underline', cursor: 'pointer'}}>Click here.</span></p>
+							<IonPopover
+								cssClass="description-hints-tips"
+								event={supportersInformationTipState.event}
+								isOpen={supportersInformationTipState.showPopover}
+								onDidDismiss={() => setSupportersInformationTipState({ showPopover: false, event: undefined })}
+								mode="ios"
+							>	<div className="" style={{padding: '8px 16px'}}>
+									<p style={{fontSize: '0.95em'}}>These are some suggestions for key bits of information that potential sponsors may wish to know.</p>
+									<p style={{fontSize: '0.95em'}}>Please feel free to expand on this as you see fit.</p>
+									<ul style={{margin: '0', fontSize: '0.95em', padding: '8px 12px 8px 18px'}}>
+										<li style={{padding: '0 0 8px', fontWeight: 500}}>What makes you special?</li>
+										<li style={{padding: '0 0 8px', fontWeight: 500}}>History within the sport</li>
+										<li style={{padding: '0 0 8px', fontWeight: 500}}>Training schedule/sacrifices</li>
+										<li style={{padding: '0 0 8px', fontWeight: 500}}>Ambition – What do you want the sponsorship to help achieve</li>
+										<li style={{padding: '0 0 8px', fontWeight: 500}}>Support team</li>
+									</ul>
+								</div>
+								
+							</IonPopover>
+						</div>
+
+						
+						<div className="section-input">
+				
+						<TextEditor
+							autoCapitalize="Sentences"
+							placeholder="Enter your description here."
+							initialText={profileData?.supportersInformation && convertFromRaw(profileData?.supportersInformation)}
+							textEditorText={supportersInformation}
+							setTextEditorText={setSupportersInformation} />
+
+						</div>
+
+						<BuildNavigation className="" saveFieldName="supportersInformation" saveFieldValue={supportersInformation && convertToRaw( supportersInformation )}  
+						setStepNumber={setStepNumber} stepNumber={stepNumber} saveField={saveField} />
+						
+					</div>
+				}
+
+				{ stepNumber === 15 && 
+					<div className="build-step description-step">
+
+						<div className="section-text" style={{color: 'var(--ion-color-dark)', padding: '24px 5px 0'}}>
+							<p style={{fontSize: '1.2em', letterSpacing: '-0.01em',  paddingBottom: '0', marginBottom: '0'}}>Any <span style={{fontWeight: 700}}>other</span> information?</p>
+							<p style={{marginTop: '8px'}} >Any other information which you feel is important?</p>
+						</div>
+
+						
+						<div className="section-input">
+				
+						<TextEditor
+							autoCapitalize="Sentences"
+							placeholder="Enter your description here."
+							initialText={profileData?.anyOtherInfo && convertFromRaw(profileData?.anyOtherInfo)}
+							textEditorText={anyOtherInfo}
+							setTextEditorText={setAnyOtherInfo} />
+
+						</div>
+
+
+						<BuildNavigation className="" saveFieldName="anyOtherInfo" saveFieldValue={anyOtherInfo && convertToRaw( anyOtherInfo )}  
+						setStepNumber={setStepNumber} stepNumber={stepNumber} saveField={saveField} />
+						
+						
+					</div>
+				}
+				
+
+				{ stepNumber === 16 && 
+					<div className="build-step complete-step">
+
+
+
+						<div className="section-text" style={{color: 'var(--ion-color-dark)', padding: '0 5px', marginTop: 'auto', marginBottom: 'auto'}}>
+
+							{profileComplete.profile && profileComplete.opportunity && 
+								<div className="">
+									<p style={{fontSize: '1.2em', letterSpacing: '-0.01em',  paddingBottom: '0', marginBottom: '0'}}><span style={{fontWeight: 700}}>Profile complete!</span></p>
+									<p style={{marginTop: '8px'}} >Well done, you have completed your profile and added at least one opportunity.</p>
+								</div>
+							}
+
+							{profileComplete.profile && !profileComplete.opportunity && 
+								<div className="">
+									<p style={{fontSize: '1.2em', letterSpacing: '-0.01em',  paddingBottom: '0', marginBottom: '0'}}><span style={{fontWeight: 700}}>Profile complete!</span></p>
+									<p style={{marginTop: '8px'}} >Well done, you have completed your profile.</p>
+								</div>
+							}
+
+							{!profileComplete.profile && 
+								<div className="">
+									<p style={{fontSize: '1.2em', letterSpacing: '-0.01em',  paddingBottom: '0', marginBottom: '0'}}><span style={{fontWeight: 700}}>Profile incomplete</span></p>
+									<p style={{marginTop: '8px'}}>There are still things that need adding to your profile.</p> 
+									<p style={{marginTop: '8px', marginBottom: '8px'}}>In order to begin to show up to potential sponsors we require each of the following to be added:</p>
+								</div>
+							}
+
+
+							{!profileComplete.profile && <ProfileTodoList setStepNumber={setStepNumber} excludeOpportunity /> }
+
+							{!profileComplete.profile && <div className="" style={{margin: '0 -12px'}}><p style={{padding: '12px 18px 12px', margin: '0'}}>Need help completing your profile?</p><div className="menu-list"><div className='menu-list-option'
+										onClick={() => history.push("/book-consultation/")}>
+											<div className="icon">
+												<IonIcon color="primary" icon={chatbubbles} />
+											</div>
+											<div className="text">
+												<p className="main-text">Book Consultation</p>
+												<p className="sub-text">Get advice about sponsorship</p>
+											</div>
+										</div></div></div> }
+
+							{profileComplete.profile && !profileComplete.opportunity && 
+								<div className="" style={{margin: '0 -12px'}}>
+									<p style={{padding: '12px 12px 12px', margin: '0'}}>To start finding potential sponsors:</p>
+									<div className="menu-list">
+										<div className="menu-list-option"
+										onClick={() => history.push("/add-opportunity/" + authState?.user?.profile )}>
+											<div className="icon">
+												<IonIcon color="primary" icon={trailSign} />
+											</div>
+											<div className="text">
+												<p className="main-text">Add Opportunities</p>
+												<p className="sub-text">Add your first sponsorship opportunity</p>
+											</div>
+										</div> 
+										<div className='menu-list-option'
+										onClick={() => history.push("/book-consultation/")}>
+											<div className="icon">
+												<IonIcon color="primary" icon={chatbubbles} />
+											</div>
+											<div className="text">
+												<p className="main-text">Book Consultation</p>
+												<p className="sub-text">Get advice about sponsorship</p>
+											</div>
+										</div>
+										<div className='menu-list-option'
+										onClick={() => history.push("/subscribe/")}>
+											<div className="icon">
+												<IonIcon color="primary" icon={rocket} />
+											</div>
+											<div className="text">
+												<p className="main-text">Subscribe</p>
+												<p className="sub-text">Start finding sponsorship today</p>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								
+							}
+
+
+						</div>
+
+						<BuildNavigation isLast={true} className="" saveFieldName="anyOtherInfo" saveFieldValue={anyOtherInfo && convertToRaw( anyOtherInfo )}  
+						setStepNumber={setStepNumber} stepNumber={stepNumber} saveField={saveField} />
+						
+					</div>
+				}
 
 
 

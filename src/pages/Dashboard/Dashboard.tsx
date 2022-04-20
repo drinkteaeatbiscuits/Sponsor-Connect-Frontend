@@ -105,19 +105,8 @@ const Dashboard: React.FC = () => {
             <div className="dashboard-actions">
               <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
                 
-                {authState.user.profileComplete < 100 ? 
-                <div className="menu-list-option"
-                  onClick={() => history.push("/profile/" + authState?.user?.profile + "/build")}>
-                  <div className="icon">
-                    <IonIcon color="primary" icon={personCircle} />
-                  </div>
-                  <div className="text">
-                    <p className="main-text">Build Profile</p>
-                    <p className="sub-text">Build your profile</p>
-                  </div>
-                </div> 
-                :  
-                <div className="menu-list-option"
+                { authState.user.profileCompletionList.length === 1 && authState.user.profileCompletionList[0] === "Add at least one active opportunity" ? 
+                 <div className="menu-list-option"
                   onClick={() => history.push("/profile/" + authState?.user?.profile + "/edit")}>
                   <div className="icon">
                     <IonIcon color="primary" icon={personCircle} />
@@ -127,7 +116,17 @@ const Dashboard: React.FC = () => {
                     <p className="sub-text">Update your profile</p>
                   </div>
                 </div>
-                
+                : 
+                <div className="menu-list-option"
+                onClick={() => history.push("/profile/" + authState?.user?.profile + "/build")}>
+                <div className="icon">
+                  <IonIcon color="primary" icon={personCircle} />
+                </div>
+                <div className="text">
+                  <p className="main-text">Build Profile</p>
+                  <p className="sub-text">Build your profile</p>
+                </div>
+              </div> 
                 }
 
               {subscriptionActive() ? <CopyToClipboard text={process.env.REACT_APP_PUBLIC_URL + "/profile/view/" + authState?.user?.profile}

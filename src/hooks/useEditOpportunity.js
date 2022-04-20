@@ -59,7 +59,10 @@ const useEditOpportunity = ( opportunityId: any ) => {
 
               dispatch && dispatch({
                 type: "updateProfileComplete",
-                payload: data.profileComplete
+                payload: { 
+                  profileComplete: data.profileComplete, 
+                  profileCompletionList: data.profileCompletionList 
+                }
               });
 
             });
