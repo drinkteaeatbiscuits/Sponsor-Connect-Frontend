@@ -174,8 +174,8 @@ const isProfileComplete = () => {
 
 		setProfileComplete( { profile: true, opportunity: true } );
 
-	}else if( authState.user.profileCompletionList.length === 1 && authState.user.profileCompletionList[0] === "Add at least one active opportunity") {
-		
+	}else if( authState?.user?.profileCompletionList?.length === 1 && authState?.user?.profileCompletionList[0] === "Add at least one active opportunity") {
+
 		setProfileComplete({ profile: true, opportunity: false } );
 
 	} else {
