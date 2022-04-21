@@ -481,7 +481,7 @@ const App: React.FC = () => {
               </Route>
 
               <Route exact path="/book-consultation">
-                {state.isAuthenticated ? ( activeSubscription ? <BookConsultation /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
+                {state.isAuthenticated ? <BookConsultation /> : (checkUser && <Redirect to="/login" />)}
               </Route>
 
 

@@ -1,13 +1,13 @@
 ul.profile-todo {
 	list-style: none;
-	padding: 24px 8px;
+	padding: 12px 8px;
 	margin: 0;
 	li {
-		padding: 0 0 4px;
+		padding: 0 0 6px;
 		display: flex;
 		align-items: center;
 		font-weight: 500;
-		font-size: 1.1em;
+		font-size: 1em;
 		cursor: pointer;
 		transition: 0.2s ease-out;
 		&:before {

@@ -28,6 +28,7 @@ import { chatbubbles, map, personCircle, rocket, trailSign } from 'ionicons/icon
 import TextEditor from '../../components/TextEditor/TextEditor';
 import BuildNavigation from '../../components/BuildNavigation/BuildNavigation';
 import ProfileTodoList from '../../components/ProfileTodoList/ProfileTodoList';
+import DescriptionTips from '../../components/DescriptionTips/DescriptionTips';
 
 export interface props { }
 
@@ -610,8 +611,7 @@ const isProfileComplete = () => {
 						
 						<div className="section-input">
 
-							<IonInput autocomplete='off' 
-								autocapitalize='words' 
+							<IonInput autocomplete='off'  
 								type='text'
 								value={ website } 
 								placeholder="www.yourwebsite.com"
@@ -780,7 +780,13 @@ const isProfileComplete = () => {
 								isOpen={informationAboutYouTipState.showPopover}
 								onDidDismiss={() => setInformationAboutYouTipState({ showPopover: false, event: undefined })}
 								mode="ios"
-							>	<div className="" style={{padding: '8px 16px'}}>
+							>	
+								<DescriptionTips descriptionSection={'informationAboutYou'} profileType={profileData?.accountFor}  />
+							
+							{/* <div className="" style={{padding: '8px 16px'}}>
+
+
+
 									<p style={{fontSize: '0.95em'}}>These are some suggestions for key bits of information that potential sponsors may wish to know.</p>
 									<p style={{fontSize: '0.95em'}}>Please feel free to expand on this as you see fit.</p>
 									<ul style={{margin: '0', fontSize: '0.95em', padding: '8px 12px 8px 18px'}}>
@@ -790,7 +796,7 @@ const isProfileComplete = () => {
 										<li style={{padding: '0 0 8px', fontWeight: 500}}>Ambition – What do you want the sponsorship to help achieve</li>
 										<li style={{padding: '0 0 8px', fontWeight: 500}}>Support team</li>
 									</ul>
-							</div>
+								</div> */}
 								
 							</IonPopover>
 						</div>
@@ -831,18 +837,8 @@ const isProfileComplete = () => {
 								isOpen={competitionInformationTipState.showPopover}
 								onDidDismiss={() => setCompetitionInformationTipState({ showPopover: false, event: undefined })}
 								mode="ios"
-							>	<div className="" style={{padding: '8px 16px'}}>
-									<p style={{fontSize: '0.95em'}}>These are some suggestions for key bits of information that potential sponsors may wish to know.</p>
-									<p style={{fontSize: '0.95em'}}>Please feel free to expand on this as you see fit.</p>
-									<ul style={{margin: '0', fontSize: '0.95em', padding: '8px 12px 8px 18px'}}>
-										<li style={{padding: '0 0 8px', fontWeight: 500}}>What makes you special?</li>
-										<li style={{padding: '0 0 8px', fontWeight: 500}}>History within the sport</li>
-										<li style={{padding: '0 0 8px', fontWeight: 500}}>Training schedule/sacrifices</li>
-										<li style={{padding: '0 0 8px', fontWeight: 500}}>Ambition – What do you want the sponsorship to help achieve</li>
-										<li style={{padding: '0 0 8px', fontWeight: 500}}>Support team</li>
-									</ul>
-							</div>
-								
+							>	<DescriptionTips descriptionSection={'competitionInformation'} profileType={profileData?.accountFor}  />
+
 							</IonPopover>
 						</div>
 
@@ -882,17 +878,8 @@ const isProfileComplete = () => {
 								isOpen={supportersInformationTipState.showPopover}
 								onDidDismiss={() => setSupportersInformationTipState({ showPopover: false, event: undefined })}
 								mode="ios"
-							>	<div className="" style={{padding: '8px 16px'}}>
-									<p style={{fontSize: '0.95em'}}>These are some suggestions for key bits of information that potential sponsors may wish to know.</p>
-									<p style={{fontSize: '0.95em'}}>Please feel free to expand on this as you see fit.</p>
-									<ul style={{margin: '0', fontSize: '0.95em', padding: '8px 12px 8px 18px'}}>
-										<li style={{padding: '0 0 8px', fontWeight: 500}}>What makes you special?</li>
-										<li style={{padding: '0 0 8px', fontWeight: 500}}>History within the sport</li>
-										<li style={{padding: '0 0 8px', fontWeight: 500}}>Training schedule/sacrifices</li>
-										<li style={{padding: '0 0 8px', fontWeight: 500}}>Ambition – What do you want the sponsorship to help achieve</li>
-										<li style={{padding: '0 0 8px', fontWeight: 500}}>Support team</li>
-									</ul>
-								</div>
+							>	<DescriptionTips descriptionSection={'supportersInformation'} profileType={profileData?.accountFor}  />
+
 								
 							</IonPopover>
 						</div>
@@ -967,25 +954,52 @@ const isProfileComplete = () => {
 
 							{!profileComplete.profile && 
 								<div className="">
-									<p style={{fontSize: '1.2em', letterSpacing: '-0.01em',  paddingBottom: '0', marginBottom: '0'}}><span style={{fontWeight: 700}}>Profile incomplete</span></p>
-									<p style={{marginTop: '8px'}}>There are still things that need adding to your profile.</p> 
-									<p style={{marginTop: '8px', marginBottom: '8px'}}>In order to begin to show up to potential sponsors we require each of the following to be added:</p>
+									<p style={{fontSize: '1.2em', letterSpacing: '-0.01em',  paddingBottom: '0', marginBottom: '0'}}><span style={{fontWeight: 700}}>Profile incomplete</span></p> 
+									<p style={{marginTop: '8px', marginBottom: '0px'}}>In order to begin to show up to potential sponsors we require each of the following:</p>
 								</div>
 							}
 
 
 							{!profileComplete.profile && <ProfileTodoList setStepNumber={setStepNumber} excludeOpportunity /> }
 
-							{!profileComplete.profile && <div className="" style={{margin: '0 -12px'}}><p style={{padding: '12px 18px 12px', margin: '0'}}>Need help completing your profile?</p><div className="menu-list"><div className='menu-list-option'
-										onClick={() => history.push("/book-consultation/")}>
-											<div className="icon">
-												<IonIcon color="primary" icon={chatbubbles} />
+							{!profileComplete.profile && <div className="" style={{margin: '0 -12px'}}>
+							
+											<div className="menu-list">
+
+												<div className="menu-list-option"
+												onClick={() => history.push("/add-opportunity/" + authState?.user?.profile )}>
+													<div className="icon">
+														<IonIcon color="primary" icon={trailSign} />
+													</div>
+													<div className="text">
+														<p className="main-text">Add Opportunities</p>
+														<p className="sub-text">Add your first sponsorship opportunity</p>
+													</div>
+												</div> 
+
+												<div className='menu-list-option'
+														onClick={() => history.push("/book-consultation/")}>
+													<div className="icon">
+														<IonIcon color="primary" icon={chatbubbles} />
+													</div>
+													<div className="text">
+														<p className="main-text">Book Consultation</p>
+														<p className="sub-text">Get advice about sponsorship</p>
+													</div>
+												</div>
+											
+												<div className='menu-list-option'
+												onClick={() => history.push("/subscribe/")}>
+													<div className="icon">
+														<IonIcon color="primary" icon={rocket} />
+													</div>
+													<div className="text">
+														<p className="main-text">Subscribe</p>
+														<p className="sub-text">Start finding sponsorship today</p>
+													</div>
+												</div>
 											</div>
-											<div className="text">
-												<p className="main-text">Book Consultation</p>
-												<p className="sub-text">Get advice about sponsorship</p>
-											</div>
-										</div></div></div> }
+										</div> }
 
 							{profileComplete.profile && !profileComplete.opportunity && 
 								<div className="" style={{margin: '0 -12px'}}>
