@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from 'react-dom';
-import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw } from 'draft-js';
+import { Editor, EditorState, RichUtils, convertToRaw, convertFromRaw, ContentState } from 'draft-js';
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonBadge, IonButton } from '@ionic/react';
 import { listOutline } from 'ionicons/icons';
 import BoldIcon from './icons/bold';
@@ -24,6 +24,7 @@ class TextEditor extends React.Component {
 	this.state = {
 		editorState: EditorState.createEmpty(),
 		initialTextLoaded: false,
+		editorReset: false,
 	};
 
 	this.placeholder = props.placeholder;
@@ -43,13 +44,22 @@ class TextEditor extends React.Component {
 	this.onTab = (e) => this._onTab(e);
 	this.toggleBlockType = (type) => this._toggleBlockType(type);
 	this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
+	this.clearContent = () => this._clearContent();
+	
+
 	
   }
+
+  
   
 
   componentDidUpdate(prevProps) {
 
-	if ( prevProps.initialText !== this.props.initialText && !this.state.initialTextLoaded ) {
+	// console.log(prevProps);
+
+	if ( prevProps.initialText !== this.props.initialText ) {
+
+		// console.log('load initial text');
 
 		this.setState({
 			editorState: EditorState.createWithContent( this.props.initialText ),
@@ -57,6 +67,14 @@ class TextEditor extends React.Component {
 		  });
 	
 	}
+
+	if( this.props.textEditorText === null && this.state.editorState.getCurrentContent().hasText() ){
+
+	  this.clearContent();
+	
+	}
+
+
   }
 
   
@@ -110,6 +128,15 @@ class TextEditor extends React.Component {
 	);
   }
 
+
+  _clearContent() {
+	// console.log('content cleared');
+	// this.setState({ editorReset: true });
+
+	const newEditorState = EditorState.push(this.state.editorState, ContentState.createFromText(''));
+
+	this.setState({ editorState: newEditorState });
+  }
   
 
 
@@ -120,15 +147,13 @@ class TextEditor extends React.Component {
 	// either style the placeholder or hide it. Let's just hide it now.
 	let className = 'RichEditor-editor';
 	var contentState = editorState.getCurrentContent();
+
 	if (!contentState.hasText()) {
 	  if (contentState.getBlockMap().first().getType() !== 'unstyled') {
 		className += ' RichEditor-hidePlaceholder';
 	  }
 	}
 
-	
-
-	// console.log(this.props.textEditorText);
 
 	return (
 		<div className="text-editor-wrap">

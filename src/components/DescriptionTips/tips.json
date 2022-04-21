@@ -1,0 +1,177 @@
+[
+	{
+		"profileType": "Individual",
+		"descriptionSections": [
+			{
+				"descriptionSection": "informationAboutYou",
+				"tips": [
+					"What makes you special?",
+					"History within the sport",
+					"Training schedule/sacrifices",
+					"Ambition – What do you want the sponsorship to help achieve",
+					"Support team"
+				]
+			},
+			{
+				"descriptionSection": "competitionInformation",
+				"tips": [
+					"Level e.g. local/regional/national",
+					"Number of events per season",
+					[ 
+						"Are the events broadcast, if so",
+						"What medium e.g. TV, Facebook",
+						"Viewing numbers"
+					],
+					"Entrance/competitor Numbers"
+				]
+			},
+			{
+				"descriptionSection": "supportersInformation",
+				"tips": [
+					"Avg attendance at a competition",
+					"How do you interact with supporters e.g. social media/training blog/vlog",
+					"Current Sponsors"
+				]
+			},
+			{
+				"descriptionSection": "anyOtherInfo",
+				"tips": [
+					"Anything you feel is important to you."
+				]
+			}
+		]
+	},
+	{
+		"profileType": "Team or Club",
+		"descriptionSections": [
+			{
+				"descriptionSection": "informationAboutYou",
+				"tips": [
+					"What makes your club special?",
+					"History of the club e.g. year founded",
+					"Training schedule/sacrifices",
+					"Ambition – What do you want the sponsorship to help achieve",
+					"Progression made",
+					"Committee Structure",
+					"Ground/Venue e.g. on site facilities"
+				]
+			},
+			{
+				"descriptionSection": "competitionInformation",
+				"tips": [
+					["Leagues/Races/Meets/Cups",
+					"What level – local/regional/national"],
+					"Number of games per season",
+					["Are the events broadcast, if so",
+					"What medium e.g. TV, Facebook",
+					"Viewing numbers"],
+					"Entrance/competitor Numbers"
+				]
+			},
+			{
+				"descriptionSection": "membersInformation",
+				"tips": [
+					"Competiting members/non-competing (social) members",
+					"Age ranges",
+					"Backgrounds/careers/interests – e.g. a rural club may have a high proportion of members associated with the agri industry."
+				]
+			},
+			{
+				"descriptionSection": "supportersInformation",
+				"tips": [
+					"Avg attendance at games/races/etc",
+					"Age ranges",
+					"Backgrounds/careers/interests – e.g. a Portsmouth based club may have a high proportion of members associated with the armed services.",
+					"How do you interact with supporters e.g. social media/training blog/vlog",
+					"Any online support e.g. watch via Youtube or interact via social media",
+					"Current Sponsors"
+				]
+			},
+			{
+				"descriptionSection": "anyOtherInfo",
+				"tips": [
+					"Anything you feel is important to you."
+				]
+			}
+		]
+	},
+	{
+		"profileType": "Venue, Event or Competition",
+		"descriptionSections": [
+			{
+				"descriptionSection": "informationAboutYou",
+				"tips": [
+					"What makes you special?",
+					"Your history e.g. year founded",
+					"Sports catered for",
+					"Parking/Access/Facilities",
+					"Ambition/Development plans – What do you want the sponsorship to help achieve",
+					"Progression made",
+					"Ownership structure",
+					"Community involvement"
+				]
+			},
+			{
+				"descriptionSection": "competitionInformation",
+				"tips": [
+					"Demographics – Primary/Secondary",
+					"Number of events per season",
+					"Are the events broadcast, if so",
+					"What medium e.g. TV, Facebook",
+					"Viewing numbers",
+					"Average attendance (by sport)",
+					"Current Sponsors"
+				]
+			},
+			{
+				"descriptionSection": "supportersInformation",
+				"tips": [
+					"Types held throughout the year",
+					"Attendance figures",
+					"Special events e.g. charity"
+				]
+			},
+			{
+				"descriptionSection": "anyOtherInfo",
+				"tips": [
+					"Anything you feel is important to you."
+				]
+			}
+		]
+	},
+	{
+		"profileType": "Associations",
+		"descriptionSections": [
+			{
+				"descriptionSection": "informationAboutYou",
+				"tips": [
+					"What makes you special?",
+					"History within the sport",
+					"Ambition – What do you want the sponsorship to help achieve"
+				]
+			},
+			{
+				"descriptionSection": "competitionInformation",
+				"tips": [
+					"Level e.g. local/regional/national",
+					"Number of events per season",
+					"Entrance/competitor Numbers"
+				]
+			},
+			{
+				"descriptionSection": "supportersInformation",
+				"tips": [
+					"Total Membership",
+					"How do you interact with members e.g. social media/training blog/vlog",
+					"Current Sponsors"
+				]
+			},
+			{
+				"descriptionSection": "anyOtherInfo",
+				"tips": [
+					"Anything you feel is important to you."
+				]
+			}
+		]
+	}
+]
