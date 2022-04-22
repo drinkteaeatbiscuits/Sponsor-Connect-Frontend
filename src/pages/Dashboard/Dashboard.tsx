@@ -8,13 +8,14 @@ import {CopyToClipboard} from 'react-copy-to-clipboard';
 import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 
 import './dashboard.scss';
-import { personCircle, link, chatbubbles, home } from 'ionicons/icons';
+import { personCircle, link, chatbubbles, home, trailSign, rocket } from 'ionicons/icons';
 import useProfile from '../../hooks/useProfile';
 import ProfileCard from '../../components/ProfileCard/ProfileCard';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
 import { NewsFeed } from '../../components/NewsFeed/NewsFeed';
 import OpportunitiesStatusCounts from '../../components/OpportunitiesStatusCounts/OpportunitiesStatusCounts';
 import MetaTags from '../../components/MetaTags/MetaTags';
+import isProfileComplete from '../../functions/isProfileComplete';
 
 export interface props {}
 
@@ -48,6 +49,8 @@ const Dashboard: React.FC = () => {
       return false
     }
   }
+
+  // console.log( isProfileComplete(authState) );
 
   const linkCopied = () => {
     
@@ -105,7 +108,7 @@ const Dashboard: React.FC = () => {
             <div className="dashboard-actions">
               <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
                 
-                { authState?.user?.profileCompletionList?.length === 1 && authState?.user?.profileCompletionList[0] === "Add at least one active opportunity" ? 
+                { isProfileComplete(authState)?.profile && isProfileComplete(authState)?.opportunity ? 
                  <div className="menu-list-option"
                   onClick={() => history.push("/profile/" + authState?.user?.profile + "/edit")}>
                   <div className="icon">
@@ -129,7 +132,20 @@ const Dashboard: React.FC = () => {
               </div> 
                 }
 
-              {subscriptionActive() ? <CopyToClipboard text={process.env.REACT_APP_PUBLIC_URL + "/profile/view/" + authState?.user?.profile}
+                { ! isProfileComplete(authState)?.opportunity &&
+                  <div className="menu-list-option"
+                  onClick={() => history.push("/add-opportunity/" + authState?.user?.profile )}>
+                    <div className="icon">
+                      <IonIcon color="primary" icon={trailSign} />
+                    </div>
+                    <div className="text">
+                      <p className="main-text">Add Opportunities</p>
+                      <p className="sub-text">Add your first sponsorship opportunity</p>
+                    </div>
+                  </div> 
+                }
+
+              { subscriptionActive() && <CopyToClipboard text={process.env.REACT_APP_PUBLIC_URL + "/profile/view/" + authState?.user?.profile}
                   onCopy={() => { linkCopied()}}>
                   <div className='menu-list-option'>
                     <div className="icon">
@@ -141,16 +157,28 @@ const Dashboard: React.FC = () => {
                     </div>
                   </div>
                 </CopyToClipboard>
-              : <div className='menu-list-option'
-              onClick={() => history.push("/settings/subscription/")}>
-              <div className="icon">
-                <IonIcon color="primary" icon={link} />
-              </div>
-              <div className="text">
-                <p className="main-text">Your Unique Link</p>
-                <p className="sub-text">Activate subscription to use</p>
-              </div>
-            </div> }
+            //   : <div className='menu-list-option'
+            //   onClick={() => history.push("/settings/subscription/")}>
+            //   <div className="icon">
+            //     <IonIcon color="primary" icon={link} />
+            //   </div>
+            //   <div className="text">
+            //     <p className="main-text">Your Unique Link</p>
+            //     <p className="sub-text">Activate subscription to use</p>
+            //   </div>
+            // </div> 
+          }
+
+            {! subscriptionActive() && <div className='menu-list-option'
+										onClick={() => history.push("/subscribe/")}>
+											<div className="icon">
+												<IonIcon color="primary" icon={rocket} />
+											</div>
+											<div className="text">
+												<p className="main-text">Subscribe</p>
+												<p className="sub-text">Start finding sponsorship today</p>
+											</div>
+										</div> }
                 
 
                 
@@ -165,6 +193,8 @@ const Dashboard: React.FC = () => {
                     <p className="sub-text">Get advice about sponsorship</p>
                   </div>
                 </div>
+
+                
                 
                 <a href="https://sponsor-connect.com">
                   <div className='menu-list-option'>

@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonPage } from '@ionic/react';
+import { IonButton, IonContent, IonIcon, IonPage, IonSegment, IonSegmentButton } from '@ionic/react';
 import { useHistory } from 'react-router';
 import { AuthContext } from "../../App";
 import React, { useEffect, useState } from 'react';
@@ -9,6 +9,8 @@ import useUpdateProfileDescriptions from '../../hooks/useUpdateProfileDescriptio
 
 import './EditProfileDescription.scss';
 import EditorSection from './EditorSection';
+import { images, pencil, person } from 'ionicons/icons';
+import EditProfileTabs from '../../components/EditProfileTabs/EditProfileTabs';
 
 export interface props {}
 
@@ -67,11 +69,14 @@ const EditProfileDescription: React.FC = () => {
 
     <IonPage>
       <TabBar activeTab="profile"/>
-      <IonContent fullscreen>
-
-          <div className="content edit-profile-description-content">
-
-            <h1 style={{textTransform: 'uppercase', color: 'var(--ion-color-dark)'}}>Edit Profile <span style={{color: 'var(--ion-color-primary)'}}>Description</span></h1>
+      <IonContent className="editor-content" fullscreen>
+        <div className="content">
+          <div className="edit-profile">
+            <h1 style={{ color: "var(--ion-color-dark)", lineHeight: 0.8, fontSize: "4em", padding: "15px" }}>EDIT <br /><span style={{ color: "var(--ion-color-primary)" }}>PROFILE</span></h1>
+            
+            <EditProfileTabs value='description' />
+            
+            <div className="editor-wrap">
 
             { profileData.status === "success" && <EditorSection title="Information About You" initialEditorContent={ profileData?.data?.informationAboutYou } editorContent={ informationAboutYou } setEditorContent={ setInformationAboutYou } saveContent={() => updateProfile()} /> }
             
@@ -82,10 +87,11 @@ const EditProfileDescription: React.FC = () => {
             { profileData.status === "success" && <EditorSection title="Any Other Information" initialEditorContent={ profileData?.data?.anyOtherInfo } editorContent={ anyOtherInfo } setEditorContent={ setAnyOtherInfo } saveContent={() => updateProfile()} /> }
 
             
-           <IonButton className="button-tertiary" size="small" onClick={ () => history.push('/profile/' + profileData.data?.id ) } >Back to profile</IonButton>
-
-
-          </div>
+           <IonButton className="button-tertiary" expand="block" size="small" onClick={ () => history.push('/profile/' + profileData.data?.id ) } >Back to profile</IonButton>
+          
+            </div>
+        </div>
+        </div>
 
       </IonContent>
     </IonPage>

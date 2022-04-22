@@ -11,6 +11,7 @@ import './ProfileImages.scss';
 import useDeleteImage from '../../hooks/useDeleteImage';
 import useMyProfileImages from '../../hooks/useMyProfileImages';
 import { trashOutline } from 'ionicons/icons';
+import EditProfileTabs from '../../components/EditProfileTabs/EditProfileTabs';
 
 export interface props {}
 
@@ -76,8 +77,14 @@ const ProfileImages: React.FC = () => {
 	return (
 		<IonPage>
 		<TabBar activeTab="profile"/>
-		<IonContent fullscreen>
-			<div className="content profile-images-content">
+		<IonContent className="editor-content" fullscreen>
+        <div className="content">
+          <div className="edit-profile">
+            <h1 style={{ color: "var(--ion-color-dark)", lineHeight: 0.8, fontSize: "4em", padding: "15px" }}>EDIT <br /><span style={{ color: "var(--ion-color-primary)" }}>PROFILE</span></h1>
+            
+            <EditProfileTabs value='images' />
+            
+        
 			<div className="editor-wrap">
 			
 
@@ -133,6 +140,8 @@ const ProfileImages: React.FC = () => {
 
 			</div>
 			
+			</div>
+
 			</div>
 
 		</IonContent>

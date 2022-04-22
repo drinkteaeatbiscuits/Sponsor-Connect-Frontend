@@ -103,9 +103,7 @@
 ion-popover.description-hints-tips {
 	--width: 100%;
 	color: var(--ion-color-dark);
-	.popover-arrow {
-		// margin: 0 0 0 -113px;
-	}
+
 	.popover-content {
 		margin: 0 16px;
 		width: calc(100% - 37px);

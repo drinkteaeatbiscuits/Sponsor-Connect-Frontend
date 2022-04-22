@@ -1,4 +1,4 @@
-import { IonButton, IonContent, IonItem, IonList, IonModal, IonPage, IonSearchbar, IonToolbar } from '@ionic/react';
+import { IonButton, IonContent, IonIcon, IonItem, IonLabel, IonList, IonModal, IonPage, IonSearchbar, IonSegment, IonSegmentButton, IonToolbar } from '@ionic/react';
 import { useHistory } from 'react-router';
 import { AuthContext } from "../../App";
 import React, { useEffect, useState } from 'react';
@@ -22,6 +22,8 @@ import SocialMediaTotalsEdit from '../../components/SocialMediaTotalsEdit/Social
 import AchievementsEdit from '../../components/AchievementsEdit/AchievementsEdit';
 import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 import MetaTags from '../../components/MetaTags/MetaTags';
+import { images, pencil, person } from 'ionicons/icons';
+import EditProfileTabs from '../../components/EditProfileTabs/EditProfileTabs';
 
 export interface props { }
 
@@ -192,6 +194,10 @@ const EditProfile: React.FC = () => {
         <div className="content">
           <div className="edit-profile">
             <h1 style={{ color: "var(--ion-color-dark)", lineHeight: 0.8, fontSize: "4em", padding: "15px" }}>EDIT <br /><span style={{ color: "var(--ion-color-primary)" }}>PROFILE</span></h1>
+            
+            <EditProfileTabs value='profile' />
+
+
             <div className="editor-wrap">
 
               <ErrorBoundary>
@@ -379,7 +385,10 @@ const EditProfile: React.FC = () => {
 
               </div>
 
+            
 
+              
+                    
               {isSuccessProfile && <IonButton className="button-tertiary" expand="block" size="small" onClick={() => { client.invalidateQueries("profile-" + profileData.id); history.push('/profile/' + profileData.id) }}>Back to Profile</IonButton>}
 
             </div>
