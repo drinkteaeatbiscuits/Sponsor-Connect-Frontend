@@ -5,6 +5,7 @@ import { IonReactRouter } from '@ionic/react-router';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 
+import TagManager from 'react-gtm-module';
 
 import Login from './pages/Login/Login';
 import CreateAccount from './pages/CreateAccount/CreateAccount';
@@ -73,6 +74,14 @@ import Subscriptions from './pages/Admin/Subscriptions/Subscriptions';
 import Users from './pages/Admin/Users/Users';
 import Discounts from './pages/Admin/Discounts/Discounts';
 import BuildProfile from './pages/Build Profile/BuildProfile';
+import AdminSettings from './pages/Admin/Settings/AdminSettings';
+
+const tagManagerArgs = {
+  gtmId: 'GTM-K6H3NN8'
+}
+
+process.env.NODE_ENV === "production" && TagManager.initialize(tagManagerArgs)
+
 
 Geocode.setApiKey(process.env.REACT_APP_GEOCODE_API_KEY);
 
@@ -452,7 +461,7 @@ const App: React.FC = () => {
               </Route>
               
               <Route exact path="/settings">
-                {state.isAuthenticated ? <Settings /> : (checkUser && <Redirect to="/login" />)}
+                {state.isAuthenticated ? ( state?.user?.role.type === 'admin' ? <AdminSettings/> : <Settings /> ) : (checkUser && <Redirect to="/login" />)}
               </Route>
 
               <Route exact path="/reset-password">
