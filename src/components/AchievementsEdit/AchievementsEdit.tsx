@@ -32,8 +32,6 @@ const AchievementsEdit: React.FC<props> = (props) => {
 
         const newAccolades: Array<any> = achievements ? [...achievements] : new Array;
 
-        
-
         // let newAccolades: Array<any> = [];
         newAccolades.push("");
         
@@ -41,7 +39,6 @@ const AchievementsEdit: React.FC<props> = (props) => {
 
         // !achievements && newAccolades.push("");
 
-        console.log(newAccolades);
 
         setAchievements(newAccolades);
     }
@@ -55,7 +52,6 @@ const AchievementsEdit: React.FC<props> = (props) => {
         setAchievements(newAccolades);
     }
 
-    console.log(achievements);
 
     return <div>
 

@@ -10,7 +10,7 @@ import urlSlug from 'url-slug';
 import useEditOpportunity from '../../hooks/useEditOpportunity';
 import NewImageUpload3 from '../../components/NewImageUpload3/NewImageUpload3';
 import TextEditor from '../../components/TextEditor/TextEditor';
-import { convertFromRaw, convertToRaw } from 'draft-js';
+import { convertFromRaw, convertToRaw, EditorState } from 'draft-js';
 import OpportunityImagesUpload from '../../components/OpportunityImagesUpload/OpportunityImagesUpload';
 
 import "react-date-range/dist/styles.css"; 
@@ -82,6 +82,8 @@ const AddOpportunity: React.FC = () => {
 
   }
 
+  // console.log(editorContent);
+
   const saveOpportunity = async (status) => {
     
     await editOpportunityMutation({
@@ -99,6 +101,7 @@ const AddOpportunity: React.FC = () => {
 
       setTitle("");
       setDescription("");
+      setEditorContent(null);
       setImages("");
       setPrice("");
       setOpportunityError("");
@@ -248,6 +251,7 @@ const AddOpportunity: React.FC = () => {
 
                   <div className="editor-section-bottom show-editor">
                     <TextEditor 
+                      
                       placeholder="Enter your description here." 
                       initialText={ null } 
                       textEditorText={ editorContent } 

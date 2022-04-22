@@ -79,7 +79,7 @@ const EditOpportunity: React.FC = () => {
               method: "POST",
               credentials: "include",
             });
-        console.log(updateProfileCompletionReq);
+        
   }
   
   const displayDate = (date) => {

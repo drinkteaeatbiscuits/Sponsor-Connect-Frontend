@@ -1,5 +1,13 @@
 .edit-profile {
-	padding-top: 60px;
+	
+	@media screen and (min-width: 768px) {
+		padding-top: 60px;
+		ion-segment {
+			
+				margin-top: -54px;
+			
+		}
+	}
 }
 
 .location-item {

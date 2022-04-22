@@ -1,4 +1,4 @@
-import { Redirect, Route, useHistory } from 'react-router-dom';
+import { Redirect, Route, useHistory, useLocation } from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import React, { useState } from "react";
 import { IonReactRouter } from '@ionic/react-router';
@@ -8,8 +8,6 @@ import { loadStripe } from '@stripe/stripe-js';
 
 import Login from './pages/Login/Login';
 import CreateAccount from './pages/CreateAccount/CreateAccount';
-
-
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -74,6 +72,7 @@ import AdminDashboard from './pages/Admin/Dashboard/AdminDashboard';
 import Subscriptions from './pages/Admin/Subscriptions/Subscriptions';
 import Users from './pages/Admin/Users/Users';
 import Discounts from './pages/Admin/Discounts/Discounts';
+import BuildProfile from './pages/Build Profile/BuildProfile';
 
 Geocode.setApiKey(process.env.REACT_APP_GEOCODE_API_KEY);
 
@@ -164,7 +163,9 @@ const reducer = (state: any, action: any) => {
       }
     }
     case "updateProfileComplete": {
-      state.user.profileComplete = action.payload
+      // console.log(action.payload);
+      state.user.profileComplete = action.payload.profileComplete
+      state.user.profileCompletionList = action.payload.profileCompletionList
       return {
         ...state 
       }
@@ -317,7 +318,12 @@ const App: React.FC = () => {
   // console.log(state?.user && state?.user?.role.type === 'admin' )
   // console.log(state.isAuthenticated )
 
-  // console.log();
+  // console.log(location);
+  // let location = useLocation();
+
+  // console.log(location.pathname);
+
+  // location?.pathname !== '' &&
 
   return (
     <HelmetProvider>  
@@ -333,11 +339,12 @@ const App: React.FC = () => {
           
           <IonReactRouter>
            
-            { state?.user?.profile && <Notifications /> }
+            { state?.user?.profile &&  <Notifications /> }
 
             <ScrollToTop />
 
             <IonRouterOutlet animated={false}>
+
             
               <Route exact path="/">
                 {state.isAuthenticated ? <Redirect to="/dashboard" /> : <Landing />}
@@ -390,6 +397,10 @@ const App: React.FC = () => {
 
                <Route exact path="/profile/:id/edit">
                 {state.isAuthenticated ? <EditProfile /> : (checkUser && <Redirect to="/login" />)}
+              </Route>
+
+               <Route exact path="/profile/:id/build">
+                {state.isAuthenticated ? <BuildProfile /> : (checkUser && <Redirect to="/login" />)}
               </Route>
 
                <Route exact path="/manage-profile-images">
@@ -470,7 +481,7 @@ const App: React.FC = () => {
               </Route>
 
               <Route exact path="/book-consultation">
-                {state.isAuthenticated ? ( activeSubscription ? <BookConsultation /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
+                {state.isAuthenticated ? <BookConsultation /> : (checkUser && <Redirect to="/login" />)}
               </Route>
 
 

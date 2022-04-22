@@ -54,6 +54,7 @@ interface UploadImageProps {
 	showUploadArea?: boolean,
 	className?: string,
 	required?: boolean,
+	isProfileBuild?: boolean,
 }
 
 
@@ -83,7 +84,8 @@ const getFileName = (file: any) => {
 const NewImageUpload3: React.FC<UploadImageProps> = (UploadImageProps) => {
 
 	const { state: authState } = React.useContext(AuthContext);
-
+	
+	const {isProfileBuild} = UploadImageProps;
 
 	const client = useQueryClient();
 
@@ -91,6 +93,7 @@ const NewImageUpload3: React.FC<UploadImageProps> = (UploadImageProps) => {
 		// Generate Unique File Name
 		renameFile: (file) => getFileName(file),
 
+		
 		// targetSize: {
 		// 	width: 1920,
 		// 	height: 1200,
@@ -334,7 +337,7 @@ useEffect(
 
 	return <div className={"editor-section upload-image-wrap " + ( UploadImageProps.className && UploadImageProps.className )  }>
 
-					<div className="editor-section-top">
+					{ !isProfileBuild && <div className="editor-section-top">
 
 						<label className="editor-section-title">{ UploadImageProps.label }</label>
 						
@@ -348,9 +351,9 @@ useEffect(
 
 						</div>	
 
-					</div>
+					</div> }
 
-					<div className="editor-section-bottom">
+					{ !isProfileBuild && <div className="editor-section-bottom">
 
 
 
@@ -368,7 +371,27 @@ useEffect(
 							</div>
 						}
 						
+					</div> }
+
+
+
+					{ isProfileBuild && 
+					<div className="profile-build-upload">
+						
+
+						{ UploadImageProps.currentImage ? <div>
+							<IonButton onClick={() => removeImage()} size="small" expand="block" color="tertiary">Remove Image</IonButton>
+						
+						</div> : 
+						<div className="upload-image">
+							<div {...getRootProps({ className: 'dropzone' })}>
+								<input {...getInputProps()} />
+								<p>Drag 'n' drop some files here, or click to select files</p>
+							</div>
+						</div> }
+
 					</div>
+					 }
 					
 			</div>
 
