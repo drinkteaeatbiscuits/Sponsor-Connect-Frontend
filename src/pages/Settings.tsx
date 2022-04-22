@@ -42,7 +42,7 @@ const Settings: React.FC = () => {
 
             <div className="menu-list ion-padding-top ion-margin-top ion-margin-bottom ion-padding-bottom">
             
-            { authState.user?.accountType !== "Business" && authState?.user?.role.type != 'admin' &&
+            { authState.user?.accountType !== "Business" && authState?.user?.role.type !== 'admin' &&
           
               <div className="menu-list-option ion-margin-top"
                 onClick={() => history.push("/settings/subscription/")}>
@@ -57,7 +57,7 @@ const Settings: React.FC = () => {
 
             }
 
-            { authState?.user?.role.type != 'admin' && <div className={authState.user?.accountType === "Business" ? "menu-list-option ion-margin-top" : "menu-list-option"}
+            { authState?.user?.role.type !== 'admin' && <div className={authState.user?.accountType === "Business" ? "menu-list-option ion-margin-top" : "menu-list-option"}
               onClick={() => history.push("/settings/account/")}>
               <div className="icon">
                 <IonIcon color="primary" icon={key} />

@@ -1,6 +1,6 @@
 {
   "name": "sponsorconnect",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "homepage": "https://app.sponsor-connect.com",
   "private": true,
   "dependencies": {
