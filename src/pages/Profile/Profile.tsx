@@ -327,7 +327,7 @@ const Profile: React.FC = () => {
               <div className="profile-tab-navigation">
                 <p className={profileTabNumber === 1 ? "active" : ""} onClick={() => setProfileTabNumber(1)}>Sponsorship</p>
                 <p className={profileTabNumber === 2 ? "active" : ""} onClick={() => setProfileTabNumber(2)}>Description</p>
-                <p className={profileTabNumber === 3 ? "active" : ""} onClick={() => setProfileTabNumber(3)}>Photos</p>
+                { profileImages.length > 0 && <p className={profileTabNumber === 3 ? "active" : ""} onClick={() => setProfileTabNumber(3)}>Photos</p> }
                 <p className={profileTabNumber === 4 ? "active" : ""} onClick={() => setProfileTabNumber(4)}>Contact</p>
               </div>
 
