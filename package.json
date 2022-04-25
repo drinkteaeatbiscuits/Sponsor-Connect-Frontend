@@ -43,6 +43,7 @@
     "masonry-layout": "^4.2.2",
     "node-sass": "^7.0.1",
     "pintura": "file:local_modules/pintura",
+    "qs": "^6.10.3",
     "react": "^17.0.1",
     "react-calendly": "^2.2.2",
     "react-circular-progressbar": "^2.0.4",

@@ -1,11 +1,12 @@
+import qs from 'qs';
 import { useQuery, useQueryClient } from 'react-query';
 
-const useProfiles = (allProfiles) => {
+const useProfiles = (allProfiles?) => {
     const client = useQueryClient();
-    
-    let showAllProfiles = "/active-profiles"
+
+    let showAllProfiles = '/active-profiles';  
     if(allProfiles){
-      showAllProfiles = "/profiles"
+      showAllProfiles = '/profiles';
     }
 
     return useQuery(
