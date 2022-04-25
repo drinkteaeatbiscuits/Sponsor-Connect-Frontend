@@ -103,6 +103,7 @@
 ion-popover.description-hints-tips {
 	--width: 100%;
 	color: var(--ion-color-dark);
+    --max-width: 450px;
 
 	.popover-content {
 		margin: 0 16px;

@@ -35,9 +35,7 @@ const ProfileCard: React.FC<ProfileProps> = ( ProfileProps ) => {
 		return socialMediaTotal;
 	}
 
-	// console.log(profileData);
-
-	return <div className={"profile-card " + className} onClick={ ()=> history.push("/profile/" + profileData?.id) } >
+	return <div className={"profile-card " + className} onClick={ ()=> history.push( profileData?.slug ? profileData?.slug : "/profile/" + profileData?.id ) } >
 
 				<div className="profile-image" >
 
@@ -66,7 +64,7 @@ const ProfileCard: React.FC<ProfileProps> = ( ProfileProps ) => {
 
 						{ getProfileOpportunityValues(profileData.opportunities) &&
 						<div className="">
-							<IonIcon color="tertiary" icon={barChart} /><p> {showCurrency(profileData)}{ getProfileOpportunityValues(profileData.opportunities)?.min } - {showCurrency(profileData)}{ getProfileOpportunityValues(profileData.opportunities)?.max } </p> 
+							<IonIcon color="tertiary" icon={barChart} /><p> {showCurrency(profileData)}{ getProfileOpportunityValues(profileData?.opportunities)?.min } - {showCurrency(profileData)}{ getProfileOpportunityValues(profileData.opportunities)?.max } </p> 
 						
 						</div>
 						

@@ -1,6 +1,6 @@
 {
   "name": "sponsorconnect",
-  "version": "1.0.7",
+  "version": "1.0.9",
   "homepage": "https://app.sponsor-connect.com",
   "private": true,
   "dependencies": {
@@ -43,6 +43,7 @@
     "masonry-layout": "^4.2.2",
     "node-sass": "^7.0.1",
     "pintura": "file:local_modules/pintura",
+    "qs": "^6.10.3",
     "react": "^17.0.1",
     "react-calendly": "^2.2.2",
     "react-circular-progressbar": "^2.0.4",
@@ -52,6 +53,7 @@
     "react-dropzone": "^11.4.2",
     "react-geocode": "^0.2.3",
     "react-google-places-autocomplete": "^3.3.2",
+    "react-gtm-module": "^2.0.11",
     "react-helmet": "^6.1.0",
     "react-helmet-async": "^1.2.3",
     "react-image-crop": "^9.0.5",

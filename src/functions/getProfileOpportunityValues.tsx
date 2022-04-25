@@ -2,6 +2,9 @@ import getOpportunityStatus from "./getOpportunityStatus";
 
 const getProfileOpportunityValues = (opportunities) => {
 
+	if(!opportunities){
+		return
+	}
 	// console.log(date)
 
 	const onlyActiveOppotunities = opportunities.filter((opportunity) => {

@@ -33,20 +33,24 @@ export interface props {}
 
 interface ParamTypes {
   id: string;
+  slug: string
 }
 
 const Profile: React.FC = () => {
 
   const thelocation = useLocation<any>();
 
-  const profileId = useParams<ParamTypes>();
+  const params = useParams<ParamTypes>();
+  const slug = params.slug;
 	const history = useHistory();
   const { state: authState, dispatch } = React.useContext(AuthContext);
   const [showFullDescription, setShowFullDescription] = useState<boolean>(false) 
   const [fullDescriptionText, setFullDescriptionText] = useState<any>(""); 
-  const {isLoading, data, error, isSuccess} = useProfile( profileId.id );
+  const {isLoading, data, error, isSuccess} = useProfile( params.id ? params.id : null, slug ? slug : null );
 
   const [updatingViewedProfiles, setUpdatingViewedProfiles] = useState(false);
+
+  const [profileId, setProfileId] = useState(params.id);
 
   const [profileImages, setProfileImages] = useState([]);
 
@@ -63,18 +67,23 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
 
+    !profileId && isSuccess && setProfileId(data?.id);
+
     isSuccess && setFullDescriptionText(  data?.fullDescriptionText  );
 
     isSuccess && setProfileImages( data?.images );
 
     thelocation && thelocation?.state?.tab === "contact" ? setProfileTabNumber(4) : setProfileTabNumber(1);
 
-    isSuccess && latestUpdateDate.length === 0 && profileLastUpdated();
+    isSuccess && latestUpdateDate?.length === 0 && profileLastUpdated();
 
     !updatingViewedProfiles && authState?.user && viewedProfile();
-    
-  }, [data?.fullDescriptionText, isSuccess, thelocation, updatingViewedProfiles, viewedProfiles, profileId, latestUpdateDate ]);
 
+    
+  }, [data?.fullDescriptionText, isSuccess, thelocation, updatingViewedProfiles, viewedProfiles, params, latestUpdateDate ]);
+
+
+  
 
   Fancybox.bind("[data-fancybox]", {
     // Your options go here
@@ -84,9 +93,9 @@ const Profile: React.FC = () => {
 
     let lastUpdatedDate = "";
 
-    lastUpdatedDate = data.updated_at;
+    lastUpdatedDate = data?.updated_at;
 
-    for (let i = 0; i < data.opportunities.length; i++) {
+    for (let i = 0; i < data?.opportunities?.length; i++) {
 
       if(new Date(data.opportunities[i].updated_at) > new Date(lastUpdatedDate)  ) {
 
@@ -102,58 +111,59 @@ const Profile: React.FC = () => {
 
   const viewedProfile = async () => {
 
-    setUpdatingViewedProfiles(true);
+    // setUpdatingViewedProfiles(true);
 
-    // Get Previously Viewed Date
-    const previouslyViewed = viewedProfiles ? viewedProfiles?.filter(e => e.profileId === profileId.id) : null;
+    // // Get Previously Viewed Date
+    // const previouslyViewed = viewedProfiles ? viewedProfiles?.filter(e => e.profileId === profileId) : null;
 
-    // Has Latest Profile Update Date Loaded
-    if(latestUpdateDate.length > 0 ){      
+    // // Has Latest Profile Update Date Loaded
+    // if(latestUpdateDate?.length > 0 ){      
 
 
-      // console.log(previouslyViewed[0]?.date);
-      // console.log(latestUpdateDate);
-      // console.log(new Date(previouslyViewed[0]?.date) < new Date(latestUpdateDate));
+    //   // console.log(previouslyViewed[0]?.date);
+    //   // console.log(latestUpdateDate);
+    //   // console.log(new Date(previouslyViewed[0]?.date) < new Date(latestUpdateDate));
 
-      // Has Viewed Profiles Loaded
-      // Has Profile Been Previously Viewed
-      // Is the previously viewed date older than the latest update date
-      if ( viewedProfiles && previouslyViewed?.length > 0 
-        && (new Date(previouslyViewed[0]?.date) > new Date(latestUpdateDate) === true ) ) {
+    //   // Has Viewed Profiles Loaded
+    //   // Has Profile Been Previously Viewed
+    //   // Is the previously viewed date older than the latest update date
+    //   if ( viewedProfiles && previouslyViewed?.length > 0 
+    //     && (new Date(previouslyViewed[0]?.date) > new Date(latestUpdateDate) === true ) ) {
         
-        setUpdatingViewedProfiles(false);
+    //     setUpdatingViewedProfiles(false);
 
-        return
+    //     return
 
-      } else {
+    //   } else {
 
-        const viewedProfilesResp = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/profile-viewed", {
-          method: "POST",
-          credentials: "include",
-          body: JSON.stringify({
-            profileId: profileId
-          })
-        });
+    //     const viewedProfilesResp = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/profile-viewed", {
+    //       method: "POST",
+    //       credentials: "include",
+    //       body: JSON.stringify({
+    //         profileId: profileId
+    //       })
+    //     });
         
-        const viewedProfileInfo = await viewedProfilesResp.json();
+    //     const viewedProfileInfo = await viewedProfilesResp.json();
     
-        dispatch && await dispatch({
-          type: "viewedProfile",
-          payload: viewedProfileInfo
-          });
+    //     dispatch && await dispatch({
+    //       type: "viewedProfile",
+    //       payload: viewedProfileInfo
+    //       });
 
-        setUpdatingViewedProfiles(false);
+    //     setUpdatingViewedProfiles(false);
 
-        return viewedProfileInfo?.statusCode ? false : viewedProfileInfo; 
+    //     return viewedProfileInfo?.statusCode ? false : viewedProfileInfo; 
 
-      }
+    //   }
       
-    }
+    // }
 
-      setUpdatingViewedProfiles(false);
+    //   setUpdatingViewedProfiles(false);
     
   }
 
+  // console.log('test');
 
   const gotoContact = () => { 
     let y = document?.getElementById("contact-form")?.offsetTop;
@@ -174,13 +184,15 @@ const Profile: React.FC = () => {
       showProfile = true;
     }
 
-    if( authState?.user?.profile === parseInt(profileId.id)) {
+    if( authState?.user?.profile === parseInt(profileId)) {
       showProfile = true;
     }
 
     if(authState?.user?.role.type === 'admin') {
       showProfile = true;
     }
+
+    showProfile = true;
 
     return showProfile;
   }  
@@ -192,10 +204,10 @@ const Profile: React.FC = () => {
 
       { isSuccess && <MetaTags title={data?.profileName + ' | Sponsor Connect'} path={thelocation.pathname} description={data?.shortDescription} image={ data?.coverImage ? process.env.REACT_APP_S3_URL + "/images/cover_xl/" + data?.coverImage?.hash + data?.coverImage?.ext : "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } /> }
 
-      { authState?.user?.profile === parseInt(profileId.id) && 
+      { authState?.user?.profile === parseInt(profileId) && 
         <IonToolbar>
           <IonButtons className="ion-justify-content-center ion-padding-start ion-padding-end">
-            <IonButton className="" size="small" onClick={()=> history.push( "/profile/" + profileId.id +"/edit" )}>Edit Profile</IonButton>
+            <IonButton className="" size="small" onClick={()=> history.push( "/profile/" + profileId +"/edit" )}>Edit Profile</IonButton>
           </IonButtons>
           
         </IonToolbar> }
@@ -327,7 +339,7 @@ const Profile: React.FC = () => {
               <div className="profile-tab-navigation">
                 <p className={profileTabNumber === 1 ? "active" : ""} onClick={() => setProfileTabNumber(1)}>Sponsorship</p>
                 <p className={profileTabNumber === 2 ? "active" : ""} onClick={() => setProfileTabNumber(2)}>Description</p>
-                <p className={profileTabNumber === 3 ? "active" : ""} onClick={() => setProfileTabNumber(3)}>Photos</p>
+                { profileImages?.length > 0 && <p className={profileTabNumber === 3 ? "active" : ""} onClick={() => setProfileTabNumber(3)}>Photos</p> }
                 <p className={profileTabNumber === 4 ? "active" : ""} onClick={() => setProfileTabNumber(4)}>Contact</p>
               </div>
 
@@ -337,7 +349,7 @@ const Profile: React.FC = () => {
                     <h2 className="ion-color-dark line-height-12 tab-title">Sponsorship Opportunities</h2>
           
                     <ErrorBoundary> 
-                      <OpportunitiesList profileId={ profileId.id } />
+                      <OpportunitiesList profileId={ profileId } />
                     </ErrorBoundary> 
                  
 
@@ -375,7 +387,7 @@ const Profile: React.FC = () => {
                    
               <div className="profile-tab photos">
 
-                  { profileImages.length > 0 && <div className="profile-images">
+                  { profileImages?.length > 0 && <div className="profile-images">
                     
                   { profileImages.map((profileImage: any) => {
 						
@@ -404,7 +416,7 @@ const Profile: React.FC = () => {
 
                 <div id="contact-form" className="profile-tab contact">
                   
-                  <ContactProfile profileId={profileId.id} label="Contact" profileData={data} />
+                  <ContactProfile profileId={profileId} label="Contact" profileData={data} />
                 </div> 
           
           </div>

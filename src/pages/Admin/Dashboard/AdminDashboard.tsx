@@ -1,28 +1,16 @@
-import { IonButton, IonContent, IonIcon, IonPage } from '@ionic/react';
+import { IonButton, IonCheckbox, IonContent, IonIcon, IonItem, IonLabel, IonPage, IonSegment, IonSegmentButton } from '@ionic/react';
 
 import { useHistory, useParams } from 'react-router';
-import Cookies from 'js-cookie';
 import { AuthContext } from "../../../App";
 import React, { useEffect, useState } from 'react';
-import LogoutButton from '../../../components/LogoutButton';
 import TabBar from '../../../components/TabBar';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
-
-import Scrollbar from "react-scrollbars-custom";
-
-import ErrorBoundary from '../../../containers/ErrorBoundary/ErrorBoundary';
 
 import './AdminDashboard.scss';
-import { NewsFeed } from '../../../components/NewsFeed/NewsFeed';
-import Sidebar from '../../Profiles/Sidebar/Sidebar';
 import useProfiles from '../../../hooks/useProflies';
-import ProfilesContacted from '../../../components/ProfilesContacted/ProfilesContacted';
-import ProfileMatches from '../../../components/ProfileMatches/ProfileMatches';
 import MetaTags from '../../../components/MetaTags/MetaTags';
-import { caretDown, caretUp, personCircle } from 'ionicons/icons';
+import { caretDown, caretUp, images, pencil, person, personCircle } from 'ionicons/icons';
 import { Link } from 'react-router-dom';
-
-
+import useAdminSettings from '../../../hooks/useAdminSettings';
 
 export interface props { }
 
@@ -35,6 +23,8 @@ const AdminDashboard: React.FC = () => {
 	const [sortedProfiles, setSortedProfiles] = useState<any[]>([]);
 	const [sortBy, setSortBy] = useState<any>();
 
+	const {data: settings, isSuccess: settingsSuccess} = useAdminSettings();
+
 	useEffect(() => {
 		
 		sortedProfiles?.length === 0 && isSuccess && setSortedProfiles(profiles.sort((a,b) => (a.id > b.id) ? -1 : ((b.id > a.id) ? 1 : 0)));
@@ -45,7 +35,6 @@ const AdminDashboard: React.FC = () => {
 		}
 		
 		
-
 	}, [profiles, sortBy, sortedProfiles])
 	
 	// sortedProfiles && console.log(sortedProfiles);
@@ -67,7 +56,6 @@ const AdminDashboard: React.FC = () => {
 		
 		if(sortBy === 'user.subscriptionStatus') {
 
-			console.log(sortBy);
 			order === 'asc' && setSortedProfiles(sortedProfiles.sort((a,b) => ( a.user.subscriptionStatus ) ? 1 : ( b.user.subscriptionStatus ? -1 : 0)))
 			order === 'desc' && setSortedProfiles(sortedProfiles.sort((a,b) => ( a.user.subscriptionStatus ) ? -1 : (b.user.subscriptionStatus ? 1 : 0) ))
 
@@ -89,7 +77,9 @@ const AdminDashboard: React.FC = () => {
 		}
 	}
 
-
+	const exampleProfileIds = settingsSuccess && settings?.exampleProfiles.map((profile) => profile.id);
+	const testProfileIds = settingsSuccess && settings?.testProfiles.map((profile) => profile.id);
+	
 	// console.log(sortBy?.order);
 	// console.log(sortedProfiles);
 
@@ -104,8 +94,13 @@ const AdminDashboard: React.FC = () => {
 
 				<div className="dashboard-content" style={{
 					height: '100%',
-					maxHeight: '100%'
+					maxHeight: '100%',
+					flexWrap: 'wrap',
+					marginTop: '0px',
 				}}>
+					<div className="tabs" style={{width: '100%'}}>
+					
+					</div>
 
 					<div className="admin-dashboard-content-column-1" style={{
 						width: '100%',
@@ -114,10 +109,11 @@ const AdminDashboard: React.FC = () => {
 						padding: '8px 16px 0px',
 						borderRadius: '5px',
 						fontSize: '0.9em',
-						marginTop: '20px',
+						
 						letterSpacing: '-0.01em'
 						}}>
 
+							
 							<div className="profilesHeader"style={{
 										position: 'relative',
 										display: 'flex',
@@ -203,7 +199,7 @@ const AdminDashboard: React.FC = () => {
 								height: 'calc(100% - 78px)'
 							}}>
 
-								{sortedProfiles && sortedProfiles.map((profile, index) => {
+								{ sortedProfiles && sortedProfiles.filter((profile) => exampleProfileIds && !exampleProfileIds?.includes(profile.id)).filter((profile) => testProfileIds && !testProfileIds?.includes(profile.id)).map((profile, index) => {
 
 									return <div key={profile.id} className="profile" style={{
 										position: 'relative',
@@ -284,6 +280,7 @@ const AdminDashboard: React.FC = () => {
 
 
 									</div>
+									
 
 								})}
 
