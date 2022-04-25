@@ -380,7 +380,7 @@ const App: React.FC = () => {
               </Route>
  
               
-              <Route exact path="/:slug" render={(props) => {
+              <Route path="/:slug" render={(props) => {
                 if(profileSlugs.includes(props.match.params.slug)){
                   return <Profile />
                 }else{

@@ -349,7 +349,7 @@ const Profile: React.FC = () => {
                     <h2 className="ion-color-dark line-height-12 tab-title">Sponsorship Opportunities</h2>
           
                     <ErrorBoundary> 
-                      <OpportunitiesList profileId={ profileId } />
+                      { profileId ? <OpportunitiesList profileId={ profileId } /> : "" }
                     </ErrorBoundary> 
                  
 
