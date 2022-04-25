@@ -15,11 +15,9 @@ const useProfile = ( profileId?: any, slug?: any ) => {
 	return useQuery(
 	  ["profile", profileId ? parseInt(profileId) : slug],
 	  async() => {
-		
-		
 
 			const response = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + query, {
-			credentials: "include",
+				credentials: "include",
 			});
 			
 			const post = await response.json();

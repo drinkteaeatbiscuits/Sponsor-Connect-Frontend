@@ -38,7 +38,7 @@ const Dashboard: React.FC = () => {
     }
   }
 
-  const profileId = authState.user.profile;
+  const profileId = authState?.user?.profile;
 
   const { data: dataProfile, isSuccess: isSuccessProfile } = useProfile( profileId );
   
