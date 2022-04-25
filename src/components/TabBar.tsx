@@ -58,7 +58,7 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
         return authState.user?.role?.type === 'admin' ? true : false;
       }
 
-    //   console.log(isAdminUser())
+    //  console.log(authState)
      
 
 	return <div className="tab-bar">
@@ -88,7 +88,7 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
                 </div>
                 :
                 !isAdminUser() ?
-                <div className={ ( activeTab === 'profile' && "active " ) + " tab-button"} onClick={()=> history.push("/profile/" + authState?.user.profile )}>
+                <div className={ ( activeTab === 'profile' && "active " ) + " tab-button"} onClick={()=> history.push(authState?.user.profileSlug ? "/" + authState?.user.profileSlug : "/profile/" + authState?.user.profile )}>
                     <IonIcon icon={personCircle} />
                     <IonLabel>Profile</IonLabel>
                 </div>

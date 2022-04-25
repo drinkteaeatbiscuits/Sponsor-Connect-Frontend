@@ -1,4 +1,4 @@
-import { Redirect, Route, useHistory, useLocation } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import { IonApp, IonRouterOutlet } from '@ionic/react';
 import React, { useState } from "react";
 import { IonReactRouter } from '@ionic/react-router';
@@ -327,7 +327,7 @@ const App: React.FC = () => {
   wasUserHere && (initialState.isAuthenticated = true);
   wasUserHere && (initialState.user = wasUserHere);
 
-
+  // console.log(wasUserHere);
   // console.log(state?.user && state?.user?.role.type === 'admin' )
   // console.log(state.isAuthenticated )
 
@@ -374,46 +374,52 @@ const App: React.FC = () => {
 
             <IonRouterOutlet animated={false}>
 
+            <Switch>
+
+            
               
               <Route exact path="/">
-                {state.isAuthenticated ? <Redirect to="/dashboard" /> : <Landing />}
+               <Landing />
+                {/* { state.isAuthenticated ? <Redirect to="/dashboard" /> : <Landing /> } */}
               </Route>
- 
               
-              <Route path="/:slug" render={(props) => {
-                if(profileSlugs.includes(props.match.params.slug)){
+              <Route exact path="/dashboard" component={() => state.isAuthenticated ? ( state.user.profile ? <Dashboard /> : (state?.user?.role.type === 'admin' ? <AdminDashboard />  : <DashboardBusiness />) ) : ( checkUser && <Redirect to="/login" /> )} />
+              {/* { state.isAuthenticated && <Dashboard /> } */}
+
+                {/* { state.isAuthenticated ? ( state.user.profile ? <Dashboard /> : (state?.user?.role.type === 'admin' ? <AdminDashboard />  : <DashboardBusiness />) ) : ( checkUser && <Redirect to="/login" /> ) } */}
+
+              {/* </Route> */}
+               
+              
+              {/* <Route exact path="/:slug" render={(props) => {
+                if(isSuccess && profileSlugs.includes(props.match.params.slug)){
                   return <Profile />
                 }else{
-                  return <ErrorPage />
+                  return <Redirect to={"/" + props.match.params.slug} />
                 }
-              }} />
-              
+              }} /> */}
 
-              <Route exact path="/sports">
-                {state.isAuthenticated ? <Redirect to="/dashboard" /> : <OnBoardingSport />}
-              </Route>
 
-              <Route exact path="/business">
+              <Route path="/sports" component={() => state.isAuthenticated ? <Redirect to="/dashboard" /> : <OnBoardingSport />} />
+             
+
+              <Route path="/business">
                 {state.isAuthenticated ? <Redirect to="/dashboard" /> : <OnBoardingBusiness />}
               </Route>
 
-              <Route exact path="/landing">
+              <Route path="/landing">
                 {state.isAuthenticated ? <Redirect to="/dashboard" /> : <Landing />}
               </Route>
 
-              <Route exact path="/create-account-sports">
+              <Route path="/create-account-sports">
                 {state.isAuthenticated ? <Redirect to="/dashboard" /> : <CreateAccount />}
               </Route> 
 
-              <Route exact path="/create-account-business">
+              <Route path="/create-account-business">
                 {state.isAuthenticated ? <Redirect to="/dashboard" /> : <CreateAccountBusiness />}
               </Route> 
 
-              <Route exact path="/dashboard">
-
-                { state.isAuthenticated ? ( state.user.profile ? <Dashboard /> : (state?.user?.role.type === 'admin' ? <AdminDashboard />  : <DashboardBusiness />) ) : ( checkUser && <Redirect to="/login" /> ) }
-
-              </Route>
+              
 
               <Route exact path="/favourites">
 
@@ -552,12 +558,18 @@ const App: React.FC = () => {
                 
               </Route>
 
+
+              <Route exact path="/:slug" component={() => <Profile />} />
+           
+              
+
               
               
               <Route>
                 <ErrorPage />
               </Route>
               
+              </Switch>
 
             </IonRouterOutlet>
           </IonReactRouter>
