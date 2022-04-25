@@ -10,11 +10,13 @@ interface props {
  
 const ExampleProfiles: React.FC<props> = ( props ) => {
 
-	const { data: profiles, isSuccess } = useProfiles(true);
+	
 	const {data: settings, isSuccess: settingsSuccess} = useAdminSettings();
 	const { mutateAsync: saveSettings } = useEditAdminSettings();
 
 	const [ exampleProfiles, setExampleProfiles ] = useState<[]>([]);
+
+	const { data: profiles, isSuccess } = useProfiles(true);
 
 	useEffect(() => {
 		

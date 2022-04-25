@@ -66,7 +66,7 @@ const ProfileCard: React.FC<ProfileProps> = ( ProfileProps ) => {
 
 						{ getProfileOpportunityValues(profileData.opportunities) &&
 						<div className="">
-							<IonIcon color="tertiary" icon={barChart} /><p> {showCurrency(profileData)}{ getProfileOpportunityValues(profileData.opportunities)?.min } - {showCurrency(profileData)}{ getProfileOpportunityValues(profileData.opportunities)?.max } </p> 
+							<IonIcon color="tertiary" icon={barChart} /><p> {showCurrency(profileData)}{ getProfileOpportunityValues(profileData?.opportunities)?.min } - {showCurrency(profileData)}{ getProfileOpportunityValues(profileData.opportunities)?.max } </p> 
 						
 						</div>
 						

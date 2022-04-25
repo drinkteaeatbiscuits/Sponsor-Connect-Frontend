@@ -75,6 +75,7 @@ import Users from './pages/Admin/Users/Users';
 import Discounts from './pages/Admin/Discounts/Discounts';
 import BuildProfile from './pages/Build Profile/BuildProfile';
 import AdminSettings from './pages/Admin/Settings/AdminSettings';
+import ProfileExamples from './pages/ProfileExamples/ProfileExamples';
 
 const tagManagerArgs = {
   gtmId: 'GTM-K6H3NN8'
@@ -474,6 +475,10 @@ const App: React.FC = () => {
 
               <Route exact path="/profiles">
                 {state.isAuthenticated ? <Profiles /> : (checkUser && <Redirect to="/login" />)}
+              </Route>
+
+              <Route exact path="/example-profiles">
+                {state.isAuthenticated ? <ProfileExamples /> : (checkUser && <Redirect to="/login" />)}
               </Route>
 
 
