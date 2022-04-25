@@ -76,6 +76,7 @@ import Discounts from './pages/Admin/Discounts/Discounts';
 import BuildProfile from './pages/Build Profile/BuildProfile';
 import AdminSettings from './pages/Admin/Settings/AdminSettings';
 import ProfileExamples from './pages/ProfileExamples/ProfileExamples';
+import useProfiles from './hooks/useProflies';
 
 const tagManagerArgs = {
   gtmId: 'GTM-K6H3NN8'
@@ -248,6 +249,8 @@ const App: React.FC = () => {
 
   }
 
+  const {isLoading, data: profilesData, isSuccess, error} = useProfiles(true);
+
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const [wasUserHere, setWasUserHere] = useState<any>("");
   const [currentLocation, setCurrentLocation] = useState<any>("");
@@ -334,6 +337,22 @@ const App: React.FC = () => {
   // console.log(location.pathname);
 
   // location?.pathname !== '' &&
+// { console.log(profilesData && profilesData.map(a => a.slug) )}
+
+  let profileSlugs: string[] = [];
+
+  if(isSuccess){
+    for( var i=0; i<profilesData?.length; i++ ){
+
+      profilesData[i].slug && profileSlugs.push( profilesData[i].slug );
+      
+    }
+  }
+
+  // console.log(profileSlugs);
+
+  // const location = useLocation();
+ 
 
   return (
     <HelmetProvider>  
@@ -355,10 +374,20 @@ const App: React.FC = () => {
 
             <IonRouterOutlet animated={false}>
 
-            
+              
               <Route exact path="/">
                 {state.isAuthenticated ? <Redirect to="/dashboard" /> : <Landing />}
               </Route>
+ 
+              
+              <Route exact path="/:slug" render={(props) => {
+                if(profileSlugs.includes(props.match.params.slug)){
+                  return <Profile />
+                }else{
+                  return <ErrorPage />
+                }
+              }} />
+              
 
               <Route exact path="/sports">
                 {state.isAuthenticated ? <Redirect to="/dashboard" /> : <OnBoardingSport />}
@@ -523,6 +552,7 @@ const App: React.FC = () => {
                 
               </Route>
 
+              
               
               <Route>
                 <ErrorPage />
