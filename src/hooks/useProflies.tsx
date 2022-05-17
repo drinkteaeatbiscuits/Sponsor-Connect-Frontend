@@ -6,7 +6,7 @@ const useProfiles = (allProfiles?) => {
 
     let showAllProfiles = '/active-profiles';  
     if(allProfiles){
-      showAllProfiles = '/profiles';
+      showAllProfiles = '/profiles?_limit=-1';
     }
 
     return useQuery(

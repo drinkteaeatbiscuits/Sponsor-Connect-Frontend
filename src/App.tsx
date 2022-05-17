@@ -382,10 +382,12 @@ const App: React.FC = () => {
                <Landing />
                 {/* { state.isAuthenticated ? <Redirect to="/dashboard" /> : <Landing /> } */}
               </Route>
+
+              
               
               <Route exact path="/dashboard" component={() => state.isAuthenticated ? ( state.user.profile ? <Dashboard /> : (state?.user?.role.type === 'admin' ? <AdminDashboard />  : <DashboardBusiness />) ) : ( checkUser && <Redirect to="/login" /> )} />
               {/* { state.isAuthenticated && <Dashboard /> } */}
-
+ 
                 {/* { state.isAuthenticated ? ( state.user.profile ? <Dashboard /> : (state?.user?.role.type === 'admin' ? <AdminDashboard />  : <DashboardBusiness />) ) : ( checkUser && <Redirect to="/login" /> ) } */}
 
               {/* </Route> */}
