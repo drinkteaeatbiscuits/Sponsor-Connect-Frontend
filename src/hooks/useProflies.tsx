@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from 'react-query';
 const useProfiles = (allProfiles?) => {
     const client = useQueryClient();
 
-    let showAllProfiles = '/active-profiles';  
+    let showAllProfiles = '/active-profiles?_limit=-1';  
     if(allProfiles){
       showAllProfiles = '/profiles?_limit=-1';
     }
