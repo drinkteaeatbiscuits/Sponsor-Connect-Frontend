@@ -54,6 +54,8 @@ const Login: React.FC<props> = () => {
         payload: loginInfo
       });
 
+      history.push('/dashboard');
+
     }
   }
 

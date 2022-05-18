@@ -385,7 +385,8 @@ const App: React.FC = () => {
 
               
               
-              <Route exact path="/dashboard" component={() => state.isAuthenticated ? ( state.user.profile ? <Dashboard /> : (state?.user?.role.type === 'admin' ? <AdminDashboard />  : <DashboardBusiness />) ) : ( checkUser && <Redirect to="/login" /> )} />
+              <Route exact path="/dashboard" component={() => state.isAuthenticated ? ( state.user.profile ? <Dashboard /> : (state?.user?.role.type === 'admin' ? <AdminDashboard />  : <DashboardBusiness />) ) : <Login />} />
+              
               {/* { state.isAuthenticated && <Dashboard /> } */}
  
                 {/* { state.isAuthenticated ? ( state.user.profile ? <Dashboard /> : (state?.user?.role.type === 'admin' ? <AdminDashboard />  : <DashboardBusiness />) ) : ( checkUser && <Redirect to="/login" /> ) } */}
@@ -405,6 +406,7 @@ const App: React.FC = () => {
               <Route path="/sports" component={() => state.isAuthenticated ? <Redirect to="/dashboard" /> : <OnBoardingSport />} />
              
 
+
               <Route path="/business">
                 {state.isAuthenticated ? <Redirect to="/dashboard" /> : <OnBoardingBusiness />}
               </Route>
@@ -422,16 +424,20 @@ const App: React.FC = () => {
               </Route> 
 
               
+              <Route exact path="/favourites" component={() => state.isAuthenticated ? <Favourites /> : <Login />} />
 
-              <Route exact path="/favourites">
+              {/* <Route exact path="/favourites">
 
                 { state.isAuthenticated ? <Favourites /> : ( checkUser && <Redirect to="/login" /> ) }
 
-              </Route>
+              </Route> */}
 
-              <Route exact path="/login">
+              {/* <Route exact path="/login">
                 { state.isAuthenticated ? <Redirect to="/dashboard" /> : ( checkUser && <Login />) }
-              </Route>
+              </Route> */}
+
+              <Route exact path="/login" component={() => state.isAuthenticated ? <Dashboard /> : <Login />} />
+
 
               <Route exact path="/profile/view/:id">
                   <Profile />
@@ -478,13 +484,18 @@ const App: React.FC = () => {
                 {state.isAuthenticated ? <SearchOpportunities /> : (checkUser && <Redirect to="/login" />)}
               </Route>
               
-              <Route exact path="/settings/billing">
-                {state.isAuthenticated ? <Billing /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
+              <Route exact path="/settings/billing" component={() => state.isAuthenticated ? <Billing /> : <Login />} />
 
-              <Route exact path="/subscribe">
+              {/* <Route exact path="/settings/billing">
+                {state.isAuthenticated ? <Billing /> : (checkUser && <Redirect to="/login" />)}
+              </Route> */}
+
+              {/* <Route exact path="/subscribe">
                 {state.isAuthenticated ? <Subscribe /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
+              </Route> */}
+
+              <Route exact path="/subscribe" component={() => state.isAuthenticated ? <Subscribe /> : <Login />} />
+
 
               <Route exact path="/settings/subscription">
                 {state.isAuthenticated ? <Subscription /> : (checkUser && <Redirect to="/login" />)}
@@ -498,21 +509,30 @@ const App: React.FC = () => {
                 {state.isAuthenticated ? <NotificationSettings /> : (checkUser && <Redirect to="/login" />)}
               </Route>
               
-              <Route exact path="/settings">
+              {/* <Route exact path="/settings">
                 {state.isAuthenticated ? ( state?.user?.role.type === 'admin' ? <AdminSettings/> : <Settings /> ) : (checkUser && <Redirect to="/login" />)}
-              </Route>
+              </Route> */}
+              <Route exact path="/settings" component={() => state.isAuthenticated ? ( state?.user?.role.type === 'admin' ? <AdminSettings/> : <Settings /> ) : (checkUser && <Login />)} />
 
-              <Route exact path="/reset-password">
+
+              {/* <Route exact path="/reset-password">
                 <ResetPassword />
-              </Route>
+              </Route> */}
 
-              <Route exact path="/forgot-password">
+              <Route exact path="/reset-password" component={() => <ResetPassword/>} />
+              <Route exact path="/forgot-password" component={() => <ForgotPassword/>} />
+
+
+              {/* <Route exact path="/forgot-password">
                 <ForgotPassword /> 
-              </Route>
+              </Route> */}
 
-              <Route exact path="/profiles">
+              {/* <Route exact path="/profiles">
                 {state.isAuthenticated ? <Profiles /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
+              </Route> */}
+
+              <Route exact path="/profiles" component={() => state.isAuthenticated ? <Profiles /> : <Login />} />
+              
 
               <Route exact path="/example-profiles">
                 {state.isAuthenticated ? <ProfileExamples /> : (checkUser && <Redirect to="/login" />)}
