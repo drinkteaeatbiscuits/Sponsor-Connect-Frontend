@@ -22,7 +22,7 @@ import VenueSVG from './images/VenueSVG';
 import TeamSVG from './images/TeamSVG';
 import OtherSVG from './images/OtherSVG';
 import EyeSVG from './images/EyeSVG';
-import { logoEuro } from 'ionicons/icons';
+import { chatbubbles, help, logoEuro, mail, search, shareSocial } from 'ionicons/icons';
 import Pound from './images/Pound';
 import MetaTags from '../../components/MetaTags/MetaTags';
 
@@ -68,6 +68,8 @@ const CreateAccount: React.FC = () => {
 
   const [filteredSports, setFilteredSports] = useState<any>(sports);
 
+  const [howDidYouHear, setHowDidYouHear] = useState<string>("");
+
 
 
   const doCreateAccount = async () => {
@@ -82,7 +84,8 @@ const CreateAccount: React.FC = () => {
         email: username,
         password: password,
         yourName: yourName,
-        currency: selectedCurrency
+        currency: selectedCurrency,
+        howDidYouHear: howDidYouHear
       }),
       credentials: "include",
     });
@@ -339,8 +342,7 @@ const CreateAccount: React.FC = () => {
   }
 
 
-  console.log(over18);
-
+ 
   return (
     <IonPage>
 
@@ -428,7 +430,61 @@ const CreateAccount: React.FC = () => {
                   </div>
                 }
 
-                {stepNumber === 3 &&
+              {stepNumber === 3 &&
+                  <div className="create-account-step select-hear-about-us">
+                    <h1 className="ion-text-center" style={{textTransform: "uppercase"}}>How did you hear <span className="ion-color-primary">about us?</span></h1>
+
+                    <div className="account-for-options">
+                      <div className={howDidYouHear === 'Search Engine' ? 'active account-for-option' : 'account-for-option'}
+                        onClick={() => setHowDidYouHear('Search Engine')}>
+                        <div className="icon"><IonIcon color='primary' icon={search} /></div>
+                        <div className="text">
+                          <p>Search Engine</p>
+                         
+                        </div>
+                      </div>
+                      <div className={howDidYouHear === 'Email Marketing' ? 'active account-for-option' : 'account-for-option'}
+                        onClick={() => setHowDidYouHear('Email Marketing')}>
+                        <div className="icon"><IonIcon color='primary' icon={mail} /></div>
+                        <div className="text">
+                          <p>Email Marketing</p>
+                  
+                        </div>
+                      </div>
+                      <div className={howDidYouHear === 'Social Media' ? 'active account-for-option' : 'account-for-option'}
+                        onClick={() => setHowDidYouHear('Social Media')}>
+                        <div className="icon"><IonIcon color='primary' icon={shareSocial} /></div>
+                        <div className="text">
+                          <p>Social Media</p>
+   
+                        </div>
+                      </div>
+                      <div className={howDidYouHear === 'Word of Mouth' ? 'active account-for-option' : 'account-for-option'}
+                        onClick={() => setHowDidYouHear('Word of Mouth')}>
+                        <div className="icon"><IonIcon color='primary' icon={chatbubbles} /></div>
+                        <div className="text">
+                          <p>Word of Mouth</p>
+
+                        </div>
+                      </div>
+                      <div className={howDidYouHear === 'Other' ? 'active account-for-option' : 'account-for-option'}
+                        onClick={() => setHowDidYouHear('Other')}>
+                        <div className="icon"><IonIcon color='primary' icon={help} /></div>
+                        <div className="text">
+                          <p>Other</p>
+                        </div>
+                      </div>
+
+                      
+
+                    </div>
+                      
+
+
+                  </div>
+                } 
+
+                {stepNumber === 4 &&
                   <div className="create-account-step who-is-this-account-for">
                     <h1 className="ion-text-center">WHO IS THIS <span className="ion-color-primary">ACCOUNT FOR?</span></h1>
 
@@ -468,34 +524,9 @@ const CreateAccount: React.FC = () => {
 
                     </div>
                   </div>
-                }
+                }     
 
-                {stepNumber === 4 &&
-                  <div className="create-account-step select-hear-about-us">
-                    <h1 className="ion-text-center" style={{textTransform: "uppercase"}}>Where did you hear <span className="ion-color-primary">about us</span></h1>
-                    <div className="step-details account-for-options">
-                      <div className={"option account-for-option" + (selectedCurrency === "GBP" ? " active" : "") }
-                      onClick={() => setSelectedCurrency("GBP")}>
-                        <div className="icon">
-                          <Pound className="pound-icon" />
-                        </div>
-                        <div className="text">
-                          <p>Pound Sterling</p>
-                        </div>
-                      </div>
-                      <div className={"option account-for-option" + (selectedCurrency === "EUR" ? " active" : "") }
-                      onClick={() => setSelectedCurrency("EUR")}>
-                        <div className="icon">
-                          <IonIcon color="primary" icon={logoEuro} style={{marginLeft: "-1px"}} />
-                        </div>
-                        <div className="text">
-                          <p>Euro</p>
-                        </div>
-                      </div>
-                    </div>
-
-                  </div>
-                }
+                
 
                 {stepNumber === 5 &&
 

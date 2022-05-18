@@ -276,3 +276,17 @@ ion-item.password-item {
 	}
 }
 
+
+
+
+.select-hear-about-us .account-for-options {
+	padding: 8px 10px;
+	.account-for-option .icon {
+		width: 36px;
+		height: 36px;
+		font-size: 16px;
+		ion-icon {
+			font-size: 18px;
+		}
+	}
+}
