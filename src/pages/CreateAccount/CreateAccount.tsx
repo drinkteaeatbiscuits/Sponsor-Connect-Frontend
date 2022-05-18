@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonRow, IonSearchbar, IonTitle, IonToolbar, useIonAlert, useIonViewDidEnter } from '@ionic/react';
+import { IonButton, IonButtons, IonCheckbox, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonRow, IonSearchbar, IonTitle, IonToolbar, useIonAlert, useIonViewDidEnter } from '@ionic/react';
 import { useState } from 'react';
 import PasswordStrengthBar from 'react-password-strength-bar';
 
@@ -51,6 +51,8 @@ const CreateAccount: React.FC = () => {
   const [searchText, setSearchText] = useState<string>("");
   const [yourSport, setYourSport] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
+
+  const [over18, setOver18] = useState<boolean>(false);
 
 
   const [validForm, setValidForm] = useState<boolean>(false);
@@ -337,7 +339,7 @@ const CreateAccount: React.FC = () => {
   }
 
 
-  
+  console.log(over18);
 
   return (
     <IonPage>
@@ -385,6 +387,15 @@ const CreateAccount: React.FC = () => {
                         <PasswordStrengthBar className="password-strength" onChangeScore={(score) => { score >= 3 ? setPasswordStrongEnough(true) : setPasswordStrongEnough(false) }} password={password} barColors={['#ddd', '#ef4836', '#ff5722', '#0eb567', '#0EB59A']} />
                         {errorMessages.password && <p className="error-message ion-no-margin"><small>{errorMessages.password}</small></p> }
                       </IonItem>
+                    <div className="" style={{display: 'flex', fontSize: '0.85em', padding: '16px 4px 0', alignItems: 'flex-start'}}>
+                      <div className="" style={{padding: '8px 16px 0 0'}}>
+                        <IonCheckbox className='over-18-checkbox' checked={ over18 } onIonChange={() => setOver18( ! over18 ) } /> 
+                      </div>
+                      <div className=""><label>I confirm I am over the age of 18 or that I have the permission of my parent or gaurdian.</label></div>
+                      
+                    </div>
+                        
+
                     </div>
                   </div>
 
@@ -541,7 +552,7 @@ const CreateAccount: React.FC = () => {
 
                     {stepNumber > 1 ? <IonButton className="arrow previous" onClick={() => doPreviousStep()} expand="block"><Arrow /></IonButton> : <div></div>}
 
-                    <IonButton className="arrow primary-button" onClick={() => doNextStep()} expand="block"><Arrow className="next-arrow" /></IonButton>
+                    <IonButton className="arrow primary-button" onClick={() => { over18 && doNextStep() }} expand="block"><Arrow className="next-arrow" /></IonButton>
 
                   </div>
                   :
