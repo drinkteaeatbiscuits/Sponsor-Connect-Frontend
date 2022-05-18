@@ -8,6 +8,7 @@ import Sidebar from './Sidebar/Sidebar';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import MetaTags from '../../components/MetaTags/MetaTags';
+import useAdminSettings from '../../hooks/useAdminSettings';
 
 export interface props {
 }
@@ -23,11 +24,18 @@ const Profiles: React.FC<props> = (props) => {
 
   const [showSidebar, setShowSidebar] = useState( thelocation?.state?.sidebarOpenOnLoad );
 
+  const {data: settings, isSuccess: settingsSuccess} = useAdminSettings();
+
+	const exampleProfileIds = settingsSuccess && settings?.exampleProfiles.map((profile) => profile.id);
+	const testProfileIds = settingsSuccess && settings?.testProfiles.map((profile) => profile.id);
+
+
   useEffect(() => {
     
-    isSuccess && !profileData && setProfileData(data);
+    isSuccess && settingsSuccess && !profileData && setProfileData(data);
     
   }, [ data ]);
+
 
   // console.log(data);
   return (
@@ -40,7 +48,10 @@ const Profiles: React.FC<props> = (props) => {
         <IonLoading isOpen={isLoading} message="Loading..." />
           
           <Sidebar className={showSidebar ? 'show-sidebar' : ''} 
-          allProfileData={data} 
+          allProfileData={data && data.filter(
+            (profile) => exampleProfileIds && !exampleProfileIds?.includes(profile.id))
+          .filter(
+            (profile) => testProfileIds && !testProfileIds?.includes(profile.id))} 
           profileData={profileData} 
           setData={setProfileData}  />
 
