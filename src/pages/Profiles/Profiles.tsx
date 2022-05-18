@@ -29,12 +29,32 @@ const Profiles: React.FC<props> = (props) => {
 	const exampleProfileIds = settingsSuccess && settings?.exampleProfiles.map((profile) => profile.id);
 	const testProfileIds = settingsSuccess && settings?.testProfiles.map((profile) => profile.id);
 
+  // console.log(exampleProfileIds);
+  // console.log(testProfileIds);
+
+  // settingsSuccess && isSuccess && console.log(data.filter((profile) => exampleProfileIds && !exampleProfileIds?.includes(profile.id)).filter((profile) => testProfileIds && !testProfileIds?.includes(profile.id)));
+
+  isSuccess && settingsSuccess && data.map((profile) => {
+    if(exampleProfileIds?.includes(profile.id)){
+      return false
+    }
+    if(testProfileIds?.includes(profile.id)){
+      return false
+    }
+
+    console.log(profile)
+
+    return profile
+
+  });
 
   useEffect(() => {
     
     isSuccess && settingsSuccess && !profileData && setProfileData(data);
     
   }, [ data ]);
+
+ 
 
 
   // console.log(data);
@@ -48,10 +68,7 @@ const Profiles: React.FC<props> = (props) => {
         <IonLoading isOpen={isLoading} message="Loading..." />
           
           <Sidebar className={showSidebar ? 'show-sidebar' : ''} 
-          allProfileData={data && data.filter(
-            (profile) => exampleProfileIds && !exampleProfileIds?.includes(profile.id))
-          .filter(
-            (profile) => testProfileIds && !testProfileIds?.includes(profile.id))} 
+          allProfileData={data} 
           profileData={profileData} 
           setData={setProfileData}  />
 

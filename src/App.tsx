@@ -530,7 +530,7 @@ const App: React.FC = () => {
               {/* <Route exact path="/profiles">
                 {state.isAuthenticated ? <Profiles /> : (checkUser && <Redirect to="/login" />)}
               </Route> */}
-
+ 
               <Route exact path="/profiles" component={() => state.isAuthenticated ? <Profiles /> : <Login />} />
               
 

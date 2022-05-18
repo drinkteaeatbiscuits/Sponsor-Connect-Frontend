@@ -7,11 +7,10 @@ const useProfile = ( profileId?: any, slug?: any ) => {
 
 	let query = /profiles/ + profileId;
 
-	if(slug){
+	if( slug ){
 		query = '/profiles?slug=' + slug;
 	}
 
-	
 	return useQuery(
 	  ["profile", profileId ? parseInt(profileId) : slug],
 	  async() => {
