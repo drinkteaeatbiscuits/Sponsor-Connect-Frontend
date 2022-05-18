@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonRow, IonSearchbar, IonTitle, IonToolbar, useIonAlert, useIonViewDidEnter } from '@ionic/react';
+import { IonButton, IonButtons, IonCheckbox, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonInput, IonItem, IonLabel, IonList, IonLoading, IonModal, IonPage, IonRow, IonSearchbar, IonTitle, IonToolbar, useIonAlert, useIonViewDidEnter } from '@ionic/react';
 import { useState } from 'react';
 import PasswordStrengthBar from 'react-password-strength-bar';
 
@@ -22,7 +22,7 @@ import VenueSVG from './images/VenueSVG';
 import TeamSVG from './images/TeamSVG';
 import OtherSVG from './images/OtherSVG';
 import EyeSVG from './images/EyeSVG';
-import { logoEuro } from 'ionicons/icons';
+import { chatbubbles, help, logoEuro, mail, search, shareSocial } from 'ionicons/icons';
 import Pound from './images/Pound';
 import MetaTags from '../../components/MetaTags/MetaTags';
 
@@ -52,6 +52,8 @@ const CreateAccount: React.FC = () => {
   const [yourSport, setYourSport] = useState<string>("");
   const [showModal, setShowModal] = useState<boolean>(false);
 
+  const [over18, setOver18] = useState<boolean>(false);
+
 
   const [validForm, setValidForm] = useState<boolean>(false);
   const [errorMessages, setErrorMessages] = useState<any>({
@@ -65,6 +67,8 @@ const CreateAccount: React.FC = () => {
   const [latLong, setLatLong] = useState<any>({});
 
   const [filteredSports, setFilteredSports] = useState<any>(sports);
+
+  const [howDidYouHear, setHowDidYouHear] = useState<string>("");
 
 
 
@@ -80,7 +84,8 @@ const CreateAccount: React.FC = () => {
         email: username,
         password: password,
         yourName: yourName,
-        currency: selectedCurrency
+        currency: selectedCurrency,
+        howDidYouHear: howDidYouHear
       }),
       credentials: "include",
     });
@@ -337,8 +342,7 @@ const CreateAccount: React.FC = () => {
   }
 
 
-  
-
+ 
   return (
     <IonPage>
 
@@ -385,6 +389,15 @@ const CreateAccount: React.FC = () => {
                         <PasswordStrengthBar className="password-strength" onChangeScore={(score) => { score >= 3 ? setPasswordStrongEnough(true) : setPasswordStrongEnough(false) }} password={password} barColors={['#ddd', '#ef4836', '#ff5722', '#0eb567', '#0EB59A']} />
                         {errorMessages.password && <p className="error-message ion-no-margin"><small>{errorMessages.password}</small></p> }
                       </IonItem>
+                    <div className="" style={{display: 'flex', fontSize: '0.85em', padding: '16px 4px 0', alignItems: 'flex-start'}}>
+                      <div className="" style={{padding: '8px 16px 0 0'}}>
+                        <IonCheckbox className='over-18-checkbox' checked={ over18 } onIonChange={() => setOver18( ! over18 ) } /> 
+                      </div>
+                      <div className=""><label>I confirm I am over the age of 18 or that I have the permission of my parent or gaurdian.</label></div>
+                      
+                    </div>
+                        
+
                     </div>
                   </div>
 
@@ -417,7 +430,61 @@ const CreateAccount: React.FC = () => {
                   </div>
                 }
 
-                {stepNumber === 3 &&
+              {stepNumber === 3 &&
+                  <div className="create-account-step select-hear-about-us">
+                    <h1 className="ion-text-center" style={{textTransform: "uppercase"}}>How did you hear <span className="ion-color-primary">about us?</span></h1>
+
+                    <div className="account-for-options">
+                      <div className={howDidYouHear === 'Search Engine' ? 'active account-for-option' : 'account-for-option'}
+                        onClick={() => setHowDidYouHear('Search Engine')}>
+                        <div className="icon"><IonIcon color='primary' icon={search} /></div>
+                        <div className="text">
+                          <p>Search Engine</p>
+                         
+                        </div>
+                      </div>
+                      <div className={howDidYouHear === 'Email Marketing' ? 'active account-for-option' : 'account-for-option'}
+                        onClick={() => setHowDidYouHear('Email Marketing')}>
+                        <div className="icon"><IonIcon color='primary' icon={mail} /></div>
+                        <div className="text">
+                          <p>Email Marketing</p>
+                  
+                        </div>
+                      </div>
+                      <div className={howDidYouHear === 'Social Media' ? 'active account-for-option' : 'account-for-option'}
+                        onClick={() => setHowDidYouHear('Social Media')}>
+                        <div className="icon"><IonIcon color='primary' icon={shareSocial} /></div>
+                        <div className="text">
+                          <p>Social Media</p>
+   
+                        </div>
+                      </div>
+                      <div className={howDidYouHear === 'Word of Mouth' ? 'active account-for-option' : 'account-for-option'}
+                        onClick={() => setHowDidYouHear('Word of Mouth')}>
+                        <div className="icon"><IonIcon color='primary' icon={chatbubbles} /></div>
+                        <div className="text">
+                          <p>Word of Mouth</p>
+
+                        </div>
+                      </div>
+                      <div className={howDidYouHear === 'Other' ? 'active account-for-option' : 'account-for-option'}
+                        onClick={() => setHowDidYouHear('Other')}>
+                        <div className="icon"><IonIcon color='primary' icon={help} /></div>
+                        <div className="text">
+                          <p>Other</p>
+                        </div>
+                      </div>
+
+                      
+
+                    </div>
+                      
+
+
+                  </div>
+                } 
+
+                {stepNumber === 4 &&
                   <div className="create-account-step who-is-this-account-for">
                     <h1 className="ion-text-center">WHO IS THIS <span className="ion-color-primary">ACCOUNT FOR?</span></h1>
 
@@ -457,9 +524,11 @@ const CreateAccount: React.FC = () => {
 
                     </div>
                   </div>
-                }
+                }     
 
-                {stepNumber === 4 &&
+                
+
+                {stepNumber === 5 &&
 
                   <div className="create-account-step">
                     <h1 className="ion-text-center">PROFILE<br /> <span className="ion-color-primary">INFORMATION</span></h1>
@@ -501,10 +570,12 @@ const CreateAccount: React.FC = () => {
                   </div>
                 }
 
+                
+
               </div>
               <div className="create-account-buttons">
 
-                {stepNumber < 4 ?
+                {stepNumber < 5 ?
 
                   <div className="prev-next-buttons">
 
@@ -512,7 +583,7 @@ const CreateAccount: React.FC = () => {
 
                     {stepNumber > 1 ? <IonButton className="arrow previous" onClick={() => doPreviousStep()} expand="block"><Arrow /></IonButton> : <div></div>}
 
-                    <IonButton className="arrow primary-button" onClick={() => doNextStep()} expand="block"><Arrow className="next-arrow" /></IonButton>
+                    <IonButton className="arrow primary-button" onClick={() => { over18 && doNextStep() }} expand="block"><Arrow className="next-arrow" /></IonButton>
 
                   </div>
                   :
