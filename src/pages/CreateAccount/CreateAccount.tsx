@@ -460,6 +460,33 @@ const CreateAccount: React.FC = () => {
                 }
 
                 {stepNumber === 4 &&
+                  <div className="create-account-step select-hear-about-us">
+                    <h1 className="ion-text-center" style={{textTransform: "uppercase"}}>Where did you hear <span className="ion-color-primary">about us</span></h1>
+                    <div className="step-details account-for-options">
+                      <div className={"option account-for-option" + (selectedCurrency === "GBP" ? " active" : "") }
+                      onClick={() => setSelectedCurrency("GBP")}>
+                        <div className="icon">
+                          <Pound className="pound-icon" />
+                        </div>
+                        <div className="text">
+                          <p>Pound Sterling</p>
+                        </div>
+                      </div>
+                      <div className={"option account-for-option" + (selectedCurrency === "EUR" ? " active" : "") }
+                      onClick={() => setSelectedCurrency("EUR")}>
+                        <div className="icon">
+                          <IonIcon color="primary" icon={logoEuro} style={{marginLeft: "-1px"}} />
+                        </div>
+                        <div className="text">
+                          <p>Euro</p>
+                        </div>
+                      </div>
+                    </div>
+
+                  </div>
+                }
+
+                {stepNumber === 5 &&
 
                   <div className="create-account-step">
                     <h1 className="ion-text-center">PROFILE<br /> <span className="ion-color-primary">INFORMATION</span></h1>
@@ -501,10 +528,12 @@ const CreateAccount: React.FC = () => {
                   </div>
                 }
 
+                
+
               </div>
               <div className="create-account-buttons">
 
-                {stepNumber < 4 ?
+                {stepNumber < 5 ?
 
                   <div className="prev-next-buttons">
 
