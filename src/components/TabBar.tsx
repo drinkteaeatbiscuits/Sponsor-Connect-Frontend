@@ -17,9 +17,6 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
     const { state: authState, dispatch } = React.useContext(AuthContext);
 
     const location = useLocation();
-  
-    // console.log(location.pathname);
-
 
 	const doLogout = async () => {
 	
@@ -35,10 +32,6 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
 			  alert( "Error: " + logoutInfo.data[0].messages[0].message );
   
 		  }else{
-			  
-			//   console.log(logoutInfo);
-
-                // history.push('/');
 
               history.push('/');
 
@@ -46,14 +39,13 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
 				type: "LOGOUT"
 			  });
 
-              
-
 			  window.location.reload();
 
 		  }
 
 	  }
 
+      
       const isBusinessAccount = () => {
         return authState.user?.accountType === "Business" ? true : false;
       }
@@ -61,77 +53,37 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
       const isAdminUser = () => {
         return authState.user?.role?.type === 'admin' ? true : false;
       }
-
-    //  console.log(authState)
      
 
 	return <div className="tab-bar">
         
+
+            {  
+            // Logged in Sport
+            authState.isAuthenticated && !isBusinessAccount() && !isAdminUser() && <>
                 <div className="logo-header">
                     <div className="" onClick={()=> history.push("/dashboard")}><SvgScLogoHorizontal /></div>
                 </div>
-                {/* <div className="">
-                    { authState?.mySubscription && authState?.mySubscription?.subscriptionStatus }    
-                </div> */}
                 <div className={ ( activeTab === 'dashboard' && "active " ) + " tab-button"} onClick={()=> history.push("/dashboard")}>
                    <IonIcon icon={speedometer} /> 
                     <IonLabel>Dashboard</IonLabel> 
                     {/* <IonBadge>2</IonBadge>  */}
                 </div>
 
-                {/* <div className={ ( activeTab === 'profiles' && "active " ) + " tab-button"} onClick={()=> history.push("/profiles")}>
-                    <IonIcon icon={personCircle} />
-                    <IonLabel>Profiles</IonLabel>
-                </div>  */}
-
-
-                {isBusinessAccount() ? 
-                <div className={ ( activeTab === 'profiles' && "active " ) + " tab-button"} onClick={()=> history.push("/profiles")}>
-                    <IonIcon icon={personCircle} />
-                    <IonLabel>Profiles</IonLabel>
-                </div>
-                :
-                !isAdminUser() ?
                 <div className={ ( activeTab === 'profile' && "active " ) + " tab-button"} onClick={()=> history.push(authState?.user.profileSlug ? "/" + authState?.user.profileSlug : "/profile/" + authState?.user.profile )}>
                     <IonIcon icon={personCircle} />
                     <IonLabel>Profile</IonLabel>
                 </div>
-                :
-                <div className={ ( activeTab === 'users' && "active " ) + " tab-button"} onClick={()=> history.push("/dashboard/users" )}>
-                    <IonIcon icon={personCircle} />
-                    <IonLabel>Users</IonLabel>
-                </div>
-                }
 
-                { !isBusinessAccount() && !isAdminUser() && <div className={ ( activeTab === 'opportunities' && "active " ) + " tab-button"} onClick={()=> history.push("/opportunities/"  + authState?.user.profile )}>
+                <div className={ ( activeTab === 'opportunities' && "active " ) + " tab-button"} onClick={()=> history.push("/opportunities/"  + authState?.user.profile )}>
                     <IonIcon icon={trailSign} />
                     <IonLabel>Opportunities</IonLabel>
                 </div>
-                }
 
-                { isBusinessAccount() && <div className={ ( activeTab === 'favourites' && "active " ) + " tab-button"} onClick={()=> history.push("/favourites/" )}>
-                    <IonIcon icon={starOutline} />
-                    <IonLabel>Favourites</IonLabel>
-                </div>
-                }
-
-                {isAdminUser() && 
-                <div className={ ( activeTab === 'subscriptions' && "active " ) + " tab-button"} onClick={()=> history.push("/subscriptions")}>
-                    <IonIcon icon={cashOutline} />
-                    <IonLabel>Subscriptions</IonLabel>
-                </div>}
-
-                {isAdminUser() && 
-                <div className={ ( activeTab === 'discounts' && "active " ) + " tab-button"} onClick={()=> history.push("/discounts")}>
-                    <IonIcon icon={pricetagsOutline} />
-                    <IonLabel>Discounts</IonLabel>
-                </div>}
-
-
-               { !isAdminUser() && <div className={ ( activeTab === 'the-dugout' && "active " ) + " tab-button"} onClick={()=> history.push("/the-dugout-categories")}>
+                <div className={ ( activeTab === 'the-dugout' && "active " ) + " tab-button"} onClick={()=> history.push("/the-dugout-categories")}>
                     <IonIcon icon={newspaper} />
                     <IonLabel>The Dugout</IonLabel>
-                </div>}
+                </div>
 
                 <div className={ ( activeTab === 'settings' && "active " ) + " tab-button"} onClick={()=> history.push("/settings")}>
                     <IonIcon icon={settings} />
@@ -143,7 +95,87 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
                     <IonIcon icon={logOut} />
                     <IonLabel>Log Out</IonLabel>
                 </div>
-           
+            
+            </>}
+
+           { // Logged in Business
+            authState.isAuthenticated && isBusinessAccount() && !isAdminUser() && <> 
+                <div className="logo-header">
+                    <div className="" onClick={()=> history.push("/dashboard")}><SvgScLogoHorizontal /></div>
+                </div>
+                <div className={ ( activeTab === 'dashboard' && "active " ) + " tab-button"} onClick={()=> history.push("/dashboard")}>
+                   <IonIcon icon={speedometer} /> 
+                    <IonLabel>Dashboard</IonLabel> 
+                    {/* <IonBadge>2</IonBadge>  */}
+                </div>
+
+                <div className={ ( activeTab === 'profiles' && "active " ) + " tab-button"} onClick={()=> history.push("/profiles")}>
+                    <IonIcon icon={personCircle} />
+                    <IonLabel>Profiles</IonLabel>
+                </div>
+                
+                <div className={ ( activeTab === 'favourites' && "active " ) + " tab-button"} onClick={()=> history.push("/favourites/" )}>
+                    <IonIcon icon={starOutline} />
+                    <IonLabel>Favourites</IonLabel>
+                </div>
+
+                <div className={ ( activeTab === 'the-dugout' && "active " ) + " tab-button"} onClick={()=> history.push("/the-dugout-categories")}>
+                    <IonIcon icon={newspaper} />
+                    <IonLabel>The Dugout</IonLabel>
+                </div>
+
+                <div className={ ( activeTab === 'settings' && "active " ) + " tab-button"} onClick={()=> history.push("/settings")}>
+                    <IonIcon icon={settings} />
+                    <IonLabel>Settings</IonLabel>
+                </div>
+
+                <div className="logout tab-button" onClick={()=> doLogout()}>
+                    <IonIcon icon={logOut} />
+                    <IonLabel>Log Out</IonLabel>
+                </div>
+                
+
+            </>}
+
+
+            { // Logged in Admin
+            authState.isAuthenticated && !isBusinessAccount() && isAdminUser() && <> 
+                <div className="logo-header">
+                    <div className="" onClick={()=> history.push("/dashboard")}><SvgScLogoHorizontal /></div>
+                </div>
+                <div className={ ( activeTab === 'dashboard' && "active " ) + " tab-button"} onClick={() => history.push("/dashboard")}>
+                   <IonIcon icon={speedometer} /> 
+                    <IonLabel>Dashboard</IonLabel> 
+                    {/* <IonBadge>2</IonBadge>  */}
+                </div>
+                <div className={ ( activeTab === 'settings' && "active " ) + " tab-button"} onClick={() => history.push("/settings")}>
+                    <IonIcon icon={settings} />
+                    <IonLabel>Settings</IonLabel>
+                </div>
+                <div className="logout tab-button" onClick={() => doLogout()}>
+                    <IonIcon icon={logOut} />
+                    <IonLabel>Log Out</IonLabel>
+                </div>
+            </>
+            }
+
+            { // Not logged in
+                !authState.isAuthenticated && !isBusinessAccount() && !isAdminUser() && <>
+                    <div className="logo-header">
+                        <div className="" onClick={()=> history.push("/")}><SvgScLogoHorizontal /></div>
+                    </div>
+                   
+                    <div className="signup tab-button" onClick={() => history.push("/")}>
+                        <IonButton style={{margin: '0 8px', minWidth: '150px', '--ripple-color': 'transparent'}} size='small' >Sign Up</IonButton>
+                    </div>
+                     <div className="login tab-button" onClick={() => history.push("/login")}>
+                        <IonButton style={{margin: '0 8px', '--ripple-color': 'transparent', color: 'var(--ion-color-dark)', fontSize: '1em'}} buttonType='link' >Login</IonButton>
+                    </div>
+                    
+                </>
+            }
+
+
 			
 		</div>;
 
