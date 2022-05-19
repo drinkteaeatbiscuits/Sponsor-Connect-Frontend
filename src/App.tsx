@@ -77,6 +77,7 @@ import BuildProfile from './pages/Build Profile/BuildProfile';
 import AdminSettings from './pages/Admin/Settings/AdminSettings';
 import ProfileExamples from './pages/ProfileExamples/ProfileExamples';
 import useProfiles from './hooks/useProflies';
+
 import Protected from './components/Protected/Protected';
 import LoggedIn from './components/LoggedIn/LoggedIn';
 import WhichDashboard from './components/WhichDashboard/WhichDashboard';
@@ -384,6 +385,7 @@ const App: React.FC = () => {
 
             <Switch>
 
+
             
               <Route exact path="/" component={() => <Landing />} />
               
@@ -461,6 +463,7 @@ const App: React.FC = () => {
               
               <Route exact path="/:slug" component={() => <CheckProfile isAdmin={state?.user?.role.type === 'admin'} profileId={ state?.user?.profile }><Profile /></CheckProfile>} />
               
+
               
               <Route>
                 <ErrorPage />

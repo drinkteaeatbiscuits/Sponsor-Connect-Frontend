@@ -11,6 +11,7 @@ const useProfile = ( profileId?: any, slug?: any ) => {
 		query = '/profiles?slug=' + slug;
 	}
 
+
 	return useQuery(
 	  ["profile", profileId ? parseInt(profileId) : slug],
 	  async() => {
