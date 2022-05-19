@@ -87,7 +87,7 @@ const EditProfileDescription: React.FC = () => {
             { profileData.status === "success" && <EditorSection title="Any Other Information" initialEditorContent={ profileData?.data?.anyOtherInfo } editorContent={ anyOtherInfo } setEditorContent={ setAnyOtherInfo } saveContent={() => updateProfile()} /> }
 
             
-           <IonButton className="button-tertiary" expand="block" size="small" onClick={ () => history.push('/profile/' + profileData.data?.id ) } >Back to profile</IonButton>
+           <IonButton className="button-tertiary" expand="block" size="small" onClick={ () => history.push(authState?.user.profileSlug ? "/" + authState?.user.profileSlug : "/profile/" + authState?.user.profile) } >Back to profile</IonButton>
           
             </div>
         </div>
