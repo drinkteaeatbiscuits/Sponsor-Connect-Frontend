@@ -83,6 +83,7 @@ import WhichDashboard from './components/WhichDashboard/WhichDashboard';
 import WhichSettings from './components/WhichSettings/WhichSettings';
 import LoggedInAdmin from './components/LoggedInAdmin/LoggedInAdmin';
 import SubscriptionNeeded from './components/SubscriptionNeeded/SubscriptionNeeded';
+import CheckProfile from './components/CheckProfile/CheckProfile';
  
 
 const tagManagerArgs = {
@@ -346,20 +347,20 @@ const App: React.FC = () => {
   // location?.pathname !== '' &&
 // { console.log(profilesData && profilesData.map(a => a.slug) )}
 
-  let profileSlugs: string[] = [];
+  // let profileSlugs: string[] = [];
 
-  if(isSuccess){
-    for( var i=0; i<profilesData?.length; i++ ){
+  // if(isSuccess){
+  //   for( var i=0; i<profilesData?.length; i++ ){
 
-      profilesData[i].slug && profileSlugs.push( profilesData[i].slug );
+  //     profilesData[i].slug && profileSlugs.push( profilesData[i].slug );
       
-    }
-  }
+  //   }
+  // }
 
   // console.log(profileSlugs);
 
   // const location = useLocation();
- 
+//  console.log(state?.user?.profile);
 
   return (
     <HelmetProvider>  
@@ -389,7 +390,6 @@ const App: React.FC = () => {
               <Route exact path="/dashboard" component={() => <WhichDashboard isLoggedIn={state.isAuthenticated} hasProfile={ state?.user?.profile } isAdmin={state?.user?.role.type === 'admin'}  ></WhichDashboard>} />
               
              
-
               <Route exact path="/sports" component={() => <LoggedIn isLoggedIn={state.isAuthenticated}><OnBoardingSport /></LoggedIn>} />
               <Route exact path="/business" component={() => <LoggedIn isLoggedIn={state.isAuthenticated}><OnBoardingBusiness /></LoggedIn>} />
               <Route exact path="/landing" component={() => <LoggedIn isLoggedIn={state.isAuthenticated}><Landing /></LoggedIn>} />
@@ -459,7 +459,7 @@ const App: React.FC = () => {
               ><DugoutArticle /></SubscriptionNeeded>} />
               
               
-              <Route exact path="/:slug" component={() => <Profile />} />
+              <Route exact path="/:slug" component={() => <CheckProfile isAdmin={state?.user?.role.type === 'admin'} profileId={ state?.user?.profile }><Profile /></CheckProfile>} />
               
               
               <Route>
