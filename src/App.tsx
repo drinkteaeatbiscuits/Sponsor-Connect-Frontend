@@ -77,13 +77,14 @@ import BuildProfile from './pages/Build Profile/BuildProfile';
 import AdminSettings from './pages/Admin/Settings/AdminSettings';
 import ProfileExamples from './pages/ProfileExamples/ProfileExamples';
 import useProfiles from './hooks/useProflies';
+
 import Protected from './components/Protected/Protected';
 import LoggedIn from './components/LoggedIn/LoggedIn';
 import WhichDashboard from './components/WhichDashboard/WhichDashboard';
 import WhichSettings from './components/WhichSettings/WhichSettings';
 import LoggedInAdmin from './components/LoggedInAdmin/LoggedInAdmin';
 import SubscriptionNeeded from './components/SubscriptionNeeded/SubscriptionNeeded';
- 
+
 
 const tagManagerArgs = {
   gtmId: 'GTM-K6H3NN8' 
@@ -383,6 +384,7 @@ const App: React.FC = () => {
 
             <Switch>
 
+
             
               <Route exact path="/" component={() => <Landing />} />
               
@@ -461,6 +463,7 @@ const App: React.FC = () => {
               
               <Route exact path="/:slug" component={() => <Profile />} />
               
+
               
               <Route>
                 <ErrorPage />
