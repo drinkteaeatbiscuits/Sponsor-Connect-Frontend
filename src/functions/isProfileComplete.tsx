@@ -1,6 +1,6 @@
 export default function isProfileComplete (authState) {
 
-	if( authState.user.profileComplete === 100 ){
+	if( authState?.user?.profileComplete === 100 ){
 
 		return { profile: true, opportunity: true }
 

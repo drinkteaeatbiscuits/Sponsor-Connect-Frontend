@@ -389,7 +389,7 @@ const EditProfile: React.FC = () => {
 
               
                     
-              {isSuccessProfile && <IonButton className="button-tertiary" expand="block" size="small" onClick={() => { client.invalidateQueries("profile-" + profileData.id); history.push('/profile/' + profileData.id) }}>Back to Profile</IonButton>}
+              {isSuccessProfile && <IonButton className="button-tertiary" expand="block" size="small" onClick={() => { client.invalidateQueries("profile-" + profileData.id); history.push(authState?.user.profileSlug ? "/" + authState?.user.profileSlug : "/profile/" + authState?.user.profile) }}>Back to Profile</IonButton>}
 
             </div>
 

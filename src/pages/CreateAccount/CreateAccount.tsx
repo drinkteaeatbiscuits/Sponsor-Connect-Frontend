@@ -161,6 +161,8 @@ const CreateAccount: React.FC = () => {
           type: "setUser",
           payload: createAccountInfo
         });
+
+        history.push('/dashboard');
       
       }
 

@@ -136,7 +136,7 @@ const ProfileImages: React.FC = () => {
 					}
 				</div>
 				
-				<IonButton className="button-tertiary" expand="block" size="small" onClick={() => history.push('/profile/' + authState?.user.profile )} >Back to Profile</IonButton>
+				<IonButton className="button-tertiary" expand="block" size="small" onClick={() => history.push(authState?.user.profileSlug ? "/" + authState?.user.profileSlug : "/profile/" + authState?.user.profile )} >Back to Profile</IonButton>
 
 			</div>
 			

@@ -9,14 +9,15 @@ const useOpportunities = ( profileId ) => {
     return useQuery(
       ["opportunities", profileId],
       async () => {
+      
         
-        const opportunitiesResponse = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/opportunities?profile=" + profileId, {
+        const opportunitiesResponse = profileId && await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/opportunities?profile=" + profileId, {
             credentials: 'include'
         });
 
-        const opportunities = await opportunitiesResponse.json();
+        const opportunities = await opportunitiesResponse?.json();
   
-        opportunities.forEach((p:any) => {
+        opportunities && opportunities.forEach((p:any) => {
           client.setQueryData(["opportunity", p.id], p);
         });
   

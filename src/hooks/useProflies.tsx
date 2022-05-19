@@ -4,13 +4,13 @@ import { useQuery, useQueryClient } from 'react-query';
 const useProfiles = (allProfiles?) => {
     const client = useQueryClient();
 
-    let showAllProfiles = '/active-profiles?_limit=-1';  
+    let showAllProfiles = '/active-profiles';  
     if(allProfiles){
       showAllProfiles = '/profiles?_limit=-1';
     }
 
     return useQuery(
-      ["profile"],
+      [ !allProfiles ? "profile" : "allProfiles" ],
       async () => {
 
         const profilesResponse = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + showAllProfiles, {
@@ -20,9 +20,10 @@ const useProfiles = (allProfiles?) => {
         const profiles = await profilesResponse.json();
   
         profiles.forEach((p:any) => {
-          client.setQueryData(["profile", p.id], p);
+          client.setQueryData([ !allProfiles ? "profile" : "allProfiles", p.id], p);
         });
   
+        
         return profiles;
   
       }

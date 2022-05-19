@@ -7,6 +7,7 @@ import { useHistory } from "react-router";
 import { AuthContext } from "../../../App";
 import getProfileOpportunityValues from "../../../functions/getProfileOpportunityValues";
 import useOpportunityValues from "../../../hooks/useOpportunityValues";
+import getLocationPlaceName from "./SidebarFunctions/getLocationPlaceName";
 
 Geocode.setApiKey("AIzaSyBVk9Y4B2ZJG1_ldwkfUPfgcy48YzNTa4Q");
 
@@ -19,7 +20,6 @@ interface SidebarProps {
 	savedActiveFilters?: any;
 }
 
-
 const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	const filters = {
@@ -28,7 +28,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		budget: null
 	};
 
-	const {className, isDashboard, savedActiveFilters, allProfileData, profileData, setData} = SidebarProps;
+	const { className, isDashboard, savedActiveFilters, allProfileData, profileData, setData } = SidebarProps;
 
 	const history = useHistory();
 
@@ -41,37 +41,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const [latLong, setLatLong] = useState<any>({});
 	
 
-	const getLocationPlaceName = (lat, long) => {
-
-		Geocode.fromLatLng(lat, long).then(
-			(response) => {
-			const address = response.results[0].formatted_address;
-			let city, state, country;
-			for (let i = 0; i < response.results[0].address_components.length; i++) {
-				for (let j = 0; j < response.results[0].address_components[i].types.length; j++) {
-				switch (response.results[0].address_components[i].types[j]) {
-					case "locality":
-					city = response.results[0].address_components[i].long_name;
-					break;
-					case "administrative_area_level_1":
-					state = response.results[0].address_components[i].long_name;
-					break;
-					case "country":
-					country = response.results[0].address_components[i].long_name;
-					break;
-				}
-				}
-			}
-
-			setFromLocation({ ...fromLocation, "city": city});
-			
-			},
-			(error) => {
-				console.error(error);
-			}
-		);
-	}
-
 	const distanceGroups = [1, 5, 10, 25, 50, 100, 200, 0];
 	const budgetGroups = [0, 100, 500, 1000, 2500, 5000, 10000, -1];
 
@@ -83,7 +52,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	const [budgetSet, setBudgetSet] = useState(false);
 
-	const [updatingProfiles, setUpdatingProfiles] = useState(true);
+	const [updatingProfiles, setUpdatingProfiles] = useState<boolean>(true);
 
 	const [currentLocation, setCurrentLocation] = useState<any[]>([]);
 
@@ -92,6 +61,8 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const [budget, setBudget] = useState<any>({ lower: 1, upper: 8 });
 	const [budgetGroupCounts, setBudgetGroupCounts] = useState<object>({});
 	const [distanceGroupCounts, setDistanceGroupCounts] = useState<object>({});
+
+	const [mounted, setMounted] = useState(true);
 
 	const [budgetRange, setBudgetRange] = useState<{
 		lower: number;
@@ -232,7 +203,9 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	}
 
 
-	const updateProfiles = async () => {		
+	const updateProfiles = async () => {
+		
+		let mounted = true;
 
 		allProfileData && await setData( allProfileData.filter(profile => {
 
@@ -306,7 +279,9 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 			}
 			// return showProfile;
 
-		}));
+		})
+		
+		)
 
 
 
@@ -382,8 +357,6 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		}));
 
 
-		setUpdatingProfiles(false);
-
 	}
 
 	// console.log(locationRange);
@@ -415,8 +388,9 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	useEffect(() => {
 	
-		allProfileData?.length > 0 && Object.keys(visibleSports).length === 0 && getSportsCounts();
 		
+		allProfileData?.length > 0 && Object.keys(visibleSports).length === 0 && getSportsCounts();
+
 		if( allProfileData && allProfileData?.length > 0 && authState?.currentLocation && currentLocation.length <= 0 ) {
 			
 			setCurrentLocation([authState?.currentLocation]);
@@ -438,7 +412,7 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 				setFromLocation( { lat: position.coords.latitude, long: position.coords.longitude } );
 			});
 	
-			Object.keys(fromLocation).length > 0 && !fromLocation.city && getLocationPlaceName(fromLocation.lat, fromLocation.long);
+			Object.keys(fromLocation).length > 0 && !fromLocation.city && getLocationPlaceName(fromLocation.lat, fromLocation.long, setFromLocation, fromLocation);
 	
 			setUpdatingProfiles(true);
 			// updateProfiles();
@@ -447,10 +421,11 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		currentLocation.length > 0 && setGettingLocation(false);
 
+		
 		if( updatingProfiles && !isDashboard ){
 
-			updateProfiles();
-
+			mounted && updateProfiles()
+			
 		}
 
 		allProfileData && allProfileData?.length > 0 && profileData && Object.keys(profileData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setData(allProfileData);
@@ -464,12 +439,17 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 		// console.log(authState?.currentLocation);
 
+		return () => {
+			setMounted(false); // This worked for me
+		};
+
 
 	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters, visibleSports ])
 	
 
 
 	useIonViewDidEnter(() => {
+		
 		const dualRange = document.querySelectorAll('#dual-range') as any;
 
 		for (let i = 0; i < dualRange.length; ++i) {

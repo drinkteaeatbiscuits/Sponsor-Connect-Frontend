@@ -38,7 +38,7 @@ const Dashboard: React.FC = () => {
     }
   }
 
-  const profileId = authState.user.profile;
+  const profileId = authState?.user?.profile;
 
   const { data: dataProfile, isSuccess: isSuccessProfile } = useProfile( profileId );
   
@@ -64,6 +64,7 @@ const Dashboard: React.FC = () => {
 
   }
   
+  // console.log(dataProfile?.slug);
 
   return (
     <IonPage> 
@@ -145,7 +146,9 @@ const Dashboard: React.FC = () => {
                   </div> 
                 }
 
-              { subscriptionActive() && <CopyToClipboard text={process.env.REACT_APP_PUBLIC_URL + "/profile/view/" + authState?.user?.profile}
+              { subscriptionActive() && <CopyToClipboard 
+              
+                  text={ isSuccessProfile && dataProfile?.slug ? process.env.REACT_APP_PUBLIC_URL + '/' + dataProfile?.slug :  process.env.REACT_APP_PUBLIC_URL + "/profile/view/" + authState?.user?.profile }
                   onCopy={() => { linkCopied()}}>
                   <div className='menu-list-option'>
                     <div className="icon">
@@ -153,7 +156,7 @@ const Dashboard: React.FC = () => {
                     </div>
                     <div className="text">
                       <p className={copied ? "main-text fade-in" : "main-text"}>{ copied ? <span style={{color: "var(--ion-color-primary)"}}>Link Copied</span> : "Your Unique Link" }</p>
-                      <p className="sub-text">{ process.env.REACT_APP_PUBLIC_URL + "/profile/view/" + authState?.user?.profile }</p>
+                      <p className="sub-text">{ isSuccessProfile && dataProfile?.slug ? process.env.REACT_APP_PUBLIC_URL + '/' + dataProfile?.slug :  process.env.REACT_APP_PUBLIC_URL + "/profile/view/" + authState?.user?.profile }</p>
                     </div>
                   </div>
                 </CopyToClipboard>

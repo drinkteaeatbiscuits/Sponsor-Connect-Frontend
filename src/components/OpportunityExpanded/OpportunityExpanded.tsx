@@ -28,6 +28,9 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 	const { isLoading: isDeletingOpportunity, error: deleteOpportunityError, isSuccess: hasDeletedOpportunity, mutateAsync: deleteOpportunityMutation } = useDeleteOpportunity(opportunityData.id);
 	const [showDelete, setShowDelete] = useState(false);
 
+	const isUsersOpportunity = () => {
+
+	}
 
 	const [showShare, setShowShare] = useState(false);
 
@@ -52,15 +55,15 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 			<div className="opportunity-actions">
 
 				<div className="opportunity-back">
-				{ authState?.user.profile === parseInt(opportunityData?.profile.id) ? <p onClick={() => history.push("/opportunities/" + opportunityData.profile.id)}>{"< Back to all opportunities"}</p> 
-				: <p onClick={() => { history.push('/profile/' + opportunityData.profile.id)}}>{"< Back to profile"}</p>}
+					{ authState?.user?.profile === parseInt(opportunityData?.profile?.id) ? <p onClick={() => history.push("/opportunities/" + opportunityData?.profile?.id)}>{"< Back to all opportunities"}</p> 
+					: <p onClick={() => { history.push('/profile/' + opportunityData?.profile?.id)}}>{"< Back to profile"}</p>}
 				</div>
 
 				
 
-				{ authState?.user.profile === parseInt(opportunityData?.profile.id) && <div className="opportunity-owner-actions">
+				{ authState?.user?.profile === parseInt(opportunityData?.profile?.id) && <div className="opportunity-owner-actions">
 
-					{ authState?.user.profile === parseInt(opportunityData?.profile.id) && <div className={'opportunity-status-' + opportunityStatus.toLowerCase()} style={{ 
+					{ authState?.user?.profile === parseInt(opportunityData?.profile.id) && <div className={'opportunity-status-' + opportunityStatus.toLowerCase()} style={{ 
 							fontWeight: 700}}>{ opportunityStatus }</div> }
 
 					{!showDelete && <div className="edit" onClick={() => history.push("/edit-opportunity/" + opportunityData.id, {deletedOpportunity: false})}>Edit</div>}
@@ -102,13 +105,13 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 			}
 
-			{ opportunityStatus != "Active" && authState?.user?.profile !== parseInt(opportunityData.profile.id) && <div className="opportunity-content">
+			{ opportunityStatus != "Active" && authState?.user?.profile !== parseInt(opportunityData?.profile?.id) && <div className="opportunity-content">
 				<div className="opportunity-content-bottom">
 					<h1 className="ion-color-dark line-height-1">Opportunity no longer active.</h1>
 					<p>Unfortunately, this sponsorship opportunity has either expired or been removed.</p>
-					<p>If you are still interested in available opportunities from this profile <span style={{color: 'var(--ion-color-primary', textDecoration: 'underline', cursor: 'pointer'}} onClick={() => { history.push('/profile/' + opportunityData.profile.id)}}>click here.</span></p>
+					<p>If you are still interested in available opportunities from this profile <span style={{color: 'var(--ion-color-primary', textDecoration: 'underline', cursor: 'pointer'}} onClick={() => { history.push('/profile/' + opportunityData?.profile?.id)}}>click here.</span></p>
 					<p>Alternatively, <span style={{color: 'var(--ion-color-primary', textDecoration: 'underline', cursor: 'pointer'}} onClick={() => { 
-								history.push('/profile/' + opportunityData.profile.id, {tab: "contact"})}}>click here to contact this profile.</span></p>
+								history.push('/profile/' + opportunityData?.profile?.id, {tab: "contact"})}}>click here to contact this profile.</span></p>
 				</div>
 
 			</div> } 
@@ -123,14 +126,14 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 					<div className="opportunity-call-to-actions">
 
-					{ authState?.user.profile !== parseInt(opportunityData?.profile.id) && <FavouriteOpportunityButton className="" opportunityId={opportunityData.id} /> }
+					{ authState?.user?.profile !== parseInt(opportunityData?.profile?.id) && <FavouriteOpportunityButton className="" opportunityId={opportunityData?.id} /> }
 
 						<div className="share" onClick={() => setShowShare( showShare ? false : true )}>
 							<IonIcon className=""  icon={shareSocialOutline}></IonIcon>
 						</div>
-						{ authState?.user.profile !== parseInt(opportunityData?.profile.id) && <div className="contact">
+						{ authState?.user?.profile !== parseInt(opportunityData?.profile?.id) && <div className="contact">
 							<IonButton className="contact-button" size="small" onClick={() => { 
-							history.push('/profile/' + opportunityData.profile.id, {tab: "contact"})}} >Contact Now</IonButton>
+							history.push('/profile/' + opportunityData?.profile?.id, {tab: "contact"})}} >Contact Now</IonButton>
 						</div> }
 					</div>
 				</div>
@@ -142,12 +145,12 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 					{opportunityData?.opportunityDescription && <TextEditorContent editorContent={opportunityData?.opportunityDescription} />}
 
-					{opportunityData?.opportunityImages.length > 0 && <ImageGallery images={opportunityData?.opportunityImages} galleryId="Opportunity Images" />}
+					{opportunityData?.opportunityImages?.length > 0 && <ImageGallery images={opportunityData?.opportunityImages} galleryId="Opportunity Images" />}
 			
 
-					{ authState?.user.profile !== parseInt(opportunityData?.profile.id) && <IonButton expand="block" className="interest-button" size="large" 
+					{ authState?.user?.profile !== parseInt(opportunityData?.profile?.id) && <IonButton expand="block" className="interest-button" size="large" 
 						onClick={() => { 
-							history.push('/profile/' + opportunityData.profile.id, {tab: "contact"})} } 
+							history.push('/profile/' + opportunityData?.profile?.id, {tab: "contact"})} } 
 					>Show an interest in this opportunity</IonButton> }
 
 				</div>
@@ -156,7 +159,7 @@ const OpportunityExpanded: React.FC<OpportunityExpandedProps> = (OpportunityExpa
 
 		
 
-		</div>  : <div className="opportunity-deleted"><p style={{fontWeight: 700, fontSize: '24px', letterSpacing: "-0.02em"}}>Opportunity Deleted</p> <p style={{cursor: "pointer"}} onClick={() => history.push("/opportunities/" + opportunityData.profile.id)}>{"< Back to all opportunities"}</p> </div> }
+		</div>  : <div className="opportunity-deleted"><p style={{fontWeight: 700, fontSize: '24px', letterSpacing: "-0.02em"}}>Opportunity Deleted</p> <p style={{cursor: "pointer"}} onClick={() => history.push("/opportunities/" + opportunityData?.profile?.id)}>{"< Back to all opportunities"}</p> </div> }
 
 		
 	</div>

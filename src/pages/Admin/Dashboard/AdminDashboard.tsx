@@ -236,7 +236,7 @@ const AdminDashboard: React.FC = () => {
 											</div>
 										</div>
 										<div className="" style={{padding: '12px', textAlign: 'center', width: columnWidths.id}}>
-											{profile.id}
+											<div style={{cursor: 'pointer'}} onClick={() => { history.push('/profile/' + profile.id )}}>{profile.id}</div>
 										</div>
 										<div className="" style={{padding: '12px', width: columnWidths.profileName}}>
 											<div className="profile-link"
@@ -245,8 +245,11 @@ const AdminDashboard: React.FC = () => {
 												color: 'var(--ion-color-primary)',
 												
 											}}
-											onClick={() => {history.push('/profile/' + profile.id)}}>
-												{profile.profileName}
+											onClick={() => { history.push(
+												profile.slug ? profile.slug : '/profile/' + profile.id
+												
+												)}}>
+												{profile.profileName || profile.id}
 											</div>
 											
 										</div>
