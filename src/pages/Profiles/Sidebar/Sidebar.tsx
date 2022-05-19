@@ -62,6 +62,8 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 	const [budgetGroupCounts, setBudgetGroupCounts] = useState<object>({});
 	const [distanceGroupCounts, setDistanceGroupCounts] = useState<object>({});
 
+	const [mounted, setMounted] = useState(true);
+
 	const [budgetRange, setBudgetRange] = useState<{
 		lower: number;
 		upper: number;
@@ -386,8 +388,9 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 
 	useEffect(() => {
 	
-		allProfileData?.length > 0 && Object.keys(visibleSports).length === 0 && getSportsCounts();
 		
+		allProfileData?.length > 0 && Object.keys(visibleSports).length === 0 && getSportsCounts();
+
 		if( allProfileData && allProfileData?.length > 0 && authState?.currentLocation && currentLocation.length <= 0 ) {
 			
 			setCurrentLocation([authState?.currentLocation]);
@@ -421,9 +424,8 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		
 		if( updatingProfiles && !isDashboard ){
 
-			updateProfiles()
-				
-
+			mounted && updateProfiles()
+			
 		}
 
 		allProfileData && allProfileData?.length > 0 && profileData && Object.keys(profileData).length <= 0 && activeFilters?.sports.length <= 0 && !activeFilters?.distance && setData(allProfileData);
@@ -436,6 +438,10 @@ const Sidebar: React.FC<SidebarProps> = (SidebarProps) => {
 		authState.user.searchNow && filtersLoaded < 2 && loadFilters();
 
 		// console.log(authState?.currentLocation);
+
+		return () => {
+			setMounted(false); // This worked for me
+		};
 
 
 	}, [ allProfileData, authState?.currentLocation, updatingProfiles, activeFilters, visibleSports ])

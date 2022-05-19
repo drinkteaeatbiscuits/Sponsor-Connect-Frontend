@@ -9,6 +9,9 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router';
 import MetaTags from '../../components/MetaTags/MetaTags';
 import useAdminSettings from '../../hooks/useAdminSettings';
+import useActiveProfiles from '../../hooks/useActiveProflies';
+import { AuthContext } from '../../App';
+import React from 'react';
 
 export interface props {
 }
@@ -17,60 +20,37 @@ const Profiles: React.FC<props> = (props) => {
 
   const thelocation = useLocation<any>();
 
-  const {isLoading, data, isSuccess, error} = useProfiles();
+  const { state: authState } = React.useContext(AuthContext);
+
+  const {isLoading, data, isSuccess, error} = useActiveProfiles();
   error && console.log(error);
 
   const [profileData, setProfileData] = useState<any[]>([]);
 
   const [showSidebar, setShowSidebar] = useState( thelocation?.state?.sidebarOpenOnLoad );
 
-  const {data: settings, isSuccess: settingsSuccess} = useAdminSettings();
-
-	const exampleProfileIds = settingsSuccess && settings?.exampleProfiles.map((profile) => profile.id);
-	const testProfileIds = settingsSuccess && settings?.testProfiles.map((profile) => profile.id);
-
-  // console.log(exampleProfileIds);
-  // console.log(testProfileIds);
-
-  // settingsSuccess && isSuccess && console.log(data.filter((profile) => exampleProfileIds && !exampleProfileIds?.includes(profile.id)).filter((profile) => testProfileIds && !testProfileIds?.includes(profile.id)));
-
-  isSuccess && settingsSuccess && data.map((profile) => {
-    if(exampleProfileIds?.includes(profile.id)){
-      return false
-    }
-    if(testProfileIds?.includes(profile.id)){
-      return false
-    }
-
-    console.log(profile)
-
-    return profile
-
-  });
 
   useEffect(() => {
     
-    isSuccess && settingsSuccess && !profileData && setProfileData(data);
+    isSuccess && !profileData && setProfileData(data);
     
   }, [ data ]);
 
  
-
-
-  // console.log(data);
   return (
     <IonPage>
 
       <MetaTags title={'Profiles | Sponsor Connect'} path={'/profiles/'} description={'Sponsor Connect profiles.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
 
       <TabBar activeTab='profiles' />
-      <IonContent className="profiles-content" fullscreen>
+      { authState.isAuthenticated ? <IonContent className="profiles-content" fullscreen>
         <IonLoading isOpen={isLoading} message="Loading..." />
           
-          <Sidebar className={showSidebar ? 'show-sidebar' : ''} 
+        
+          { isSuccess && <Sidebar className={showSidebar ? 'show-sidebar' : ''} 
           allProfileData={data} 
           profileData={profileData} 
-          setData={setProfileData}  />
+          setData={setProfileData}  /> }
 
           <div className="toggle-sidebar-button" >
            
@@ -88,7 +68,10 @@ const Profiles: React.FC<props> = (props) => {
                 }) }
 
           </div>
+      </IonContent> : <IonContent>
+              <p>Login</p>
       </IonContent>
+    }
     </IonPage>
   );
 };
