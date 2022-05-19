@@ -78,8 +78,16 @@ import AdminSettings from './pages/Admin/Settings/AdminSettings';
 import ProfileExamples from './pages/ProfileExamples/ProfileExamples';
 import useProfiles from './hooks/useProflies';
 
+import Protected from './components/Protected/Protected';
+import LoggedIn from './components/LoggedIn/LoggedIn';
+import WhichDashboard from './components/WhichDashboard/WhichDashboard';
+import WhichSettings from './components/WhichSettings/WhichSettings';
+import LoggedInAdmin from './components/LoggedInAdmin/LoggedInAdmin';
+import SubscriptionNeeded from './components/SubscriptionNeeded/SubscriptionNeeded';
+
+
 const tagManagerArgs = {
-  gtmId: 'GTM-K6H3NN8'
+  gtmId: 'GTM-K6H3NN8' 
 }
 
 process.env.NODE_ENV === "production" && TagManager.initialize(tagManagerArgs)
@@ -368,7 +376,7 @@ const App: React.FC = () => {
           
           <IonReactRouter>
            
-            { state?.user?.profile &&  <Notifications /> }
+            { state?.user?.profile && <Notifications /> }
 
             <ScrollToTop />
 
@@ -376,194 +384,86 @@ const App: React.FC = () => {
 
             <Switch>
 
+
             
+              <Route exact path="/" component={() => <Landing />} />
               
-              <Route exact path="/">
-               <Landing />
-                {/* { state.isAuthenticated ? <Redirect to="/dashboard" /> : <Landing /> } */}
-              </Route>
+              <Route exact path="/dashboard" component={() => <WhichDashboard isLoggedIn={state.isAuthenticated} hasProfile={ state?.user?.profile } isAdmin={state?.user?.role.type === 'admin'}  ></WhichDashboard>} />
               
-              <Route exact path="/dashboard" component={() => state.isAuthenticated ? ( state.user.profile ? <Dashboard /> : (state?.user?.role.type === 'admin' ? <AdminDashboard />  : <DashboardBusiness />) ) : ( checkUser && <Redirect to="/login" /> )} />
-              {/* { state.isAuthenticated && <Dashboard /> } */}
-
-                {/* { state.isAuthenticated ? ( state.user.profile ? <Dashboard /> : (state?.user?.role.type === 'admin' ? <AdminDashboard />  : <DashboardBusiness />) ) : ( checkUser && <Redirect to="/login" /> ) } */}
-
-              {/* </Route> */}
-               
-              
-              {/* <Route exact path="/:slug" render={(props) => {
-                if(isSuccess && profileSlugs.includes(props.match.params.slug)){
-                  return <Profile />
-                }else{
-                  return <Redirect to={"/" + props.match.params.slug} />
-                }
-              }} /> */}
-
-
-              <Route path="/sports" component={() => state.isAuthenticated ? <Redirect to="/dashboard" /> : <OnBoardingSport />} />
              
 
-              <Route path="/business">
-                {state.isAuthenticated ? <Redirect to="/dashboard" /> : <OnBoardingBusiness />}
-              </Route>
+              <Route exact path="/sports" component={() => <LoggedIn isLoggedIn={state.isAuthenticated}><OnBoardingSport /></LoggedIn>} />
+              <Route exact path="/business" component={() => <LoggedIn isLoggedIn={state.isAuthenticated}><OnBoardingBusiness /></LoggedIn>} />
+              <Route exact path="/landing" component={() => <LoggedIn isLoggedIn={state.isAuthenticated}><Landing /></LoggedIn>} />
+              <Route exact path="/create-account-sports" component={() => <LoggedIn isLoggedIn={state.isAuthenticated}><CreateAccount /></LoggedIn>} />
+              <Route exact path="/create-account-business" component={() => <LoggedIn isLoggedIn={state.isAuthenticated}><CreateAccountBusiness /></LoggedIn>} />
+              <Route exact path="/login" component={() => <LoggedIn isLoggedIn={state.isAuthenticated}><Login /></LoggedIn>} />
 
-              <Route path="/landing">
-                {state.isAuthenticated ? <Redirect to="/dashboard" /> : <Landing />}
-              </Route>
+              {
+                // Unprotected Routes
+              }
 
-              <Route path="/create-account-sports">
-                {state.isAuthenticated ? <Redirect to="/dashboard" /> : <CreateAccount />}
-              </Route> 
-
-              <Route path="/create-account-business">
-                {state.isAuthenticated ? <Redirect to="/dashboard" /> : <CreateAccountBusiness />}
-              </Route> 
-
+              <Route exact path="/profile/view/:id" component={() => <Profile />} />
+              <Route exact path="/profile/:id" component={() => <Profile />} />
+              <Route exact path="/opportunities/:id" component={() => <Opportunities />} />
+              <Route exact path="/opportunity/:id" component={() => <Opportunity />} />
+              <Route exact path="/reset-password" component={() => <ResetPassword/>} />
+              <Route exact path="/forgot-password" component={() => <ForgotPassword/>} />
               
+              {
+                // Protected Routes
+              }
 
-              <Route exact path="/favourites">
-
-                { state.isAuthenticated ? <Favourites /> : ( checkUser && <Redirect to="/login" /> ) }
-
-              </Route>
-
-              <Route exact path="/login">
-                { state.isAuthenticated ? <Redirect to="/dashboard" /> : ( checkUser && <Login />) }
-              </Route>
-
-              <Route exact path="/profile/view/:id">
-                  <Profile />
-              </Route>
-
-
-               <Route exact path="/profile/:id">
-                {state.isAuthenticated ? <Profile /> : (checkUser && <Redirect to="/login" />)}
-                </Route> 
-
-               <Route exact path="/profile/:id/edit">
-                {state.isAuthenticated ? <EditProfile /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
-
-               <Route exact path="/profile/:id/build">
-                {state.isAuthenticated ? <BuildProfile /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
-
-               <Route exact path="/manage-profile-images">
-                {state.isAuthenticated ? <ProfileImages /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
-
-               <Route exact path="/edit-profile-description">
-                {state.isAuthenticated ? <EditProfileDescription /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
+              <Route exact path="/favourites" component={() => <Protected isLoggedIn={state.isAuthenticated}><Favourites /></Protected>} />
+              <Route exact path="/profile/:id/edit" component={() => <Protected isLoggedIn={state.isAuthenticated}><EditProfile /></Protected>} />
+              <Route exact path="/profile/:id/build" component={() => <Protected isLoggedIn={state.isAuthenticated}><BuildProfile /></Protected>} />
+              <Route exact path="/manage-profile-images" component={() => <Protected isLoggedIn={state.isAuthenticated}><ProfileImages /></Protected>} />
+              <Route exact path="/edit-profile-description" component={() => <Protected isLoggedIn={state.isAuthenticated}><EditProfileDescription /></Protected>} />
+              <Route exact path="/add-opportunity/:id" component={() => <Protected isLoggedIn={state.isAuthenticated}><AddOpportunity /></Protected>} />
+              <Route exact path="/edit-opportunity/:id" component={() => <Protected isLoggedIn={state.isAuthenticated}><EditOpportunity /></Protected>} />
+              <Route exact path="/search-opportunities" component={() => <Protected isLoggedIn={state.isAuthenticated}><SearchOpportunities /></Protected>} />
+              <Route exact path="/settings/billing" component={() => <Protected isLoggedIn={state.isAuthenticated}><Billing /></Protected>} />
+              <Route exact path="/subscribe" component={() => <Protected isLoggedIn={state.isAuthenticated}><Subscribe /></Protected>} />
+              <Route exact path="/settings/subscription" component={() => <Protected isLoggedIn={state.isAuthenticated}><Subscription /></Protected>} />
+              <Route exact path="/settings/account" component={() => <Protected isLoggedIn={state.isAuthenticated}><Account /></Protected>} />
+              <Route exact path="/settings/notifications" component={() => <Protected isLoggedIn={state.isAuthenticated}><NotificationSettings /></Protected>} />
+              <Route exact path="/example-profiles" component={() => <Protected isLoggedIn={state.isAuthenticated} ><ProfileExamples /></Protected>} />
+              <Route exact path="/profiles" component={() => <Protected isLoggedIn={state.isAuthenticated}><Profiles /></Protected>} />
+              <Route exact path="/book-consultation" component={() => <Protected isLoggedIn={state.isAuthenticated}><BookConsultation /></Protected>} />
               
-               <Route exact path="/opportunities/:id">
-                {state.isAuthenticated ? <Opportunities /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
-
-              <Route exact path="/opportunity/:id">
-                {state.isAuthenticated ? <Opportunity /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
-
-              <Route exact path="/add-opportunity/:id">
-                {state.isAuthenticated ? <AddOpportunity /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
-
-              <Route exact path="/edit-opportunity/:id">
-                {state.isAuthenticated ? <EditOpportunity /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
-
-              <Route exact path="/search-opportunities">
-                {state.isAuthenticated ? <SearchOpportunities /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
+              <Route exact path="/settings" component={() => <WhichSettings isLoggedIn={state.isAuthenticated} isAdmin={state?.user?.role.type === 'admin'}><Settings /></WhichSettings>} />
               
-              <Route exact path="/settings/billing">
-                {state.isAuthenticated ? <Billing /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
-
-              <Route exact path="/subscribe">
-                {state.isAuthenticated ? <Subscribe /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
-
-              <Route exact path="/settings/subscription">
-                {state.isAuthenticated ? <Subscription /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
-
-              <Route exact path="/settings/account">
-                {state.isAuthenticated ? <Account /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
-
-              <Route exact path="/settings/notifications">
-                {state.isAuthenticated ? <NotificationSettings /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
+              <Route exact path="/subscriptions" component={() => <LoggedInAdmin isLoggedIn={state.isAuthenticated} isAdmin={state?.user?.role.type === 'admin'}><Subscriptions /></LoggedInAdmin>} />
+              <Route exact path="/dashboard/users" component={() => <LoggedInAdmin isLoggedIn={state.isAuthenticated} isAdmin={state?.user?.role.type === 'admin'}><Users /></LoggedInAdmin>} />
+              <Route exact path="/discounts" component={() => <LoggedInAdmin isLoggedIn={state.isAuthenticated} isAdmin={state?.user?.role.type === 'admin'}><Discounts /></LoggedInAdmin>} />
               
-              <Route exact path="/settings">
-                {state.isAuthenticated ? ( state?.user?.role.type === 'admin' ? <AdminSettings/> : <Settings /> ) : (checkUser && <Redirect to="/login" />)}
-              </Route>
-
-              <Route exact path="/reset-password">
-                <ResetPassword />
-              </Route>
-
-              <Route exact path="/forgot-password">
-                <ForgotPassword /> 
-              </Route>
-
-              <Route exact path="/profiles">
-                {state.isAuthenticated ? <Profiles /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
-
-              <Route exact path="/example-profiles">
-                {state.isAuthenticated ? <ProfileExamples /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
-
-
-              <Route exact path="/subscriptions">
-                {state.isAuthenticated && state?.user?.role.type === 'admin' ? <Subscriptions /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
-
-              <Route exact path="/dashboard/users">
-                {state.isAuthenticated && state?.user?.role.type === 'admin' ? <Users /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
-
-              <Route exact path="/discounts">
-                {state.isAuthenticated && state?.user?.role.type === 'admin' ? <Discounts /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
-
-              <Route exact path="/book-consultation">
-                {state.isAuthenticated ? <BookConsultation /> : (checkUser && <Redirect to="/login" />)}
-              </Route>
-
-
-              {/* <Route exact path="/admin/news-feed">
-                <NewsArticles />
-              </Route> */}
-
               
+              <Route exact path="/the-dugout" component={() => <SubscriptionNeeded 
+              isLoggedIn={state.isAuthenticated} 
+              isAdmin={state?.user?.role.type === 'admin'}
+              isBusiness={ accountType === "Business" }
+              activeSubscription={ activeSubscription }
+              ><DugoutArticles /></SubscriptionNeeded>} />
 
-              <Route exact path="/the-dugout">
+              <Route exact path="/the-dugout-categories" component={() => <SubscriptionNeeded 
+              isLoggedIn={state.isAuthenticated} 
+              isAdmin={state?.user?.role.type === 'admin'}
+              isBusiness={ accountType === "Business" }
+              activeSubscription={ activeSubscription }
+              ><DugoutCategories /></SubscriptionNeeded>} />
+
+
+              <Route exact path="/the-dugout/:slug" component={() => <SubscriptionNeeded 
+              isLoggedIn={state.isAuthenticated} 
+              isAdmin={state?.user?.role.type === 'admin'}
+              isBusiness={ accountType === "Business" }
+              activeSubscription={ activeSubscription }
+              ><DugoutArticle /></SubscriptionNeeded>} />
               
-                {state.isAuthenticated ? ((activeSubscription || accountType === "Business") ? <DugoutArticles /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
-                
-              </Route>
-
-              <Route exact path="/the-dugout-categories">
-                
-                {state.isAuthenticated ? ((activeSubscription || accountType === "Business") ? <DugoutCategories /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
-
-              </Route>
               
-              <Route exact path="/the-dugout/:slug">
-                
-                {state.isAuthenticated ? ((activeSubscription || accountType === "Business") ? <DugoutArticle /> : <PleaseSubscribe /> ) : (checkUser && <Redirect to="/login" />)}
-                
-              </Route>
-
-
               <Route exact path="/:slug" component={() => <Profile />} />
-           
               
 
-              
               
               <Route>
                 <ErrorPage />

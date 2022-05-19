@@ -40,9 +40,13 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
 
                 // history.push('/');
 
+              history.push('/');
+
 			  dispatch && dispatch({
 				type: "LOGOUT"
 			  });
+
+              
 
 			  window.location.reload();
 

@@ -23,7 +23,6 @@ const Login: React.FC<props> = () => {
 
   const doLogin = async () => {
 
-
     const loginResp = await fetch((process.env.NODE_ENV === "development" ? 'http://localhost:1337' : process.env.REACT_APP_API_URL) + "/auth/local", {
       method: "POST",
       headers: {
@@ -53,6 +52,8 @@ const Login: React.FC<props> = () => {
         type: "setUser",
         payload: loginInfo
       });
+
+      // history.push('/dashboard');
 
     }
   }
