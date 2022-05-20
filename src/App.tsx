@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { IonReactRouter } from '@ionic/react-router';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import { Helmet } from 'react-helmet-async';
 
 import TagManager from 'react-gtm-module';
 
@@ -363,10 +364,11 @@ const App: React.FC = () => {
 //  console.log(state?.user?.profile);
 
   return (
-    <HelmetProvider>  
+     
     <IonApp>
+      
       <Elements stripe={stripePromise}>
-
+      
         <AuthContext.Provider
           value={{
             state,
@@ -374,9 +376,17 @@ const App: React.FC = () => {
           }}
         >
           
+      <Helmet prioritizeSeoTags>
+        <title  data-react-helmet='true'>Sponsor Connect | Optimising Sponsorship Potential</title>
+        <meta name="description" content="Our professional subscription-based platform is modestly tailored to your sporting needs, making it simpler than ever to showcase your upcoming sponsor opportunities." data-react-helmet='true' />
+        <meta property="og:title" content='Sponsor Connect | Optimising Sponsorship Potential' data-rh="true" data-react-helmet='true' />
+        <meta property="og:description" content='Our professional subscription-based platform is modestly tailored to your sporting needs, making it simpler than ever to showcase your upcoming sponsor opportunities.' data-rh="true"  data-react-helmet='true' /> 
+        <meta property="og:image" content='https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg' data-rh="true"  data-react-helmet='true' />
+      </Helmet>
+          
           <IonReactRouter>
            
-            { state?.user?.profile && <Notifications /> }
+            {/* { state?.user?.profile && <Notifications /> } */}
 
             <ScrollToTop />
 
@@ -385,7 +395,6 @@ const App: React.FC = () => {
             <Switch>
 
 
-            
               <Route exact path="/" component={() => <Landing />} />
               
               <Route exact path="/dashboard" component={() => <WhichDashboard isLoggedIn={state.isAuthenticated} hasProfile={ state?.user?.profile } isAdmin={state?.user?.role.type === 'admin'}  ></WhichDashboard>} />
@@ -477,7 +486,7 @@ const App: React.FC = () => {
         
       </Elements>
     </IonApp>
-    </HelmetProvider>
+    
   )
 };
 
