@@ -93,12 +93,13 @@ const tagManagerArgs = {
 
 process.env.NODE_ENV === "production" && TagManager.initialize(tagManagerArgs)
 
-
 Geocode.setApiKey(process.env.REACT_APP_GEOCODE_API_KEY);
+
 
 let stripePK = "";
 process.env.REACT_APP_STRIPE_PK && (stripePK = process.env.REACT_APP_STRIPE_PK);
 const stripePromise = loadStripe(stripePK);
+
 
 export const AuthContext = React.createContext<{
   state?: any;
@@ -114,7 +115,6 @@ const initialState = {
 };
 
 const reducer = (state: any, action: any) => {
-
   switch (action.type) {
     case "LOGIN":
       let isAuthenticated = false;
@@ -183,7 +183,6 @@ const reducer = (state: any, action: any) => {
       }
     }
     case "updateProfileComplete": {
-      // console.log(action.payload);
       state.user.profileComplete = action.payload.profileComplete
       state.user.profileCompletionList = action.payload.profileCompletionList
       return {
@@ -192,7 +191,6 @@ const reducer = (state: any, action: any) => {
     }
 
     default:
-
     return state;
   }
 };
@@ -216,59 +214,61 @@ const checkIfAuthenticated = async () => {
 
 const App: React.FC = () => {
 
-  const getLocationPlaceName = (lat, long) => {
+  // const getLocationPlaceName = (lat, long) => {
 
-    setCheckingLocationPlaceName(true);
+  //   setCheckingLocationPlaceName(true);
 
-		Geocode.fromLatLng(lat, long).then(
-			(response) => {
-			const address = response.results[0].formatted_address;
-			let city, state, country;
-			for (let i = 0; i < response.results[0].address_components.length; i++) {
-				for (let j = 0; j < response.results[0].address_components[i].types.length; j++) {
-				switch (response.results[0].address_components[i].types[j]) {
-					case "locality":
-					city = response.results[0].address_components[i].long_name;
-					break;
-					case "administrative_area_level_1":
-					state = response.results[0].address_components[i].long_name;
-					break;
-					case "country":
-					country = response.results[0].address_components[i].long_name;
-					break;
-				}
-				}
-			}
+	// 	Geocode.fromLatLng(lat, long).then(
+	// 		(response) => {
+	// 		const address = response.results[0].formatted_address;
+	// 		let city, state, country;
+	// 		for (let i = 0; i < response.results[0].address_components.length; i++) {
+	// 			for (let j = 0; j < response.results[0].address_components[i].types.length; j++) {
+	// 			switch (response.results[0].address_components[i].types[j]) {
+	// 				case "locality":
+	// 				city = response.results[0].address_components[i].long_name;
+	// 				break;
+	// 				case "administrative_area_level_1":
+	// 				state = response.results[0].address_components[i].long_name;
+	// 				break;
+	// 				case "country":
+	// 				country = response.results[0].address_components[i].long_name;
+	// 				break;
+	// 			}
+	// 			}
+	// 		}
 
-			setFromLocation({ ...fromLocation, "city": city});
+	// 		setFromLocation({ ...fromLocation, "city": city});
 			
-			},
-			(error) => {
-				console.error(error);
-			}
-		);
-	}
+	// 		},
+	// 		(error) => {
+	// 			console.error(error);
+	// 		}
+	// 	);
+	// }
 
-  const doesLocationCookieExist = () => {
+  // const doesLocationCookieExist = () => {
 
-    if (document.cookie.split(';').some((item) => item.trim().startsWith('user_location='))) {
-      return true;
-    }
-    return false;
+  //   if (document.cookie.split(';').some((item) => item.trim().startsWith('user_location='))) {
+  //     return true;
+  //   }
+  //   return false;
 
-  }
-
-  const {isLoading, data: profilesData, isSuccess, error} = useProfiles(true);
+  // }
 
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const [wasUserHere, setWasUserHere] = useState<any>("");
-  const [currentLocation, setCurrentLocation] = useState<any>("");
-  const [fromLocation, setFromLocation] = useState<any>({});
-  const [checkUser, setCheckUser] = useState<any>(false);
-  const [checkingLocation, setCheckingLocation] = useState<any>(false);
-  const [checkingLocationPlaceName, setCheckingLocationPlaceName] = useState<any>(false);
-  const { data: mySubscription, isSuccess: subscriptionSuccess, error: subscriptionError, refetch: refetchMySubscription } = useMySubscription();
+  
+  // const [currentLocation, setCurrentLocation] = useState<any>("");
+  // const [fromLocation, setFromLocation] = useState<any>({});
+  // const [checkingLocation, setCheckingLocation] = useState<any>(false);
+  // const [checkingLocationPlaceName, setCheckingLocationPlaceName] = useState<any>(false);
 
+
+  const [checkUser, setCheckUser] = useState<any>(false);
+  
+
+  const { data: mySubscription, isSuccess: subscriptionSuccess, error: subscriptionError, refetch: refetchMySubscription } = useMySubscription();
   const [activeSubscription, setActiveSubscription] = useState(false);
   const [accountType, setAccountType] = useState('');
 
@@ -302,36 +302,35 @@ const App: React.FC = () => {
 
     } );
 
-
     subscriptionSuccess && mySubscription.length > 0 && (state.mySubscription = mySubscription[0]);
 
     subscriptionActive();
-
     businessAccount();
 
-    !doesLocationCookieExist() && !checkingLocation && currentLocation.length <= 0 && navigator.geolocation.getCurrentPosition(function(position) {
+
+    // !doesLocationCookieExist() && !checkingLocation && currentLocation.length <= 0 && navigator.geolocation.getCurrentPosition(function(position) {
     
-      setCurrentLocation([
-        {"lat": position.coords.latitude, "long": position.coords.longitude}
-      ]);
+    //   setCurrentLocation([
+    //     {"lat": position.coords.latitude, "long": position.coords.longitude}
+    //   ]);
     
-      setFromLocation( { lat: position.coords.latitude, long: position.coords.longitude } );
+    //   setFromLocation( { lat: position.coords.latitude, long: position.coords.longitude } );
 
-      setCheckingLocation(true);
+    //   setCheckingLocation(true);
 
-    });
+    // });
 
-    !doesLocationCookieExist() && !checkingLocationPlaceName && Object.keys(fromLocation).length > 0 && !fromLocation.city && getLocationPlaceName(fromLocation.lat, fromLocation.long);
+    // !doesLocationCookieExist() && !checkingLocationPlaceName && Object.keys(fromLocation).length > 0 && !fromLocation.city && getLocationPlaceName(fromLocation.lat, fromLocation.long);
 
-    !doesLocationCookieExist() && Object.keys(fromLocation).length > 0 && fromLocation.city && (initialState.currentLocation = fromLocation);
+    // !doesLocationCookieExist() && Object.keys(fromLocation).length > 0 && fromLocation.city && (initialState.currentLocation = fromLocation);
 
-    !doesLocationCookieExist() && Object.keys(fromLocation).length > 0 && fromLocation.city && (document.cookie = "user_location=" + JSON.stringify({lat: fromLocation.lat, long: fromLocation.long, city: fromLocation.city }) + ";max-age=" + 60*60*24 );
+    // !doesLocationCookieExist() && Object.keys(fromLocation).length > 0 && fromLocation.city && (document.cookie = "user_location=" + JSON.stringify({lat: fromLocation.lat, long: fromLocation.long, city: fromLocation.city }) + ";max-age=" + 60*60*24 );
 
     // doesLocationCookieExist() && Object.keys(fromLocation).length <= 0 && setFromLocation(JSON.parse( document.cookie.split('; ').find(row => row.startsWith('user_location='))?.split('=')[1] || "" ));
     
-    doesLocationCookieExist() && (initialState.currentLocation = JSON.parse( document.cookie.split('; ').find(row => row.startsWith('user_location='))?.split('=')[1] || "" ));
+    // doesLocationCookieExist() && (initialState.currentLocation = JSON.parse( document.cookie.split('; ').find(row => row.startsWith('user_location='))?.split('=')[1] || "" ));
 
-  }, [currentLocation, fromLocation, state.isAuthenticated, doesLocationCookieExist(), mySubscription, state.mySubscription]);
+  }, [ state.isAuthenticated, mySubscription, state.mySubscription]);
 
   wasUserHere && (initialState.isAuthenticated = true);
   wasUserHere && (initialState.user = wasUserHere);
