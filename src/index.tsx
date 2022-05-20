@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider} from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
+import { HelmetProvider } from 'react-helmet-async';
 
 
 const queryClient = new QueryClient();
@@ -14,8 +15,11 @@ const queryClient = new QueryClient();
 ReactDOM.render(
     <QueryClientProvider client={queryClient}>
       <React.StrictMode> 
+          <HelmetProvider>
             <App />
+          </HelmetProvider>
             <ReactQueryDevtools />
+
       </React.StrictMode>
     </QueryClientProvider>,
   document.getElementById('root')
