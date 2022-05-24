@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Helmet } from 'react-helmet-async';
+import { env } from "process";
 
 interface props {
 	title?: any;
@@ -20,6 +21,8 @@ const MetaTags: React.FC<props> = (props) => {
   // console.log(pathname);
   // console.log(path);
 
+
+
   useEffect(() => {
 
         setMetaTitle(pathname === path ? title : '');
@@ -28,6 +31,7 @@ const MetaTags: React.FC<props> = (props) => {
   
       }, [pathname]);
 
+      
 
   return <> 
 
@@ -40,6 +44,9 @@ const MetaTags: React.FC<props> = (props) => {
 
             { metaDescription && metaDescription.length > 0 && <meta property="og:description" content={ metaDescription } data-rh="true"  data-react-helmet='true' /> }
             { metaImage && metaImage.length > 0 && <meta property="og:image" content={ metaImage } data-rh="true"  data-react-helmet='true' /> }
+
+            <meta property="og:url" content={process.env.REACT_APP_PUBLIC_URL + pathname} data-react-helmet='true' />
+            <meta property="og:type" content='website' data-react-helmet='true' />
 
         </Helmet>
   </>

@@ -40,6 +40,8 @@ const Profile: React.FC = () => {
 
   const thelocation = useLocation<any>();
 
+  
+
   const params = useParams<ParamTypes>();
   const slug = params.slug;
 	const history = useHistory();
