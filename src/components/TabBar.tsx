@@ -148,6 +148,11 @@ const TabBar: React.FC<TabBarProps> = ({ activeTab }: TabBarProps ) => {
                     <IonLabel>Dashboard</IonLabel> 
                     {/* <IonBadge>2</IonBadge>  */}
                 </div>
+                <div className={ ( activeTab === 'users' && "active " ) + " tab-button"} onClick={() => history.push("/dashboard/users")}>
+                   <IonIcon icon={personCircle} /> 
+                    <IonLabel>Users</IonLabel> 
+                    {/* <IonBadge>2</IonBadge>  */}
+                </div>
                 <div className={ ( activeTab === 'settings' && "active " ) + " tab-button"} onClick={() => history.push("/settings")}>
                     <IonIcon icon={settings} />
                     <IonLabel>Settings</IonLabel>
