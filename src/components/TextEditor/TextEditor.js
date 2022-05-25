@@ -46,38 +46,40 @@ class TextEditor extends React.Component {
 	this.toggleInlineStyle = (style) => this._toggleInlineStyle(style);
 	this.clearContent = () => this._clearContent();
 	
-
 	
   }
 
   
-  
-
-  componentDidUpdate(prevProps) {
-
-	// console.log(prevProps);
-
-	if ( prevProps.initialText !== this.props.initialText ) {
-
-		// console.log('load initial text');
-
-		this.setState({
-			editorState: EditorState.createWithContent( this.props.initialText ),
-			initialTextLoaded: true
-		  });
-	
-	}
-
-	if( this.props.textEditorText === null && this.state.editorState.getCurrentContent().hasText() ){
-
-	  this.clearContent();
-	
-	}
-
-
+  componentDidMount(){
+	this.setState({
+		editorState: EditorState.createWithContent( this.props.initialText ),
+		initialTextLoaded: true
+	});
   }
 
-  
+//   componentDidUpdate(prevProps) {
+
+// 	// console.log(prevProps);
+
+// 	if ( prevProps.initialText !== this.props.initialText ) {
+
+// 		// console.log('load initial text');
+
+// 		this.setState({
+// 			editorState: EditorState.createWithContent( this.props.initialText ),
+// 			initialTextLoaded: true
+// 		  });
+	
+// 	}
+
+// 	if( this.props.textEditorText === null && this.state.editorState.getCurrentContent().hasText() ){
+
+// 	  this.clearContent();
+	
+// 	}
+
+
+//   }
 
 
   _handleReturn(command) {
