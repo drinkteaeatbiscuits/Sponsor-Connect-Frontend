@@ -33,8 +33,10 @@ class TextEditor extends React.Component {
 
 	this.focus = () => this.inputRef.current.focus();
 	this.onChange = (editorState) => {
-		this.setState({editorState})
-		// props.setTextEditorText({editorState});
+
+		this.setState({editorState});
+		
+		props.setTextEditorText({editorState});
 
 		props.setTextEditorText( editorState.getCurrentContent() );
 	};
@@ -51,6 +53,8 @@ class TextEditor extends React.Component {
 
   
   componentDidMount(){
+	 
+	  
 	this.setState({
 		editorState: EditorState.createWithContent( this.props.initialText ),
 		initialTextLoaded: true

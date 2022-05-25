@@ -27,7 +27,7 @@ const EditorSection: React.FC<EditorSectionProps> = (EditorSectionProps) => {
 
 			<div className="editor-section-top-buttons">
 
-				{!showEditor ? <div className="editor-section-button" onClick={() => {setShowEditor(true); setEditorContent(initialEditorContent)}}>{initialEditorContent ? "Edit" : "Add"}</div> :
+				{!showEditor ? <div className="editor-section-button" onClick={() => {setShowEditor(true); }}>{initialEditorContent ? "Edit" : "Add"}</div> :
 
 					<div className="editor-section-button secondary" onClick={() => { setShowEditor(false); setEditorContent(initialEditorContent); }}>Cancel</div>}
 
