@@ -53,12 +53,19 @@ class TextEditor extends React.Component {
 
   
   componentDidMount(){
+
+	// console.log(this.props.initialText);
 	 
+	if(this.props.initialText){
+
+		this.setState({
+			editorState: EditorState.createWithContent( this.props.initialText ),
+			initialTextLoaded: true
+		});
+
+	}
 	  
-	this.setState({
-		editorState: EditorState.createWithContent( this.props.initialText ),
-		initialTextLoaded: true
-	});
+	
   }
 
 //   componentDidUpdate(prevProps) {
