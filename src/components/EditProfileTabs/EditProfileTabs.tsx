@@ -18,7 +18,7 @@ const EditProfileTabs: React.FC<props> = (props) => {
 
 
 
-	return <IonSegment style={{justifyContent: 'flex-end', padding: '0 16px'}} value={value}>
+	return <IonSegment mode="md" style={{justifyContent: 'flex-end', padding: '0 16px'}} value={value}>
 	<IonSegmentButton onClick={() => { history.push('/profile/' + profileId + '/edit') }} 
 	style={{'--color-checked': 'var(--ion-color-primary)', '--indicator-color': 'var(--ion-color-primary)', flexGrow: 0}} value="profile">
 	  <p style={{display: 'flex', textTransform: 'none', letterSpacing: '0', fontSize: '1.1em'}}><IonIcon style={{margin: '4px 5px 0 0'}} icon={person} /> Info</p>
