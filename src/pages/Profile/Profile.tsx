@@ -19,7 +19,7 @@ import { Fancybox } from "@fancyapps/ui";
 import "@fancyapps/ui/dist/fancybox.css";
 
 import './profile.scss';
-import { personCircle, location, cash, wallet, cellular, browsersOutline, logoVimeo, settings, text } from 'ionicons/icons';
+import { personCircle, location, cash, wallet, cellular, browsersOutline, logoVimeo, settings, text, create, rocket, sparkles } from 'ionicons/icons';
 import SocialMediaTotals from '../../components/SocialMediaTotals/SocialMediaTotals';
 import ImageSlider from '../../components/ImageSlider/ImageSlider';
 import OpportunitiesList from '../../components/OpportunitiesList/OpportunitiesList';
@@ -109,6 +109,13 @@ const Profile: React.FC = () => {
     setLatestUpdateDate(lastUpdatedDate);
   }
 
+  const subscriptionActive = () => {
+    if( authState?.mySubscription?.subscriptionStatus === 'active' ){
+      return true
+    }else{
+      return false
+    }
+  }
 
 
   const viewedProfile = async () => {
@@ -208,9 +215,26 @@ const Profile: React.FC = () => {
 
       { authState?.user?.profile === parseInt(profileId) && 
         <IonToolbar>
-          <IonButtons className="ion-justify-content-center ion-padding-start ion-padding-end">
-            <IonButton className="" size="small" onClick={()=> history.push( "/profile/" + profileId +"/edit" )}>Edit Profile</IonButton>
-          </IonButtons>
+          <IonButtons className="edit-profile-toolbar-buttons" style={{}}>
+
+            <IonButton className="edit-profile-button" style={{flexGrow: 1, color: 'var(--ion-color-medium-tint)'}}  size="small" onClick={()=> history.push( "/profile/" + profileId +"/edit" )}>
+              <IonIcon style={{margin: '0 8px 0 0'}} color="medium" icon={create} /> Edit Profile
+            </IonButton>
+            
+           { ! subscriptionActive() && <IonButton className="" style={{
+              '--background': 'var(--ion-color-primary)',
+              '--border-radius': '0',
+              '--padding-start': '24px',
+              '--padding-end': '30px',
+              marginInlineStart: 0,
+              marginInlineEnd: 0,
+              height: '56px',
+              fontWeight: 500,
+              color: '#fff'
+              }} size="small" onClick={()=> history.push( "/subscribe" )}
+              ><IonIcon style={{margin: '0 8px 0 0', color: 'var(--ion-color-primary-tint)'}} icon={rocket} /> Make Profile Live &gt;</IonButton>
+            } 
+          </IonButtons> 
           
         </IonToolbar> }
             
