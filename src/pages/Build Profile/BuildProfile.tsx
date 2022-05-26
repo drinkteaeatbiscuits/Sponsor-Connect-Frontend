@@ -1025,7 +1025,7 @@ const isProfileComplete = () => {
 												<p className="sub-text">Get advice about sponsorship</p>
 											</div>
 										</div>
-										<div className='menu-list-option'
+										{/* <div className='menu-list-option'
 										onClick={() => history.push("/subscribe/")}>
 											<div className="icon">
 												<IonIcon color="primary" icon={rocket} />
@@ -1034,8 +1034,22 @@ const isProfileComplete = () => {
 												<p className="main-text">Subscribe</p>
 												<p className="sub-text">Start finding sponsorship today</p>
 											</div>
-										</div>
+										</div> */}
 									</div>
+									<IonButton className="" style={{
+									'--background': 'var(--ion-color-primary)',
+									'--border-radius': '30px',
+									'--padding-start': '24px',
+									'--padding-end': '30px',
+									marginInlineStart: 'auto',
+									marginInlineEnd: 0,
+									height: '56px',
+									fontWeight: 500,
+									color: '#fff',
+									margin: '16px 0 0'
+									}} size="small" expand='block' onClick={()=> history.push( "/subscribe" )}
+									><IonIcon style={{margin: '0 8px 0 0', color: 'var(--ion-color-primary-tint)'}} icon={rocket} /> Make Profile Live &gt;</IonButton>
+
 								</div>
 
 								

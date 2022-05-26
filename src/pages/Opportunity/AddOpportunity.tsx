@@ -99,18 +99,18 @@ const AddOpportunity: React.FC = () => {
       opportunityStatus: status,
     }).then(() => {
 
-      setTitle("");
-      setDescription("");
-      setEditorContent(null);
-      setImages("");
-      setPrice("");
-      setOpportunityError("");
-      setPublishedAt(null);
-      setOpportunityId("");
-      setOpportunitySlug("");
-      setDate("");
+      // setTitle("");
+      // setDescription("");
+      // setEditorContent(null);
+      // setImages("");
+      // setPrice("");
+      // setOpportunityError("");
+      // setPublishedAt(null);
+      // setOpportunityId("");
+      // setOpportunitySlug("");
+      // setDate("");
 
-      history.push("/opportunity/" + opportunityId, {deletedOpportunity: false});
+      history.push("/opportunity/" + opportunityId, { deletedOpportunity: false });
 
       // reset();
 
@@ -120,9 +120,9 @@ const AddOpportunity: React.FC = () => {
 
   }
 
-  useIonViewDidEnter(() => {
-    createOpportunity();
-  });
+  // useIonViewDidEnter(() => {
+  //   createOpportunity();
+  // });
     
 
   const displayDate = (date) => {
