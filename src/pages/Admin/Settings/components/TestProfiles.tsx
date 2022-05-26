@@ -42,7 +42,7 @@ const TestProfiles: React.FC<props> = ( props ) => {
               value={testProfiles}
               multiple={true}
               cancelText="cancel"
-              okText="save"
+              okText="OK"
               onIonChange={(e) => setTestProfiles(e.detail.value)}
             >
 				{profiles.map((profile) => <IonSelectOption key={profile.id} value={profile.id}>{ profile.profileName }</IonSelectOption>)}
