@@ -417,6 +417,8 @@ const App: React.FC = () => {
               <Route exact path="/opportunity/:id" component={() => <Opportunity />} />
               <Route exact path="/reset-password" component={() => <ResetPassword/>} />
               <Route exact path="/forgot-password" component={() => <ForgotPassword/>} />
+              <Route exact path="/example-profiles" component={() => <ProfileExamples />} />
+              
               
               {
                 // Protected Routes
