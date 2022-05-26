@@ -1,4 +1,5 @@
 import { Redirect, useLocation, useParams } from "react-router-dom";
+import useAdminSettings from "../../hooks/useAdminSettings";
 import useProfile from "../../hooks/useProfile";
 import AdminDashboard from "../../pages/Admin/Dashboard/AdminDashboard";
 import AdminSettings from "../../pages/Admin/Settings/AdminSettings";
@@ -21,8 +22,12 @@ const CheckProfile = ({ isAdmin, profileId, children }) => {
 	const slug = params.slug;
 	
 	const {isLoading, data, error, isSuccess} = useProfile( params.id ? params.id : null, slug ? slug : null );
+	
+	const {data: settings, isSuccess: settingsSuccess} = useAdminSettings();
 
-	// isSuccess && console.log(data?.user?.subscriptionStatus === 'active');
+	if(settingsSuccess && isSuccess && settings?.exampleProfiles.filter((e) => e.id === data.id).length > 0){
+		return children;
+	}
 
 	if(isAdmin){
 		return children;
