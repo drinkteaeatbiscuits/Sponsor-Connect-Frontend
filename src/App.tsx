@@ -86,6 +86,7 @@ import WhichSettings from './components/WhichSettings/WhichSettings';
 import LoggedInAdmin from './components/LoggedInAdmin/LoggedInAdmin';
 import SubscriptionNeeded from './components/SubscriptionNeeded/SubscriptionNeeded';
 import CheckProfile from './components/CheckProfile/CheckProfile';
+import MarketingPreferences from './pages/MarketingPreferences/MarketingPreferences';
  
 
 const tagManagerArgs = {
@@ -436,6 +437,7 @@ const App: React.FC = () => {
               <Route exact path="/subscribe" component={() => <Protected isLoggedIn={state.isAuthenticated}><Subscribe /></Protected>} />
               <Route exact path="/settings/subscription" component={() => <Protected isLoggedIn={state.isAuthenticated}><Subscription /></Protected>} />
               <Route exact path="/settings/account" component={() => <Protected isLoggedIn={state.isAuthenticated}><Account /></Protected>} />
+              <Route exact path="/settings/marketing" component={() => <Protected isLoggedIn={state.isAuthenticated}><MarketingPreferences /></Protected>} />
               <Route exact path="/settings/notifications" component={() => <Protected isLoggedIn={state.isAuthenticated}><NotificationSettings /></Protected>} />
               <Route exact path="/example-profiles" component={() => <Protected isLoggedIn={state.isAuthenticated} ><ProfileExamples /></Protected>} />
               <Route exact path="/profiles" component={() => <Protected isLoggedIn={state.isAuthenticated}><Profiles /></Protected>} />

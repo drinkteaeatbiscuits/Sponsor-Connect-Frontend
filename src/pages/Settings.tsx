@@ -4,7 +4,7 @@ import { AuthContext } from "../App";
 import React from 'react';
 import LogoutButton from '../components/LogoutButton';
 import TabBar from '../components/TabBar';
-import { card, key } from 'ionicons/icons';
+import { card, key, mail } from 'ionicons/icons';
 import MetaTags from '../components/MetaTags/MetaTags';
 
 export interface props {}
@@ -67,6 +67,18 @@ const Settings: React.FC = () => {
                 <p className="sub-text">Manage your account settings</p>
               </div>
             </div> }
+
+
+            <div className="menu-list-option"
+                onClick={() => history.push("/settings/marketing/")}>
+                <div className="icon">
+                  <IonIcon color="primary" icon={mail} />
+                </div>
+                <div className="text">
+                  <p className="main-text">Marketing Preferences</p>
+                  <p className="sub-text">Opt in or out of our marketing</p>
+                </div>
+              </div>
 
             {/* <div className='menu-list-option'
               onClick={() => history.push("/settings/notifications/")}>
