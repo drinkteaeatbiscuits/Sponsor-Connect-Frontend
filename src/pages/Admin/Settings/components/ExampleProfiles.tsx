@@ -44,7 +44,7 @@ const ExampleProfiles: React.FC<props> = ( props ) => {
               value={exampleProfiles}
               multiple={true}
               cancelText="cancel"
-              okText="save"
+              okText="OK"
               onIonChange={(e) => setExampleProfiles(e.detail.value)}
             >
 				{profiles.map((profile) => <IonSelectOption key={profile.id} value={profile.id}>{ profile.profileName }</IonSelectOption>)}
