@@ -25,6 +25,8 @@ import EyeSVG from './images/EyeSVG';
 import { chatbubbles, help, logoEuro, mail, search, shareSocial } from 'ionicons/icons';
 import Pound from './images/Pound';
 import MetaTags from '../../components/MetaTags/MetaTags';
+import PodcastSVG from './images/PodcastSVG';
+import AssociationSVG from './images/AssociationSVG';
 
 
 const CreateAccount: React.FC = () => {
@@ -351,7 +353,7 @@ const CreateAccount: React.FC = () => {
     <MetaTags title={'Create Account | Sponsor Connect'} path={'/create-account-sports'} description={'Create a Sponsor Connect account.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />
 
 
-      <IonContent fullscreen scrollY={true} className="on-boarding create-account">
+      <IonContent fullscreen scrollY={true} className="on-boarding create-account create-account-sports">
 
         <IonGrid className="on-boarding-grid">
           <IonRow className="">
@@ -517,10 +519,18 @@ const CreateAccount: React.FC = () => {
                       </div>
                       <div className={selectedOption === 'Associations' ? 'active account-for-option' : 'account-for-option'}
                         onClick={() => setSelectedOption('Associations')}>
-                        <div className="icon"><OtherSVG /></div>
+                        <div className="icon"><AssociationSVG /></div>
                         <div className="text">
                           <p>Associations</p>
                           <p>Governing body or sports organization</p>
+                        </div>
+                      </div>
+                      <div className={selectedOption === 'Podcast' ? 'active account-for-option' : 'account-for-option'}
+                        onClick={() => setSelectedOption('Podcast')}>
+                        <div className="icon"><PodcastSVG /></div>
+                        <div className="text">
+                          <p>Podcasts</p>
+                          <p>Sports based podcasts</p>
                         </div>
                       </div>
 

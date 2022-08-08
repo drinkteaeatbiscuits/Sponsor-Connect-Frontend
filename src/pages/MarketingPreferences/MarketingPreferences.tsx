@@ -36,7 +36,7 @@ const MarketingPreferences: React.FC = () => {
 
   const setMarketing = (value) => {
 
-    console.log(value);
+    // console.log(value);
     setMarketingOptOut(value);
    
     let marketingOptOut;
