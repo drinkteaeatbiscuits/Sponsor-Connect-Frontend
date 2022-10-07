@@ -27,6 +27,7 @@ const CheckProfile = ({ isAdmin, profileId, children }) => {
 
 
 	if(settingsSuccess && isSuccess && data !== undefined && settings?.exampleProfiles.filter((e) => e.id === data.id).length > 0){
+
 		return children;
 	}
 
@@ -34,7 +35,7 @@ const CheckProfile = ({ isAdmin, profileId, children }) => {
 		return children;
 	}
 
-	if(isSuccess && data !== undefined && profileId === data.id) {
+	if( isSuccess && data !== undefined ) {
 		return children;
 	}
 
