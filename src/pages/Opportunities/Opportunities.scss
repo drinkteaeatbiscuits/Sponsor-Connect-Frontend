@@ -1,4 +1,38 @@
+.opportunities-page ion-toolbar {
+	@media screen and ( min-width: 768px ) {
+		position: fixed;
+    	top: 80px;
+		box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+        --background: #fcfcfc;
+	}
+    .edit-profile-toolbar-buttons {
+        justify-content: space-between;
+        .new-opportunity-button {
+            flex-grow: 1;
+        }
+        @media screen and ( min-width: 768px ) {
+            justify-content: flex-end;
+            .new-opportunity-button {
+                flex-grow: 0;
+                --padding-start: 18px;
+                --padding-end: 18px;
+            }
+        }
+        .make-profile-live-button {
+                --padding-start: 8px;
+                --padding-end: 12px;
+            @media screen and ( min-width: 768px ) {
+                --padding-start: 24px;
+                --padding-end: 30px;
+            }
+        }
+    }
+}
+
 .opportunities-content .content,
 .opportunity-content .content {
     padding-bottom: 120px;
+    @media screen and ( min-width: 768px ) {
+        padding-top: 135px;
+    }
 }

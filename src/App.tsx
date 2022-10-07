@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { IonReactRouter } from '@ionic/react-router';
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import { Helmet } from 'react-helmet-async';
 
 import TagManager from 'react-gtm-module';
 
@@ -85,6 +86,7 @@ import WhichSettings from './components/WhichSettings/WhichSettings';
 import LoggedInAdmin from './components/LoggedInAdmin/LoggedInAdmin';
 import SubscriptionNeeded from './components/SubscriptionNeeded/SubscriptionNeeded';
 import CheckProfile from './components/CheckProfile/CheckProfile';
+import MarketingPreferences from './pages/MarketingPreferences/MarketingPreferences';
  
 
 const tagManagerArgs = {
@@ -93,12 +95,13 @@ const tagManagerArgs = {
 
 process.env.NODE_ENV === "production" && TagManager.initialize(tagManagerArgs)
 
-
 Geocode.setApiKey(process.env.REACT_APP_GEOCODE_API_KEY);
+
 
 let stripePK = "";
 process.env.REACT_APP_STRIPE_PK && (stripePK = process.env.REACT_APP_STRIPE_PK);
 const stripePromise = loadStripe(stripePK);
+
 
 export const AuthContext = React.createContext<{
   state?: any;
@@ -114,7 +117,6 @@ const initialState = {
 };
 
 const reducer = (state: any, action: any) => {
-
   switch (action.type) {
     case "LOGIN":
       let isAuthenticated = false;
@@ -183,7 +185,6 @@ const reducer = (state: any, action: any) => {
       }
     }
     case "updateProfileComplete": {
-      // console.log(action.payload);
       state.user.profileComplete = action.payload.profileComplete
       state.user.profileCompletionList = action.payload.profileCompletionList
       return {
@@ -192,7 +193,6 @@ const reducer = (state: any, action: any) => {
     }
 
     default:
-
     return state;
   }
 };
@@ -216,59 +216,61 @@ const checkIfAuthenticated = async () => {
 
 const App: React.FC = () => {
 
-  const getLocationPlaceName = (lat, long) => {
+  // const getLocationPlaceName = (lat, long) => {
 
-    setCheckingLocationPlaceName(true);
+  //   setCheckingLocationPlaceName(true);
 
-		Geocode.fromLatLng(lat, long).then(
-			(response) => {
-			const address = response.results[0].formatted_address;
-			let city, state, country;
-			for (let i = 0; i < response.results[0].address_components.length; i++) {
-				for (let j = 0; j < response.results[0].address_components[i].types.length; j++) {
-				switch (response.results[0].address_components[i].types[j]) {
-					case "locality":
-					city = response.results[0].address_components[i].long_name;
-					break;
-					case "administrative_area_level_1":
-					state = response.results[0].address_components[i].long_name;
-					break;
-					case "country":
-					country = response.results[0].address_components[i].long_name;
-					break;
-				}
-				}
-			}
+	// 	Geocode.fromLatLng(lat, long).then(
+	// 		(response) => {
+	// 		const address = response.results[0].formatted_address;
+	// 		let city, state, country;
+	// 		for (let i = 0; i < response.results[0].address_components.length; i++) {
+	// 			for (let j = 0; j < response.results[0].address_components[i].types.length; j++) {
+	// 			switch (response.results[0].address_components[i].types[j]) {
+	// 				case "locality":
+	// 				city = response.results[0].address_components[i].long_name;
+	// 				break;
+	// 				case "administrative_area_level_1":
+	// 				state = response.results[0].address_components[i].long_name;
+	// 				break;
+	// 				case "country":
+	// 				country = response.results[0].address_components[i].long_name;
+	// 				break;
+	// 			}
+	// 			}
+	// 		}
 
-			setFromLocation({ ...fromLocation, "city": city});
+	// 		setFromLocation({ ...fromLocation, "city": city});
 			
-			},
-			(error) => {
-				console.error(error);
-			}
-		);
-	}
+	// 		},
+	// 		(error) => {
+	// 			console.error(error);
+	// 		}
+	// 	);
+	// }
 
-  const doesLocationCookieExist = () => {
+  // const doesLocationCookieExist = () => {
 
-    if (document.cookie.split(';').some((item) => item.trim().startsWith('user_location='))) {
-      return true;
-    }
-    return false;
+  //   if (document.cookie.split(';').some((item) => item.trim().startsWith('user_location='))) {
+  //     return true;
+  //   }
+  //   return false;
 
-  }
-
-  const {isLoading, data: profilesData, isSuccess, error} = useProfiles(true);
+  // }
 
   const [state, dispatch] = React.useReducer(reducer, initialState);
   const [wasUserHere, setWasUserHere] = useState<any>("");
-  const [currentLocation, setCurrentLocation] = useState<any>("");
-  const [fromLocation, setFromLocation] = useState<any>({});
-  const [checkUser, setCheckUser] = useState<any>(false);
-  const [checkingLocation, setCheckingLocation] = useState<any>(false);
-  const [checkingLocationPlaceName, setCheckingLocationPlaceName] = useState<any>(false);
-  const { data: mySubscription, isSuccess: subscriptionSuccess, error: subscriptionError, refetch: refetchMySubscription } = useMySubscription();
+  
+  // const [currentLocation, setCurrentLocation] = useState<any>("");
+  // const [fromLocation, setFromLocation] = useState<any>({});
+  // const [checkingLocation, setCheckingLocation] = useState<any>(false);
+  // const [checkingLocationPlaceName, setCheckingLocationPlaceName] = useState<any>(false);
 
+
+  const [checkUser, setCheckUser] = useState<any>(false);
+  
+
+  const { data: mySubscription, isSuccess: subscriptionSuccess, error: subscriptionError, refetch: refetchMySubscription } = useMySubscription();
   const [activeSubscription, setActiveSubscription] = useState(false);
   const [accountType, setAccountType] = useState('');
 
@@ -302,36 +304,35 @@ const App: React.FC = () => {
 
     } );
 
-
     subscriptionSuccess && mySubscription.length > 0 && (state.mySubscription = mySubscription[0]);
 
     subscriptionActive();
-
     businessAccount();
 
-    !doesLocationCookieExist() && !checkingLocation && currentLocation.length <= 0 && navigator.geolocation.getCurrentPosition(function(position) {
+
+    // !doesLocationCookieExist() && !checkingLocation && currentLocation.length <= 0 && navigator.geolocation.getCurrentPosition(function(position) {
     
-      setCurrentLocation([
-        {"lat": position.coords.latitude, "long": position.coords.longitude}
-      ]);
+    //   setCurrentLocation([
+    //     {"lat": position.coords.latitude, "long": position.coords.longitude}
+    //   ]);
     
-      setFromLocation( { lat: position.coords.latitude, long: position.coords.longitude } );
+    //   setFromLocation( { lat: position.coords.latitude, long: position.coords.longitude } );
 
-      setCheckingLocation(true);
+    //   setCheckingLocation(true);
 
-    });
+    // });
 
-    !doesLocationCookieExist() && !checkingLocationPlaceName && Object.keys(fromLocation).length > 0 && !fromLocation.city && getLocationPlaceName(fromLocation.lat, fromLocation.long);
+    // !doesLocationCookieExist() && !checkingLocationPlaceName && Object.keys(fromLocation).length > 0 && !fromLocation.city && getLocationPlaceName(fromLocation.lat, fromLocation.long);
 
-    !doesLocationCookieExist() && Object.keys(fromLocation).length > 0 && fromLocation.city && (initialState.currentLocation = fromLocation);
+    // !doesLocationCookieExist() && Object.keys(fromLocation).length > 0 && fromLocation.city && (initialState.currentLocation = fromLocation);
 
-    !doesLocationCookieExist() && Object.keys(fromLocation).length > 0 && fromLocation.city && (document.cookie = "user_location=" + JSON.stringify({lat: fromLocation.lat, long: fromLocation.long, city: fromLocation.city }) + ";max-age=" + 60*60*24 );
+    // !doesLocationCookieExist() && Object.keys(fromLocation).length > 0 && fromLocation.city && (document.cookie = "user_location=" + JSON.stringify({lat: fromLocation.lat, long: fromLocation.long, city: fromLocation.city }) + ";max-age=" + 60*60*24 );
 
     // doesLocationCookieExist() && Object.keys(fromLocation).length <= 0 && setFromLocation(JSON.parse( document.cookie.split('; ').find(row => row.startsWith('user_location='))?.split('=')[1] || "" ));
     
-    doesLocationCookieExist() && (initialState.currentLocation = JSON.parse( document.cookie.split('; ').find(row => row.startsWith('user_location='))?.split('=')[1] || "" ));
+    // doesLocationCookieExist() && (initialState.currentLocation = JSON.parse( document.cookie.split('; ').find(row => row.startsWith('user_location='))?.split('=')[1] || "" ));
 
-  }, [currentLocation, fromLocation, state.isAuthenticated, doesLocationCookieExist(), mySubscription, state.mySubscription]);
+  }, [ state.isAuthenticated, mySubscription, state.mySubscription]);
 
   wasUserHere && (initialState.isAuthenticated = true);
   wasUserHere && (initialState.user = wasUserHere);
@@ -364,10 +365,11 @@ const App: React.FC = () => {
 //  console.log(state?.user?.profile);
 
   return (
-    <HelmetProvider>  
+     
     <IonApp>
+      
       <Elements stripe={stripePromise}>
-
+      
         <AuthContext.Provider
           value={{
             state,
@@ -375,9 +377,17 @@ const App: React.FC = () => {
           }}
         >
           
+      <Helmet prioritizeSeoTags>
+        <title  data-react-helmet='true'>Sponsor Connect | Optimising Sponsorship Potential</title>
+        <meta name="description" content="Our professional subscription-based platform is modestly tailored to your sporting needs, making it simpler than ever to showcase your upcoming sponsor opportunities." data-react-helmet='true' />
+        <meta property="og:title" content='Sponsor Connect | Optimising Sponsorship Potential' data-rh="true" data-react-helmet='true' />
+        <meta property="og:description" content='Our professional subscription-based platform is modestly tailored to your sporting needs, making it simpler than ever to showcase your upcoming sponsor opportunities.' data-rh="true"  data-react-helmet='true' /> 
+        <meta property="og:image" content='https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg' data-rh="true"  data-react-helmet='true' />
+      </Helmet>
+          
           <IonReactRouter>
            
-            { state?.user?.profile && <Notifications /> }
+            {/* { state?.user?.profile && <Notifications /> } */}
 
             <ScrollToTop />
 
@@ -386,7 +396,6 @@ const App: React.FC = () => {
             <Switch>
 
 
-            
               <Route exact path="/" component={() => <Landing />} />
               
               <Route exact path="/dashboard" component={() => <WhichDashboard isLoggedIn={state.isAuthenticated} hasProfile={ state?.user?.profile } isAdmin={state?.user?.role.type === 'admin'}  ></WhichDashboard>} />
@@ -409,6 +418,8 @@ const App: React.FC = () => {
               <Route exact path="/opportunity/:id" component={() => <Opportunity />} />
               <Route exact path="/reset-password" component={() => <ResetPassword/>} />
               <Route exact path="/forgot-password" component={() => <ForgotPassword/>} />
+              <Route exact path="/example-profiles" component={() => <ProfileExamples />} />
+              
               
               {
                 // Protected Routes
@@ -426,6 +437,7 @@ const App: React.FC = () => {
               <Route exact path="/subscribe" component={() => <Protected isLoggedIn={state.isAuthenticated}><Subscribe /></Protected>} />
               <Route exact path="/settings/subscription" component={() => <Protected isLoggedIn={state.isAuthenticated}><Subscription /></Protected>} />
               <Route exact path="/settings/account" component={() => <Protected isLoggedIn={state.isAuthenticated}><Account /></Protected>} />
+              <Route exact path="/settings/marketing" component={() => <Protected isLoggedIn={state.isAuthenticated}><MarketingPreferences /></Protected>} />
               <Route exact path="/settings/notifications" component={() => <Protected isLoggedIn={state.isAuthenticated}><NotificationSettings /></Protected>} />
               <Route exact path="/example-profiles" component={() => <Protected isLoggedIn={state.isAuthenticated} ><ProfileExamples /></Protected>} />
               <Route exact path="/profiles" component={() => <Protected isLoggedIn={state.isAuthenticated}><Profiles /></Protected>} />
@@ -478,7 +490,7 @@ const App: React.FC = () => {
         
       </Elements>
     </IonApp>
-    </HelmetProvider>
+    
   )
 };
 

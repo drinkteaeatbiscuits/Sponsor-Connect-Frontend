@@ -22,7 +22,7 @@ import SocialMediaTotalsEdit from '../../components/SocialMediaTotalsEdit/Social
 import AchievementsEdit from '../../components/AchievementsEdit/AchievementsEdit';
 import ErrorBoundary from '../../containers/ErrorBoundary/ErrorBoundary';
 import MetaTags from '../../components/MetaTags/MetaTags';
-import { images, pencil, person } from 'ionicons/icons';
+import { images, pencil, person, rocket } from 'ionicons/icons';
 import EditProfileTabs from '../../components/EditProfileTabs/EditProfileTabs';
 
 export interface props { }
@@ -73,7 +73,13 @@ const EditProfile: React.FC = () => {
   const [socialMediaObject, setSocialMediaObject] = useState([{}]);
 
 
-
+  const subscriptionActive = () => {
+    if(authState?.mySubscription?.subscriptionStatus === 'active'){
+      return true
+    }else{
+      return false
+    }
+  }
 
   const saveField = async (fieldName: string, fieldData: any) => {
 
@@ -385,12 +391,23 @@ const EditProfile: React.FC = () => {
 
               </div>
 
-            
+              { !subscriptionActive() && <IonButton className="" style={{
+              '--background': 'var(--ion-color-primary)',
+              '--border-radius': '30px',
+              '--padding-start': '24px',
+              '--padding-end': '30px',
+              marginInlineStart: 'auto',
+              marginInlineEnd: 0,
+              height: '56px',
+              fontWeight: 500,
+              color: '#fff',
+              margin: '24px 0 0'
+              }} size="small" expand='block' onClick={()=> history.push( "/subscribe" )}
+              ><IonIcon style={{margin: '0 8px 0 0', color: 'var(--ion-color-primary-tint)'}} icon={rocket} /> Make Profile Live &gt;</IonButton>
+              }
+              {isSuccessProfile && <IonButton style={{marginTop: '8px'}} className="button-tertiary" expand="block" size="small" onClick={() => { client.invalidateQueries("profile-" + profileData.id); history.push(authState?.user.profileSlug ? "/" + authState?.user.profileSlug : "/profile/" + authState?.user.profile) }}>Back to Profile</IonButton>}
 
               
-                    
-              {isSuccessProfile && <IonButton className="button-tertiary" expand="block" size="small" onClick={() => { client.invalidateQueries("profile-" + profileData.id); history.push(authState?.user.profileSlug ? "/" + authState?.user.profileSlug : "/profile/" + authState?.user.profile) }}>Back to Profile</IonButton>}
-
             </div>
 
           </div>

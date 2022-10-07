@@ -208,6 +208,20 @@
 	@media screen and ( min-width: 768px ) {
 		position: fixed;
     	top: 80px;
+		box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
+	}
+}
+
+.profile .edit-profile-toolbar-buttons {
+	justify-content: space-between;
+	.edit-profile-button {
+		max-width: 160px;
+	}
+	@media screen and ( min-width: 768px ) {
+		justify-content: flex-end;
+		.edit-profile-button {
+			max-width: 180px;
+		}
 	}
 }
 

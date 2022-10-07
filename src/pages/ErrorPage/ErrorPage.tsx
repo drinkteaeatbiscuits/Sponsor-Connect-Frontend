@@ -17,10 +17,12 @@ const ErrorPage: React.FC = () => {
 
   const { dispatch } = React.useContext( AuthContext );
 
-
+  
   return (
     <IonPage>
        <MetaTags title={'Page not found | Sponsor Connect'} path={''} description={'Sponsor Connect page not found.'} image={ "https://sponsor-connect.com/wp-content/uploads/2021/07/sponsor-connect.jpg" } />  
+       
+       <TabBar />
 
       { authState.isAuthenticated && <TabBar activeTab="profile"/> }
       <IonContent fullscreen>

@@ -51,6 +51,8 @@ const EditProfileDescription: React.FC = () => {
   }, [profileData.status, profileData.data]);
 
   const updateProfile = async () => {
+
+    // console.log(informationAboutYou);
     
     await addProfileDescriptionMutation({
       informationAboutYou: informationAboutYou && convertToRaw( informationAboutYou ),

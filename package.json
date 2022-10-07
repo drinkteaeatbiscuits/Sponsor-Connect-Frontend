@@ -1,6 +1,6 @@
 {
   "name": "sponsorconnect",
-  "version": "1.0.10",
+  "version": "1.0.13",
   "homepage": "https://app.sponsor-connect.com",
   "private": true,
   "dependencies": {
@@ -55,7 +55,7 @@
     "react-google-places-autocomplete": "^3.3.2",
     "react-gtm-module": "^2.0.11",
     "react-helmet": "^6.1.0",
-    "react-helmet-async": "^1.2.3",
+    "react-helmet-async": "^1.3.0",
     "react-image-crop": "^9.0.5",
     "react-masonry-css": "^1.0.16",
     "react-multi-email": "^0.5.3",
@@ -90,6 +90,7 @@
   },
   "scripts": {
     "start": "GENERATE_SOURCEMAP=false react-scripts start",
+    "start-source": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
