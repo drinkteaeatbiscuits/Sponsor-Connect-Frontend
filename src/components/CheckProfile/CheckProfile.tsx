@@ -25,7 +25,8 @@ const CheckProfile = ({ isAdmin, profileId, children }) => {
 	
 	const {data: settings, isSuccess: settingsSuccess} = useAdminSettings();
 
-	if(settingsSuccess && isSuccess && settings?.exampleProfiles.filter((e) => e.id === data.id).length > 0){
+
+	if(settingsSuccess && isSuccess && data !== undefined && settings?.exampleProfiles.filter((e) => e.id === data.id).length > 0){
 		return children;
 	}
 
@@ -33,14 +34,18 @@ const CheckProfile = ({ isAdmin, profileId, children }) => {
 		return children;
 	}
 
-	if(isSuccess && profileId === data?.id) {
+	if(isSuccess && data !== undefined && profileId === data.id) {
 		return children;
 	}
 
-	if (isSuccess && !data) {
+	
+
+	if ( data === undefined ) {	
 		return <ErrorPage />;
 	}
 
+
+	
 	if(isSuccess && data?.user?.subscriptionStatus === 'active'){
 
 		return children;
