@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonItem, IonLabel, IonList, IonLoading, IonPage, IonSkeletonText, IonTitle, IonToolbar, useIonViewDidEnter, useIonViewWillEnter } from '@ionic/react';
+import { IonButton, IonButtons, IonContent, IonFab, IonFabButton, IonFabList, IonIcon, IonItem, IonLabel, IonList, IonLoading, IonPage, IonRouterLink, IonSkeletonText, IonTitle, IonToolbar, useIonViewDidEnter, useIonViewWillEnter } from '@ionic/react';
 import Header from '../../components/Header';
 import { useHistory, useParams, useLocation } from 'react-router';
 import Cookies from 'js-cookie';
@@ -40,7 +40,8 @@ const Profile: React.FC = () => {
 
   const thelocation = useLocation<any>();
 
-  
+  const withHttp = (url) => url.replace(/^(?:(.*:)?\/\/)?(.*)/i, (match, schemma, nonSchemmaUrl) => schemma ? match : `http://${nonSchemmaUrl}`);
+
 
   const params = useParams<ParamTypes>();
   const slug = params.slug;
@@ -323,7 +324,7 @@ const Profile: React.FC = () => {
               
                 <div className="profile-detail price-range ion-text-left">
                   <IonIcon color="tertiary" size="large" icon={browsersOutline} />
-                  <p>{data.website}</p>
+                  <IonRouterLink href={ withHttp(data.website) } rel='external' target="_blank"><p>{data.website}</p></IonRouterLink>
                 </div> 
               
               } 
